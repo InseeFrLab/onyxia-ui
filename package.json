@@ -1,0 +1,63 @@
+{
+    "name": "#{REPO_NAME}#",
+    "version": "0.0.0",
+    "description": "#{DESC}#",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/#{USER_OR_ORG}#/#{REPO_NAME}#.git"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "node dist/test/",
+        "cdn:bundle:.js": "simplifyify dist/index.js -s #{REPO_NAME_NO_DASHES}# -o dist/bundle.js --debug --bundle",
+        "cdn:bundle:.min.js": "terser dist/bundle.js -cmo dist/bundle.min.js",
+        "cdn:bundle": "npm run cdn:bundle:.js && npm run cdn:bundle:.min.js",
+        "cdn:esm": "tsc -p tsconfig.esm.json",
+        "cdn": "npm run cdn:bundle && npm run cdn:esm",
+        "build": "tsc && npm run cdn",
+        "lint:check": "eslint . --ext .ts,.tsx",
+        "lint": "npm run lint:check -- --fix",
+        "_format": "prettier '**/*.{ts,tsx,json,md}'",
+        "format": "npm run _format -- --write",
+        "format:check": "npm run _format -- --list-different"
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "eslint --fix"
+        ],
+        "*.{ts,tsx,json,md}": [
+            "prettier --write"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged -v"
+        }
+    },
+    "author": "u/#{USER_OR_ORG}#",
+    "license": "MIT",
+    "files": [
+        "src/",
+        "!src/test/",
+        "dist/",
+        "!dist/test/",
+        "!dist/tsconfig.tsbuildinfo"
+    ],
+    "keywords": [],
+    "homepage": "https://github.com/#{USER_OR_ORG}#/#{REPO_NAME}#",
+    "devDependencies": {
+        "@types/node": "^15.3.1",
+        "@typescript-eslint/eslint-plugin": "^4.24.0",
+        "@typescript-eslint/parser": "^4.24.0",
+        "eslint": "^7.26.0",
+        "eslint-config-prettier": "^8.3.0",
+        "evt": "^1.9.14",
+        "husky": "^4.3.8",
+        "lint-staged": "^11.0.0",
+        "prettier": "^2.3.0",
+        "simplifyify": "^8.0.4",
+        "terser": "^5.7.0",
+        "typescript": "^4.2.4"
+    }
+}
