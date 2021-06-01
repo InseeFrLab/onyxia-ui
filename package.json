@@ -1,16 +1,16 @@
 {
-    "name": "#{REPO_NAME}#",
+    "name": "onyxia-ui",
     "version": "0.0.0",
-    "description": "#{DESC}#",
+    "description": "A ui toolkit, like material-ui but with stronger typing and more opinionated",
     "repository": {
         "type": "git",
-        "url": "git://github.com/#{USER_OR_ORG}#/#{REPO_NAME}#.git"
+        "url": "git://github.com/garronej/onyxia-ui.git"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
         "test": "node dist/test/",
-        "cdn:bundle:.js": "simplifyify dist/index.js -s #{REPO_NAME_NO_DASHES}# -o dist/bundle.js --debug --bundle",
+        "cdn:bundle:.js": "simplifyify dist/index.js -s onyxia_ui -o dist/bundle.js --debug --bundle",
         "cdn:bundle:.min.js": "terser dist/bundle.js -cmo dist/bundle.min.js",
         "cdn:bundle": "npm run cdn:bundle:.js && npm run cdn:bundle:.min.js",
         "cdn:esm": "tsc -p tsconfig.esm.json",
@@ -35,7 +35,7 @@
             "pre-commit": "lint-staged -v"
         }
     },
-    "author": "u/#{USER_OR_ORG}#",
+    "author": "u/garronej",
     "license": "MIT",
     "files": [
         "src/",
@@ -45,7 +45,7 @@
         "!dist/tsconfig.tsbuildinfo"
     ],
     "keywords": [],
-    "homepage": "https://github.com/#{USER_OR_ORG}#/#{REPO_NAME}#",
+    "homepage": "https://github.com/garronej/onyxia-ui",
     "devDependencies": {
         "@types/node": "^15.3.1",
         "@typescript-eslint/eslint-plugin": "^4.24.0",
