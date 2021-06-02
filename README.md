@@ -85,6 +85,8 @@ export const { createUseClassNames } = createUseClassNamesFactory({ "useTheme": 
 //index.ts
 
 function Root() {
+    //Example to show how to access the theme object.
+    //Note that it works even outside the <OnyxiaThemeProvider/>
     const onyxiaTheme = useOnyxiaTheme();
 
     //If we waned to retrieve our pink:
