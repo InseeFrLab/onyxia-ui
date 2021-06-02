@@ -1,8 +1,10 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/6702424/80216211-00ef5280-863e-11ea-81de-59f3a3d4b8e4.png">  
+    <img src="https://user-images.githubusercontent.com/6702424/120405033-efe83900-c347-11eb-9a7c-7b680c26a18c.png">  
 </p>
 <p align="center">
-    <i>A ui toolkit, like material-ui but with stronger typing and more opinionated</i>
+    <i>A modern UI toolkit with excellent typing.</i><br>
+    <i>Highly customizable, looks great out of the box.</i><br>
+    <i>Build on top of material-ui.</i>
     <br>
     <br>
     <img src="https://github.com/garronej/onyxia-ui/workflows/ci/badge.svg?branch=main">
@@ -11,53 +13,123 @@
     <img src="https://img.shields.io/npm/l/onyxia-ui">
 </p>
 <p align="center">
-  <a href="https://github.com/garronej/onyxia-ui">Home</a>
-  -
-  <a href="https://github.com/garronej/onyxia-ui">Documentation</a>
+  <a href="https://ui.onyxia.dev">Documentation</a>
 </p>
+
+`onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).
+
+Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
+
+# Motivation
+
+[Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
+We argue that the experience for TypeScript developers is not optimal and sometime frustrating.
+
+`onyxia-ui` tries to improves `material-ui` in the following ways:
+
+-   Providing better typing support.
+-   Better styling API ([TSS](https://github.com/garronej/tss-react)).
+-   Core support for the dark mode.
+-   Easier, more guided, theme customization.
+-   Provides smarter core components that requires less boiler plate.
+-   Provide splash screen.
+
+You can checkout `onyxia-ui` builtins components [here](https://ui.onyxia.dev).
+You can also use all `material-ui` components
+The theme will be automatically adapted so they fit in nicely. You don't need to install
+anything else than `onyxia-ui`, you can simply [`import Select from '@material-ui/core/Select';`](https://material-ui.com/components/selects/)
+for example, it will work.
+
+# Showcase
+
+-   [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
+-   [onyxia.dev](https://onyxia.dev)
+-   [sspcloud.fr](https://sspcloud.fr)
 
 # Install / Import
 
 ```bash
-$ npm install --save onyxia-ui
+$ yarn add onyxia-ui
 ```
+
+# Quick start
 
 ```typescript
-import { myFunction, myObject } from "onyxia-ui";
-```
+// theme.ts
 
-Specific imports:
+import { createThemeProvider, defaultPalette, createDefaultColorUseCases } from "onyxia-ui";
+import "onyxia-design-lab/assets/fonts/work-sans.css";
+import { createUseClassNamesFactory } from "tss-react";
 
-```typescript
-import { myFunction } from "onyxia-ui/myFunction";
-import { myObject } from "onyxia-ui/myObject";
-```
+const { OnyxiaThemeProvider, useOnyxiaTheme } = createThemeProvider({
+    //We keep the default color palette but we add a custom color: a shiny pink.
+    "palette": {
+        ...defaultPalette,
+        "shinyPink": {
+            "main": "#3333",
+        },
+    },
+    //We keep the default usecases colors except that we add
+    //a new usage scenario: "flash" and we use our pink within.
+    "createColorUseCases": ({ isDarkModeEnabled, palette }) => ({
+        ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
+        "flashes": {
+            "cute": palette.shinyPink.main,
+            "sad": palette.orangeWarning.light,
+        },
+    }),
+});
 
-## Import from HTML, with CDN
+export const { createUseClassNames } = createUseClassNamesFactory({ "useTheme": useOnyxiaTheme });
 
-Import it via a bundle that creates a global ( wider browser support ):
+//index.ts
 
-```html
-<script src="//unpkg.com/onyxia-ui/bundle.min.js"></script>
-<script>
-    const { myFunction, myObject } = onyxia_ui;
-</script>
-```
+function Root() {
+    const onyxiaTheme = useOnyxiaTheme();
 
-Or import it as an ES module:
+    //If we waned to retrieve our pink:
+    onyxiaTheme.colors.palette.shinyPink.main;
+    //If we wanted the color of pink flashes:
+    onyxiaTheme.colors.useCases.flashes.cute;
+    //Here you have the theme object as defined by material-ui.
+    onyxiaTheme.muiTheme;
 
-```html
-<script type="module">
-    import { myFunction, myObject } from "//unpkg.com/onyxia-ui/zz_esm/index.js";
-</script>
-```
+    return (
+        <OnyxiaThemeProvider>
+            <MyComponent />
+        </OnyxiaThemeProvider>
+    );
+}
 
-_You can specify the version you wish to import:_ [unpkg.com](https://unpkg.com)
+//MyComponent
 
-## Contribute
+import { useIsDarkModeEnabled } from "onyxia-ui";
+import { createUseClassNames } from "./theme.ts";
+import { Button } from "../Button";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
-```bash
-npm install
-npm run build
-npm test
+//See: https://github.com/garronej/tss-react
+const { useClassNames } = createUseClassNames()(theme => ({
+    "root": {
+        "backgroundColor": theme.colors.useCases.flashes.cute,
+    },
+}));
+
+function MyComponent() {
+    const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
+
+    const { classNames } = useClassNames({});
+
+    return (
+        <div className={classNames.root}>
+            <Button>Hello World</Button>
+            <Select>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+        </div>
+    );
+}
 ```

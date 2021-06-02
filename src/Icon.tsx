@@ -3,17 +3,17 @@ import { cx } from "tss-react";
 import { forwardRef, memo } from "react";
 import type { MouseEventHandler } from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as TourSvg } from "app/assets/svg/Tour.svg";
-import { ReactComponent as ServicesSvg } from "app/assets/svg/Services.svg";
-import { ReactComponent as SecretsSvg } from "app/assets/svg/Secrets.svg";
-import { ReactComponent as AccountSvg } from "app/assets/svg/Account2.svg";
-import { ReactComponent as HomeSvg } from "app/assets/svg/Home2.svg";
-import { ReactComponent as TrainingsSvg } from "app/assets/svg/Trainings2.svg";
-import { ReactComponent as FilesSvg } from "app/assets/svg/Files.svg";
-import { ReactComponent as CollaborationToolsSvg } from "app/assets/svg/CollaborationTools.svg";
-import { ReactComponent as BashSvg } from "app/assets/svg/Bash.svg";
-import { ReactComponent as CommunitySvg } from "app/assets/svg/Community.svg";
-import { ReactComponent as CatalogSvg } from "app/assets/svg/Catalog.svg";
+import { ReactComponent as TourSvg } from "./assets/svg/Tour.svg";
+import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
+import { ReactComponent as SecretsSvg } from "./assets/svg/Secrets.svg";
+import { ReactComponent as AccountSvg } from "./assets/svg/Account2.svg";
+import { ReactComponent as HomeSvg } from "./assets/svg/Home2.svg";
+import { ReactComponent as TrainingsSvg } from "./assets/svg/Trainings2.svg";
+import { ReactComponent as FilesSvg } from "./assets/svg/Files.svg";
+import { ReactComponent as CollaborationToolsSvg } from "./assets/svg/CollaborationTools.svg";
+import { ReactComponent as BashSvg } from "./assets/svg/Bash.svg";
+import { ReactComponent as CommunitySvg } from "./assets/svg/Community.svg";
+import { ReactComponent as CatalogSvg } from "./assets/svg/Catalog.svg";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
@@ -102,7 +102,7 @@ export type Props = {
     /** Design which icon should be displayed */
     type: SvgTypes | MaterialType;
     /** Color of the icon based on the theme */
-    color?: "textPrimary" | "textSecondary" | "textDisabled" | "textFocus" | "limeGreen";
+    color?: "textPrimary" | "textSecondary" | "textDisabled" | "textFocus";
     /** TODO: Only works for mui icons!!! Enable to make the icon larger or smaller */
     fontSize?: "default" | "inherit" | "small" | "large";
 
@@ -118,10 +118,7 @@ export const defaultProps: PickOptionals<Props> = {
 
 const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color }) => ({
     "root": {
-        "color":
-            color === "limeGreen"
-                ? theme.colors.palette.limeGreen.main
-                : theme.colors.useCases.typography[color],
+        "color": theme.colors.useCases.typography[color],
         // https://stackoverflow.com/a/24626986/3731798
         //"verticalAlign": "top",
         //"display": "inline-block"
