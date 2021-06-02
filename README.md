@@ -69,7 +69,7 @@ const { OnyxiaThemeProvider, useOnyxiaTheme } = createThemeProvider({
             "main": "#3333",
         },
     },
-    //We keep the default usecases colors except that we add
+    //We keep the default surceases colors except that we add
     //a new usage scenario: "flash" and we use our pink within.
     "createColorUseCases": ({ isDarkModeEnabled, palette }) => ({
         ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
@@ -104,8 +104,8 @@ function Root() {
 //MyComponent
 
 import { useIsDarkModeEnabled } from "onyxia-ui";
+import { Button } from "onyxia-ui/Button";
 import { createUseClassNames } from "./theme.ts";
-import { Button } from "../Button";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
