@@ -1,3 +1,8 @@
+### **0.0.4** (2021-06-02)  
+  
+- update  
+- Update CI    
+  
 ### **0.0.3** (2021-06-02)  
   
 - Update package.json  
