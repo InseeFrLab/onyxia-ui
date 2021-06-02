@@ -27,7 +27,7 @@ We argue that the experience for TypeScript developers is not optimal and somewh
 
 `onyxia-ui` tries to improves `material-ui` in the following ways:
 
--   Providing better typing support.
+-   Providing better typing.
 -   Better styling API ([TSS](https://github.com/garronej/tss-react)).
 -   Core support for the dark mode.
 -   Easier, more guided, theme customization.
