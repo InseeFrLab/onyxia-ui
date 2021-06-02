@@ -59,6 +59,7 @@ jobs:
     - uses: bahmutov/npm-install@v1
     - run: mkdir public
     - run: yarn build-storybook -o ./build_storybook
+    - run: echo "ui.onyxia.dev" > build_storybook/CNAME
     - run: git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${{github.repository}}.git
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
