@@ -23,7 +23,7 @@ Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
 # Motivation
 
 [Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
-We argue that the experience for TypeScript developers is not optimal and sometime frustrating.
+We argue that the experience for TypeScript developers is not optimal and somewhat frustrating.
 
 `onyxia-ui` tries to improves `material-ui` in the following ways:
 
