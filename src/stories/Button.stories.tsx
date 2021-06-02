@@ -15,7 +15,7 @@ export const VueNoIcon = getStory({
     ...logCallbacks(["onClick"]),
 });
 
-export const Vue1 = getStory({
+export const VueWithStartIcon = getStory({
     ...defaultProps,
     "children": "Foo bar",
     "startIcon": "home",

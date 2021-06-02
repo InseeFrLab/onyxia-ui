@@ -10,7 +10,7 @@
     "types": "dist/lib/index.d.ts",
     "scripts": {
         "copyfiles": "copyfiles -u 1 src/**/*.css src/**/*.woff2 src/**/*.svg dist/",
-        "build": "tsc",
+        "build": "tsc && yarn copyfiles",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
