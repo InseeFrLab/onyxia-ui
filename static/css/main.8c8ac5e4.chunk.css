@@ -1,0 +1,37 @@
+
+/*@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap");*/
+
+/* latin */
+@font-face {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: normal; /*400*/
+  font-display: swap;
+  src: url(../../static/media/worksans-regular-webfont.3d45de00.woff2) format("woff2");
+}
+/* latin */
+@font-face {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../../static/media/worksans-medium-webfont.3d45de00.woff2) format("woff2");
+}
+/* latin */
+@font-face {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../static/media/worksans-semibold-webfont.3d45de00.woff2) format("woff2");
+}
+/* latin */
+@font-face {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: bold; /*700*/
+  font-display: swap;
+  src: url(../../static/media/worksans-bold-webfont.3d45de00.woff2) format("woff2");
+}
+
+/*# sourceMappingURL=main.8c8ac5e4.chunk.css.map*/
