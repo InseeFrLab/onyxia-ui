@@ -85,7 +85,7 @@ jobs:
     needs: check_if_version_upgraded
     if: needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
     steps:
-    - uses: garronej/github_actions_toolkit@v2.2
+    - uses: garronej/github_actions_toolkit@v2.4
       with:
         action_name: update_changelog
         branch: ${{ github.ref }}
