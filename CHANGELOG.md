@@ -1,3 +1,14 @@
+### **0.1.1** (2021-06-03)  
+  
+- Specifying logo is not optional  
+- Define default page for storybook  
+- Storybook custom home  
+- Update introduction mdx  
+- Update README.md  
+- Update README.md  
+- Update README.md  
+- Update Docs    
+  
 ## **0.1.0** (2021-06-03)  
   
 - Refactor, add splash screen  
