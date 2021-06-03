@@ -16,7 +16,7 @@
   <a href="https://ui.onyxia.dev">Documentation</a>
 </p>
 
-`onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).
+`onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).  
 All `material-ui` components are compatible with `onyxia-ui`.
 
 Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
@@ -49,13 +49,11 @@ The theme will be automatically adapted so they fit in nicely. You don't need to
 anything else than `onyxia-ui`, you can simply [`import Select from '@material-ui/core/Select';`](https://material-ui.com/components/selects/)
 for example, it will work.
 
-# Install / Import
+# Quick start
 
 ```bash
-$ yarn add onyxia-ui
+yarn add onyxia-ui tss-react
 ```
-
-# Quick start
 
 `src/theme.ts`:
 

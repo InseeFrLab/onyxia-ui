@@ -1,3 +1,8 @@
+## **0.1.0** (2021-06-03)  
+  
+- Refactor, add splash screen  
+- Update storybook configuration    
+  
 ### **0.0.5** (2021-06-02)  
   
 - Add assets    
