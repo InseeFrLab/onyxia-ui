@@ -1,6 +1,5 @@
 import { useState, useEffect, memo } from "react";
 import type { ReactNode, FC } from "react";
-import { ReactComponent as OnyxiaLogoSvg } from "app/assets/svg/OnyxiaLogo.svg";
 import { createUseClassNames, useThemeBase } from "./lib/ThemeProvider";
 import { css, cx, keyframes } from "tss-react";
 import { useDomRect } from "powerhooks";
@@ -217,13 +216,13 @@ const SplashScreen = memo((props: Props) => {
 });
 
 export function SplashScreenProvider(props: {
-    Logo?(props: { className?: string }): ReturnType<FC>;
+    Logo(props: { className?: string }): ReturnType<FC>;
     fillColor?: string;
     children: ReactNode;
 }) {
     const { themeBase } = useThemeBase();
 
-    const { children, Logo = OnyxiaLogoSvg, fillColor = themeBase.colors.palette.focus.main } = props;
+    const { children, Logo, fillColor = themeBase.colors.palette.focus.main } = props;
 
     const {
         ref,
