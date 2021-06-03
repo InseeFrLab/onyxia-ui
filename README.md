@@ -23,6 +23,8 @@ Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
 
 # Showcase
 
+Some apps using this toolkit.
+
 -   [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
 -   [onyxia.dev](https://onyxia.dev)
 -   [sspcloud.fr](https://sspcloud.fr)
@@ -66,6 +68,7 @@ import {
 } from "onyxia-ui";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
+import { SplashScreenProvider } from "onyxia-ui/splashScreen";
 
 const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
@@ -105,7 +108,9 @@ import { MyComponent } from "./MyComponent.txt";
 
 ReactDOM.render(
     <ThemeProvider>
-        <MyComponent />
+        <SplashScreenProvider>
+            <MyComponent />
+        </SplashScreenProvider>
     </ThemeProvider>,
     document.getElementById("root"),
 );
@@ -114,17 +119,16 @@ ReactDOM.render(
 `src/MyComponent.tsx`:
 
 ```tsx
+import { useEffect } from "react";
 import { createUseClassNames } from "./theme.ts";
-
 //Cherry pick the custom components you wish to import.
 import { Button } from "onyxia-ui/Button";
-
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
 import { useIsDarkModeEnabled } from "onyxia-ui";
-
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
+import { hideSplashScreen } from "onyxia-ui/splashScreen";
 
 //See: https://github.com/garronej/tss-react
 const { useClassNames } = createUseClassNames()(theme => ({
@@ -142,6 +146,11 @@ function MyComponent() {
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
     const { classNames } = useClassNames({});
+
+    useEffect(() => {
+        //Call this when your component is in a state ready to be shown
+        hideSplashScreen();
+    }, []);
 
     return (
         <div className={classNames.root}>
