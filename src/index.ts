@@ -1,5 +1,5 @@
-//NOTE: This is the index for the components. The real index is src/lib/index.ts
-//This index should never be used, component should be cherry picked.
+//NOTE: This index should never be used.
+
 export * from "./Alert";
 export * from "./Button";
 export * from "./CircularProgress";
@@ -11,3 +11,5 @@ export * from "./splashScreen";
 export * from "./TextField";
 export * from "./Tooltip";
 export * from "./Typography";
+
+export * from "./lib";

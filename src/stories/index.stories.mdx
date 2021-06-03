@@ -5,8 +5,6 @@
 yarn add onyxia-ui tss-react
 ```
 
-app/assets/svg/OnyxiaLogo
-
 `src/theme.ts`:
 
 ```tsx
@@ -14,11 +12,10 @@ import {
     createThemeProvider,
     defaultPalette,
     createDefaultColorUseCases,
-    defaultTypography
-} from "onyxia-ui";
+    defaultTypography,
+} from "onyxia-ui/lib";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
-import { SplashScreenProvider } from "onyxia-ui/splashScreen";
 
 const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
@@ -38,15 +35,14 @@ const { ThemeProvider, useTheme } = createThemeProvider({
         ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
         "flashes": {
             "cute": palette.shinyPink.main,
-            "warning": palette.orangeWarning.light
+            "warning": palette.orangeWarning.light,
         },
     }),
 });
 
-export { ThemeProvider }
+export { ThemeProvider };
 
 export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
-
 ```
 
 `src/index.tsx`:
@@ -55,10 +51,12 @@ export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
 import * as ReactDOM from "react-dom";
 import { ThemeProvider } from "./theme";
 import { MyComponent } from "./MyComponent.txt";
+import { SplashScreenProvider } from "onyxia-ui/splashScreen";
+import { ReactComponent as CompanyLogoSvg } from "./company-logo.svg";
 
 ReactDOM.render(
     <ThemeProvider>
-        <SplashScreenProvider>
+        <SplashScreenProvider Logo={CompanyLogo}>
             <MyComponent />
         </SplashScreenProvider>
     </ThemeProvider>,
@@ -75,7 +73,7 @@ import { createUseClassNames } from "./theme.ts";
 import { Button } from "onyxia-ui/Button";
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
-import { useIsDarkModeEnabled } from "onyxia-ui";
+import { useIsDarkModeEnabled } from "onyxia-ui/lib";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
 import { hideSplashScreen } from "onyxia-ui/splashScreen";

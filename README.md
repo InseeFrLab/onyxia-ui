@@ -63,7 +63,7 @@ import {
     defaultPalette,
     createDefaultColorUseCases,
     defaultTypography,
-} from "onyxia-ui";
+} from "onyxia-ui/lib";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
 
@@ -123,7 +123,7 @@ import { createUseClassNames } from "./theme.ts";
 import { Button } from "onyxia-ui/Button";
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
-import { useIsDarkModeEnabled } from "onyxia-ui";
+import { useIsDarkModeEnabled } from "onyxia-ui/lib";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
 import { hideSplashScreen } from "onyxia-ui/splashScreen";
