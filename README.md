@@ -62,7 +62,7 @@ import {
     createThemeProvider,
     defaultPalette,
     createDefaultColorUseCases,
-    defaultTypography
+    defaultTypography,
 } from "onyxia-ui";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
@@ -70,7 +70,7 @@ import { createUseClassNamesFactory } from "tss-react";
 const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
     "typography": {
-        ...defaultTypography
+        ...defaultTypography,
         "fontFamily": '"Work Sans", sans-serif',
     },
     "palette": {
@@ -85,15 +85,14 @@ const { ThemeProvider, useTheme } = createThemeProvider({
         ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
         "flashes": {
             "cute": palette.shinyPink.main,
-            "warning": palette.orangeWarning.light
+            "warning": palette.orangeWarning.light,
         },
     }),
 });
 
-export { ThemeProvider }
+export { ThemeProvider };
 
 export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
-
 ```
 
 `src/index.tsx`:
