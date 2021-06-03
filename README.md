@@ -47,12 +47,6 @@ The theme will be automatically adapted so they fit in nicely. You don't need to
 anything else than `onyxia-ui`, you can simply [`import Select from '@material-ui/core/Select';`](https://material-ui.com/components/selects/)
 for example, it will work.
 
-# Install / Import
-
-```bash
-$ yarn add onyxia-ui
-```
-
 # Quick start
 
 ```bash
