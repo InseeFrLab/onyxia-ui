@@ -66,7 +66,6 @@ import {
 } from "onyxia-ui";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
-import { SplashScreenProvider } from "onyxia-ui/splashScreen";
 
 const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
@@ -103,10 +102,12 @@ export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
 import * as ReactDOM from "react-dom";
 import { ThemeProvider } from "./theme";
 import { MyComponent } from "./MyComponent.txt";
+import { SplashScreenProvider } from "onyxia-ui/splashScreen";
+import { ReactComponent as CompanyLogoSvg } from "./company-logo.svg";
 
 ReactDOM.render(
     <ThemeProvider>
-        <SplashScreenProvider>
+        <SplashScreenProvider Logo={CompanyLogo}>
             <MyComponent />
         </SplashScreenProvider>
     </ThemeProvider>,
