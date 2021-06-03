@@ -1,4 +1,4 @@
-import type { Theme } from "@material-ui/core";
+import type { Theme as MuiTheme } from "@material-ui/core";
 import { useIsDarkModeEnabled, evtIsDarkModeEnabled } from "./useIsDarkModeEnabled";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider as MuiThemeProvider, StylesProvider } from "@material-ui/core/styles";
@@ -12,11 +12,11 @@ import { defaultPalette, createDefaultColorUseCases } from "./colors";
 import type { TypographyOptionsBase } from "./typography";
 import { defaultTypography, createMuiTypographyOptions } from "./typography";
 import { createMuiPaletteOptions } from "./colors";
-import { createUseGlobalState } from "powerhooks/useGlobalState";
+import { createUseGlobalState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 
-export type OnyxiaTheme<
+export type Theme<
     Palette extends PaletteBase,
     ColorUseCases extends ColorUseCasesBase,
     TypographyOptions extends TypographyOptionsBase,
@@ -29,26 +29,28 @@ export type OnyxiaTheme<
     isDarkModeEnabled: boolean;
     typography: TypographyOptions;
     shadows: typeof shadows;
-    spacing: Theme["spacing"];
-    muiTheme: Theme;
+    spacing: MuiTheme["spacing"];
+    muiTheme: MuiTheme;
     custom: Custom;
 };
 
-const { useOnyxiaThemeBase, evtOnyxiaThemeBase } = createUseGlobalState(
-    "onyxiaThemeBase",
+const { useThemeBase, evtThemeBase } = createUseGlobalState(
+    "themeBase",
     //NOTE We should be able to use Record<string, never> as Custom here...
     createObjectThatThrowsIfAccessed<
-        OnyxiaTheme<PaletteBase, ColorUseCasesBase, TypographyOptionsBase, Record<string, unknown>>
+        Theme<PaletteBase, ColorUseCasesBase, TypographyOptionsBase, Record<string, unknown>>
     >({
         "debugMessage": "You must invoke createThemeProvider() before being able to use the components",
     }),
     { "persistance": false },
 );
 
+export { useThemeBase };
+
 export const { createUseClassNames } = createUseClassNamesFactory({
     "useTheme": function useClosure() {
-        const { onyxiaThemeBase } = useOnyxiaThemeBase();
-        return onyxiaThemeBase;
+        const { themeBase } = useThemeBase();
+        return themeBase;
     },
 });
 
@@ -101,7 +103,7 @@ export function createThemeProvider<
         { "max": 1 },
     );
 
-    function OnyxiaThemeProvider(props: { children: React.ReactNode }) {
+    function ThemeProvider(props: { children: React.ReactNode }) {
         const { children } = props;
 
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
@@ -114,8 +116,8 @@ export function createThemeProvider<
         );
     }
 
-    const createOnyxiaTheme_memo = memoize(
-        (isDarkModeEnabled): OnyxiaTheme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
+    const createTheme_memo = memoize(
+        (isDarkModeEnabled): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
             "colors": {
                 palette,
                 "useCases": createColorUseCases_memo(isDarkModeEnabled),
@@ -125,9 +127,8 @@ export function createThemeProvider<
             shadows,
             ...(() => {
                 const muiTheme = createMuiTheme_memo(isDarkModeEnabled);
-
                 return {
-                    "spacing": muiTheme.spacing,
+                    "spacing": muiTheme.spacing.bind(muiTheme),
                     muiTheme,
                 };
             })(),
@@ -137,14 +138,13 @@ export function createThemeProvider<
     );
 
     evtIsDarkModeEnabled.attach(
-        isDarkModeEnabled => (evtOnyxiaThemeBase.state = createOnyxiaTheme_memo(isDarkModeEnabled)),
+        isDarkModeEnabled => (evtThemeBase.state = createTheme_memo(isDarkModeEnabled)),
     );
 
-    function useOnyxiaTheme(): OnyxiaTheme<Palette, ColorUseCases, TypographyOptions, Custom> {
+    function useTheme(): Theme<Palette, ColorUseCases, TypographyOptions, Custom> {
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
-
-        return createOnyxiaTheme_memo(isDarkModeEnabled);
+        return createTheme_memo(isDarkModeEnabled);
     }
 
-    return { OnyxiaThemeProvider, useOnyxiaTheme };
+    return { ThemeProvider, useTheme };
 }

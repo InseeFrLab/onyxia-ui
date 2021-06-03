@@ -1,4 +1,4 @@
-import { TextField, defaultProps } from "../TextField";
+import { TextField, textFieldDefaultProps } from "../TextField";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./geStory";
 import { css } from "tss-react";
@@ -11,7 +11,7 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Vue1 = getStory({
-    ...defaultProps,
+    ...textFieldDefaultProps,
     "defaultValue": "",
     "inputProps_aria-label": "the aria label",
     "label": "This is the label",
@@ -38,7 +38,7 @@ export const Vue1 = getStory({
 });
 
 export const VuePassword = getStory({
-    ...defaultProps,
+    ...textFieldDefaultProps,
     "className": css({ "width": 500 }),
     "defaultValue": "",
     "inputProps_aria-label": "password",
@@ -67,7 +67,7 @@ export const VuePassword = getStory({
 });
 
 export const VueWithHint = getStory({
-    ...defaultProps,
+    ...textFieldDefaultProps,
     "helperText": "This is an helper text",
     "className": css({ "width": 500 }),
     "defaultValue": "",
@@ -97,7 +97,7 @@ export const VueWithHint = getStory({
 });
 
 export const VueWithHintAndQuestionMark = getStory({
-    ...defaultProps,
+    ...textFieldDefaultProps,
     "helperText": "This is an helper text",
     "questionMarkHelperText": "This is an extra helper text",
     "className": css({ "width": 500 }),

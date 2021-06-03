@@ -4,10 +4,10 @@ import { forwardRef, memo } from "react";
 import MuiIconButton from "@material-ui/core/IconButton";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
-import type { Props as IconProps } from "./Icon";
+import type { IconProps as IconProps } from "./Icon";
 import { Icon } from "./Icon";
 
-export type Props = {
+export type IconButtonProps = {
     className?: string | null;
 
     disabled?: boolean;
@@ -19,14 +19,14 @@ export type Props = {
     "aria-label"?: string | null;
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const iconButtonDefaultProps: PickOptionals<IconButtonProps> = {
     "className": null,
     "disabled": false,
     "fontSize": "default",
     "aria-label": null,
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()(theme => ({
+const { useClassNames } = createUseClassNames<Required<IconButtonProps>>()(theme => ({
     "root": {
         "padding": theme.spacing(1),
         "&:hover": {
@@ -39,8 +39,8 @@ const { useClassNames } = createUseClassNames<Required<Props>>()(theme => ({
 }));
 
 export const IconButton = memo(
-    forwardRef<HTMLButtonElement, Props>((props, ref) => {
-        const completedProps = { ...defaultProps, ...noUndefined(props) };
+    forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
+        const completedProps = { ...iconButtonDefaultProps, ...noUndefined(props) };
 
         const {
             disabled,

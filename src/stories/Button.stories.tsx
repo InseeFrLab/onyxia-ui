@@ -1,4 +1,4 @@
-import { Button, defaultProps } from "../Button";
+import { Button, buttonDefaultProps } from "../Button";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./geStory";
 
@@ -10,13 +10,13 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const VueNoIcon = getStory({
-    ...defaultProps,
+    ...buttonDefaultProps,
     "children": "Default",
     ...logCallbacks(["onClick"]),
 });
 
 export const VueWithStartIcon = getStory({
-    ...defaultProps,
+    ...buttonDefaultProps,
     "children": "Foo bar",
     "startIcon": "home",
     ...logCallbacks(["onClick"]),

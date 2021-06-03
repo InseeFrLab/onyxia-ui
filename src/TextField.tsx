@@ -2,7 +2,7 @@ import { createUseClassNames } from "./lib/ThemeProvider";
 import { cx } from "tss-react";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
-import { useConstCallback } from "powerhooks/useConstCallback";
+import { useConstCallback } from "powerhooks";
 import MuiTextField from "@material-ui/core/TextField";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
@@ -10,7 +10,7 @@ import { getBrowser } from "./tools/getBrowser";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { IconButton } from "./IconButton";
 import type { NonPostableEvt } from "evt";
-import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
+import { useEffectOnValueChange } from "powerhooks";
 import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
@@ -58,7 +58,7 @@ export type TextFieldProps = {
     selectAllTextOnFocus?: boolean;
 };
 
-export const defaultProps: PickOptionals<TextFieldProps> = {
+export const textFieldDefaultProps: PickOptionals<TextFieldProps> = {
     "label": null,
     "helperText": "",
     "questionMarkHelperText": "",
@@ -154,7 +154,7 @@ const { useClassNames } = createUseClassNames<Required<TextFieldProps> & { error
 );
 
 export const TextField = memo((props: TextFieldProps) => {
-    const completedProps = { ...defaultProps, ...noUndefined(props) };
+    const completedProps = { ...textFieldDefaultProps, ...noUndefined(props) };
 
     const {
         transformValueBeingTyped,

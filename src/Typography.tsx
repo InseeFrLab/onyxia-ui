@@ -5,7 +5,7 @@ import MuiTypography from "@material-ui/core/Typography";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 
-export type Props = {
+export type TypographyProps = {
     className?: string | null;
     id?: string | null;
     variant?:
@@ -25,7 +25,7 @@ export type Props = {
     onClick?: (() => void) | null;
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const typographyDefaultProps: PickOptionals<TypographyProps> = {
     "className": null,
     "id": null,
     "variant": "body1",
@@ -33,30 +33,32 @@ export const defaultProps: PickOptionals<Props> = {
     "onClick": null,
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color, onClick }) => ({
-    "root": {
-        "color":
-            theme.colors.useCases.typography[
-                (() => {
-                    switch (color) {
-                        case "primary":
-                            return "textPrimary";
-                        case "secondary":
-                            return "textSecondary";
-                        case "disabled":
-                            return "textDisabled";
-                        case "focus":
-                            return "textFocus";
-                    }
-                })()
-            ],
-        "cursor": onClick !== null ? "pointer" : undefined,
-    },
-}));
+const { useClassNames } = createUseClassNames<Required<TypographyProps>>()(
+    (theme, { color, onClick }) => ({
+        "root": {
+            "color":
+                theme.colors.useCases.typography[
+                    (() => {
+                        switch (color) {
+                            case "primary":
+                                return "textPrimary";
+                            case "secondary":
+                                return "textSecondary";
+                            case "disabled":
+                                return "textDisabled";
+                            case "focus":
+                                return "textFocus";
+                        }
+                    })()
+                ],
+            "cursor": onClick !== null ? "pointer" : undefined,
+        },
+    }),
+);
 
 export const Typography = memo(
-    forwardRef<any, Props>((props, ref) => {
-        const completedProps = { ...defaultProps, ...noUndefined(props) };
+    forwardRef<any, TypographyProps>((props, ref) => {
+        const completedProps = { ...typographyDefaultProps, ...noUndefined(props) };
 
         const {
             children,

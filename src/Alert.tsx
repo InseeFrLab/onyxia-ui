@@ -8,19 +8,19 @@ import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 import { cx } from "tss-react";
 
-export type Props = {
+export type AlertProps = {
     className?: string | null;
     severity: "warning" | "info" | "error" | "info" | "success";
     children: NonNullable<ReactNode>;
     doDisplayCross?: boolean;
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const alertDefaultProps: PickOptionals<AlertProps> = {
     "className": null,
     "doDisplayCross": false,
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { severity }) => ({
+const { useClassNames } = createUseClassNames<Required<AlertProps>>()((theme, { severity }) => ({
     "root": {
         "color": theme.colors.useCases.typography.textPrimary,
         "backgroundColor": theme.colors.useCases.alertSeverity[severity].background,
@@ -33,8 +33,8 @@ const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { sever
     },
 }));
 
-export const Alert = memo((props: Props) => {
-    const completedProps = { ...defaultProps, ...noUndefined(props) };
+export const Alert = memo((props: AlertProps) => {
+    const completedProps = { ...alertDefaultProps, ...noUndefined(props) };
 
     const { severity, children, className, doDisplayCross } = completedProps;
 

@@ -1,4 +1,4 @@
-import { IconButton, defaultProps } from "../IconButton";
+import { IconButton, iconButtonDefaultProps } from "../IconButton";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./geStory";
 
@@ -10,7 +10,7 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Vue = getStory({
-    ...defaultProps,
+    ...iconButtonDefaultProps,
     "type": "add",
     ...logCallbacks(["onClick"]),
 });

@@ -1,5 +1,5 @@
-import { createUseGlobalState } from "powerhooks/useGlobalState";
-import type { StatefulEvt } from "powerhooks/useGlobalState";
+import { createUseGlobalState } from "powerhooks";
+import type { StatefulEvt } from "powerhooks";
 
 export function getIsDarkModeEnabledOsDefault() {
     return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;

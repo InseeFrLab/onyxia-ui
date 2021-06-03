@@ -1,4 +1,4 @@
-import { Icon, defaultProps } from "../Icon";
+import { Icon, iconDefaultProps } from "../Icon";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./geStory";
 
@@ -9,4 +9,4 @@ const { meta, getStory } = getStoryFactory({
 
 export default meta;
 
-export const Home = getStory({ ...defaultProps, "type": "home" });
+export const Home = getStory({ ...iconDefaultProps, "type": "home" });

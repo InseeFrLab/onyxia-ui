@@ -4,11 +4,11 @@ import MuiDialog from "@material-ui/core/Dialog";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import { Typography } from "./Typography";
 import Checkbox from "@material-ui/core/Checkbox";
-import { useConstCallback } from "powerhooks/useConstCallback";
+import { useConstCallback } from "powerhooks";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { assert } from "tsafe/assert";
 
-export type Props = {
+export type DialogProps = {
     title?: string;
     subtitle?: string;
     body?: string;
@@ -52,7 +52,7 @@ const { useClassNames } = createUseClassNames()(theme => ({
 const labelledby = "alert-dialog-title";
 const describedby = "alert-dialog-description";
 
-export const Dialog = memo((props: Props) => {
+export const Dialog = memo((props: DialogProps) => {
     const {
         title,
         subtitle,

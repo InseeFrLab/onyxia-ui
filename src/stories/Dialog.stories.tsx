@@ -1,6 +1,6 @@
 import { Dialog } from "../Dialog";
 import { Button } from "../Button";
-import type { Props } from "../Dialog";
+import type { DialogProps } from "../Dialog";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./geStory";
 
@@ -11,7 +11,7 @@ const { meta, getStory } = getStoryFactory({
 
 export default meta;
 
-const props: Props = {
+const props: DialogProps = {
     /* spell-checker: disable */
     "title": "Utiliser dans un service",
     "subtitle": "Le chemin du secret a été copié. ",

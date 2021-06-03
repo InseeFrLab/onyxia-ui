@@ -17,8 +17,15 @@
 </p>
 
 `onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).
+All `material-ui` components are compatible with `onyxia-ui`.
 
 Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
+
+# Showcase
+
+-   [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
+-   [onyxia.dev](https://onyxia.dev)
+-   [sspcloud.fr](https://sspcloud.fr)
 
 # Motivation
 
@@ -29,7 +36,7 @@ We argue that the experience for TypeScript developers is not optimal and somewh
 
 -   Providing better typing.
 -   Better styling API ([TSS](https://github.com/garronej/tss-react)).
--   Core support for the dark mode.
+-   Built in support for dark mode, persistent across reload, without white flashes.
 -   Easier, more guided, theme customization.
 -   Provides smarter core components that requires less boiler plate.
 -   Provide splash screen.
@@ -40,12 +47,6 @@ The theme will be automatically adapted so they fit in nicely. You don't need to
 anything else than `onyxia-ui`, you can simply [`import Select from '@material-ui/core/Select';`](https://material-ui.com/components/selects/)
 for example, it will work.
 
-# Showcase
-
--   [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
--   [onyxia.dev](https://onyxia.dev)
--   [sspcloud.fr](https://sspcloud.fr)
-
 # Install / Import
 
 ```bash
@@ -54,15 +55,24 @@ $ yarn add onyxia-ui
 
 # Quick start
 
-```typescript
-// theme.ts
+`src/theme.ts`:
 
-import { createThemeProvider, defaultPalette, createDefaultColorUseCases } from "onyxia-ui";
+```tsx
+import {
+    createThemeProvider,
+    defaultPalette,
+    createDefaultColorUseCases,
+    defaultTypography
+} from "onyxia-ui";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
 
-const { OnyxiaThemeProvider, useOnyxiaTheme } = createThemeProvider({
+const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
+    "typography": {
+        ...defaultTypography
+        "fontFamily": '"Work Sans", sans-serif',
+    },
     "palette": {
         ...defaultPalette,
         "shinyPink": {
@@ -75,46 +85,56 @@ const { OnyxiaThemeProvider, useOnyxiaTheme } = createThemeProvider({
         ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
         "flashes": {
             "cute": palette.shinyPink.main,
-            "sad": palette.orangeWarning.light,
+            "warning": palette.orangeWarning.light
         },
     }),
 });
 
-export const { createUseClassNames } = createUseClassNamesFactory({ "useTheme": useOnyxiaTheme });
+export { ThemeProvider }
 
-//index.ts
+export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
 
-function Root() {
-    //Example to show how to access the theme object.
-    //Note that it works even outside the <OnyxiaThemeProvider/>
-    const onyxiaTheme = useOnyxiaTheme();
+```
 
-    //If we waned to retrieve our pink:
-    onyxiaTheme.colors.palette.shinyPink.main;
-    //If we wanted the color of pink flashes:
-    onyxiaTheme.colors.useCases.flashes.cute;
-    //Here you have the theme object as defined by material-ui.
-    onyxiaTheme.muiTheme;
+`src/index.tsx`:
 
-    return (
-        <OnyxiaThemeProvider>
-            <MyComponent />
-        </OnyxiaThemeProvider>
-    );
-}
+```tsx
+import * as ReactDOM from "react-dom";
+import { ThemeProvider } from "./theme";
+import { MyComponent } from "./MyComponent.txt";
 
-//MyComponent
+ReactDOM.render(
+    <ThemeProvider>
+        <MyComponent />
+    </ThemeProvider>,
+    document.getElementById("root"),
+);
+```
 
-import { useIsDarkModeEnabled } from "onyxia-ui";
-import { Button } from "onyxia-ui/Button";
+`src/MyComponent.tsx`:
+
+```tsx
 import { createUseClassNames } from "./theme.ts";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
+//Cherry pick the custom components you wish to import.
+import { Button } from "onyxia-ui/Button";
+
+//Use this hook to know if the dark mode is currently enabled.
+//and to toggle it's state.
+import { useIsDarkModeEnabled } from "onyxia-ui";
+
+//Yo can import and use Materia-UI components, they will blend in nicely.
+import Switch from "@material-ui/core/Switch";
 
 //See: https://github.com/garronej/tss-react
 const { useClassNames } = createUseClassNames()(theme => ({
     "root": {
-        "backgroundColor": theme.colors.useCases.flashes.cute,
+        "backgroundColor": theme.colors.useCases.surfaces.background,
+        /*
+        theme.colors.palette.shinyPink.main <- your custom color
+        theme.colors.useCases.flashes.cute  <- your custom use case
+        theme.muiTheme                      <- the theme object as defined by @material-ui/core
+        */
     },
 }));
 
@@ -125,12 +145,11 @@ function MyComponent() {
 
     return (
         <div className={classNames.root}>
-            <Button>Hello World</Button>
-            <Select>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
+            <Button onClick={() => console.log("click")}>Hello World</Button>
+            <Switch
+                checked={isDarkModeEnabled}
+                onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
+            />
         </div>
     );
 }

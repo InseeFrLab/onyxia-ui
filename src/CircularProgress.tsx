@@ -5,26 +5,26 @@ import MuiCircularProgress from "@material-ui/core/CircularProgress";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 
-export type Props = {
+export type CircularProgressProps = {
     className?: string | null;
     size?: number;
     color?: "primary" | "textPrimary";
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const circularProgressDefaultProps: PickOptionals<CircularProgressProps> = {
     "className": null,
     "size": 40,
     "color": "primary",
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color }) => ({
+const { useClassNames } = createUseClassNames<Required<CircularProgressProps>>()((theme, { color }) => ({
     "root": {
         "color": color !== "textPrimary" ? undefined : theme.colors.useCases.typography.textPrimary,
     },
 }));
 
-export const CircularProgress = memo((props: Props) => {
-    const completedProps = { ...defaultProps, ...noUndefined(props) };
+export const CircularProgress = memo((props: CircularProgressProps) => {
+    const completedProps = { ...circularProgressDefaultProps, ...noUndefined(props) };
 
     const { color, size, className } = completedProps;
 

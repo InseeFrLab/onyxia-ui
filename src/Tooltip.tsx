@@ -4,7 +4,7 @@ import MuiTooltip from "@material-ui/core/Tooltip";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import { Typography } from "./Typography";
 
-export type Props = {
+export type TooltipProps = {
     title: NonNullable<ReactNode>;
     children: ReactElement;
     enterDelay?: number;
@@ -16,7 +16,7 @@ const { useClassNames } = createUseClassNames()(theme => ({
     },
 }));
 
-export const Tooltip = memo((props: Props) => {
+export const Tooltip = memo((props: TooltipProps) => {
     const { title, children, enterDelay } = props;
 
     const { classNames } = useClassNames({});

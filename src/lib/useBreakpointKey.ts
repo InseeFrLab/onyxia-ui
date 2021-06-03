@@ -1,5 +1,5 @@
 import { useTheme } from "@material-ui/core/styles";
-import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
+import { useWindowInnerSize } from "powerhooks";
 
 export function useBreakpointKey() {
     const theme = useTheme();

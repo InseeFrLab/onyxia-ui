@@ -4,12 +4,12 @@ import { cx } from "tss-react";
 import MuiButton from "@material-ui/core/Button";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
-import type { Props as IconProps } from "./Icon";
+import type { IconProps as IconProps } from "./Icon";
 import { Icon } from "./Icon";
-import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
+import { useGuaranteedMemo } from "powerhooks";
 import { capitalize } from "tsafe/capitalize";
 
-export type Props = {
+export type ButtonProps = {
     className?: string | null;
 
     color?: "primary" | "secondary" | "ternary";
@@ -34,7 +34,7 @@ export type Props = {
     doOpenNewTabIfHref?: boolean;
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const buttonDefaultProps: PickOptionals<ButtonProps> = {
     "className": null,
     "color": "primary",
     "disabled": false,
@@ -53,8 +53,8 @@ export const defaultProps: PickOptionals<Props> = {
     "doOpenNewTabIfHref": true,
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color, disabled }) => {
-    const textColor = ({ color, disabled }: Pick<Required<Props>, "color" | "disabled">) =>
+const { useClassNames } = createUseClassNames<Required<ButtonProps>>()((theme, { color, disabled }) => {
+    const textColor = ({ color, disabled }: Pick<Required<ButtonProps>, "color" | "disabled">) =>
         theme.colors.useCases.typography[
             disabled
                 ? "textDisabled"
@@ -69,7 +69,7 @@ const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color
                   })()
         ];
 
-    const hoverTextColor = ({ color }: Pick<Required<Props>, "color" | "disabled">) => {
+    const hoverTextColor = ({ color }: Pick<Required<ButtonProps>, "color" | "disabled">) => {
         switch (theme.isDarkModeEnabled) {
             case true:
                 return theme.colors.palette[
@@ -151,8 +151,8 @@ const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color
 });
 
 export const Button = memo(
-    forwardRef<HTMLButtonElement, Props>((props, ref) => {
-        const completedProps = { ...defaultProps, ...noUndefined(props) };
+    forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+        const completedProps = { ...buttonDefaultProps, ...noUndefined(props) };
 
         const {
             className,

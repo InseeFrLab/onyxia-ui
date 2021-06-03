@@ -5,26 +5,26 @@ import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 import { cx } from "tss-react";
 
-export type Props = {
+export type PaperProps = {
     children: NonNullable<React.ReactNode>;
     elevation?: number;
     className?: string | null;
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const paperDefaultProps: PickOptionals<PaperProps> = {
     "className": null,
     "elevation": 1,
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { elevation }) => ({
+const { useClassNames } = createUseClassNames<Required<PaperProps>>()((theme, { elevation }) => ({
     "root": {
         "backgroundColor": theme.colors.useCases.surfaces.surface1,
         "boxShadow": theme.shadows[elevation],
     },
 }));
 export const Paper = memo(
-    forwardRef<HTMLButtonElement, Props>((props, ref) => {
-        const completedProps = { ...defaultProps, ...noUndefined(props) };
+    forwardRef<HTMLButtonElement, PaperProps>((props, ref) => {
+        const completedProps = { ...paperDefaultProps, ...noUndefined(props) };
 
         const {
             children,

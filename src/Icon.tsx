@@ -96,7 +96,7 @@ export type MaterialType = typeof materialType[number];
 //NOTE: Ensure there is not overlap between the types
 doExtends<SvgTypes & MaterialType, never>();
 
-export type Props = {
+export type IconProps = {
     className?: string | null;
 
     /** Design which icon should be displayed */
@@ -109,14 +109,14 @@ export type Props = {
     onClick?: MouseEventHandler<SVGSVGElement> | null;
 };
 
-export const defaultProps: PickOptionals<Props> = {
+export const iconDefaultProps: PickOptionals<IconProps> = {
     "className": null,
     "color": "textPrimary",
     "fontSize": "default",
     "onClick": null,
 };
 
-const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color }) => ({
+const { useClassNames } = createUseClassNames<Required<IconProps>>()((theme, { color }) => ({
     "root": {
         "color": theme.colors.useCases.typography[color],
         // https://stackoverflow.com/a/24626986/3731798
@@ -127,8 +127,8 @@ const { useClassNames } = createUseClassNames<Required<Props>>()((theme, { color
 }));
 
 export const Icon = memo(
-    forwardRef<SVGSVGElement, Props>((props, ref) => {
-        const completedProps = { ...defaultProps, ...noUndefined(props) };
+    forwardRef<SVGSVGElement, IconProps>((props, ref) => {
+        const completedProps = { ...iconDefaultProps, ...noUndefined(props) };
 
         const {
             type,
