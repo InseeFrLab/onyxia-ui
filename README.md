@@ -3,7 +3,7 @@
 </p>
 <p align="center">
     <i>A modern UI toolkit with excellent typing.</i><br>
-    <i>Highly customizable, looks great out of the box.</i><br>
+    <i>Highly customizable but looks great out of the box.</i><br>
     <i>Build on top of material-ui.</i>
     <br>
     <br>
@@ -16,8 +16,7 @@
   <a href="https://ui.onyxia.dev">Documentation</a>
 </p>
 
-`onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).  
-All `material-ui` components are compatible with `onyxia-ui`.
+`onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).
 
 Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
 
@@ -33,21 +32,15 @@ Some apps using this toolkit.
 
 [Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
 We argue that the experience for TypeScript developers is not optimal and somewhat frustrating.
-
-`onyxia-ui` tries to improves `material-ui` in the following ways:
+In consequence, we wanted to create a ui toolkit that would be compatible with
+`material-ui` components but that would also improves it in the following ways:
 
 -   Providing better typing.
--   Better styling API ([TSS](https://github.com/garronej/tss-react)).
+-   Arguably better styling API: [TSS](https://github.com/garronej/tss-react).
 -   Built in support for dark mode, persistent across reload, without white flashes.
 -   Easier, more guided, theme customization.
 -   Provides smarter core components that requires less boiler plate.
--   Provide splash screen.
-
-You can checkout `onyxia-ui` builtins components [here](https://ui.onyxia.dev).
-You can also use all `material-ui` components
-The theme will be automatically adapted so they fit in nicely. You don't need to install
-anything else than `onyxia-ui`, you can simply [`import Select from '@material-ui/core/Select';`](https://material-ui.com/components/selects/)
-for example, it will work.
+-   Provide splash screen that hides your components while they are not yet loaded.
 
 # Quick start
 
