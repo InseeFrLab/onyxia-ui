@@ -1,3 +1,8 @@
+### **0.1.2** (2021-06-03)  
+  
+- Change the index to be able to work with a local copy  
+- Small fix    
+  
 ### **0.1.1** (2021-06-03)  
   
 - Specifying logo is not optional  
