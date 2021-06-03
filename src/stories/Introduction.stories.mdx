@@ -1,13 +1,115 @@
 
-<Meta title="Introduction" />
+<Meta title="Quick start" />
 
+# Quick start
 
-# Plaground for the app UI components 🎉
+```bash
+yarn add onyxia-ui tss-react
+```
 
-If you see this page it means that you just ran `yarn run storybook`.  
-You can go ahead and try the component in isolation. ✨
+`src/theme.ts`:
 
-Learn more about [Storybook](https://storybook.js.org/)
+```tsx
+import {
+    createThemeProvider,
+    defaultPalette,
+    createDefaultColorUseCases,
+    defaultTypography
+} from "onyxia-ui";
+import "onyxia-design-lab/assets/fonts/work-sans.css";
+import { createUseClassNamesFactory } from "tss-react";
+import { SplashScreenProvider } from "onyxia-ui/splashScreen";
 
+const { ThemeProvider, useTheme } = createThemeProvider({
+    //We keep the default color palette but we add a custom color: a shiny pink.
+    "typography": {
+        ...defaultTypography
+        "fontFamily": '"Work Sans", sans-serif',
+    },
+    "palette": {
+        ...defaultPalette,
+        "shinyPink": {
+            "main": "#3333",
+        },
+    },
+    //We keep the default surceases colors except that we add
+    //a new usage scenario: "flash" and we use our pink within.
+    "createColorUseCases": ({ isDarkModeEnabled, palette }) => ({
+        ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
+        "flashes": {
+            "cute": palette.shinyPink.main,
+            "warning": palette.orangeWarning.light
+        },
+    }),
+});
 
+export { ThemeProvider }
 
+export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
+
+```
+
+`src/index.tsx`:
+
+```tsx
+import * as ReactDOM from "react-dom";
+import { ThemeProvider } from "./theme";
+import { MyComponent } from "./MyComponent.txt";
+
+ReactDOM.render(
+    <ThemeProvider>
+        <SplashScreenProvider>
+            <MyComponent />
+        </SplashScreenProvider>
+    </ThemeProvider>,
+    document.getElementById("root"),
+);
+```
+
+`src/MyComponent.tsx`:
+
+```tsx
+import { useEffect } from "react";
+import { createUseClassNames } from "./theme.ts";
+//Cherry pick the custom components you wish to import.
+import { Button } from "onyxia-ui/Button";
+//Use this hook to know if the dark mode is currently enabled.
+//and to toggle it's state.
+import { useIsDarkModeEnabled } from "onyxia-ui";
+//Yo can import and use Materia-UI components, they will blend in nicely.
+import Switch from "@material-ui/core/Switch";
+import { hideSplashScreen } from "onyxia-ui/splashScreen";
+
+//See: https://github.com/garronej/tss-react
+const { useClassNames } = createUseClassNames()(theme => ({
+    "root": {
+        "backgroundColor": theme.colors.useCases.surfaces.background,
+        /*
+        theme.colors.palette.shinyPink.main <- your custom color
+        theme.colors.useCases.flashes.cute  <- your custom use case
+        theme.muiTheme                      <- the theme object as defined by @material-ui/core
+        */
+    },
+}));
+
+function MyComponent() {
+    const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
+
+    const { classNames } = useClassNames({});
+
+    useEffect(() => {
+        //Call this when your component is in a state ready to be shown
+        hideSplashScreen();
+    }, []);
+
+    return (
+        <div className={classNames.root}>
+            <Button onClick={() => console.log("click")}>Hello World</Button>
+            <Switch
+                checked={isDarkModeEnabled}
+                onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
+            />
+        </div>
+    );
+}
+```
