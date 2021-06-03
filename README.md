@@ -55,6 +55,10 @@ $ yarn add onyxia-ui
 
 # Quick start
 
+```bash
+yarn add onyxia-ui tss-react
+```
+
 `src/theme.ts`:
 
 ```tsx
