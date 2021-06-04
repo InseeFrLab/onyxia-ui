@@ -12,3 +12,5 @@ export { defaultTypography } from "./typography";
 
 export * from "./useIsDarkModeEnabled";
 export * from "./useBreakpointKey";
+
+export { useDomRect } from "powerhooks";

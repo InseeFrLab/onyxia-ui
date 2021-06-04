@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
 import { useIsDarkModeEnabled, evtIsDarkModeEnabled } from "./useIsDarkModeEnabled";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,6 +17,7 @@ import { createMuiPaletteOptions } from "./colors";
 import { createUseGlobalState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
+import { ZoomProvider } from "powerhooks";
 
 export type Theme<
     Palette extends PaletteBase,
@@ -59,14 +62,27 @@ export function createThemeProvider<
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
     TypographyOptions extends TypographyOptionsBase = TypographyOptionsBase,
     Custom extends Record<string, unknown> = Record<string, never>,
->(params: {
-    isReactStrictModeEnabled?: boolean;
-    typography?: TypographyOptions;
-    palette?: Palette;
-    createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
-    spacingSteps?(factor: number): number;
-    custom?: Custom;
-}) {
+>(
+    params: {
+        isReactStrictModeEnabled?: boolean;
+        typography?: TypographyOptions;
+        palette?: Palette;
+        createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
+        spacingSteps?(factor: number): number;
+        custom?: Custom;
+    } & (
+        | {}
+        | {
+              zoomProviderReferenceWidth: number | undefined;
+              /**
+               * Message to display when portrait mode, example:
+               *    This app isn't compatible with landscape mode yet,
+               *    please enable the rotation sensor and flip your phone.
+               */
+              portraitModeUnsupportedMessage?: ReactNode;
+          }
+    ),
+) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
@@ -103,18 +119,40 @@ export function createThemeProvider<
         { "max": 1 },
     );
 
-    function ThemeProvider(props: { children: React.ReactNode }) {
-        const { children } = props;
+    const { ThemeProvider } = (() => {
+        const zoomProviderParams =
+            "zoomProviderReferenceWidth" in params
+                ? ({ "doUseZoomProvider": true, ...params } as const)
+                : ({ "doUseZoomProvider": false } as const);
 
-        const { isDarkModeEnabled } = useIsDarkModeEnabled();
+        function ThemeProvider(props: { children: React.ReactNode }) {
+            const { children } = props;
 
-        return (
-            <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
-                <CssBaseline />
-                <StylesProvider injectFirst>{children}</StylesProvider>
-            </MuiThemeProvider>
-        );
-    }
+            const { isDarkModeEnabled } = useIsDarkModeEnabled();
+
+            return (
+                <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
+                    <CssBaseline />
+                    <StylesProvider injectFirst>
+                        {zoomProviderParams.doUseZoomProvider ? (
+                            <ZoomProvider
+                                referenceWidth={zoomProviderParams.zoomProviderReferenceWidth}
+                                portraitModeUnsupportedMessage={
+                                    zoomProviderParams.portraitModeUnsupportedMessage
+                                }
+                            >
+                                {children}
+                            </ZoomProvider>
+                        ) : (
+                            children
+                        )}
+                    </StylesProvider>
+                </MuiThemeProvider>
+            );
+        }
+
+        return { ThemeProvider };
+    })();
 
     const createTheme_memo = memoize(
         (isDarkModeEnabled): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({

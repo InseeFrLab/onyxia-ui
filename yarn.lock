@@ -11558,13 +11558,14 @@ postcss@^8.1.0:
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
 
-powerhooks@^0.0.39:
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.0.39.tgz#9c51e119bb64aa4a62092318359b9a35747a5392"
-  integrity sha512-D64i3OpXdkFvyarw4kvcPuYwCvv05Oyu/7kvdCHSGgIMzqe8ZpUpUX17S7b7oHfW2H6BBg0CDT3/lOdgYPV93g==
+powerhooks@^0.0.40:
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.0.40.tgz#e66e8b4a0882e8095ce9fd9728056fa6385a86e8"
+  integrity sha512-V7RftCNlafJj6C27vJyyOSD2DJs9lngrGBX86nvgjzamhlsAy9ID1hcNMBzUvEsPRTyzC/+Ec+op++o+ybdK+w==
   dependencies:
     evt "2.0.0-beta.15"
     memoizee "^0.4.15"
+    minimal-polyfills "^2.2.1"
     resize-observer-polyfill "^1.5.1"
     tsafe "^0.1.0"
 
