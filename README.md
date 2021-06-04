@@ -49,6 +49,9 @@ In consequence, we wanted to create a ui toolkit that would be compatible with
 yarn add onyxia-ui tss-react
 ```
 
+It's important **not** to install `@material-ui/core` or `@material-ui/styles`,
+they comes with `onyxia-ui`.
+
 `src/theme.ts`:
 
 ```tsx
