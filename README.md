@@ -37,11 +37,11 @@ In consequence, we wanted to create a ui toolkit that would be compatible with
 
 -   Providing better typing.
 -   Arguably better styling API: [TSS](https://github.com/garronej/tss-react).
--   Built in support for dark mode, persistent across reload, without white flashes.
--   Enable the app to look the same regardless of the screen size (You should eventually implement responsive design tho).
+-   Built in support for the dark mode, persistent across reload, without white flashes.
+-   Enable the app to look the same regardless of the screen size (If there isn't enough time for implementing responsive design).
 -   Easier, more guided, theme customization.
 -   Provide splash screen that hides your components while they are not yet loaded.
--   Provides smarter core components that requires less boiler plate.
+-   Provides smarter core components that require less boiler plate.
 
 # Quick start
 
