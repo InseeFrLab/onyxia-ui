@@ -1,3 +1,7 @@
+### **0.2.1** (2021-06-04)  
+  
+- Theme provider reference width should be a prop of ThemeProvider    
+  
 ## **0.2.0** (2021-06-04)  
   
 - Inculde ZoomProvider  
