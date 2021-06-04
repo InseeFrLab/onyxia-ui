@@ -1,3 +1,7 @@
+### **0.2.3** (2021-06-04)  
+  
+- Memory leak detection should be disable at powerhooks level    
+  
 ### **0.2.2** (2021-06-04)  
   
 - Disable memory leaks warnings for evtIsDarkModeEnabled    
