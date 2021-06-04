@@ -1,3 +1,7 @@
+### **0.2.2** (2021-06-04)  
+  
+- Disable memory leaks warnings for evtIsDarkModeEnabled    
+  
 ### **0.2.1** (2021-06-04)  
   
 - Theme provider reference width should be a prop of ThemeProvider    
