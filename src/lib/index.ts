@@ -4,7 +4,7 @@ export { defaultPalette, createDefaultColorUseCases } from "./colors";
 
 export * from "../tools/changeColorOpacity";
 
-export type { Theme as OnyxiaTheme } from "./ThemeProvider";
+export type { Theme, ThemeProviderProps } from "./ThemeProvider";
 export { createThemeProvider } from "./ThemeProvider";
 
 export type { TypographyOptionsBase } from "./typography";

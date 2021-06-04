@@ -38,9 +38,6 @@ const { ThemeProvider, useTheme } = createThemeProvider({
             "warning": palette.orangeWarning.light,
         },
     }),
-    //Enable the app to look exactly the same regardless of the screen size.
-    //This shouldn't be defined if you have implemented responsive design.
-    "zoomProviderReferenceWidth": 1920
 });
 
 export { ThemeProvider };
@@ -58,7 +55,11 @@ import { SplashScreenProvider } from "onyxia-ui/splashScreen";
 import { ReactComponent as CompanyLogoSvg } from "./company-logo.svg";
 
 ReactDOM.render(
-    <ThemeProvider>
+    <ThemeProvider
+        //Enable the app to look exactly the same regardless of the screen size.
+        //Remove this prop if you have implemented responsive design.
+        zoomProviderReferenceWidth={1920}
+    >
         <SplashScreenProvider Logo={CompanyLogo}>
             <MyComponent />
         </SplashScreenProvider>

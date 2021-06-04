@@ -57,32 +57,39 @@ export const { createUseClassNames } = createUseClassNamesFactory({
     },
 });
 
+export type ThemeProviderProps = ThemeProviderProps.WithZoom | ThemeProviderProps.WithoutZoom;
+export declare namespace ThemeProviderProps {
+    type WithChildren = {
+        children: ReactNode;
+    };
+
+    export type WithZoom = {
+        zoomProviderReferenceWidth?: number;
+
+        /**
+         * Message to display when portrait mode, example:
+         *    This app isn't compatible with landscape mode yet,
+         *    please enable the rotation sensor and flip your phone.
+         */
+        portraitModeUnsupportedMessage?: ReactNode;
+    } & WithChildren;
+
+    export type WithoutZoom = WithChildren;
+}
+
 export function createThemeProvider<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
     TypographyOptions extends TypographyOptionsBase = TypographyOptionsBase,
     Custom extends Record<string, unknown> = Record<string, never>,
->(
-    params: {
-        isReactStrictModeEnabled?: boolean;
-        typography?: TypographyOptions;
-        palette?: Palette;
-        createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
-        spacingSteps?(factor: number): number;
-        custom?: Custom;
-    } & (
-        | {}
-        | {
-              zoomProviderReferenceWidth: number | undefined;
-              /**
-               * Message to display when portrait mode, example:
-               *    This app isn't compatible with landscape mode yet,
-               *    please enable the rotation sensor and flip your phone.
-               */
-              portraitModeUnsupportedMessage?: ReactNode;
-          }
-    ),
-) {
+>(params: {
+    isReactStrictModeEnabled?: boolean;
+    typography?: TypographyOptions;
+    palette?: Palette;
+    createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
+    spacingSteps?(factor: number): number;
+    custom?: Custom;
+}) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
@@ -119,40 +126,29 @@ export function createThemeProvider<
         { "max": 1 },
     );
 
-    const { ThemeProvider } = (() => {
-        const zoomProviderParams =
-            "zoomProviderReferenceWidth" in params
-                ? ({ "doUseZoomProvider": true, ...params } as const)
-                : ({ "doUseZoomProvider": false } as const);
+    function ThemeProvider(props: ThemeProviderProps) {
+        const { children } = props;
 
-        function ThemeProvider(props: { children: React.ReactNode }) {
-            const { children } = props;
+        const { isDarkModeEnabled } = useIsDarkModeEnabled();
 
-            const { isDarkModeEnabled } = useIsDarkModeEnabled();
-
-            return (
-                <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
-                    <CssBaseline />
-                    <StylesProvider injectFirst>
-                        {zoomProviderParams.doUseZoomProvider ? (
-                            <ZoomProvider
-                                referenceWidth={zoomProviderParams.zoomProviderReferenceWidth}
-                                portraitModeUnsupportedMessage={
-                                    zoomProviderParams.portraitModeUnsupportedMessage
-                                }
-                            >
-                                {children}
-                            </ZoomProvider>
-                        ) : (
-                            children
-                        )}
-                    </StylesProvider>
-                </MuiThemeProvider>
-            );
-        }
-
-        return { ThemeProvider };
-    })();
+        return (
+            <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
+                <CssBaseline />
+                <StylesProvider injectFirst>
+                    {"zoomProviderReferenceWidth" in props ? (
+                        <ZoomProvider
+                            referenceWidth={props.zoomProviderReferenceWidth}
+                            portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
+                        >
+                            {children}
+                        </ZoomProvider>
+                    ) : (
+                        children
+                    )}
+                </StylesProvider>
+            </MuiThemeProvider>
+        );
+    }
 
     const createTheme_memo = memoize(
         (isDarkModeEnabled): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
