@@ -11,8 +11,3 @@ const { useIsDarkModeEnabled, evtIsDarkModeEnabled: evtIsDarkModeEnabled_needsAn
 export { useIsDarkModeEnabled };
 
 export const evtIsDarkModeEnabled: StatefulEvt<boolean> = evtIsDarkModeEnabled_needsAnnotation;
-
-//NOTE: useClassNames -> useTheme -> useIsDarkModeEnabled -> one handler attached.
-//There is one handler attached for every components loaded. It's normal and alright
-//so we can disable memory leaks warnings.
-evtIsDarkModeEnabled.setMaxHandlers(Infinity);
