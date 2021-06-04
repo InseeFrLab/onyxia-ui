@@ -1,3 +1,9 @@
+## **0.2.0** (2021-06-04)  
+  
+- Inculde ZoomProvider  
+- Theme the storybook  
+- Update docs    
+  
 ### **0.1.2** (2021-06-03)  
   
 - Change the index to be able to work with a local copy  
