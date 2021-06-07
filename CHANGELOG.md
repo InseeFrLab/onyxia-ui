@@ -1,3 +1,7 @@
+### **0.3.1** (2021-06-07)  
+  
+- Throw error if theme created more than once    
+  
 ## **0.3.0** (2021-06-07)  
   
 - Implement icon customization  
