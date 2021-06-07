@@ -46,11 +46,15 @@ In consequence, we wanted to create a ui toolkit that would be compatible with
 # Quick start
 
 ```bash
-yarn add onyxia-ui tss-react
-```
+yarn add onyxia-ui tss-react @material-ui/core@^4.11.4
 
-It's important **not** to install `@material-ui/core` or `@material-ui/styles`,
-they comes with `onyxia-ui`.
+# If you plan on using icons from: https://material-ui.com/components/material-icons/
+yarn add @material-ui/icons@^4.11.2
+
+# Only necessary for onyxia-ui/Alert and if you want
+# to use components from https://material-ui.com/components/material-icons/
+yarn add @material-ui/lab@^4.0.0-alpha.58
+```
 
 `src/theme.ts`:
 
@@ -61,10 +65,21 @@ import {
     createDefaultColorUseCases,
     defaultTypography,
 } from "onyxia-ui/lib";
+import { createIcon } from "onyxia-ui/Icon";
+import { createIconButton } from "onyxia-ui/IconButton";
+import { createButton } from "onyxia-ui/Button";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
 
-const { ThemeProvider, useTheme } = createThemeProvider({
+//Import icons from https://material-ui.com/components/material-icons/ that you plan to use
+import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
+import EditIcon from "@material-ui/icons/Edit";
+
+//Import your custom icons
+import { ReactComponent as FooSvg } from "./assets/svg/foo.svg";
+import { ReactComponent as BarSvg } from "./assets/svg/bar.svg";
+
+export const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
     "typography": {
         ...defaultTypography,
@@ -87,9 +102,17 @@ const { ThemeProvider, useTheme } = createThemeProvider({
     }),
 });
 
-export { ThemeProvider };
-
 export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
+
+export const { Icon } = createIcon({
+    "hello": EmojiPeopleIcon,
+    "edit": EditIcon,
+    "foo": FooSvg,
+    "bar": BarSvg,
+});
+
+export const { IconButton } = createIconButton({ Icon });
+export const { Button } = createButton({ Icon });
 ```
 
 `src/index.tsx`:
@@ -97,9 +120,9 @@ export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
 ```tsx
 import * as ReactDOM from "react-dom";
 import { ThemeProvider } from "./theme";
-import { MyComponent } from "./MyComponent.txt";
+import { MyComponent } from "./MyComponent";
 import { SplashScreenProvider } from "onyxia-ui/splashScreen";
-import { ReactComponent as CompanyLogoSvg } from "./company-logo.svg";
+import { ReactComponent as CompanyLogo } from "./assets/svg/company-logo.svg";
 import { Typography } from "onyxia-ui/Typography";
 
 ReactDOM.render(
@@ -123,9 +146,9 @@ ReactDOM.render(
 
 ```tsx
 import { useEffect } from "react";
-import { createUseClassNames } from "./theme.ts";
+import { createUseClassNames, Icon } from "./theme";
 //Cherry pick the custom components you wish to import.
-import { Button } from "onyxia-ui/Button";
+import { Typography } from "onyxia-ui/Typography";
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
 import { useIsDarkModeEnabled } from "onyxia-ui/lib";
@@ -145,7 +168,7 @@ const { useClassNames } = createUseClassNames()(theme => ({
     },
 }));
 
-function MyComponent() {
+export function MyComponent() {
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
     const { classNames } = useClassNames({});
@@ -157,7 +180,10 @@ function MyComponent() {
 
     return (
         <div className={classNames.root}>
-            <Button onClick={() => console.log("click")}>Hello World</Button>
+            <Typography>
+                <Icon id="hello" />
+                Hello World
+            </Typography>
             <Switch
                 checked={isDarkModeEnabled}
                 onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}

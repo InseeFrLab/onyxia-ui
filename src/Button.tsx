@@ -1,215 +1,253 @@
+/* eslint-disable @typescript-eslint/ban-types */
+import type { FC } from "react";
 import { forwardRef, memo } from "react";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import { cx } from "tss-react";
-import MuiButton from "@material-ui/core/Button";
-import type { PickOptionals } from "tsafe";
-import { noUndefined } from "./tools/noUndefined";
-import type { IconProps as IconProps } from "./Icon";
-import { Icon } from "./Icon";
+import type { IconProps } from "./Icon";
+import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks";
+import MuiButton from "@material-ui/core/Button";
 import { capitalize } from "tsafe/capitalize";
+import { doExtends } from "tsafe/doExtends";
+import type { Any } from "ts-toolbelt";
 
-export type ButtonProps = {
-    className?: string | null;
+export type ButtonProps<IconId extends string = never> =
+    | ButtonProps.Clickable<IconId>
+    | ButtonProps.Link<IconId>
+    | ButtonProps.Submit<IconId>;
 
-    color?: "primary" | "secondary" | "ternary";
-    /** can be optional with an icon */
-    children?: React.ReactNode;
-    disabled?: boolean;
-    onClick?(): void;
+export namespace ButtonProps {
+    type Common<IconId extends string> = {
+        className?: string;
 
-    startIcon?: IconProps["type"] | null;
-    endIcon?: IconProps["type"] | null;
+        /** Defaults to "primary" */
+        color?: "primary" | "secondary" | "ternary";
 
-    autoFocus?: boolean;
+        children: React.ReactNode;
 
-    type?: "button" | "submit";
+        /** Defaults to false */
+        disabled?: boolean;
 
-    tabIndex?: number | null;
+        startIcon?: IconId;
+        endIcon?: IconId;
 
-    name?: string | null;
-    id?: string | null;
+        /** Defaults to false */
+        autoFocus?: boolean;
 
-    href?: string | null;
-    doOpenNewTabIfHref?: boolean;
-};
+        tabIndex?: number;
 
-export const buttonDefaultProps: PickOptionals<ButtonProps> = {
-    "className": null,
-    "color": "primary",
-    "disabled": false,
-    "children": null,
-    "startIcon": null,
-    "endIcon": null,
-    "autoFocus": false,
-    "type": "button",
-    "onClick": () => {
-        /*Do nothing*/
-    },
-    "tabIndex": null,
-    "name": null,
-    "id": null,
-    "href": null,
-    "doOpenNewTabIfHref": true,
-};
-
-const { useClassNames } = createUseClassNames<Required<ButtonProps>>()((theme, { color, disabled }) => {
-    const textColor = ({ color, disabled }: Pick<Required<ButtonProps>, "color" | "disabled">) =>
-        theme.colors.useCases.typography[
-            disabled
-                ? "textDisabled"
-                : (() => {
-                      switch (color) {
-                          case "primary":
-                              return "textFocus";
-                          case "secondary":
-                          case "ternary":
-                              return "textPrimary";
-                      }
-                  })()
-        ];
-
-    const hoverTextColor = ({ color }: Pick<Required<ButtonProps>, "color" | "disabled">) => {
-        switch (theme.isDarkModeEnabled) {
-            case true:
-                return theme.colors.palette[
-                    (() => {
-                        switch (color) {
-                            case "primary":
-                                return "light";
-                            case "secondary":
-                            case "ternary":
-                                return "dark";
-                        }
-                    })()
-                ].main;
-            case false:
-                return theme.colors.palette.light.main;
-        }
+        name?: string;
+        htmlId?: string;
+        "aria-label"?: string;
     };
 
-    return {
-        "root": (() => {
-            const hoverBackgroundColor =
-                theme.colors.useCases.buttons[
-                    (() => {
-                        switch (color) {
-                            case "primary":
-                                return "actionHoverPrimary";
-                            case "secondary":
-                            case "ternary":
-                                return "actionHoverSecondary";
-                        }
-                    })()
-                ];
+    export type Clickable<IconId extends string = never> = Common<IconId> & {
+        onClick(): void;
+    };
 
-            return {
-                "textTransform": "unset" as const,
-                "backgroundColor": disabled
-                    ? theme.colors.useCases.buttons.actionDisabledBackground
+    export type Link<IconId extends string = never> = Common<IconId> & {
+        href: string;
+        /** Defaults to true */
+        doOpenNewTabIfHref?: boolean;
+    };
+
+    export type Submit<IconId extends string = never> = Common<IconId> & {
+        type: "submit";
+    };
+}
+
+export function createButton<IconId extends string = never>(params?: {
+    Icon(props: IconProps<IconId>): ReturnType<FC>;
+}) {
+    const { Icon } = params ?? { "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>) };
+
+    const { useClassNames } = createUseClassNames<{
+        color: NonNullable<ButtonProps["color"]>;
+        disabled: boolean;
+    }>()((theme, { color, disabled }) => {
+        const textColor = ({ color, disabled }: Pick<Required<ButtonProps>, "color" | "disabled">) =>
+            theme.colors.useCases.typography[
+                disabled
+                    ? "textDisabled"
                     : (() => {
                           switch (color) {
                               case "primary":
+                                  return "textFocus";
                               case "secondary":
-                                  return "transparent";
                               case "ternary":
-                                  return theme.colors.useCases.surfaces.background;
+                                  return "textPrimary";
                           }
-                      })(),
-                "height": 36,
-                "borderRadius": 20,
-                "borderWidth": (() => {
-                    switch (color) {
-                        case "primary":
-                        case "secondary":
-                            return 2;
-                        case "ternary":
-                            return 0;
-                    }
-                })(),
-                "borderStyle": "solid",
-                "borderColor": disabled ? "transparent" : hoverBackgroundColor,
-                "padding": theme.spacing(0, 2),
-                "&.MuiButton-text": {
-                    "color": textColor({ color, disabled }),
-                },
-                "&:hover": {
-                    "backgroundColor": hoverBackgroundColor,
-                    "& .MuiSvgIcon-root": {
-                        "color": hoverTextColor({ color, disabled }),
-                    },
+                      })()
+            ];
+
+        const hoverTextColor = ({ color }: Pick<Required<ButtonProps>, "color" | "disabled">) => {
+            switch (theme.isDarkModeEnabled) {
+                case true:
+                    return theme.colors.palette[
+                        (() => {
+                            switch (color) {
+                                case "primary":
+                                    return "light";
+                                case "secondary":
+                                case "ternary":
+                                    return "dark";
+                            }
+                        })()
+                    ].main;
+                case false:
+                    return theme.colors.palette.light.main;
+            }
+        };
+
+        return {
+            "root": (() => {
+                const hoverBackgroundColor =
+                    theme.colors.useCases.buttons[
+                        (() => {
+                            switch (color) {
+                                case "primary":
+                                    return "actionHoverPrimary";
+                                case "secondary":
+                                case "ternary":
+                                    return "actionHoverSecondary";
+                            }
+                        })()
+                    ];
+
+                return {
+                    "textTransform": "unset" as const,
+                    "backgroundColor": disabled
+                        ? theme.colors.useCases.buttons.actionDisabledBackground
+                        : (() => {
+                              switch (color) {
+                                  case "primary":
+                                  case "secondary":
+                                      return "transparent";
+                                  case "ternary":
+                                      return theme.colors.useCases.surfaces.background;
+                              }
+                          })(),
+                    "height": 36,
+                    "borderRadius": 20,
+                    "borderWidth": (() => {
+                        switch (color) {
+                            case "primary":
+                            case "secondary":
+                                return 2;
+                            case "ternary":
+                                return 0;
+                        }
+                    })(),
+                    "borderStyle": "solid",
+                    "borderColor": disabled ? "transparent" : hoverBackgroundColor,
+                    "padding": theme.spacing(0, 2),
                     "&.MuiButton-text": {
-                        "color": hoverTextColor({ color, disabled }),
+                        "color": textColor({ color, disabled }),
                     },
-                },
-            };
-        })(),
-        "icon": {
-            "color": textColor({ color, disabled }),
-        },
-    };
-});
+                    "&:hover": {
+                        "backgroundColor": hoverBackgroundColor,
+                        "& .MuiSvgIcon-root": {
+                            "color": hoverTextColor({ color, disabled }),
+                        },
+                        "&.MuiButton-text": {
+                            "color": hoverTextColor({ color, disabled }),
+                        },
+                    },
+                };
+            })(),
+            "icon": {
+                "color": textColor({ color, disabled }),
+            },
+        };
+    });
 
-export const Button = memo(
-    forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-        const completedProps = { ...buttonDefaultProps, ...noUndefined(props) };
+    const Button = memo(
+        forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
+            const {
+                className,
+                color = "primary",
+                disabled = false,
+                children,
+                startIcon,
+                endIcon,
+                autoFocus = false,
+                tabIndex,
+                name,
+                htmlId,
+                "aria-label": ariaLabel,
+                //For the forwarding, rest should be empty (typewise)
+                ...rest
+            } = props;
 
-        const {
-            className,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            color,
-            disabled,
-            children,
-            onClick,
-            startIcon,
-            endIcon,
-            autoFocus,
-            type,
-            tabIndex,
-            name,
-            id,
-            href,
-            doOpenNewTabIfHref,
-            //For the forwarding, rest should be empty (typewise)
-            ...rest
-        } = completedProps;
+            const { classNames } = useClassNames({ color, disabled });
 
-        const { classNames } = useClassNames(completedProps);
+            const IconWd = useGuaranteedMemo(
+                () => (props: { id: IconId }) =>
+                    (
+                        <Icon
+                            id={props.id}
+                            color={disabled ? "textDisabled" : "textPrimary"}
+                            fontSize="inherit"
+                            className={classNames.icon}
+                        />
+                    ),
+                [disabled, classNames.icon],
+            );
 
-        const IconWd = useGuaranteedMemo(
-            () => (props: { type: IconProps["type"] }) =>
-                (
-                    <Icon
-                        color={disabled ? "textDisabled" : "textPrimary"}
-                        fontSize="inherit"
-                        className={classNames.icon}
-                        type={props.type}
-                    />
-                ),
-            [disabled, classNames.icon],
-        );
+            return (
+                <MuiButton
+                    ref={ref}
+                    className={cx(classNames.root, className)}
+                    //There is an error in @material-ui/core types, this should be correct.
+                    disabled={disabled}
+                    startIcon={startIcon === undefined ? undefined : <IconWd id={startIcon} />}
+                    endIcon={endIcon === undefined ? undefined : <IconWd id={endIcon} />}
+                    autoFocus={autoFocus}
+                    tabIndex={tabIndex}
+                    name={name}
+                    id={htmlId}
+                    aria-label={ariaLabel}
+                    {...(() => {
+                        if ("onClick" in rest) {
+                            const { onClick, ...restRest } = rest;
 
-        return (
-            <MuiButton
-                ref={ref}
-                className={cx(classNames.root, className)}
-                //There is an error in @material-ui/core types, this should be correct.
-                {...((href === undefined
-                    ? {}
-                    : { href, "target": doOpenNewTabIfHref ? "_blank" : undefined }) as any)}
-                disabled={disabled}
-                onClick={onClick}
-                startIcon={startIcon === null ? undefined : <IconWd type={startIcon} />}
-                endIcon={endIcon === null ? undefined : <IconWd type={endIcon} />}
-                autoFocus={autoFocus}
-                type={type}
-                tabIndex={tabIndex ?? undefined}
-                name={name ?? undefined}
-                id={id ?? undefined}
-                {...rest}
-            >
-                {typeof children === "string" ? capitalize(children) : children}
-            </MuiButton>
-        );
-    }),
-);
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                            return { onClick, ...restRest };
+                        }
+
+                        if ("href" in rest) {
+                            const { href, doOpenNewTabIfHref = true, ...restRest } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                            return {
+                                href,
+                                "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                                ...restRest,
+                            };
+                        }
+
+                        if ("type" in rest) {
+                            const { type, ...restRest } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                            return {
+                                type,
+                                ...restRest,
+                            };
+                        }
+                    })()}
+                >
+                    {typeof children === "string" ? capitalize(children) : children}
+                </MuiButton>
+            );
+        }),
+    );
+
+    return { Button };
+}

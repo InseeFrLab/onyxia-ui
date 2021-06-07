@@ -1,5 +1,5 @@
 import { Dialog } from "../Dialog";
-import { Button } from "../Button";
+import { Button } from "./theme";
 import type { DialogProps } from "../Dialog";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./geStory";
@@ -23,8 +23,12 @@ const props: DialogProps = {
     /* spell-checker: enable */
     "buttons": (
         <>
-            <Button color="secondary">Cancel</Button>
-            <Button color="primary">Ok</Button>
+            <Button color="secondary" type="submit">
+                Cancel
+            </Button>
+            <Button color="primary" type="submit">
+                Ok
+            </Button>
         </>
     ),
     "isOpen": true,

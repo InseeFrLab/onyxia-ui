@@ -1,5 +1,5 @@
 import { Tooltip } from "../Tooltip";
-import { Icon } from "../Icon";
+import { Icon } from "./theme";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./geStory";
 
@@ -11,6 +11,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Vue1 = getStory({
-    "children": <Icon type="help" />,
+    "children": <Icon id="help" />,
     "title": "This is the title",
 });

@@ -8,15 +8,18 @@ import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 import { getBrowser } from "./tools/getBrowser";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { IconButton } from "./IconButton";
+import { createIconButton } from "./IconButton";
+import { createIcon } from "./Icon";
 import type { NonPostableEvt } from "evt";
 import { useEffectOnValueChange } from "powerhooks";
 import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
 import { Tooltip } from "./Tooltip";
-import { Icon } from "./Icon";
 import { Typography } from "./Typography";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Visibility from "@material-ui/icons/Visibility";
+import Help from "@material-ui/icons/Help";
 
 export type TextFieldProps = {
     className?: string | null;
@@ -57,6 +60,14 @@ export type TextFieldProps = {
     isCircularProgressShown?: boolean;
     selectAllTextOnFocus?: boolean;
 };
+
+const { Icon } = createIcon({
+    "visibilityOff": VisibilityOff,
+    "visibility": Visibility,
+    "help": Help,
+});
+
+const { IconButton } = createIconButton({ Icon });
 
 export const textFieldDefaultProps: PickOptionals<TextFieldProps> = {
     "label": null,
@@ -301,7 +312,7 @@ export const TextField = memo((props: TextFieldProps) => {
                 ) : type === "password" ? (
                     <InputAdornment position="end">
                         <IconButton
-                            type={isPasswordShown ? "visibilityOff" : "visibility"}
+                            id={isPasswordShown ? "visibilityOff" : "visibility"}
                             onClick={toggleIsPasswordShown}
                         />
                     </InputAdornment>
@@ -327,7 +338,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         <>
                             &nbsp;
                             <Tooltip title={questionMarkHelperText}>
-                                <Icon className={classNames.questionMark} type="help" fontSize="small" />
+                                <Icon className={classNames.questionMark} id="help" fontSize="small" />
                             </Tooltip>
                         </>
                     )}

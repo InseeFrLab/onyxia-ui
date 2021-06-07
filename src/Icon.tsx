@@ -1,261 +1,95 @@
+/* eslint-disable @typescript-eslint/ban-types */
+
+import { memo, forwardRef, ElementType } from "react";
+import type { ForwardedRef, MouseEventHandler } from "react";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import { cx } from "tss-react";
-import { forwardRef, memo } from "react";
-import type { MouseEventHandler } from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as TourSvg } from "./assets/svg/Tour.svg";
-import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
-import { ReactComponent as SecretsSvg } from "./assets/svg/Secrets.svg";
-import { ReactComponent as AccountSvg } from "./assets/svg/Account2.svg";
-import { ReactComponent as HomeSvg } from "./assets/svg/Home2.svg";
-import { ReactComponent as TrainingsSvg } from "./assets/svg/Trainings2.svg";
-import { ReactComponent as FilesSvg } from "./assets/svg/Files.svg";
-import { ReactComponent as CollaborationToolsSvg } from "./assets/svg/CollaborationTools.svg";
-import { ReactComponent as BashSvg } from "./assets/svg/Bash.svg";
-import { ReactComponent as CommunitySvg } from "./assets/svg/Community.svg";
-import { ReactComponent as CatalogSvg } from "./assets/svg/Catalog.svg";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
-import FilterNoneIcon from "@material-ui/icons/FilterNone";
-import CheckIcon from "@material-ui/icons/Check";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import AttachMoney from "@material-ui/icons/AttachMoney";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import Cached from "@material-ui/icons/Cached";
-import CloseSharp from "@material-ui/icons/CloseSharp";
-import InfoOutlined from "@material-ui/icons/InfoOutlined";
-import Brightness7 from "@material-ui/icons/Brightness7";
-import Brightness4 from "@material-ui/icons/Brightness4";
-import Translate from "@material-ui/icons/Translate";
 import { doExtends } from "tsafe/doExtends";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import GetApp from "@material-ui/icons/GetApp";
-import Replay from "@material-ui/icons/Replay";
-import Help from "@material-ui/icons/Help";
-import Search from "@material-ui/icons/Search";
-import Cancel from "@material-ui/icons/Cancel";
-import Bookmark from "@material-ui/icons/Bookmark";
-import BookmarkBorder from "@material-ui/icons/BookmarkBorder";
-import Code from "@material-ui/icons/Code";
-import Link from "@material-ui/icons/Link";
-import SubdirectoryArrowRight from "@material-ui/icons/SubdirectoryArrowRight";
+import type { Any } from "ts-toolbelt";
 
-import { noUndefined } from "./tools/noUndefined";
-import type { PickOptionals } from "tsafe";
-import { typeGuard } from "tsafe/typeGuard";
+export type IconProps<IconId = string> = {
+    id: IconId;
 
-const svgTypes = [
-    "tour",
-    "services",
-    "secrets",
-    "account",
-    "home",
-    "trainings",
-    "files",
-    "collaborationTools",
-    "bash",
-    "community",
-    "catalog",
-] as const;
+    className?: string;
 
-export type SvgTypes = typeof svgTypes[number];
-
-const materialType = [
-    "delete",
-    "edit",
-    "add",
-    "filterNone",
-    "check",
-    "expandMore",
-    "attachMoney",
-    "chevronLeft",
-    "cached",
-    "closeSharp",
-    "infoOutlined",
-    "brightness7",
-    "brightness4",
-    "translate",
-    "visibility",
-    "visibilityOff",
-    "getApp",
-    "replay",
-    "help",
-    "search",
-    "cancel",
-    "bookmark",
-    "bookmarkBorder",
-    "code",
-    "link",
-    "subdirectoryArrowRight",
-] as const;
-
-export type MaterialType = typeof materialType[number];
-
-//NOTE: Ensure there is not overlap between the types
-doExtends<SvgTypes & MaterialType, never>();
-
-export type IconProps = {
-    className?: string | null;
-
-    /** Design which icon should be displayed */
-    type: SvgTypes | MaterialType;
-    /** Color of the icon based on the theme */
+    /** Defaults to "textPrimary" */
     color?: "textPrimary" | "textSecondary" | "textDisabled" | "textFocus";
-    /** TODO: Only works for mui icons!!! Enable to make the icon larger or smaller */
+    //TODO: Test if actually works
+    /** Defaults to "default" */
     fontSize?: "default" | "inherit" | "small" | "large";
 
-    onClick?: MouseEventHandler<SVGSVGElement> | null;
+    onClick?: MouseEventHandler<SVGSVGElement>;
 };
 
-export const iconDefaultProps: PickOptionals<IconProps> = {
-    "className": null,
-    "color": "textPrimary",
-    "fontSize": "default",
-    "onClick": null,
-};
+type MuiIconLike = (props: {
+    ref: ForwardedRef<SVGSVGElement>;
+    className: string;
+    fontSize: "default" | "inherit" | "small" | "large";
+    onClick?: MouseEventHandler<SVGSVGElement>;
+}) => JSX.Element;
 
-const { useClassNames } = createUseClassNames<Required<IconProps>>()((theme, { color }) => ({
-    "root": {
-        "color": theme.colors.useCases.typography[color],
-        // https://stackoverflow.com/a/24626986/3731798
-        //"verticalAlign": "top",
-        //"display": "inline-block"
-        "verticalAlign": "top",
-    },
-}));
+type SvgComponentLike = ElementType;
 
-export const Icon = memo(
-    forwardRef<SVGSVGElement, IconProps>((props, ref) => {
-        const completedProps = { ...iconDefaultProps, ...noUndefined(props) };
+function isMuiIcon(Component: MuiIconLike | SvgComponentLike): Component is MuiIconLike {
+    return "type" in (Component as any);
+}
 
-        const {
-            type,
-            fontSize,
-            className,
-            onClick,
+export function createIcon<IconId extends string>(
+    params: { readonly [iconId in IconId]: MuiIconLike | SvgComponentLike },
+) {
+    const { useClassNames } = createUseClassNames<{ color: NonNullable<IconProps["color"]> }>()(
+        (theme, { color }) => ({
+            "root": {
+                "color": theme.colors.useCases.typography[color],
+                // https://stackoverflow.com/a/24626986/3731798
+                //"verticalAlign": "top",
+                //"display": "inline-block"
+                "verticalAlign": "top",
+            },
+        }),
+    );
+
+    const Icon = memo(
+        forwardRef<SVGSVGElement, IconProps<IconId>>((props, ref) => {
+            const {
+                id,
+                className,
+                color = "textPrimary",
+                fontSize = "default",
+                onClick,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                children,
+                ...rest
+            } = props;
+
             //For the forwarding, rest should be empty (typewise),
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            color,
-            children,
-            ...rest
-        } = completedProps;
+            doExtends<Any.Equals<typeof rest, {}>, 1>();
 
-        const { classNames } = useClassNames(completedProps);
+            const { classNames } = useClassNames({ color });
 
-        const svgTypeOrMuiIcon = (() => {
-            if (!typeGuard<MaterialType>(type, !!materialType.find(t => t === type))) {
-                return type;
-            }
+            const Component: MuiIconLike | SvgComponentLike = params[id];
 
-            switch (type) {
-                case "delete":
-                    return DeleteIcon;
-                case "edit":
-                    return EditIcon;
-                case "add":
-                    return AddIcon;
-                case "filterNone":
-                    return FilterNoneIcon;
-                case "check":
-                    return CheckIcon;
-                case "closeSharp":
-                    return CloseSharp;
-                case "infoOutlined":
-                    return InfoOutlined;
-                case "expandMore":
-                    return ExpandMore;
-                case "attachMoney":
-                    return AttachMoney;
-                case "chevronLeft":
-                    return ChevronLeft;
-                case "cached":
-                    return Cached;
-                case "visibility":
-                    return Visibility;
-                case "visibilityOff":
-                    return VisibilityOff;
-                case "getApp":
-                    return GetApp;
-                case "replay":
-                    return Replay;
-                case "help":
-                    return Help;
-                case "search":
-                    return Search;
-                case "cancel":
-                    return Cancel;
-                case "brightness7":
-                    return Brightness7;
-                case "brightness4":
-                    return Brightness4;
-                case "translate":
-                    return Translate;
-                case "bookmark":
-                    return Bookmark;
-                case "bookmarkBorder":
-                    return BookmarkBorder;
-                case "code":
-                    return Code;
-                case "link":
-                    return Link;
-                case "subdirectoryArrowRight":
-                    return SubdirectoryArrowRight;
-            }
-        })();
-
-        if (typeof svgTypeOrMuiIcon !== "string") {
-            const MuiIcon = svgTypeOrMuiIcon;
-
-            return (
-                <MuiIcon
+            return isMuiIcon(Component) ? (
+                <Component
                     ref={ref}
                     className={cx(classNames.root, className)}
                     fontSize={fontSize}
-                    children={children}
-                    onClick={onClick ?? undefined}
+                    onClick={onClick}
+                    {...rest}
+                />
+            ) : (
+                <SvgIcon
+                    ref={ref}
+                    onClick={onClick}
+                    className={cx(classNames.root, className)}
+                    component={Component}
+                    fontSize={fontSize}
                     {...rest}
                 />
             );
-        }
+        }),
+    );
 
-        const svgType = svgTypeOrMuiIcon;
-
-        return (
-            <SvgIcon
-                ref={ref}
-                onClick={onClick ?? undefined}
-                className={cx(classNames.root, className)}
-                component={(() => {
-                    switch (svgType) {
-                        case "tour":
-                            return TourSvg;
-                        case "services":
-                            return ServicesSvg;
-                        case "secrets":
-                            return SecretsSvg;
-                        case "files":
-                            return FilesSvg;
-                        case "collaborationTools":
-                            return CollaborationToolsSvg;
-                        case "bash":
-                            return BashSvg;
-                        case "community":
-                            return CommunitySvg;
-                        case "catalog":
-                            return CatalogSvg;
-                        case "account":
-                            return AccountSvg;
-                        case "home":
-                            return HomeSvg;
-                        case "trainings":
-                            return TrainingsSvg;
-                    }
-                })()}
-                fontSize={fontSize}
-                {...rest}
-            />
-        );
-    }),
-);
+    return { Icon };
+}

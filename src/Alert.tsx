@@ -1,12 +1,14 @@
 import { useReducer, memo } from "react";
 import type { ReactNode } from "react";
-import { IconButton } from "./IconButton";
+import { createIcon } from "./Icon";
+import { createIconButton } from "./IconButton";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Typography } from "./Typography";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 import { cx } from "tss-react";
+import CloseSharp from "@material-ui/icons/CloseSharp";
 
 export type AlertProps = {
     className?: string | null;
@@ -19,6 +21,12 @@ export const alertDefaultProps: PickOptionals<AlertProps> = {
     "className": null,
     "doDisplayCross": false,
 };
+
+const { IconButton } = createIconButton(
+    createIcon({
+        "closeSharp": CloseSharp,
+    }),
+);
 
 const { useClassNames } = createUseClassNames<Required<AlertProps>>()((theme, { severity }) => ({
     "root": {
@@ -48,7 +56,7 @@ export const Alert = memo((props: AlertProps) => {
             severity={severity}
             action={
                 doDisplayCross ? (
-                    <IconButton type="closeSharp" aria-label="close" onClick={close} />
+                    <IconButton id="closeSharp" aria-label="close" onClick={close} />
                 ) : undefined
             }
         >

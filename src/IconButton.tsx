@@ -1,79 +1,146 @@
+/* eslint-disable @typescript-eslint/ban-types */
+import type { FC } from "react";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import { cx } from "tss-react";
 import { forwardRef, memo } from "react";
 import MuiIconButton from "@material-ui/core/IconButton";
-import type { PickOptionals } from "tsafe";
-import { noUndefined } from "./tools/noUndefined";
-import type { IconProps as IconProps } from "./Icon";
-import { Icon } from "./Icon";
+import type { IconProps } from "./Icon";
+import { id } from "tsafe/id";
+import { doExtends } from "tsafe/doExtends";
+import type { Any } from "ts-toolbelt";
 
-export type IconButtonProps = {
-    className?: string | null;
+export type IconButtonProps<IconId extends string = never> =
+    | IconButtonProps.Clickable<IconId>
+    | IconButtonProps.Link<IconId>
+    | IconButtonProps.Submit<IconId>;
 
-    disabled?: boolean;
-    onClick: (() => void) | undefined;
+export namespace IconButtonProps {
+    type Common<IconId extends string> = {
+        className?: string;
+        id: IconId;
+        /** Defaults to false */
+        disabled?: boolean;
 
-    type: IconProps["type"];
-    fontSize?: IconProps["fontSize"];
+        /** Defaults to "default" */
+        fontSize?: IconProps["fontSize"];
 
-    "aria-label"?: string | null;
-};
+        /** Defaults to false */
+        autoFocus?: boolean;
 
-export const iconButtonDefaultProps: PickOptionals<IconButtonProps> = {
-    "className": null,
-    "disabled": false,
-    "fontSize": "default",
-    "aria-label": null,
-};
+        tabIndex?: number;
 
-const { useClassNames } = createUseClassNames<Required<IconButtonProps>>()(theme => ({
-    "root": {
-        "padding": theme.spacing(1),
-        "&:hover": {
-            "backgroundColor": "unset",
-            "& svg": {
-                "color": theme.colors.useCases.buttons.actionHoverPrimary,
+        name?: string;
+        htmlId?: string;
+        "aria-label"?: string;
+    };
+
+    export type Clickable<IconId extends string = never> = Common<IconId> & {
+        onClick(): void;
+    };
+
+    export type Link<IconId extends string = never> = Common<IconId> & {
+        href: string;
+        /** Defaults to true */
+        doOpenNewTabIfHref?: boolean;
+    };
+
+    export type Submit<IconId extends string = never> = Common<IconId> & {
+        type: "submit";
+    };
+}
+
+export function createIconButton<IconId extends string = never>(params?: {
+    Icon(props: IconProps<IconId>): ReturnType<FC>;
+}) {
+    const { Icon } = params ?? { "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>) };
+
+    const { useClassNames } = createUseClassNames()(theme => ({
+        "root": {
+            "padding": theme.spacing(1),
+            "&:hover": {
+                "backgroundColor": "unset",
+                "& svg": {
+                    "color": theme.colors.useCases.buttons.actionHoverPrimary,
+                },
             },
         },
-    },
-}));
+    }));
 
-export const IconButton = memo(
-    forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
-        const completedProps = { ...iconButtonDefaultProps, ...noUndefined(props) };
+    const IconButton = memo(
+        forwardRef<HTMLButtonElement, IconButtonProps<IconId>>((props, ref) => {
+            const {
+                className,
+                id,
+                disabled = false,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                children,
+                autoFocus = false,
+                tabIndex,
+                name,
+                htmlId,
+                fontSize = "default",
+                "aria-label": ariaLabel,
+                //For the forwarding, rest should be empty (typewise)
+                ...rest
+            } = props;
 
-        const {
-            disabled,
-            onClick,
-            type,
-            fontSize,
-            className,
-            "aria-label": ariaLabel,
-            //For the forwarding, rest should be empty (typewise)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            children,
-            ...rest
-        } = completedProps;
+            const { classNames } = useClassNames({});
 
-        const { classNames } = useClassNames(completedProps);
+            return (
+                <MuiIconButton
+                    ref={ref}
+                    className={cx(classNames.root, className)}
+                    disabled={disabled}
+                    aria-label={ariaLabel ?? undefined}
+                    autoFocus={autoFocus}
+                    tabIndex={tabIndex}
+                    name={name}
+                    id={htmlId}
+                    {...(() => {
+                        if ("onClick" in rest) {
+                            const { onClick, ...restRest } = rest;
 
-        //const icon =
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
-        return (
-            <MuiIconButton
-                ref={ref}
-                className={cx(classNames.root, className)}
-                disabled={disabled}
-                onClick={onClick}
-                aria-label={ariaLabel ?? undefined}
-                {...rest}
-            >
-                <Icon
-                    color={disabled ? "textDisabled" : "textPrimary"}
-                    type={type}
-                    fontSize={fontSize}
-                />
-            </MuiIconButton>
-        );
-    }),
-);
+                            return { onClick, ...restRest };
+                        }
+
+                        if ("href" in rest) {
+                            const { href, doOpenNewTabIfHref = true, ...restRest } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                            return {
+                                href,
+                                "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                                ...restRest,
+                            };
+                        }
+
+                        if ("type" in rest) {
+                            const { type, ...restRest } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                            return {
+                                type,
+                                ...restRest,
+                            };
+                        }
+                    })()}
+                >
+                    <Icon
+                        color={disabled ? "textDisabled" : "textPrimary"}
+                        id={id}
+                        fontSize={fontSize}
+                    />
+                </MuiIconButton>
+            );
+        }),
+    );
+
+    return { IconButton };
+}
