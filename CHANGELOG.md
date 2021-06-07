@@ -1,3 +1,9 @@
+## **0.3.0** (2021-06-07)  
+  
+- Implement icon customization  
+- Update docs  
+- Update powerhooks    
+  
 ### **0.2.3** (2021-06-04)  
   
 - Memory leak detection should be disable at powerhooks level    
