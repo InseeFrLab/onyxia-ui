@@ -6,8 +6,10 @@ import type { Param0 } from "tsafe";
 export type PaletteBase = typeof defaultPalette;
 export type ColorUseCasesBase = ReturnType<typeof createDefaultColorUseCases>;
 
-export type CreateColorUseCase<Palette extends PaletteBase, ColorUseCases extends ColorUseCasesBase> =
-    (params: { isDarkModeEnabled: boolean; palette: Palette }) => ColorUseCases;
+export type CreateColorUseCase<
+    Palette extends PaletteBase,
+    ColorUseCases extends ColorUseCasesBase,
+> = (params: { isDarkModeEnabled: boolean; palette: Palette }) => ColorUseCases;
 
 export const defaultPalette = {
     "focus": {
