@@ -21,10 +21,10 @@ import { ZoomProvider } from "powerhooks";
 import { assert } from "tsafe/assert";
 
 export type Theme<
-    Palette extends PaletteBase,
-    ColorUseCases extends ColorUseCasesBase,
-    TypographyOptions extends TypographyOptionsBase,
-    Custom extends Record<string, unknown>,
+    Palette extends PaletteBase = PaletteBase,
+    ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
+    TypographyOptions extends TypographyOptionsBase = TypographyOptionsBase,
+    Custom extends Record<string, unknown> = Record<string, unknown>,
 > = {
     colors: {
         palette: Palette;
@@ -41,9 +41,7 @@ export type Theme<
 const { useThemeBase, evtThemeBase } = createUseGlobalState(
     "themeBase",
     //NOTE We should be able to use Record<string, never> as Custom here...
-    createObjectThatThrowsIfAccessed<
-        Theme<PaletteBase, ColorUseCasesBase, TypographyOptionsBase, Record<string, unknown>>
-    >({
+    createObjectThatThrowsIfAccessed<Theme>({
         "debugMessage": "You must invoke createThemeProvider() before being able to use the components",
     }),
     { "persistance": false },
