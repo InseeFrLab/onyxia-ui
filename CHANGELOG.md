@@ -1,3 +1,8 @@
+### **0.3.4** (2021-06-11)  
+  
+- Fix previous build  
+- Button should accept href for router link    
+  
 ### **0.3.3** (2021-06-11)  
   
 - Theme by default is standardized one    
