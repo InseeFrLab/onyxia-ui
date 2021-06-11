@@ -36,7 +36,7 @@ export namespace IconButtonProps {
 
     export type Clickable<IconId extends string = never> = Common<IconId> & {
         onClick(): void;
-        href: string | undefined;
+        href?: string;
     };
 
     export type Link<IconId extends string = never> = Common<IconId> & {
