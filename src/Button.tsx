@@ -43,6 +43,7 @@ export namespace ButtonProps {
 
     export type Clickable<IconId extends string = never> = Common<IconId> & {
         onClick(): void;
+        href: string | undefined;
     };
 
     export type Link<IconId extends string = never> = Common<IconId> & {
@@ -209,12 +210,12 @@ export function createButton<IconId extends string = never>(params?: {
                     aria-label={ariaLabel}
                     {...(() => {
                         if ("onClick" in rest) {
-                            const { onClick, ...restRest } = rest;
+                            const { onClick, href, ...restRest } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
                             doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
-                            return { onClick, ...restRest };
+                            return { onClick, href, ...restRest };
                         }
 
                         if ("href" in rest) {
