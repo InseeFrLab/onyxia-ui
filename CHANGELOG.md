@@ -1,3 +1,8 @@
+### **0.3.5** (2021-06-12)  
+  
+- Make baseTheme a scoped state  
+- Allow overite default isDarkModeEnabled value    
+  
 ### **0.3.4** (2021-06-11)  
   
 - Fix previous build  
