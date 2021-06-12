@@ -1,3 +1,7 @@
+### **0.3.6** (2021-06-12)  
+  
+- Less strict TypoGraphy    
+  
 ### **0.3.5** (2021-06-12)  
   
 - Make baseTheme a scoped state  
