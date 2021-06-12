@@ -1,3 +1,7 @@
+### **0.3.7** (2021-06-12)  
+  
+- Make it so an extended theme actually extends the base theme    
+  
 ### **0.3.6** (2021-06-12)  
   
 - Less strict TypoGraphy    
