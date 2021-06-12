@@ -90,6 +90,7 @@ export function createThemeProvider<
     createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
     spacingSteps?(factor: number): number;
     custom?: Custom;
+    defaultIsDarkModeEnabled?: boolean;
 }) {
     assert(!haveThemeBeenCreatedAlready, "Can't create theme more than once");
 
@@ -104,7 +105,12 @@ export function createThemeProvider<
         isReactStrictModeEnabled = false,
         spacingSteps = factor => 8 * factor,
         custom = {} as NonNullable<typeof params["custom"]>,
+        defaultIsDarkModeEnabled,
     } = params;
+
+    if (defaultIsDarkModeEnabled !== undefined) {
+        evtIsDarkModeEnabled.state = defaultIsDarkModeEnabled;
+    }
 
     const createColorUseCases_memo = memoize(
         (isDarkModeEnabled: boolean) => createColorUseCases({ palette, isDarkModeEnabled }),
