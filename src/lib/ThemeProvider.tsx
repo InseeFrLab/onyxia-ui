@@ -14,7 +14,7 @@ import { defaultPalette, createDefaultColorUseCases } from "./colors";
 import type { TypographyOptionsBase } from "./typography";
 import { defaultTypography, createMuiTypographyOptions } from "./typography";
 import { createMuiPaletteOptions } from "./colors";
-import { createUseGlobalState } from "powerhooks";
+import { createUseScopedState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
@@ -38,13 +38,11 @@ export type Theme<
     custom: Custom;
 };
 
-const { useThemeBase, evtThemeBase } = createUseGlobalState(
+const { ThemeBaseProvider, useThemeBase } = createUseScopedState(
     "themeBase",
-    //NOTE We should be able to use Record<string, never> as Custom here...
     createObjectThatThrowsIfAccessed<Theme>({
         "debugMessage": "You must invoke createThemeProvider() before being able to use the components",
     }),
-    { "persistance": false },
 );
 
 export { useThemeBase };
@@ -143,21 +141,23 @@ export function createThemeProvider<
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
 
         return (
-            <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
-                <CssBaseline />
-                <StylesProvider injectFirst>
-                    {"zoomProviderReferenceWidth" in props ? (
-                        <ZoomProvider
-                            referenceWidth={props.zoomProviderReferenceWidth}
-                            portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
-                        >
-                            {children}
-                        </ZoomProvider>
-                    ) : (
-                        children
-                    )}
-                </StylesProvider>
-            </MuiThemeProvider>
+            <ThemeBaseProvider>
+                <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
+                    <CssBaseline />
+                    <StylesProvider injectFirst>
+                        {"zoomProviderReferenceWidth" in props ? (
+                            <ZoomProvider
+                                referenceWidth={props.zoomProviderReferenceWidth}
+                                portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
+                            >
+                                {children}
+                            </ZoomProvider>
+                        ) : (
+                            children
+                        )}
+                    </StylesProvider>
+                </MuiThemeProvider>
+            </ThemeBaseProvider>
         );
     }
 
@@ -180,10 +180,6 @@ export function createThemeProvider<
             custom,
         }),
         { "max": 1 },
-    );
-
-    evtIsDarkModeEnabled.attach(
-        isDarkModeEnabled => (evtThemeBase.state = createTheme_memo(isDarkModeEnabled)),
     );
 
     function useTheme(): Theme<Palette, ColorUseCases, TypographyOptions, Custom> {
