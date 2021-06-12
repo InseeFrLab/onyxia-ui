@@ -80,7 +80,7 @@ export function createThemeProvider<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
     TypographyOptions extends TypographyOptionsBase = TypographyOptionsBase,
-    Custom extends Record<string, unknown> = Record<string, never>,
+    Custom extends Record<string, unknown> = Record<string, unknown>,
 >(params: {
     isReactStrictModeEnabled?: boolean;
     typography?: TypographyOptions;
