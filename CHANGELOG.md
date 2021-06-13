@@ -1,3 +1,7 @@
+### **0.5.1** (2021-06-13)  
+  
+- Dialog accepts react node instead of just strings    
+  
 ## **0.5.0** (2021-06-13)  
   
 - Fix splashscreen (again)    
