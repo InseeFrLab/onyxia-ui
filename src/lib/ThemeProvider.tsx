@@ -19,6 +19,8 @@ import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
 import { assert } from "tsafe/assert";
+import { useBreakpointKey } from "./useBreakpointKey";
+import type { BreakpointKey } from "./useBreakpointKey";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -35,6 +37,7 @@ export type Theme<
     shadows: typeof shadows;
     spacing: MuiTheme["spacing"];
     muiTheme: MuiTheme;
+    bp: BreakpointKey;
     custom: Custom;
 };
 
@@ -162,7 +165,10 @@ export function createThemeProvider<
     }
 
     const createTheme_memo = memoize(
-        (isDarkModeEnabled): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
+        (
+            isDarkModeEnabled: boolean,
+            bp: BreakpointKey,
+        ): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
             "colors": {
                 palette,
                 "useCases": createColorUseCases_memo(isDarkModeEnabled),
@@ -177,6 +183,7 @@ export function createThemeProvider<
                     muiTheme,
                 };
             })(),
+            bp,
             custom,
         }),
         { "max": 1 },
@@ -184,7 +191,8 @@ export function createThemeProvider<
 
     function useTheme(): Theme<Palette, ColorUseCases, TypographyOptions, Custom> {
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
-        return createTheme_memo(isDarkModeEnabled);
+        const { bp } = useBreakpointKey();
+        return createTheme_memo(isDarkModeEnabled, bp);
     }
 
     return { ThemeProvider, useTheme };
