@@ -1,3 +1,8 @@
+### **0.3.12** (2021-06-13)  
+  
+- Fix previous build  
+- Fix previous build    
+  
 ### **0.3.10** (2021-06-13)  
   
 - Includes breakpoints in the theme (as in mui + current bp)    
