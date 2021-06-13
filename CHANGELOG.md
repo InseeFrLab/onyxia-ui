@@ -1,3 +1,7 @@
+### **0.5.2** (2021-06-13)  
+  
+- Typography can use div as root component    
+  
 ### **0.5.1** (2021-06-13)  
   
 - Dialog accepts react node instead of just strings    
