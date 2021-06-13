@@ -1,27 +1,32 @@
 import { useTheme } from "@material-ui/core/styles";
 import { useWindowInnerSize } from "powerhooks";
+import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+import { doExtends } from "tsafe/doExtends";
 
-export const breakpointKeys = ["xl", "lg", "md", "sm", "xs"] as const;
+export { Breakpoint };
 
-export type BreakpointKey = typeof breakpointKeys[number];
+const breakpoints = ["xs", "sm", "md", "lg", "xl"] as const;
 
-export function useBreakpointKey() {
+doExtends<typeof breakpoints[number], Breakpoint>();
+doExtends<Breakpoint, typeof breakpoints[number]>();
+
+export function useBreakpoint(): Breakpoint {
     const theme = useTheme();
 
     const { windowInnerWidth } = useWindowInnerSize();
 
-    let bp: BreakpointKey | undefined;
+    let key: Breakpoint | undefined;
 
-    for (const breakpointKey of breakpointKeys) {
-        if (windowInnerWidth >= theme.breakpoints.width(breakpointKey)) {
-            bp = breakpointKey;
+    for (const key_i of breakpoints) {
+        if (windowInnerWidth >= theme.breakpoints.width(key_i)) {
+            key = key_i;
             break;
         }
     }
 
-    if (bp === undefined) {
-        bp = "xs";
+    if (key === undefined) {
+        key = "xs";
     }
 
-    return { bp };
+    return key;
 }

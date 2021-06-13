@@ -19,8 +19,8 @@ import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
 import { assert } from "tsafe/assert";
-import { useBreakpointKey } from "./useBreakpointKey";
-import type { BreakpointKey } from "./useBreakpointKey";
+import { useBreakpoint } from "./useBreakpointKey";
+import type { Breakpoint } from "./useBreakpointKey";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -37,9 +37,13 @@ export type Theme<
     shadows: typeof shadows;
     spacing: MuiTheme["spacing"];
     muiTheme: MuiTheme;
-    bp: BreakpointKey;
+    breakpoints: MuiTheme["breakpoints"] & { key: Breakpoint };
     custom: Custom;
 };
+
+const theme: Theme = null as any;
+
+theme.muiTheme.breakpoints;
 
 const { ThemeBaseProvider, useThemeBase } = createUseScopedState(
     "themeBase",
@@ -141,7 +145,7 @@ export function createThemeProvider<
     const createTheme_memo = memoize(
         (
             isDarkModeEnabled: boolean,
-            bp: BreakpointKey,
+            breakpoint: Breakpoint,
         ): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
             "colors": {
                 palette,
@@ -154,10 +158,13 @@ export function createThemeProvider<
                 const muiTheme = createMuiTheme_memo(isDarkModeEnabled);
                 return {
                     "spacing": muiTheme.spacing.bind(muiTheme),
+                    "breakpoints": {
+                        ...muiTheme.breakpoints,
+                        "key": breakpoint,
+                    },
                     muiTheme,
                 };
             })(),
-            bp,
             custom,
         }),
         { "max": 1 },
@@ -165,8 +172,8 @@ export function createThemeProvider<
 
     function useTheme(): Theme<Palette, ColorUseCases, TypographyOptions, Custom> {
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
-        const { bp } = useBreakpointKey();
-        return createTheme_memo(isDarkModeEnabled, bp);
+        const breakpoint = useBreakpoint();
+        return createTheme_memo(isDarkModeEnabled, breakpoint);
     }
 
     function ThemeProvider(props: ThemeProviderProps) {
