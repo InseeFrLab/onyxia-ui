@@ -3,7 +3,7 @@ import { useWindowInnerSize } from "powerhooks";
 import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { doExtends } from "tsafe/doExtends";
 
-export { Breakpoint };
+export type { Breakpoint };
 
 const breakpoints = ["xs", "sm", "md", "lg", "xl"] as const;
 
