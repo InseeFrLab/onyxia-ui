@@ -41,10 +41,6 @@ export type Theme<
     custom: Custom;
 };
 
-const theme: Theme = null as any;
-
-theme.muiTheme.breakpoints;
-
 const { ThemeBaseProvider, useThemeBase } = createUseScopedState(
     "themeBase",
     createObjectThatThrowsIfAccessed<Theme>({
