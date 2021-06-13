@@ -1,16 +1,27 @@
 import { useTheme } from "@material-ui/core/styles";
 import { useWindowInnerSize } from "powerhooks";
 
+export const breakpointKeys = ["xl", "lg", "md", "sm", "xs"] as const;
+
+export type BreakpointKey = typeof breakpointKeys[number];
+
 export function useBreakpointKey() {
     const theme = useTheme();
 
     const { windowInnerWidth } = useWindowInnerSize();
 
-    for (const key of ["xl", "lg", "md", "sm"] as const) {
-        if (windowInnerWidth >= theme.breakpoints.width(key)) {
-            return key;
+    let bp: BreakpointKey | undefined;
+
+    for (const breakpointKey of breakpointKeys) {
+        if (windowInnerWidth >= theme.breakpoints.width(breakpointKey)) {
+            bp = breakpointKey;
+            break;
         }
     }
 
-    return "xs";
+    if (bp === undefined) {
+        bp = "xs";
+    }
+
+    return { bp };
 }
