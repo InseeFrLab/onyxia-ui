@@ -27,11 +27,11 @@ export function MyComponent() {
     const { classNames } = useClassNames({});
 
     {
-        const { hideSplashScreen } = useSplashScreen();
+        const { hideRootSplashScreen } = useSplashScreen();
 
         useEffect(() => {
             //Call this when your component is in a state ready to be shown
-            hideSplashScreen();
+            hideRootSplashScreen();
         }, []);
     }
 

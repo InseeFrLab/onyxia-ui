@@ -114,28 +114,12 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
     })();
 
     const { useSplashScreen } = (() => {
-        let isFirstUsageOfUseSplashScreen = true;
-
         function useSplashScreen(params?: { onHidden?(): void }) {
             const { showSplashScreen, hideSplashScreen } = (function useClosure() {
-                const countRef = useRef<number | undefined>(undefined);
-
-                useEffect(() => {
-                    if (isFirstUsageOfUseSplashScreen) {
-                        countRef.current = 1;
-
-                        isFirstUsageOfUseSplashScreen = false;
-                    } else {
-                        countRef.current = 0;
-                    }
-                }, []);
+                const countRef = useRef<number>(0);
 
                 const showSplashScreen = useConstCallback<typeof globalShowSplashScreen>(
                     ({ enableTransparency }) => {
-                        if (countRef.current === undefined) {
-                            throw new Error("showSplashScreen must be called after component mounted");
-                        }
-
                         countRef.current++;
 
                         globalShowSplashScreen({ enableTransparency });
@@ -143,10 +127,6 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
                 );
 
                 const hideSplashScreen = useConstCallback<typeof globalHideSplashScreen>(async () => {
-                    if (countRef.current === undefined) {
-                        throw new Error("hideSplashScreen must be called after component mounted");
-                    }
-
                     if (countRef.current === 0) {
                         return;
                     }
@@ -164,6 +144,7 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
             return {
                 isSplashScreenShown,
                 isTransparencyEnabled,
+                "hideRootSplashScreen": globalHideSplashScreen,
                 showSplashScreen,
                 hideSplashScreen,
             };

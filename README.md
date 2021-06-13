@@ -174,14 +174,15 @@ export function MyComponent() {
     const { classNames } = useClassNames({});
 
     {
-        const { hideSplashScreen } = useSplashScreen();
+        const { hideRootSplashScreen } = useSplashScreen();
 
         useEffect(() => {
             //Call this when your component is in a state ready to be shown
-            hideSplashScreen();
+            hideRootSplashScreen();
         }, []);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoading, setIsLoading] = useState(false);
 
     // This pattern let you display the splash screen when the isLoading state is true.
