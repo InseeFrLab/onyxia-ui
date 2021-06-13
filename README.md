@@ -145,16 +145,16 @@ ReactDOM.render(
 `src/MyComponent.tsx`:
 
 ```tsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createUseClassNames, Icon } from "./theme";
 //Cherry pick the custom components you wish to import.
-import { Typography } from "onyxia-ui/Typography";
+import { Typography } from "../../Typography";
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
-import { useIsDarkModeEnabled } from "onyxia-ui/lib";
+import { useIsDarkModeEnabled } from "../../lib";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
-import { hideSplashScreen } from "onyxia-ui/splashScreen";
+import { useSplashScreen } from "../../splashScreen";
 
 //See: https://github.com/garronej/tss-react
 const { useClassNames } = createUseClassNames()(theme => ({
@@ -173,10 +173,29 @@ export function MyComponent() {
 
     const { classNames } = useClassNames({});
 
-    useEffect(() => {
-        //Call this when your component is in a state ready to be shown
-        hideSplashScreen();
-    }, []);
+    {
+        const { hideSplashScreen } = useSplashScreen();
+
+        useEffect(() => {
+            //Call this when your component is in a state ready to be shown
+            hideSplashScreen();
+        }, []);
+    }
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    // This pattern let you display the splash screen when the isLoading state is true.
+    {
+        const { showSplashScreen, hideSplashScreen } = useSplashScreen();
+
+        useEffect(() => {
+            if (isLoading) {
+                showSplashScreen({ "enableTransparency": true });
+            } else {
+                hideSplashScreen();
+            }
+        }, [isLoading]);
+    }
 
     return (
         <div className={classNames.root}>

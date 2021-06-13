@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createUseClassNames, Icon } from "./theme";
 //Cherry pick the custom components you wish to import.
 import { Typography } from "../../Typography";
@@ -7,7 +7,7 @@ import { Typography } from "../../Typography";
 import { useIsDarkModeEnabled } from "../../lib";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
-import { hideSplashScreen } from "../../splashScreen";
+import { useSplashScreen } from "../../splashScreen";
 
 //See: https://github.com/garronej/tss-react
 const { useClassNames } = createUseClassNames()(theme => ({
@@ -26,10 +26,30 @@ export function MyComponent() {
 
     const { classNames } = useClassNames({});
 
-    useEffect(() => {
-        //Call this when your component is in a state ready to be shown
-        hideSplashScreen();
-    }, []);
+    {
+        const { hideSplashScreen } = useSplashScreen();
+
+        useEffect(() => {
+            //Call this when your component is in a state ready to be shown
+            hideSplashScreen();
+        }, []);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isLoading, setIsLoading] = useState(false);
+
+    // This pattern let you display the splash screen when the isLoading state is true.
+    {
+        const { showSplashScreen, hideSplashScreen } = useSplashScreen();
+
+        useEffect(() => {
+            if (isLoading) {
+                showSplashScreen({ "enableTransparency": true });
+            } else {
+                hideSplashScreen();
+            }
+        }, [isLoading]);
+    }
 
     return (
         <div className={classNames.root}>

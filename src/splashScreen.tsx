@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import type { ReactNode, FC } from "react";
 import { createUseClassNames, useThemeBase } from "./lib/ThemeProvider";
 import { css, cx, keyframes } from "tss-react";
@@ -6,6 +6,7 @@ import { useDomRect } from "powerhooks";
 import Color from "color";
 import { createUseGlobalState } from "powerhooks";
 import { useRerenderOnStateChange } from "evt/hooks";
+import { useConstCallback } from "powerhooks";
 
 let fadeOutDuration = 700;
 
@@ -13,14 +14,14 @@ export function setSplashScreenFadeOutDuration(value: number) {
     fadeOutDuration = value;
 }
 
-export const { useSplashScreen, hideSplashScreen, showSplashScreen } = (() => {
+const { useSplashScreen, useSplashScreenStatus } = (() => {
     const { evtDisplayState } = createUseGlobalState(
         "displayState",
         { "count": 1, "isTransparencyEnabled": false, "prevTime": 0 },
         { "persistance": false },
     );
 
-    const { hideSplashScreen } = (() => {
+    const { globalHideSplashScreen } = (() => {
         const { getDoUseDelay } = (() => {
             const { evtLastDelayedTime } = createUseGlobalState("lastDelayedTime", 0, {
                 "persistance": "localStorage",
@@ -39,22 +40,23 @@ export const { useSplashScreen, hideSplashScreen, showSplashScreen } = (() => {
             return { getDoUseDelay };
         })();
 
-        async function hideSplashScreen() {
+        async function globalHideSplashScreen() {
+            evtDisplayState.state.count = Math.max(evtDisplayState.state.count - 1, 0);
+
             if (getDoUseDelay()) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
 
             evtDisplayState.state = {
                 ...evtDisplayState.state,
-                "count": Math.max(evtDisplayState.state.count - 1, 0),
                 "prevTime": Date.now(),
             };
         }
 
-        return { hideSplashScreen };
+        return { globalHideSplashScreen };
     })();
 
-    function showSplashScreen(params: { enableTransparency: boolean }) {
+    function globalShowSplashScreen(params: { enableTransparency: boolean }) {
         evtDisplayState.state = {
             "count": evtDisplayState.state.count + 1,
             "isTransparencyEnabled": params.enableTransparency,
@@ -62,7 +64,7 @@ export const { useSplashScreen, hideSplashScreen, showSplashScreen } = (() => {
         };
     }
 
-    const { useSplashScreen } = (() => {
+    const { useSplashScreenStatus } = (() => {
         function useOnSplashScreenHidden(params: {
             onHidden: (() => void) | undefined;
             isSplashScreenShown: boolean;
@@ -89,7 +91,7 @@ export const { useSplashScreen, hideSplashScreen, showSplashScreen } = (() => {
             }, [isSplashScreenShown]);
         }
 
-        function useSplashScreen(params?: { onHidden?(): void }) {
+        function useSplashScreenStatus(params?: { onHidden?(): void }) {
             const { onHidden } = params ?? {};
 
             useRerenderOnStateChange(evtDisplayState);
@@ -108,11 +110,72 @@ export const { useSplashScreen, hideSplashScreen, showSplashScreen } = (() => {
             };
         }
 
+        return { useSplashScreenStatus };
+    })();
+
+    const { useSplashScreen } = (() => {
+        let isFirstUsageOfUseSplashScreen = true;
+
+        function useSplashScreen(params?: { onHidden?(): void }) {
+            const { showSplashScreen, hideSplashScreen } = (function useClosure() {
+                const countRef = useRef<number | undefined>(undefined);
+
+                useEffect(() => {
+                    if (isFirstUsageOfUseSplashScreen) {
+                        countRef.current = 1;
+
+                        isFirstUsageOfUseSplashScreen = false;
+                    } else {
+                        countRef.current = 0;
+                    }
+                }, []);
+
+                const showSplashScreen = useConstCallback<typeof globalShowSplashScreen>(
+                    ({ enableTransparency }) => {
+                        if (countRef.current === undefined) {
+                            throw new Error("showSplashScreen must be called after component mounted");
+                        }
+
+                        countRef.current++;
+
+                        globalShowSplashScreen({ enableTransparency });
+                    },
+                );
+
+                const hideSplashScreen = useConstCallback<typeof globalHideSplashScreen>(async () => {
+                    if (countRef.current === undefined) {
+                        throw new Error("hideSplashScreen must be called after component mounted");
+                    }
+
+                    if (countRef.current === 0) {
+                        return;
+                    }
+
+                    countRef.current--;
+
+                    await globalHideSplashScreen();
+                });
+
+                return { showSplashScreen, hideSplashScreen };
+            })();
+
+            const { isSplashScreenShown, isTransparencyEnabled } = useSplashScreenStatus(params);
+
+            return {
+                isSplashScreenShown,
+                isTransparencyEnabled,
+                showSplashScreen,
+                hideSplashScreen,
+            };
+        }
+
         return { useSplashScreen };
     })();
 
-    return { useSplashScreen, hideSplashScreen, showSplashScreen };
+    return { useSplashScreen, useSplashScreenStatus };
 })();
+
+export { useSplashScreen };
 
 const fadeInAndOut = keyframes`
 60%, 100% {
@@ -174,7 +237,7 @@ type Props = {
 const SplashScreen = memo((props: Props) => {
     const { className, Logo, fillColor } = props;
 
-    const { isSplashScreenShown, isTransparencyEnabled } = useSplashScreen();
+    const { isSplashScreenShown, isTransparencyEnabled } = useSplashScreenStatus();
 
     const [isFadingOut, setIsFadingOut] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
