@@ -9,9 +9,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { assert } from "tsafe/assert";
 
 export type DialogProps = {
-    title?: string;
-    subtitle?: string;
-    body?: string;
+    title?: NonNullable<ReactNode>;
+    subtitle?: NonNullable<ReactNode>;
+    body?: NonNullable<ReactNode>;
     buttons: ReactNode;
     isOpen: boolean;
     onClose(): void;
