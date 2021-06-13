@@ -98,7 +98,11 @@ export const Dialog = memo((props: DialogProps) => {
                     </Typography>
                 )}
                 {body !== undefined && (
-                    <Typography className={classNames.body} variant="body2">
+                    <Typography
+                        className={classNames.body}
+                        doUseDivAsRootComponent={true}
+                        variant="body2"
+                    >
                         {body}
                     </Typography>
                 )}

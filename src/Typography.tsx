@@ -22,6 +22,7 @@ export type TypographyProps = {
         | "caption";
     color?: "primary" | "secondary" | "disabled" | "focus";
     children: NonNullable<React.ReactNode>;
+    doUseDivAsRootComponent?: boolean;
     onClick?: (() => void) | null;
 };
 
@@ -30,6 +31,7 @@ export const typographyDefaultProps: PickOptionals<TypographyProps> = {
     "id": null,
     "variant": "body1",
     "color": "primary",
+    "doUseDivAsRootComponent": false,
     "onClick": null,
 };
 
@@ -69,6 +71,7 @@ export const Typography = memo(
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             color,
             onClick,
+            doUseDivAsRootComponent,
             ...rest
         } = completedProps;
 
@@ -76,6 +79,7 @@ export const Typography = memo(
 
         return (
             <MuiTypography
+                {...(doUseDivAsRootComponent ? { "component": "div" } : {})}
                 id={id ?? undefined}
                 className={cx(classNames.root, className)}
                 ref={ref}
