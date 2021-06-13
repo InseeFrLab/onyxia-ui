@@ -1,3 +1,7 @@
+## **0.4.0** (2021-06-13)  
+  
+- Change the API of SplashScreen    
+  
 ### **0.3.13** (2021-06-13)  
   
 - Remove garbage    
