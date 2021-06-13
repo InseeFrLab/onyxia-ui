@@ -1,3 +1,10 @@
+### **0.3.8** (2021-06-13)  
+  
+- Merge pull request #2 from garronej/add_breakpoints_in_theme
+
+Add breakpoints in theme  
+- Add breakpoints in theme    
+  
 ### **0.3.7** (2021-06-12)  
   
 - Make it so an extended theme actually extends the base theme    
