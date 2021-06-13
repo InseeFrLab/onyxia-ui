@@ -138,32 +138,6 @@ export function createThemeProvider<
         { "max": 1 },
     );
 
-    function ThemeProvider(props: ThemeProviderProps) {
-        const { children } = props;
-
-        const { isDarkModeEnabled } = useIsDarkModeEnabled();
-
-        return (
-            <ThemeBaseProvider>
-                <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
-                    <CssBaseline />
-                    <StylesProvider injectFirst>
-                        {"zoomProviderReferenceWidth" in props ? (
-                            <ZoomProvider
-                                referenceWidth={props.zoomProviderReferenceWidth}
-                                portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
-                            >
-                                {children}
-                            </ZoomProvider>
-                        ) : (
-                            children
-                        )}
-                    </StylesProvider>
-                </MuiThemeProvider>
-            </ThemeBaseProvider>
-        );
-    }
-
     const createTheme_memo = memoize(
         (
             isDarkModeEnabled: boolean,
@@ -193,6 +167,34 @@ export function createThemeProvider<
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
         const { bp } = useBreakpointKey();
         return createTheme_memo(isDarkModeEnabled, bp);
+    }
+
+    function ThemeProvider(props: ThemeProviderProps) {
+        const { children } = props;
+
+        const { isDarkModeEnabled } = useIsDarkModeEnabled();
+
+        const theme = useTheme();
+
+        return (
+            <ThemeBaseProvider initialState={theme}>
+                <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
+                    <CssBaseline />
+                    <StylesProvider injectFirst>
+                        {"zoomProviderReferenceWidth" in props ? (
+                            <ZoomProvider
+                                referenceWidth={props.zoomProviderReferenceWidth}
+                                portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
+                            >
+                                {children}
+                            </ZoomProvider>
+                        ) : (
+                            children
+                        )}
+                    </StylesProvider>
+                </MuiThemeProvider>
+            </ThemeBaseProvider>
+        );
     }
 
     return { ThemeProvider, useTheme };
