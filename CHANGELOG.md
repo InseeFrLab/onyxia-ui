@@ -1,3 +1,7 @@
+## **0.5.0** (2021-06-13)  
+  
+- Fix splashscreen (again)    
+  
 ## **0.4.0** (2021-06-13)  
   
 - Change the API of SplashScreen    
