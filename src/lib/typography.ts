@@ -14,7 +14,7 @@ export declare namespace FontWeightProperty {
 export type TypographyOptionsBase = typeof defaultTypography;
 
 export const defaultTypography = {
-    "fontFamily": '"Work Sans", sans-serif',
+    "fontFamily": "sans-serif",
     "h1": {
         "fontWeight": id<FontWeightProperty>("bold"),
         "fontSize": "60px",
