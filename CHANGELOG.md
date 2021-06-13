@@ -1,3 +1,8 @@
+### **0.3.9** (2021-06-13)  
+  
+- Fix previous build  
+- Default font is sans-serif    
+  
 ### **0.3.8** (2021-06-13)  
   
 - Merge pull request #2 from garronej/add_breakpoints_in_theme
