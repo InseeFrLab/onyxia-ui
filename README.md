@@ -20,20 +20,6 @@
 
 Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
 
-# Showcase
-
-UI built with this toolkit.
-
-## [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
-
-![scree_myservices](https://user-images.githubusercontent.com/6702424/121828699-a8a36600-ccc0-11eb-903c-1cd4b6cbb0ff.png)
-![screen_launcher](https://user-images.githubusercontent.com/6702424/121828696-a80acf80-ccc0-11eb-86fb-c7d0bca55d4f.png)
-![screen_main_services](https://user-images.githubusercontent.com/6702424/121828700-a93bfc80-ccc0-11eb-8149-f6c85c06cffd.png)
-![my_secrets](https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png)
-
-## [onyxia.dev](https://onyxia.dev)
-## [sspcloud.fr](https://sspcloud.fr)
-
 # Motivation
 
 [Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
@@ -48,6 +34,20 @@ In consequence, we wanted to create a ui toolkit that would be compatible with
 -   Easier, more guided, theme customization.
 -   Provide splash screen that hides your components while they are not yet loaded.
 -   Provides smarter core components that require less boiler plate.
+
+# Showcase
+
+UI built with this toolkit.
+
+## [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
+
+![scree_myservices](https://user-images.githubusercontent.com/6702424/121828699-a8a36600-ccc0-11eb-903c-1cd4b6cbb0ff.png)
+![screen_launcher](https://user-images.githubusercontent.com/6702424/121828696-a80acf80-ccc0-11eb-86fb-c7d0bca55d4f.png)
+![screen_main_services](https://user-images.githubusercontent.com/6702424/121828700-a93bfc80-ccc0-11eb-8149-f6c85c06cffd.png)
+![my_secrets](https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png)
+
+## [onyxia.dev](https://onyxia.dev)
+## [sspcloud.fr](https://sspcloud.fr)
 
 # Quick start
 
