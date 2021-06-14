@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { useEffect, useState, memo } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
 import { useIsDarkModeEnabled, evtIsDarkModeEnabled } from "./useIsDarkModeEnabled";
@@ -44,7 +45,7 @@ export type Theme<
 const { ThemeBaseProvider, useThemeBase } = createUseScopedState(
     "themeBase",
     createObjectThatThrowsIfAccessed<Theme>({
-        "debugMessage": "You must invoke createThemeProvider() before being able to use the components",
+        "debugMessage": "Your app should be wrapped into ThemeProvider",
     }),
 );
 
@@ -172,16 +173,20 @@ export function createThemeProvider<
         return createTheme_memo(isDarkModeEnabled, breakpoint);
     }
 
-    function ThemeProvider(props: ThemeProviderProps) {
-        const { children } = props;
+    const { ThemeProvider } = (() => {
+        const Component = memo((props: ThemeProviderProps) => {
+            const { children } = props;
 
-        const { isDarkModeEnabled } = useIsDarkModeEnabled();
+            const theme = useTheme();
 
-        const theme = useTheme();
+            const { setThemeBase } = useThemeBase();
 
-        return (
-            <ThemeBaseProvider initialState={theme}>
-                <MuiThemeProvider theme={createMuiTheme_memo(isDarkModeEnabled)}>
+            useEffect(() => {
+                setThemeBase(theme);
+            }, [theme]);
+
+            return (
+                <MuiThemeProvider theme={createMuiTheme_memo(theme.isDarkModeEnabled)}>
                     <CssBaseline />
                     <StylesProvider injectFirst>
                         {"zoomProviderReferenceWidth" in props ? (
@@ -196,9 +201,25 @@ export function createThemeProvider<
                         )}
                     </StylesProvider>
                 </MuiThemeProvider>
-            </ThemeBaseProvider>
-        );
-    }
+            );
+        });
+
+        const ThemeProvider = memo((props: ThemeProviderProps) => {
+            const breakpoint = useBreakpoint();
+
+            const [initialState] = useState(() =>
+                createTheme_memo(evtIsDarkModeEnabled.state, breakpoint),
+            );
+
+            return (
+                <ThemeBaseProvider initialState={initialState}>
+                    <Component {...props} />
+                </ThemeBaseProvider>
+            );
+        });
+
+        return { ThemeProvider };
+    })();
 
     return { ThemeProvider, useTheme };
 }
