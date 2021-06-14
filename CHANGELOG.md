@@ -1,3 +1,7 @@
+### **0.5.4** (2021-06-14)  
+  
+- Do not wrap ThemeProvider into memo    
+  
 ### **0.5.3** (2021-06-14)  
   
 - Fix dark mode switch with scoped state    
