@@ -1,3 +1,7 @@
+### **0.5.3** (2021-06-14)  
+  
+- Fix dark mode switch with scoped state    
+  
 ### **0.5.2** (2021-06-13)  
   
 - Typography can use div as root component    
