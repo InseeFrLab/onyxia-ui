@@ -204,7 +204,7 @@ export function createThemeProvider<
             );
         });
 
-        const ThemeProvider = memo((props: ThemeProviderProps) => {
+        function ThemeProvider(props: ThemeProviderProps) {
             const breakpoint = useBreakpoint();
 
             const [initialState] = useState(() =>
@@ -216,7 +216,7 @@ export function createThemeProvider<
                     <Component {...props} />
                 </ThemeBaseProvider>
             );
-        });
+        }
 
         return { ThemeProvider };
     })();
