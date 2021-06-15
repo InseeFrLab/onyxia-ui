@@ -11551,10 +11551,10 @@ postcss@^8.1.0:
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
 
-powerhooks@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.1.0.tgz#c6dce051a90ffcac14d3a4588d1a6839e77fb7e3"
-  integrity sha512-kpzhsGCQtTe36QDeuHCeoqOSQfEacip2i1+RzddJ3YOkJUphTpS8NaKO/kJ7bNRALCXla494LeU0ii+LG+g6EA==
+powerhooks@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.1.2.tgz#8e580b01a14e669e2f2f8b032a31a69dfc5ee382"
+  integrity sha512-ByXazoWMKeCt8Hdjv5ckKNKSKfWTlzQfg2AODDT6SYyMriYBHU8vg9pdGRovgJsLVPqrAxRcXT5utBqI6GtnRA==
   dependencies:
     evt "2.0.0-beta.15"
     memoizee "^0.4.15"
