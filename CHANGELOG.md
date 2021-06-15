@@ -1,3 +1,8 @@
+### **0.5.8** (2021-06-15)  
+  
+- Fix legacy error  
+- Theme can be created more than once    
+  
 ### **0.5.7** (2021-06-15)  
   
 - fix breakpoints and add Xl    
