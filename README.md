@@ -47,6 +47,7 @@ UI built with this toolkit.
 ![my_secrets](https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png)
 
 ## [onyxia.dev](https://onyxia.dev)
+
 ## [sspcloud.fr](https://sspcloud.fr)
 
 # Quick start
