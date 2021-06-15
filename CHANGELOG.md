@@ -1,3 +1,9 @@
+### **0.5.5** (2021-06-15)  
+  
+- Update deps (fix bug with zoom)  
+- Update README.md  
+- Update README.md    
+  
 ### **0.5.4** (2021-06-14)  
   
 - Do not wrap ThemeProvider into memo    
