@@ -75,7 +75,7 @@ import {
 import { createIcon } from "onyxia-ui/Icon";
 import { createIconButton } from "onyxia-ui/IconButton";
 import { createButton } from "onyxia-ui/Button";
-import "onyxia-design-lab/assets/fonts/work-sans.css";
+import "onyxia-ui/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
