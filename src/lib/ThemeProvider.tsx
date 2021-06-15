@@ -20,8 +20,17 @@ import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
 import { assert } from "tsafe/assert";
-import { useBreakpoint } from "./useBreakpointKey";
+import { useBreakpoint, breakpointsValues } from "./useBreakpointKey";
 import type { Breakpoint } from "./useBreakpointKey";
+
+export interface Breakpoints {
+    key: Breakpoint;
+    up(key: Breakpoint | number): string;
+    down(key: Breakpoint | number): string;
+    between(start: Breakpoint | number, end: Breakpoint | number): string;
+    only(key: Breakpoint): string;
+    width(key: Breakpoint): number;
+}
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -38,7 +47,7 @@ export type Theme<
     shadows: typeof shadows;
     spacing: MuiTheme["spacing"];
     muiTheme: MuiTheme;
-    breakpoints: MuiTheme["breakpoints"] & { key: Breakpoint };
+    breakpoints: Breakpoints & { key: Breakpoint };
     custom: Custom;
 };
 
@@ -134,6 +143,9 @@ export function createThemeProvider<
                         "useCases": createColorUseCases_memo(isDarkModeEnabled),
                     }),
                     "spacing": spacingSteps,
+                    "breakpoints": {
+                        "values": breakpointsValues,
+                    },
                 }),
             ),
         { "max": 1 },
@@ -158,7 +170,7 @@ export function createThemeProvider<
                     "breakpoints": {
                         ...muiTheme.breakpoints,
                         "key": breakpoint,
-                    },
+                    } as any,
                     muiTheme,
                 };
             })(),
