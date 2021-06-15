@@ -1,3 +1,7 @@
+### **0.5.7** (2021-06-15)  
+  
+- fix breakpoints and add Xl    
+  
 ### **0.5.6** (2021-06-15)  
   
 - Fix useBreakpoint    
