@@ -1,3 +1,7 @@
+### **0.5.6** (2021-06-15)  
+  
+- Fix useBreakpoint    
+  
 ### **0.5.5** (2021-06-15)  
   
 - Update deps (fix bug with zoom)  
