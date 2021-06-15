@@ -19,7 +19,6 @@ import { createUseScopedState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
-import { assert } from "tsafe/assert";
 import { useBreakpoint, breakpointsValues } from "./useBreakpointKey";
 import type { Breakpoint } from "./useBreakpointKey";
 
@@ -87,8 +86,6 @@ export declare namespace ThemeProviderProps {
     export type WithoutZoom = WithChildren;
 }
 
-let haveThemeBeenCreatedAlready = false;
-
 export function createThemeProvider<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
@@ -103,10 +100,6 @@ export function createThemeProvider<
     custom?: Custom;
     defaultIsDarkModeEnabled?: boolean;
 }) {
-    assert(!haveThemeBeenCreatedAlready, "Can't create theme more than once");
-
-    haveThemeBeenCreatedAlready = true;
-
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
