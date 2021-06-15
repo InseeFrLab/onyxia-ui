@@ -5,7 +5,8 @@ import { doExtends } from "tsafe/doExtends";
 
 export type { Breakpoint };
 
-const breakpoints = ["xs", "sm", "md", "lg", "xl"] as const;
+//It's important to go from the larger to the smaller
+const breakpoints = ["xl", "lg", "md", "sm", "xs"] as const;
 
 doExtends<typeof breakpoints[number], Breakpoint>();
 doExtends<Breakpoint, typeof breakpoints[number]>();
