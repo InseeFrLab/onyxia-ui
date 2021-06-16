@@ -1,3 +1,7 @@
+### **0.6.1** (2021-06-16)  
+  
+- Handle typography responsiveness    
+  
 ## **0.6.0** (2021-06-16)  
   
 - Implement real responsive support    
