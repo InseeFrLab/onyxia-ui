@@ -1,3 +1,7 @@
+## **0.6.0** (2021-06-16)  
+  
+- Implement real responsive support    
+  
 ### **0.5.8** (2021-06-15)  
   
 - Fix legacy error  
