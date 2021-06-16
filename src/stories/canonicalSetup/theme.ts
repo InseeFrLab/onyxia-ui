@@ -2,7 +2,7 @@ import {
     createThemeProvider,
     defaultPalette,
     createDefaultColorUseCases,
-    defaultTypography,
+    defaultGetTypography,
 } from "../../lib";
 import { createIcon } from "../../Icon";
 import { createIconButton } from "../../IconButton";
@@ -20,10 +20,10 @@ import { ReactComponent as BarSvg } from "./assets/svg/bar.svg";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
-    "typography": {
-        ...defaultTypography,
+    "getTypography": ({ windowInnerWidth }) => ({
+        ...defaultGetTypography({ windowInnerWidth }),
         "fontFamily": '"Work Sans", sans-serif',
-    },
+    }),
     "palette": {
         ...defaultPalette,
         "shinyPink": {

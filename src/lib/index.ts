@@ -7,8 +7,8 @@ export * from "../tools/changeColorOpacity";
 export type { Theme, ThemeProviderProps } from "./ThemeProvider";
 export { createThemeProvider } from "./ThemeProvider";
 
-export type { TypographyOptionsBase } from "./typography";
-export { defaultTypography } from "./typography";
+export type { TypographyOptionsBase, FontWeightProperty } from "./typography";
+export { defaultGetTypography } from "./typography";
 
 export * from "./useIsDarkModeEnabled";
 

@@ -70,12 +70,12 @@ import {
     createThemeProvider,
     defaultPalette,
     createDefaultColorUseCases,
-    defaultTypography,
-} from "onyxia-ui/lib";
-import { createIcon } from "onyxia-ui/Icon";
-import { createIconButton } from "onyxia-ui/IconButton";
-import { createButton } from "onyxia-ui/Button";
-import "onyxia-ui/assets/fonts/work-sans.css";
+    defaultGetTypography,
+} from "../../lib";
+import { createIcon } from "../../Icon";
+import { createIconButton } from "../../IconButton";
+import { createButton } from "../../Button";
+import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
@@ -88,10 +88,10 @@ import { ReactComponent as BarSvg } from "./assets/svg/bar.svg";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     //We keep the default color palette but we add a custom color: a shiny pink.
-    "typography": {
-        ...defaultTypography,
+    "getTypography": ({ windowInnerWidth }) => ({
+        ...defaultGetTypography({ windowInnerWidth }),
         "fontFamily": '"Work Sans", sans-serif',
-    },
+    }),
     "palette": {
         ...defaultPalette,
         "shinyPink": {

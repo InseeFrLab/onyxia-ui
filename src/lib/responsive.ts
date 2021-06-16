@@ -19,6 +19,8 @@ export type Responsive = {
     between(start: Breakpoint | number, end: Breakpoint | number): boolean;
     /** Up or equal but strictly down next breakpoint */
     only(breakpoint: Breakpoint): boolean;
+    /** Current value of window.innerWidth */
+    windowInnerWidth: number;
 };
 
 export const { createResponsive } = (() => {
@@ -42,6 +44,7 @@ export const { createResponsive } = (() => {
             "down": arg => !out.up(arg),
             "between": (start, end) => out.up(start) && out.down(end),
             "only": breakpoint => out.between(breakpoint, getNextBreakpoint(breakpoint) ?? Infinity),
+            windowInnerWidth,
         };
 
         return out;

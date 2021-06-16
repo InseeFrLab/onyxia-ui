@@ -13,7 +13,7 @@ import { createObjectThatThrowsIfAccessed } from "../tools/createObjectThatThrow
 import type { PaletteBase, ColorUseCasesBase, CreateColorUseCase } from "./colors";
 import { defaultPalette, createDefaultColorUseCases } from "./colors";
 import type { TypographyOptionsBase } from "./typography";
-import { defaultTypography, createMuiTypographyOptions } from "./typography";
+import { defaultGetTypography, createMuiTypographyOptions } from "./typography";
 import { createMuiPaletteOptions } from "./colors";
 import { createUseScopedState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
@@ -84,7 +84,7 @@ export function createThemeProvider<
     Custom extends Record<string, unknown> = Record<string, unknown>,
 >(params: {
     isReactStrictModeEnabled?: boolean;
-    typography?: TypographyOptions;
+    getTypography?: (params: { windowInnerWidth: number }) => TypographyOptions;
     palette?: Palette;
     createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
     spacingSteps?(factor: number): number;
@@ -96,7 +96,7 @@ export function createThemeProvider<
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
             typeof params["createColorUseCases"]
         >,
-        typography = defaultTypography as NonNullable<typeof params["typography"]>,
+        getTypography = defaultGetTypography as NonNullable<typeof params["getTypography"]>,
         isReactStrictModeEnabled = false,
         spacingSteps = factor => 8 * factor,
         custom = {} as NonNullable<typeof params["custom"]>,
@@ -115,11 +115,13 @@ export function createThemeProvider<
     );
 
     const createMuiTheme_memo = memoize(
-        (isDarkModeEnabled: boolean) =>
+        (isDarkModeEnabled: boolean, windowInnerWidth: number) =>
             //https://material-ui.com/customization/theming/#responsivefontsizes-theme-options-theme
             (isReactStrictModeEnabled ? unstable_createMuiStrictModeTheme : createMuiTheme)({
                 // https://material-ui.com/customization/palette/#using-a-color-object
-                "typography": createMuiTypographyOptions({ typography }),
+                "typography": createMuiTypographyOptions({
+                    "typography": getTypography({ windowInnerWidth }),
+                }),
                 "palette": createMuiPaletteOptions({
                     isDarkModeEnabled,
                     palette,
@@ -142,12 +144,12 @@ export function createThemeProvider<
                 palette,
                 "useCases": createColorUseCases_memo(isDarkModeEnabled),
             },
-            typography,
+            "typography": getTypography({ windowInnerWidth }),
             isDarkModeEnabled,
             shadows,
             "responsive": createResponsive({ windowInnerWidth }),
             ...(() => {
-                const muiTheme = createMuiTheme_memo(isDarkModeEnabled);
+                const muiTheme = createMuiTheme_memo(isDarkModeEnabled, windowInnerWidth);
                 return {
                     "spacing": muiTheme.spacing.bind(muiTheme),
                     muiTheme,
@@ -178,7 +180,12 @@ export function createThemeProvider<
                 }, [theme]);
 
                 return (
-                    <MuiThemeProvider theme={createMuiTheme_memo(theme.isDarkModeEnabled)}>
+                    <MuiThemeProvider
+                        theme={createMuiTheme_memo(
+                            theme.isDarkModeEnabled,
+                            theme.responsive.windowInnerWidth,
+                        )}
+                    >
                         <CssBaseline />
                         <StylesProvider injectFirst>{children}</StylesProvider>
                     </MuiThemeProvider>
