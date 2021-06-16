@@ -11,6 +11,8 @@ export type { TypographyOptionsBase } from "./typography";
 export { defaultTypography } from "./typography";
 
 export * from "./useIsDarkModeEnabled";
-export * from "./useBreakpointKey";
+
+export type { Breakpoint, Responsive } from "./responsive";
+export { breakpointsValues } from "./responsive";
 
 export { useDomRect } from "powerhooks";

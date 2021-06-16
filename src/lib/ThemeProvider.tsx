@@ -6,7 +6,7 @@ import { useIsDarkModeEnabled, evtIsDarkModeEnabled } from "./useIsDarkModeEnabl
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider as MuiThemeProvider, StylesProvider } from "@material-ui/core/styles";
 import { createMuiTheme, unstable_createMuiStrictModeTheme } from "@material-ui/core/styles";
-import { responsiveFontSizes } from "@material-ui/core/styles";
+import { useWindowInnerSize } from "powerhooks";
 import memoize from "memoizee";
 import { createObjectThatThrowsIfAccessed } from "../tools/createObjectThatThrowsIfAccessed";
 
@@ -19,17 +19,8 @@ import { createUseScopedState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
 import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
-import { useBreakpoint, breakpointsValues } from "./useBreakpointKey";
-import type { Breakpoint } from "./useBreakpointKey";
-
-export interface Breakpoints {
-    key: Breakpoint;
-    up(key: Breakpoint | number): string;
-    down(key: Breakpoint | number): string;
-    between(start: Breakpoint | number, end: Breakpoint | number): string;
-    only(key: Breakpoint): string;
-    width(key: Breakpoint): number;
-}
+import { createResponsive, breakpointsValues } from "./responsive";
+import type { Responsive } from "./responsive";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -46,7 +37,7 @@ export type Theme<
     shadows: typeof shadows;
     spacing: MuiTheme["spacing"];
     muiTheme: MuiTheme;
-    breakpoints: Breakpoints & { key: Breakpoint };
+    responsive: Responsive;
     custom: Custom;
 };
 
@@ -125,29 +116,27 @@ export function createThemeProvider<
 
     const createMuiTheme_memo = memoize(
         (isDarkModeEnabled: boolean) =>
-            responsiveFontSizes(
-                //https://material-ui.com/customization/theming/#responsivefontsizes-theme-options-theme
-                (isReactStrictModeEnabled ? unstable_createMuiStrictModeTheme : createMuiTheme)({
-                    // https://material-ui.com/customization/palette/#using-a-color-object
-                    "typography": createMuiTypographyOptions({ typography }),
-                    "palette": createMuiPaletteOptions({
-                        isDarkModeEnabled,
-                        palette,
-                        "useCases": createColorUseCases_memo(isDarkModeEnabled),
-                    }),
-                    "spacing": spacingSteps,
-                    "breakpoints": {
-                        "values": breakpointsValues,
-                    },
+            //https://material-ui.com/customization/theming/#responsivefontsizes-theme-options-theme
+            (isReactStrictModeEnabled ? unstable_createMuiStrictModeTheme : createMuiTheme)({
+                // https://material-ui.com/customization/palette/#using-a-color-object
+                "typography": createMuiTypographyOptions({ typography }),
+                "palette": createMuiPaletteOptions({
+                    isDarkModeEnabled,
+                    palette,
+                    "useCases": createColorUseCases_memo(isDarkModeEnabled),
                 }),
-            ),
+                "spacing": spacingSteps,
+                "breakpoints": {
+                    "values": breakpointsValues,
+                },
+            }),
         { "max": 1 },
     );
 
     const createTheme_memo = memoize(
         (
             isDarkModeEnabled: boolean,
-            breakpoint: Breakpoint,
+            windowInnerWidth: number,
         ): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
             "colors": {
                 palette,
@@ -156,14 +145,11 @@ export function createThemeProvider<
             typography,
             isDarkModeEnabled,
             shadows,
+            "responsive": createResponsive({ windowInnerWidth }),
             ...(() => {
                 const muiTheme = createMuiTheme_memo(isDarkModeEnabled);
                 return {
                     "spacing": muiTheme.spacing.bind(muiTheme),
-                    "breakpoints": {
-                        ...muiTheme.breakpoints,
-                        "key": breakpoint,
-                    } as any,
                     muiTheme,
                 };
             })(),
@@ -174,54 +160,64 @@ export function createThemeProvider<
 
     function useTheme(): Theme<Palette, ColorUseCases, TypographyOptions, Custom> {
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
-        const breakpoint = useBreakpoint();
-        return createTheme_memo(isDarkModeEnabled, breakpoint);
+        const { windowInnerWidth } = useWindowInnerSize();
+        return createTheme_memo(isDarkModeEnabled, windowInnerWidth);
     }
 
     const { ThemeProvider } = (() => {
-        const Component = memo((props: ThemeProviderProps) => {
-            const { children } = props;
+        const { ThemeProviderInner } = (() => {
+            const ThemeProviderInnerInner = memo((props: ThemeProviderProps) => {
+                const { children } = props;
 
-            const theme = useTheme();
+                const theme = useTheme();
 
-            const { setThemeBase } = useThemeBase();
+                const { setThemeBase } = useThemeBase();
 
-            useEffect(() => {
-                setThemeBase(theme);
-            }, [theme]);
+                useEffect(() => {
+                    setThemeBase(theme);
+                }, [theme]);
+
+                return (
+                    <MuiThemeProvider theme={createMuiTheme_memo(theme.isDarkModeEnabled)}>
+                        <CssBaseline />
+                        <StylesProvider injectFirst>{children}</StylesProvider>
+                    </MuiThemeProvider>
+                );
+            });
+
+            function ThemeProviderInner(props: ThemeProviderProps) {
+                const [initialState] = useState(() =>
+                    createTheme_memo(evtIsDarkModeEnabled.state, window.innerWidth),
+                );
+
+                return (
+                    <ThemeBaseProvider initialState={initialState}>
+                        <ThemeProviderInnerInner {...props} />
+                    </ThemeBaseProvider>
+                );
+            }
+
+            return { ThemeProviderInner };
+        })();
+
+        const ThemeProvider = (props: ThemeProviderProps) => {
+            const children = <ThemeProviderInner {...props} />;
 
             return (
-                <MuiThemeProvider theme={createMuiTheme_memo(theme.isDarkModeEnabled)}>
-                    <CssBaseline />
-                    <StylesProvider injectFirst>
-                        {"zoomProviderReferenceWidth" in props ? (
-                            <ZoomProvider
-                                referenceWidth={props.zoomProviderReferenceWidth}
-                                portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
-                            >
-                                {children}
-                            </ZoomProvider>
-                        ) : (
-                            children
-                        )}
-                    </StylesProvider>
-                </MuiThemeProvider>
+                <>
+                    {"zoomProviderReferenceWidth" in props ? (
+                        <ZoomProvider
+                            referenceWidth={props.zoomProviderReferenceWidth}
+                            portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
+                        >
+                            {children}
+                        </ZoomProvider>
+                    ) : (
+                        children
+                    )}
+                </>
             );
-        });
-
-        function ThemeProvider(props: ThemeProviderProps) {
-            const breakpoint = useBreakpoint();
-
-            const [initialState] = useState(() =>
-                createTheme_memo(evtIsDarkModeEnabled.state, breakpoint),
-            );
-
-            return (
-                <ThemeBaseProvider initialState={initialState}>
-                    <Component {...props} />
-                </ThemeBaseProvider>
-            );
-        }
+        };
 
         return { ThemeProvider };
     })();
