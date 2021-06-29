@@ -1,3 +1,7 @@
+### **0.6.2** (2021-06-29)  
+  
+- Fix TextField update    
+  
 ### **0.6.1** (2021-06-16)  
   
 - Handle typography responsiveness    
