@@ -48,7 +48,11 @@ export type TextFieldProps = {
     /** Submit invoked on evtAction.post("TRIGGER SUBMIT") only if value being typed is valid */
     onSubmit?(value: string): void;
     getIsValidValue?(value: string): { isValidValue: true } | { isValidValue: false; message: string };
-    /** Invoked on first render */
+    /**
+     * Invoked on first render,
+     * called again if getIsValidValue have been updated and
+     * the validity of the current value changes.
+     */
     onValueBeingTypedChange?(
         params: { value: string } & ReturnType<TextFieldProps["getIsValidValue"]>,
     ): void;
@@ -233,7 +237,11 @@ export const TextField = memo((props: TextFieldProps) => {
 
     useEffect(() => {
         onValueBeingTypedChange({ value, ...getIsValidValueResult });
-    }, [value]);
+    }, [
+        value,
+        getIsValidValueResult.isValidValue,
+        getIsValidValueResult.isValidValue ? Object : getIsValidValueResult.message,
+    ]);
 
     const [isValidationEnabled, enableValidation] = useReducer(() => true, false);
 
