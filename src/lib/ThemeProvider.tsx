@@ -12,8 +12,12 @@ import { createObjectThatThrowsIfAccessed } from "../tools/createObjectThatThrow
 
 import type { PaletteBase, ColorUseCasesBase, CreateColorUseCase } from "./colors";
 import { defaultPalette, createDefaultColorUseCases } from "./colors";
-import type { TypographyOptionsBase } from "./typography";
-import { defaultGetTypography, createMuiTypographyOptions } from "./typography";
+import type { ComputedTypography, GetTypographyDesc } from "./typography";
+import {
+    defaultGetTypographyDesc,
+    createMuiTypographyOptions,
+    getComputedTypography,
+} from "./typography";
 import { createMuiPaletteOptions } from "./colors";
 import { createUseScopedState } from "powerhooks";
 import { createUseClassNamesFactory } from "tss-react";
@@ -21,11 +25,13 @@ import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
 import { createResponsive, breakpointsValues } from "./responsive";
 import type { Responsive } from "./responsive";
+import { useBrowserFontSizeFactor, getBrowserFontSizeFactor } from "./useBrowserFontSizeFactor";
+import { createText } from "../Text";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
-    TypographyOptions extends TypographyOptionsBase = TypographyOptionsBase,
+    CustomTypographyVariantName extends string = never,
     Custom extends Record<string, unknown> = Record<string, unknown>,
 > = {
     colors: {
@@ -33,7 +39,7 @@ export type Theme<
         useCases: ColorUseCases;
     };
     isDarkModeEnabled: boolean;
-    typography: TypographyOptions;
+    typography: ComputedTypography<CustomTypographyVariantName>;
     shadows: typeof shadows;
     spacing: MuiTheme["spacing"];
     muiTheme: MuiTheme;
@@ -41,21 +47,26 @@ export type Theme<
     custom: Custom;
 };
 
-const { ThemeBaseProvider, useThemeBase } = createUseScopedState(
+const { ThemeBaseProvider, useThemeBase: useWrappedThemeBase } = createUseScopedState(
     "themeBase",
     createObjectThatThrowsIfAccessed<Theme>({
         "debugMessage": "Your app should be wrapped into ThemeProvider",
     }),
 );
 
-export { useThemeBase };
-
-export const { createUseClassNames } = createUseClassNamesFactory({
-    "useTheme": function useClosure() {
-        const { themeBase } = useThemeBase();
+/** Used internally, not exported */
+export const { createUseClassNames, useThemeBase, Text } = (() => {
+    function useThemeBase() {
+        const { themeBase } = useWrappedThemeBase();
         return themeBase;
-    },
-});
+    }
+
+    const { createUseClassNames } = createUseClassNamesFactory({ "useTheme": useThemeBase });
+
+    const { Text } = createText({ "useTheme": useThemeBase });
+
+    return { createUseClassNames, useThemeBase, Text };
+})();
 
 export type ThemeProviderProps = ThemeProviderProps.WithZoom | ThemeProviderProps.WithoutZoom;
 export declare namespace ThemeProviderProps {
@@ -80,11 +91,11 @@ export declare namespace ThemeProviderProps {
 export function createThemeProvider<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
-    TypographyOptions extends TypographyOptionsBase = TypographyOptionsBase,
+    CustomTypographyVariantName extends string = never,
     Custom extends Record<string, unknown> = Record<string, unknown>,
 >(params: {
     isReactStrictModeEnabled?: boolean;
-    getTypography?: (params: { windowInnerWidth: number }) => TypographyOptions;
+    getTypographyDesc?: GetTypographyDesc<CustomTypographyVariantName>;
     palette?: Palette;
     createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
     spacingSteps?(factor: number): number;
@@ -96,7 +107,7 @@ export function createThemeProvider<
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
             typeof params["createColorUseCases"]
         >,
-        getTypography = defaultGetTypography as NonNullable<typeof params["getTypography"]>,
+        getTypographyDesc = defaultGetTypographyDesc as NonNullable<typeof params["getTypographyDesc"]>,
         isReactStrictModeEnabled = false,
         spacingSteps = factor => 8 * factor,
         custom = {} as NonNullable<typeof params["custom"]>,
@@ -115,12 +126,12 @@ export function createThemeProvider<
     );
 
     const createMuiTheme_memo = memoize(
-        (isDarkModeEnabled: boolean, windowInnerWidth: number) =>
+        (isDarkModeEnabled: boolean, windowInnerWidth: number, browserFontSizeFactor: number) =>
             //https://material-ui.com/customization/theming/#responsivefontsizes-theme-options-theme
             (isReactStrictModeEnabled ? unstable_createMuiStrictModeTheme : createMuiTheme)({
                 // https://material-ui.com/customization/palette/#using-a-color-object
                 "typography": createMuiTypographyOptions({
-                    "typography": getTypography({ windowInnerWidth }),
+                    "typographyDesc": getTypographyDesc({ windowInnerWidth, browserFontSizeFactor }),
                 }),
                 "palette": createMuiPaletteOptions({
                     isDarkModeEnabled,
@@ -129,7 +140,7 @@ export function createThemeProvider<
                 }),
                 "spacing": spacingSteps,
                 "breakpoints": {
-                    "values": breakpointsValues,
+                    "values": { "xs": 0, ...breakpointsValues },
                 },
             }),
         { "max": 1 },
@@ -139,17 +150,24 @@ export function createThemeProvider<
         (
             isDarkModeEnabled: boolean,
             windowInnerWidth: number,
-        ): Theme<Palette, ColorUseCases, TypographyOptions, Custom> => ({
+            browserFontSizeFactor: number,
+        ): Theme<Palette, ColorUseCases, CustomTypographyVariantName, Custom> => ({
             "colors": {
                 palette,
                 "useCases": createColorUseCases_memo(isDarkModeEnabled),
             },
-            "typography": getTypography({ windowInnerWidth }),
+            "typography": getComputedTypography({
+                "typographyDesc": getTypographyDesc({ windowInnerWidth, browserFontSizeFactor }),
+            }),
             isDarkModeEnabled,
             shadows,
             "responsive": createResponsive({ windowInnerWidth }),
             ...(() => {
-                const muiTheme = createMuiTheme_memo(isDarkModeEnabled, windowInnerWidth);
+                const muiTheme = createMuiTheme_memo(
+                    isDarkModeEnabled,
+                    windowInnerWidth,
+                    browserFontSizeFactor,
+                );
                 return {
                     "spacing": muiTheme.spacing.bind(muiTheme),
                     muiTheme,
@@ -160,10 +178,11 @@ export function createThemeProvider<
         { "max": 1 },
     );
 
-    function useTheme(): Theme<Palette, ColorUseCases, TypographyOptions, Custom> {
+    function useTheme(): Theme<Palette, ColorUseCases, CustomTypographyVariantName, Custom> {
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
         const { windowInnerWidth } = useWindowInnerSize();
-        return createTheme_memo(isDarkModeEnabled, windowInnerWidth);
+        const { browserFontSizeFactor } = useBrowserFontSizeFactor();
+        return createTheme_memo(isDarkModeEnabled, windowInnerWidth, browserFontSizeFactor);
     }
 
     const { ThemeProvider } = (() => {
@@ -173,7 +192,7 @@ export function createThemeProvider<
 
                 const theme = useTheme();
 
-                const { setThemeBase } = useThemeBase();
+                const { setThemeBase } = useWrappedThemeBase();
 
                 useEffect(() => {
                     setThemeBase(theme);
@@ -184,6 +203,7 @@ export function createThemeProvider<
                         theme={createMuiTheme_memo(
                             theme.isDarkModeEnabled,
                             theme.responsive.windowInnerWidth,
+                            getBrowserFontSizeFactor(),
                         )}
                     >
                         <CssBaseline />
@@ -194,7 +214,11 @@ export function createThemeProvider<
 
             function ThemeProviderInner(props: ThemeProviderProps) {
                 const [initialState] = useState(() =>
-                    createTheme_memo(evtIsDarkModeEnabled.state, window.innerWidth),
+                    createTheme_memo(
+                        evtIsDarkModeEnabled.state,
+                        window.innerWidth,
+                        getBrowserFontSizeFactor(),
+                    ),
                 );
 
                 return (
@@ -231,3 +255,23 @@ export function createThemeProvider<
 
     return { ThemeProvider, useTheme };
 }
+
+/*
+const { useTheme } = createThemeProvider({
+    "getTypographyDesc": ({ windowInnerWidth, browserFontSizeFactor }) => ({
+        "fontFamily": "Roboto",
+        "rootFontSizePx": 20,
+        "variants": {
+            ...defaultGetTypographyDesc({ windowInnerWidth, browserFontSizeFactor }).variants,
+            "my hero": {
+                "htmlComponent": "h1" as const,
+                "fontWeight": "bold",
+                "fontSizeRem": 3,
+                "lineHeightRem": 1.5
+            } as const
+        }
+    })
+})
+
+const x = useTheme().typography["my hero"].htmlComponent
+*/

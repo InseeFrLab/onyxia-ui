@@ -2,19 +2,12 @@ import type { Meta } from "@storybook/react";
 import type { Story } from "@storybook/react";
 import { useEffect } from "react";
 import { symToStr } from "tsafe/symToStr";
-import { createThemeProvider, useIsDarkModeEnabled, defaultGetTypography } from "../lib";
+import { useIsDarkModeEnabled } from "../lib";
+import { ThemeProvider, useTheme } from "./theme";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import { id } from "tsafe/id";
 import "../assets/fonts/work-sans.css";
-
-const { ThemeProvider, useTheme } = createThemeProvider({
-    "isReactStrictModeEnabled": false,
-    "getTypography": ({ windowInnerWidth }) => ({
-        ...defaultGetTypography({ windowInnerWidth }),
-        "fontFamily": '"Work Sans", sans-serif',
-    }),
-});
 
 export function getStoryFactory<Props>(params: {
     sectionName: string;
@@ -24,7 +17,11 @@ export function getStoryFactory<Props>(params: {
 
     const Component: any = Object.entries(wrappedComponent).map(([, component]) => component)[0];
 
-    const Template: Story<Props & { darkMode: boolean }> = ({ darkMode, ...props }) => {
+    const Template: Story<Props & { darkMode: boolean; width: number }> = ({
+        darkMode,
+        width,
+        ...props
+    }) => {
         const { setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
         useEffect(() => {
@@ -45,6 +42,7 @@ export function getStoryFactory<Props>(params: {
                             <div
                                 style={{
                                     "border": `1px dotted ${theme.colors.useCases.typography.textDisabled}`,
+                                    "width": width !== 0 ? width : undefined,
                                 }}
                             >
                                 <Component {...props} />
@@ -61,6 +59,7 @@ export function getStoryFactory<Props>(params: {
 
         out.args = {
             "darkMode": false,
+            "width": 0,
             ...props,
         };
 
@@ -71,6 +70,17 @@ export function getStoryFactory<Props>(params: {
         "meta": id<Meta>({
             "title": `${sectionName}/${symToStr(wrappedComponent)}`,
             "component": Component,
+            // https://storybook.js.org/docs/react/essentials/controls
+            "argTypes": {
+                "width": {
+                    "control": {
+                        "type": "range",
+                        "min": 0,
+                        "max": 1920,
+                        "step": 1,
+                    },
+                },
+            },
         }),
         getStory,
     };

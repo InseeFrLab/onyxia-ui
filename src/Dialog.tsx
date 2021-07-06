@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@material-ui/core/Dialog";
 import { createUseClassNames } from "./lib/ThemeProvider";
-import { Typography } from "./Typography";
+import { Text } from "./lib/ThemeProvider";
 import Checkbox from "@material-ui/core/Checkbox";
 import { useConstCallback } from "powerhooks";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -88,23 +88,23 @@ export const Dialog = memo((props: DialogProps) => {
         >
             <div className={classNames.root}>
                 {title !== undefined && (
-                    <Typography id={labelledby} variant="h5">
+                    <Text typo="object heading" componentProps={{ "id": labelledby }}>
                         {title}
-                    </Typography>
+                    </Text>
                 )}
                 {subtitle !== undefined && (
-                    <Typography className={classNames.subtitle} id={describedby} variant="body1">
+                    <Text
+                        className={classNames.subtitle}
+                        componentProps={{ "id": describedby }}
+                        typo="body 1"
+                    >
                         {subtitle}
-                    </Typography>
+                    </Text>
                 )}
                 {body !== undefined && (
-                    <Typography
-                        className={classNames.body}
-                        doUseDivAsRootComponent={true}
-                        variant="body2"
-                    >
+                    <Text className={classNames.body} htmlComponent="div" typo="body 2">
                         {body}
-                    </Typography>
+                    </Text>
                 )}
 
                 <div className={classNames.buttonWrapper}>

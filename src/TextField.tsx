@@ -1,4 +1,4 @@
-import { createUseClassNames } from "./lib/ThemeProvider";
+import { createUseClassNames, Text } from "./lib/ThemeProvider";
 import { cx } from "tss-react";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
@@ -16,7 +16,6 @@ import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
 import { Tooltip } from "./Tooltip";
-import { Typography } from "./Typography";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Visibility from "@material-ui/icons/Visibility";
 import Help from "@material-ui/icons/Help";
@@ -164,6 +163,7 @@ const { useClassNames } = createUseClassNames<Required<TextFieldProps> & { error
         "questionMark": {
             "verticalAlign": "middle",
             "color": theme.colors.useCases.typography.textDisabled,
+            "fontSize": `${theme.typography.rootFontSizePx * 1.25}px`,
         },
     }),
 );
@@ -337,16 +337,16 @@ export const TextField = memo((props: TextFieldProps) => {
             error={error}
             helperText={
                 <>
-                    <Typography className={classNames.helperText} variant="caption">
+                    <Text className={classNames.helperText} typo="caption">
                         {isValidationEnabled && !getIsValidValueResult.isValidValue
                             ? getIsValidValueResult.message || helperText
                             : helperText}
-                    </Typography>
+                    </Text>
                     {questionMarkHelperText !== "" && (
                         <>
                             &nbsp;
                             <Tooltip title={questionMarkHelperText}>
-                                <Icon className={classNames.questionMark} id="help" fontSize="small" />
+                                <Icon name="help" className={classNames.questionMark} />
                             </Tooltip>
                         </>
                     )}

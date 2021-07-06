@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import MuiAlert from "@material-ui/lab/Alert";
-import { Typography } from "./Typography";
+import { Text } from "./lib/ThemeProvider";
 import { createUseClassNames } from "./lib/ThemeProvider";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
@@ -56,12 +56,14 @@ export const Alert = memo((props: AlertProps) => {
             severity={severity}
             action={
                 doDisplayCross ? (
-                    <IconButton id="closeSharp" aria-label="close" onClick={close} />
+                    <IconButton iconId="closeSharp" aria-label="close" onClick={close} />
                 ) : undefined
             }
         >
             {typeof children === "string" ? (
-                <Typography className={classNames.text}>{children}</Typography>
+                <Text typo="body 1" className={classNames.text}>
+                    {children}
+                </Text>
             ) : (
                 children
             )}

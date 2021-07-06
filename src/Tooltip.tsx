@@ -1,8 +1,7 @@
 import { memo } from "react";
 import type { ReactNode, ReactElement } from "react";
 import MuiTooltip from "@material-ui/core/Tooltip";
-import { createUseClassNames } from "./lib/ThemeProvider";
-import { Typography } from "./Typography";
+import { createUseClassNames, Text } from "./lib/ThemeProvider";
 
 export type TooltipProps = {
     title: NonNullable<ReactNode>;
@@ -24,9 +23,9 @@ export const Tooltip = memo((props: TooltipProps) => {
     return (
         <MuiTooltip
             title={
-                <Typography className={classNames.root} variant="caption">
+                <Text className={classNames.root} typo="caption">
                     {title}
-                </Typography>
+                </Text>
             }
             enterDelay={enterDelay}
         >

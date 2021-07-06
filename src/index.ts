@@ -7,7 +7,7 @@ export * from "./Paper";
 export * from "./splashScreen";
 export * from "./TextField";
 export * from "./Tooltip";
-export * from "./Typography";
+export * from "./Text";
 
 export * from "./Icon";
 export * from "./Button";

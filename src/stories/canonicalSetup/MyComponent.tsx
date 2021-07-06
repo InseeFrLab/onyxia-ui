@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { createUseClassNames, Icon } from "./theme";
+import { createUseClassNames, Icon, Text } from "./theme";
 //Cherry pick the custom components you wish to import.
-import { Typography } from "../../Typography";
+import { Alert } from "../../Alert";
+
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
 import { useIsDarkModeEnabled } from "../../lib";
@@ -53,10 +54,11 @@ export function MyComponent() {
 
     return (
         <div className={classNames.root}>
-            <Typography>
-                <Icon id="hello" />
+            <Alert severity="success">Onyxia UI successfully setup!</Alert>
+            <Text typo="my hero">
+                <Icon iconId="hello" />
                 Hello World
-            </Typography>
+            </Text>
             <Switch
                 checked={isDarkModeEnabled}
                 onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}

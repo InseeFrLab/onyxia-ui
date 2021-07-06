@@ -183,15 +183,8 @@ export function createButton<IconId extends string = never>(params?: {
             const { classNames } = useClassNames({ color, disabled });
 
             const IconWd = useGuaranteedMemo(
-                () => (props: { id: IconId }) =>
-                    (
-                        <Icon
-                            id={props.id}
-                            color={disabled ? "textDisabled" : "textPrimary"}
-                            fontSize="inherit"
-                            className={classNames.icon}
-                        />
-                    ),
+                () => (props: { iconId: IconId }) =>
+                    <Icon iconId={props.iconId} className={classNames.icon} />,
                 [disabled, classNames.icon],
             );
 
@@ -201,8 +194,8 @@ export function createButton<IconId extends string = never>(params?: {
                     className={cx(classNames.root, className)}
                     //There is an error in @material-ui/core types, this should be correct.
                     disabled={disabled}
-                    startIcon={startIcon === undefined ? undefined : <IconWd id={startIcon} />}
-                    endIcon={endIcon === undefined ? undefined : <IconWd id={endIcon} />}
+                    startIcon={startIcon === undefined ? undefined : <IconWd iconId={startIcon} />}
+                    endIcon={endIcon === undefined ? undefined : <IconWd iconId={endIcon} />}
                     autoFocus={autoFocus}
                     tabIndex={tabIndex}
                     name={name}

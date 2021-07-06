@@ -17,12 +17,10 @@ export type IconButtonProps<IconId extends string = never> =
 export namespace IconButtonProps {
     type Common<IconId extends string> = {
         className?: string;
-        id: IconId;
+        iconClassName?: string;
+        iconId: IconId;
         /** Defaults to false */
         disabled?: boolean;
-
-        /** Defaults to "default" */
-        fontSize?: IconProps["fontSize"];
 
         /** Defaults to false */
         autoFocus?: boolean;
@@ -30,7 +28,7 @@ export namespace IconButtonProps {
         tabIndex?: number;
 
         name?: string;
-        htmlId?: string;
+        id?: string;
         "aria-label"?: string;
     };
 
@@ -55,7 +53,7 @@ export function createIconButton<IconId extends string = never>(params?: {
 }) {
     const { Icon } = params ?? { "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>) };
 
-    const { useClassNames } = createUseClassNames()(theme => ({
+    const { useClassNames } = createUseClassNames<{ disabled: boolean }>()((theme, { disabled }) => ({
         "root": {
             "padding": theme.spacing(1),
             "&:hover": {
@@ -65,27 +63,30 @@ export function createIconButton<IconId extends string = never>(params?: {
                 },
             },
         },
+        "icon": {
+            "color": theme.colors.useCases.typography[disabled ? "textDisabled" : "textPrimary"],
+        },
     }));
 
     const IconButton = memo(
         forwardRef<HTMLButtonElement, IconButtonProps<IconId>>((props, ref) => {
             const {
                 className,
-                id,
+                iconClassName,
+                iconId,
                 disabled = false,
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 children,
                 autoFocus = false,
                 tabIndex,
                 name,
-                htmlId,
-                fontSize = "default",
+                id,
                 "aria-label": ariaLabel,
                 //For the forwarding, rest should be empty (typewise)
                 ...rest
             } = props;
 
-            const { classNames } = useClassNames({});
+            const { classNames } = useClassNames({ disabled });
 
             return (
                 <MuiIconButton
@@ -96,7 +97,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                     autoFocus={autoFocus}
                     tabIndex={tabIndex}
                     name={name}
-                    id={htmlId}
+                    id={id}
                     {...(() => {
                         if ("onClick" in rest) {
                             const { onClick, href, ...restRest } = rest;
@@ -133,11 +134,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                         }
                     })()}
                 >
-                    <Icon
-                        color={disabled ? "textDisabled" : "textPrimary"}
-                        id={id}
-                        fontSize={fontSize}
-                    />
+                    <Icon iconId={iconId} className={cx(classNames.icon, iconClassName)} />
                 </MuiIconButton>
             );
         }),

@@ -264,7 +264,7 @@ export function SplashScreenProvider(props: {
     fillColor?: string;
     children: ReactNode;
 }) {
-    const { themeBase } = useThemeBase();
+    const themeBase = useThemeBase();
 
     const { children, Logo, fillColor = themeBase.colors.palette.focus.main } = props;
 
