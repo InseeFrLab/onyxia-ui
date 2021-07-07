@@ -95,8 +95,8 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
                 }
 
                 return {
-                    "fontSizeRem": 2.8,
-                    "lineHeightRem": 3.25,
+                    "fontSizeRem": 1.75,
+                    "lineHeightRem": 2.5,
                 };
             })(),
         },
@@ -144,7 +144,7 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
 
                 return {
                     "fontSizeRem": 1,
-                    "lineHeightRem": 1.281,
+                    "lineHeightRem": 1.475,
                 };
             })(),
         },
@@ -178,8 +178,8 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1.375,
-                        "lineHeightRem": 1.5,
+                        "fontSizeRem": 1.25,
+                        "lineHeightRem": 1.7,
                     };
                 }
 
@@ -202,8 +202,8 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1.375,
-                        "lineHeightRem": 1.5,
+                        "fontSizeRem": 1.25,
+                        "lineHeightRem": 1.7,
                     };
                 }
 
@@ -233,7 +233,7 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1,
+                        "fontSizeRem": 1.475,
                         "lineHeightRem": 1.28,
                     };
                 }
@@ -281,7 +281,7 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1,
+                        "fontSizeRem": 0.875,
                         "lineHeightRem": 1.28,
                     };
                 }
@@ -299,14 +299,14 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
                         "fontSizeRem": 0.875,
-                        "lineHeightRem": 20.5,
+                        "lineHeightRem": 1.28,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
                         "fontSizeRem": 0.75,
-                        "lineHeightRem": 20.5,
+                        "lineHeightRem": 1,
                     };
                 }
 
