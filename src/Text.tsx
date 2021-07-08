@@ -64,6 +64,8 @@ export function createText<TypographyVariantNameCustom extends string = never>(p
                                         }
                                     })()
                                 ],
+                            "padding": 0,
+                            "margin": 0,
                         }),
                         classNameFromProps,
                     ),

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
 import { useIsDarkModeEnabled, evtIsDarkModeEnabled } from "./useIsDarkModeEnabled";
@@ -25,8 +25,10 @@ import { shadows } from "./shadows";
 import { ZoomProvider } from "powerhooks";
 import { createResponsive, breakpointsValues } from "./responsive";
 import type { Responsive } from "./responsive";
-import { useBrowserFontSizeFactor, getBrowserFontSizeFactor } from "./useBrowserFontSizeFactor";
 import { createText } from "../Text";
+import { getWindowInnerSize } from "powerhooks";
+import type { ZoomProviderProps } from "powerhooks";
+import { useBrowserFontSizeFactor, getBrowserFontSizeFactor } from "powerhooks";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -68,7 +70,10 @@ export const { createUseClassNames, useThemeBase, Text } = (() => {
     return { createUseClassNames, useThemeBase, Text };
 })();
 
-export type ThemeProviderProps = ThemeProviderProps.WithZoom | ThemeProviderProps.WithoutZoom;
+export type ThemeProviderProps = {
+    children: ReactNode;
+    getZoomConfig?: ZoomProviderProps["getConfig"];
+};
 export declare namespace ThemeProviderProps {
     type WithChildren = {
         children: ReactNode;
@@ -182,12 +187,13 @@ export function createThemeProvider<
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
         const { windowInnerWidth } = useWindowInnerSize();
         const { browserFontSizeFactor } = useBrowserFontSizeFactor();
+
         return createTheme_memo(isDarkModeEnabled, windowInnerWidth, browserFontSizeFactor);
     }
 
     const { ThemeProvider } = (() => {
         const { ThemeProviderInner } = (() => {
-            const ThemeProviderInnerInner = memo((props: ThemeProviderProps) => {
+            function ThemeProviderInnerInner(props: { children: ReactNode }) {
                 const { children } = props;
 
                 const theme = useTheme();
@@ -210,20 +216,24 @@ export function createThemeProvider<
                         <StylesProvider injectFirst>{children}</StylesProvider>
                     </MuiThemeProvider>
                 );
-            });
+            }
 
-            function ThemeProviderInner(props: ThemeProviderProps) {
+            function ThemeProviderInner(props: { children: ReactNode }) {
+                const { children } = props;
+
+                //NOTE: It's a shame that we have to do all that just to
+                //initialize for a few ms
                 const [initialState] = useState(() =>
                     createTheme_memo(
                         evtIsDarkModeEnabled.state,
-                        window.innerWidth,
+                        getWindowInnerSize().windowInnerWidth,
                         getBrowserFontSizeFactor(),
                     ),
                 );
 
                 return (
                     <ThemeBaseProvider initialState={initialState}>
-                        <ThemeProviderInnerInner {...props} />
+                        <ThemeProviderInnerInner>{children}</ThemeProviderInnerInner>
                     </ThemeBaseProvider>
                 );
             }
@@ -232,21 +242,14 @@ export function createThemeProvider<
         })();
 
         const ThemeProvider = (props: ThemeProviderProps) => {
-            const children = <ThemeProviderInner {...props} />;
+            const { getZoomConfig } = props;
 
-            return (
-                <>
-                    {"zoomProviderReferenceWidth" in props ? (
-                        <ZoomProvider
-                            referenceWidth={props.zoomProviderReferenceWidth}
-                            portraitModeUnsupportedMessage={props.portraitModeUnsupportedMessage}
-                        >
-                            {children}
-                        </ZoomProvider>
-                    ) : (
-                        children
-                    )}
-                </>
+            const children = <ThemeProviderInner>{props.children}</ThemeProviderInner>;
+
+            return getZoomConfig === undefined ? (
+                children
+            ) : (
+                <ZoomProvider getConfig={getZoomConfig}>{children}</ZoomProvider>
             );
         };
 
@@ -255,23 +258,3 @@ export function createThemeProvider<
 
     return { ThemeProvider, useTheme };
 }
-
-/*
-const { useTheme } = createThemeProvider({
-    "getTypographyDesc": ({ windowInnerWidth, browserFontSizeFactor }) => ({
-        "fontFamily": "Roboto",
-        "rootFontSizePx": 20,
-        "variants": {
-            ...defaultGetTypographyDesc({ windowInnerWidth, browserFontSizeFactor }).variants,
-            "my hero": {
-                "htmlComponent": "h1" as const,
-                "fontWeight": "bold",
-                "fontSizeRem": 3,
-                "lineHeightRem": 1.5
-            } as const
-        }
-    })
-})
-
-const x = useTheme().typography["my hero"].htmlComponent
-*/

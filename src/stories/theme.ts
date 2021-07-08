@@ -8,8 +8,7 @@ import { ReactComponent as TourSvg } from "./assets/svg/Tour.svg";
 import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
 import HelpIcon from "@material-ui/icons/Help";
 import HomeIcon from "@material-ui/icons/Home";
-
-console.log({ TourSvg, HelpIcon });
+import { Param0 } from "tsafe";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "isReactStrictModeEnabled": false,
@@ -25,6 +24,8 @@ export const { Icon } = createIcon({
     "help": HelpIcon,
     "home": HomeIcon,
 });
+
+export type IconId = Param0<typeof Icon>["iconId"];
 
 export const { IconButton } = createIconButton({ Icon });
 

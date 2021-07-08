@@ -1,5 +1,5 @@
-import type { Meta } from "@storybook/react";
-import type { Story } from "@storybook/react";
+import type { Meta, Story } from "@storybook/react";
+import type { ArgType } from "@storybook/addons";
 import { useEffect } from "react";
 import { symToStr } from "tsafe/symToStr";
 import { useIsDarkModeEnabled } from "../lib";
@@ -12,8 +12,10 @@ import "../assets/fonts/work-sans.css";
 export function getStoryFactory<Props>(params: {
     sectionName: string;
     wrappedComponent: Record<string, (props: Props) => ReturnType<React.FC>>;
+    /** https://storybook.js.org/docs/react/essentials/controls */
+    argTypes?: Partial<Record<keyof Props, ArgType>>;
 }) {
-    const { sectionName, wrappedComponent } = params;
+    const { sectionName, wrappedComponent, argTypes = {} } = params;
 
     const Component: any = Object.entries(wrappedComponent).map(([, component]) => component)[0];
 
@@ -70,7 +72,6 @@ export function getStoryFactory<Props>(params: {
         "meta": id<Meta>({
             "title": `${sectionName}/${symToStr(wrappedComponent)}`,
             "component": Component,
-            // https://storybook.js.org/docs/react/essentials/controls
             "argTypes": {
                 "width": {
                     "control": {
@@ -80,6 +81,7 @@ export function getStoryFactory<Props>(params: {
                         "step": 1,
                     },
                 },
+                ...argTypes,
             },
         }),
         getStory,

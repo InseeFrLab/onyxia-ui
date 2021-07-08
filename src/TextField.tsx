@@ -320,7 +320,7 @@ export const TextField = memo((props: TextFieldProps) => {
                 ) : type === "password" ? (
                     <InputAdornment position="end">
                         <IconButton
-                            id={isPasswordShown ? "visibilityOff" : "visibility"}
+                            iconId={isPasswordShown ? "visibilityOff" : "visibility"}
                             onClick={toggleIsPasswordShown}
                         />
                     </InputAdornment>
@@ -346,7 +346,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         <>
                             &nbsp;
                             <Tooltip title={questionMarkHelperText}>
-                                <Icon name="help" className={classNames.questionMark} />
+                                <Icon iconId="help" className={classNames.questionMark} />
                             </Tooltip>
                         </>
                     )}

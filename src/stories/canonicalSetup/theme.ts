@@ -10,6 +10,7 @@ import { createButton } from "../../Button";
 import { createText } from "../../Text";
 import "onyxia-design-lab/assets/fonts/work-sans.css";
 import { createUseClassNamesFactory } from "tss-react";
+import type { Param0 } from "tsafe";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
@@ -74,6 +75,8 @@ export const { Icon } = createIcon({
     "foo": FooSvg,
     "bar": BarSvg,
 });
+
+export type IconId = Param0<typeof Icon>["iconId"];
 
 export const { IconButton } = createIconButton({ Icon });
 export const { Button } = createButton({ Icon });
