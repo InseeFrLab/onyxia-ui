@@ -51,15 +51,20 @@ export const defaultPalette = {
     },
 };
 
-export function createDefaultColorUseCases(params: Param0<CreateColorUseCase<PaletteBase, any>>) {
+export function createDefaultColorUseCases(
+    params: Param0<CreateColorUseCase<PaletteBase, any>>,
+) {
     const { isDarkModeEnabled, palette } = params;
 
     return {
         "typography": {
             "textPrimary": palette[isDarkModeEnabled ? "light" : "dark"].main,
-            "textSecondary": palette[isDarkModeEnabled ? "dark" : "light"].greyVariant4,
-            "textTertiary": palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
-            "textDisabled": palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
+            "textSecondary":
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant4,
+            "textTertiary":
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
+            "textDisabled":
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
             "textFocus": palette.focus.main,
         },
         "buttons": {
@@ -72,14 +77,21 @@ export function createDefaultColorUseCases(params: Param0<CreateColorUseCase<Pal
                 ? defaultPalette.dark.light
                 : defaultPalette.light.greyVariant1,
             "actionActive": defaultPalette.focus.main,
-            "actionDisabled": defaultPalette[isDarkModeEnabled ? "dark" : "light"].greyVariant3,
+            "actionDisabled":
+                defaultPalette[isDarkModeEnabled ? "dark" : "light"]
+                    .greyVariant3,
             "actionDisabledBackground":
-                defaultPalette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
+                defaultPalette[isDarkModeEnabled ? "dark" : "light"]
+                    .greyVariant1,
         },
         "surfaces": {
-            "background": defaultPalette[isDarkModeEnabled ? "dark" : "light"].main,
-            "surface1": defaultPalette[isDarkModeEnabled ? "dark" : "light"].light,
-            "surface2": defaultPalette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
+            "background":
+                defaultPalette[isDarkModeEnabled ? "dark" : "light"].main,
+            "surface1":
+                defaultPalette[isDarkModeEnabled ? "dark" : "light"].light,
+            "surface2":
+                defaultPalette[isDarkModeEnabled ? "dark" : "light"]
+                    .greyVariant1,
         },
         "alertSeverity": {
             "error": {

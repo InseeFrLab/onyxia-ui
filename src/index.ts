@@ -4,7 +4,7 @@ export * from "./Alert";
 export * from "./CircularProgress";
 export * from "./Dialog";
 export * from "./Paper";
-export * from "./splashScreen";
+export * from "./lib/SplashScreen";
 export * from "./TextField";
 export * from "./Tooltip";
 export * from "./Text";

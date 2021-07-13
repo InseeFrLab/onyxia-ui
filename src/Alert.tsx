@@ -4,10 +4,9 @@ import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Text } from "./lib/ThemeProvider";
-import { createUseClassNames } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
-import { cx } from "tss-react";
 import CloseSharp from "@material-ui/icons/CloseSharp";
 
 export type AlertProps = {
@@ -28,18 +27,21 @@ const { IconButton } = createIconButton(
     }),
 );
 
-const { useClassNames } = createUseClassNames<Required<AlertProps>>()((theme, { severity }) => ({
-    "root": {
-        "color": theme.colors.useCases.typography.textPrimary,
-        "backgroundColor": theme.colors.useCases.alertSeverity[severity].background,
-        "& $icon": {
-            "color": theme.colors.useCases.alertSeverity[severity].main,
+const { useStyles } = makeStyles<Pick<AlertProps, "severity">>()(
+    (theme, { severity }) => ({
+        "root": {
+            "color": theme.colors.useCases.typography.textPrimary,
+            "backgroundColor":
+                theme.colors.useCases.alertSeverity[severity].background,
+            "& $icon": {
+                "color": theme.colors.useCases.alertSeverity[severity].main,
+            },
         },
-    },
-    "text": {
-        "paddingTop": 2,
-    },
-}));
+        "text": {
+            "paddingTop": 2,
+        },
+    }),
+);
 
 export const Alert = memo((props: AlertProps) => {
     const completedProps = { ...alertDefaultProps, ...noUndefined(props) };
@@ -48,20 +50,24 @@ export const Alert = memo((props: AlertProps) => {
 
     const [isClosed, close] = useReducer(() => true, false);
 
-    const { classNames } = useClassNames(completedProps);
+    const { classes, cx } = useStyles(completedProps);
 
     return isClosed ? null : (
         <MuiAlert
-            className={cx(classNames.root, className)}
+            className={cx(classes.root, className)}
             severity={severity}
             action={
                 doDisplayCross ? (
-                    <IconButton iconId="closeSharp" aria-label="close" onClick={close} />
+                    <IconButton
+                        iconId="closeSharp"
+                        aria-label="close"
+                        onClick={close}
+                    />
                 ) : undefined
             }
         >
             {typeof children === "string" ? (
-                <Text typo="body 1" className={classNames.text}>
+                <Text typo="body 1" className={classes.text}>
                     {children}
                 </Text>
             ) : (

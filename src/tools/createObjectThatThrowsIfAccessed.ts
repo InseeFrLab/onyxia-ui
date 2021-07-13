@@ -4,7 +4,8 @@ export function createObjectThatThrowsIfAccessed<T extends object>(params?: {
     debugMessage?: string;
     isPropertyWhitelisted?: (prop: string | number | symbol) => boolean;
 }): T {
-    const { debugMessage = "", isPropertyWhitelisted = () => false } = params ?? {};
+    const { debugMessage = "", isPropertyWhitelisted = () => false } =
+        params ?? {};
 
     const get: NonNullable<ProxyHandler<T>["get"]> = (...args) => {
         const [, prop] = args;
@@ -28,7 +29,9 @@ export function createObjectThatThrowsIfAccessedFactory(params: {
     const { isPropertyWhitelisted } = params;
 
     return {
-        "createObjectThatThrowsIfAccessed": <T extends object>(params?: { debugMessage?: string }) => {
+        "createObjectThatThrowsIfAccessed": <T extends object>(params?: {
+            debugMessage?: string;
+        }) => {
             const { debugMessage } = params ?? {};
 
             return createObjectThatThrowsIfAccessed<T>({
@@ -39,10 +42,14 @@ export function createObjectThatThrowsIfAccessedFactory(params: {
     };
 }
 
-export function isPropertyAccessedByReduxOrStorybook(prop: string | number | symbol) {
+export function isPropertyAccessedByReduxOrStorybook(
+    prop: string | number | symbol,
+) {
     switch (typeof prop) {
         case "symbol":
-            return ["Symbol.toStringTag", "immer-state"].map(s => `Symbol(${s})`).includes(String(prop));
+            return ["Symbol.toStringTag", "immer-state"]
+                .map(s => `Symbol(${s})`)
+                .includes(String(prop));
         case "string":
             return ["window", "toJSON"].includes(prop);
         case "number":
@@ -50,12 +57,17 @@ export function isPropertyAccessedByReduxOrStorybook(prop: string | number | sym
     }
 }
 
-export function createPropertyThatThrowIfAccessed<T extends object, PropertyName extends keyof T>(
+export function createPropertyThatThrowIfAccessed<
+    T extends object,
+    PropertyName extends keyof T,
+>(
     propertyName: PropertyName,
     debugMessage?: string,
 ): { [K in PropertyName]: T[K] } {
     const getAndSet = () => {
-        throw new Error(`Cannot access ${propertyName} yet ${debugMessage ?? ""}`);
+        throw new Error(
+            `Cannot access ${propertyName} yet ${debugMessage ?? ""}`,
+        );
     };
 
     return Object.defineProperty({}, propertyName, {

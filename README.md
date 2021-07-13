@@ -2,9 +2,10 @@
     <img src="https://user-images.githubusercontent.com/6702424/120405033-efe83900-c347-11eb-9a7c-7b680c26a18c.png">  
 </p>
 <p align="center">
-    <i>A modern UI toolkit with excellent typing.</i><br>
+    <i>A disruptive UI toolkit</i><br>
+    <i>Optimized for TypeScript</i><br>
     <i>Highly customizable but looks great out of the box.</i><br>
-    <i>Build on top of material-ui.</i>
+    <i>Compatible with material-ui large library of components</i>
     <br>
     <br>
     <img src="https://github.com/garronej/onyxia-ui/workflows/ci/badge.svg?branch=main">
@@ -18,22 +19,22 @@
 
 `onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).
 
-Design by [Marc Hufschmitt](http://marchufschmitt.fr/)
+Default design system by [Marc Hufschmitt](http://marchufschmitt.fr/)
 
 # Motivation
 
 [Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
 We argue that the experience for TypeScript developers is not optimal and somewhat frustrating.
+Also we find problematic how hard it is to build an app that won't break on any other screen size.
 In consequence, we wanted to create a ui toolkit that would be compatible with
-`material-ui` components but that would also improves it in the following ways:
+`material-ui`'s large library of components but that would also improves it in the following ways:
 
--   Providing better typing.
--   Arguably better styling API: [TSS](https://github.com/garronej/tss-react).
+-   Optimized for typescript.
+-   Responsive design **way** more easy to implement.
 -   Built in support for the dark mode, persistent across reload, without white flashes.
--   Enable the app to look the same regardless of the screen size (If there isn't enough time for implementing responsive design).
 -   Easier, more guided, theme customization.
 -   Provide splash screen that hides your components while they are not yet loaded.
--   Provides smarter core components that require less boiler plate.
+-   Leverages an arguably better styling API: [TSS](https://github.com/garronej/tss-react).
 
 # Showcase
 
@@ -61,161 +62,4 @@ yarn add @material-ui/icons@^4.11.2
 # Only necessary for onyxia-ui/Alert and if you want
 # to use components from https://material-ui.com/components/material-icons/
 yarn add @material-ui/lab@^4.0.0-alpha.58
-```
-
-`src/theme.ts`:
-
-```tsx
-import {
-    createThemeProvider,
-    defaultPalette,
-    createDefaultColorUseCases,
-    defaultGetTypography,
-} from "../../lib";
-import { createIcon } from "../../Icon";
-import { createIconButton } from "../../IconButton";
-import { createButton } from "../../Button";
-import "onyxia-design-lab/assets/fonts/work-sans.css";
-import { createUseClassNamesFactory } from "tss-react";
-
-//Import icons from https://material-ui.com/components/material-icons/ that you plan to use
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
-import EditIcon from "@material-ui/icons/Edit";
-
-//Import your custom icons
-import { ReactComponent as FooSvg } from "./assets/svg/foo.svg";
-import { ReactComponent as BarSvg } from "./assets/svg/bar.svg";
-
-export const { ThemeProvider, useTheme } = createThemeProvider({
-    //We keep the default color palette but we add a custom color: a shiny pink.
-    "getTypography": ({ windowInnerWidth }) => ({
-        ...defaultGetTypography({ windowInnerWidth }),
-        "fontFamily": '"Work Sans", sans-serif',
-    }),
-    "palette": {
-        ...defaultPalette,
-        "shinyPink": {
-            "main": "#3333",
-        },
-    },
-    //We keep the default surceases colors except that we add
-    //a new usage scenario: "flash" and we use our pink within.
-    "createColorUseCases": ({ isDarkModeEnabled, palette }) => ({
-        ...createDefaultColorUseCases({ isDarkModeEnabled, palette }),
-        "flashes": {
-            "cute": palette.shinyPink.main,
-            "warning": palette.orangeWarning.light,
-        },
-    }),
-});
-
-export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
-
-export const { Icon } = createIcon({
-    "hello": EmojiPeopleIcon,
-    "edit": EditIcon,
-    "foo": FooSvg,
-    "bar": BarSvg,
-});
-
-export const { IconButton } = createIconButton({ Icon });
-export const { Button } = createButton({ Icon });
-```
-
-`src/index.tsx`:
-
-```tsx
-import * as ReactDOM from "react-dom";
-import { ThemeProvider } from "./theme";
-import { MyComponent } from "./MyComponent";
-import { SplashScreenProvider } from "onyxia-ui/splashScreen";
-import { ReactComponent as CompanyLogo } from "./assets/svg/company-logo.svg";
-import { Typography } from "onyxia-ui/Typography";
-
-ReactDOM.render(
-    <ThemeProvider
-        //Enable the app to look exactly the same regardless of the screen size.
-        //Remove this prop if you have implemented responsive design.
-        zoomProviderReferenceWidth={1920}
-        //With zoom provider enabled portrait mode is often unusable
-        //example: https://user-images.githubusercontent.com/6702424/120894826-a97e2d00-c61a-11eb-8b2d-a2b9f9485837.png
-        portraitModeUnsupportedMessage={<Typography variant="h3">Please rotate your phone</Typography>}
-    >
-        <SplashScreenProvider Logo={CompanyLogo}>
-            <MyComponent />
-        </SplashScreenProvider>
-    </ThemeProvider>,
-    document.getElementById("root"),
-);
-```
-
-`src/MyComponent.tsx`:
-
-```tsx
-import { useEffect, useState } from "react";
-import { createUseClassNames, Icon } from "./theme";
-//Cherry pick the custom components you wish to import.
-import { Typography } from "../../Typography";
-//Use this hook to know if the dark mode is currently enabled.
-//and to toggle it's state.
-import { useIsDarkModeEnabled } from "../../lib";
-//Yo can import and use Materia-UI components, they will blend in nicely.
-import Switch from "@material-ui/core/Switch";
-import { useSplashScreen } from "../../splashScreen";
-
-//See: https://github.com/garronej/tss-react
-const { useClassNames } = createUseClassNames()(theme => ({
-    "root": {
-        "backgroundColor": theme.colors.useCases.surfaces.background,
-        /*
-        theme.colors.palette.shinyPink.main <- your custom color
-        theme.colors.useCases.flashes.cute  <- your custom use case
-        theme.muiTheme                      <- the theme object as defined by @material-ui/core
-        */
-    },
-}));
-
-export function MyComponent() {
-    const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
-
-    const { classNames } = useClassNames({});
-
-    {
-        const { hideRootSplashScreen } = useSplashScreen();
-
-        useEffect(() => {
-            //Call this when your component is in a state ready to be shown
-            hideRootSplashScreen();
-        }, []);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isLoading, setIsLoading] = useState(false);
-
-    // This pattern let you display the splash screen when the isLoading state is true.
-    {
-        const { showSplashScreen, hideSplashScreen } = useSplashScreen();
-
-        useEffect(() => {
-            if (isLoading) {
-                showSplashScreen({ "enableTransparency": true });
-            } else {
-                hideSplashScreen();
-            }
-        }, [isLoading]);
-    }
-
-    return (
-        <div className={classNames.root}>
-            <Typography>
-                <Icon id="hello" />
-                Hello World
-            </Typography>
-            <Switch
-                checked={isDarkModeEnabled}
-                onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
-            />
-        </div>
-    );
-}
 ```

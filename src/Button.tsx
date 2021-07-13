@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
 import { forwardRef, memo } from "react";
-import { createUseClassNames } from "./lib/ThemeProvider";
-import { cx } from "tss-react";
+import { makeStyles } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
-import { useGuaranteedMemo } from "powerhooks";
+import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import MuiButton from "@material-ui/core/Button";
 import { capitalize } from "tsafe/capitalize";
 import { doExtends } from "tsafe/doExtends";
@@ -60,13 +59,18 @@ export namespace ButtonProps {
 export function createButton<IconId extends string = never>(params?: {
     Icon(props: IconProps<IconId>): ReturnType<FC>;
 }) {
-    const { Icon } = params ?? { "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>) };
+    const { Icon } = params ?? {
+        "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>),
+    };
 
-    const { useClassNames } = createUseClassNames<{
+    const { useStyles } = makeStyles<{
         color: NonNullable<ButtonProps["color"]>;
         disabled: boolean;
     }>()((theme, { color, disabled }) => {
-        const textColor = ({ color, disabled }: Pick<Required<ButtonProps>, "color" | "disabled">) =>
+        const textColor = ({
+            color,
+            disabled,
+        }: Pick<Required<ButtonProps>, "color" | "disabled">) =>
             theme.colors.useCases.typography[
                 disabled
                     ? "textDisabled"
@@ -81,7 +85,9 @@ export function createButton<IconId extends string = never>(params?: {
                       })()
             ];
 
-        const hoverTextColor = ({ color }: Pick<Required<ButtonProps>, "color" | "disabled">) => {
+        const hoverTextColor = ({
+            color,
+        }: Pick<Required<ButtonProps>, "color" | "disabled">) => {
             switch (theme.isDarkModeEnabled) {
                 case true:
                     return theme.colors.palette[
@@ -125,7 +131,8 @@ export function createButton<IconId extends string = never>(params?: {
                                   case "secondary":
                                       return "transparent";
                                   case "ternary":
-                                      return theme.colors.useCases.surfaces.background;
+                                      return theme.colors.useCases.surfaces
+                                          .background;
                               }
                           })(),
                     "height": 36,
@@ -140,7 +147,9 @@ export function createButton<IconId extends string = never>(params?: {
                         }
                     })(),
                     "borderStyle": "solid",
-                    "borderColor": disabled ? "transparent" : hoverBackgroundColor,
+                    "borderColor": disabled
+                        ? "transparent"
+                        : hoverBackgroundColor,
                     "padding": theme.spacing(0, 2),
                     "&.MuiButton-text": {
                         "color": textColor({ color, disabled }),
@@ -180,22 +189,36 @@ export function createButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
-            const { classNames } = useClassNames({ color, disabled });
+            const { classes, cx } = useStyles({ color, disabled });
 
             const IconWd = useGuaranteedMemo(
                 () => (props: { iconId: IconId }) =>
-                    <Icon iconId={props.iconId} className={classNames.icon} />,
-                [disabled, classNames.icon],
+                    (
+                        <Icon
+                            iconId={props.iconId}
+                            className={classes.icon}
+                            size="default"
+                        />
+                    ),
+                [disabled, classes.icon],
             );
 
             return (
                 <MuiButton
                     ref={ref}
-                    className={cx(classNames.root, className)}
+                    className={cx(classes.root, className)}
                     //There is an error in @material-ui/core types, this should be correct.
                     disabled={disabled}
-                    startIcon={startIcon === undefined ? undefined : <IconWd iconId={startIcon} />}
-                    endIcon={endIcon === undefined ? undefined : <IconWd iconId={endIcon} />}
+                    startIcon={
+                        startIcon === undefined ? undefined : (
+                            <IconWd iconId={startIcon} />
+                        )
+                    }
+                    endIcon={
+                        endIcon === undefined ? undefined : (
+                            <IconWd iconId={endIcon} />
+                        )
+                    }
                     autoFocus={autoFocus}
                     tabIndex={tabIndex}
                     name={name}
@@ -212,14 +235,20 @@ export function createButton<IconId extends string = never>(params?: {
                         }
 
                         if ("href" in rest) {
-                            const { href, doOpenNewTabIfHref = true, ...restRest } = rest;
+                            const {
+                                href,
+                                doOpenNewTabIfHref = true,
+                                ...restRest
+                            } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
                             doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
                             return {
                                 href,
-                                "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                                "target": doOpenNewTabIfHref
+                                    ? "_blank"
+                                    : undefined,
                                 ...restRest,
                             };
                         }
@@ -237,7 +266,9 @@ export function createButton<IconId extends string = never>(params?: {
                         }
                     })()}
                 >
-                    {typeof children === "string" ? capitalize(children) : children}
+                    {typeof children === "string"
+                        ? capitalize(children)
+                        : children}
                 </MuiButton>
             );
         }),

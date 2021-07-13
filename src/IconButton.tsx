@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
-import { createUseClassNames } from "./lib/ThemeProvider";
-import { cx } from "tss-react";
+import { makeStyles } from "./lib/ThemeProvider";
 import { forwardRef, memo } from "react";
 import MuiIconButton from "@material-ui/core/IconButton";
 import type { IconProps } from "./Icon";
@@ -51,22 +50,30 @@ export namespace IconButtonProps {
 export function createIconButton<IconId extends string = never>(params?: {
     Icon(props: IconProps<IconId>): ReturnType<FC>;
 }) {
-    const { Icon } = params ?? { "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>) };
+    const { Icon } = params ?? {
+        "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>),
+    };
 
-    const { useClassNames } = createUseClassNames<{ disabled: boolean }>()((theme, { disabled }) => ({
-        "root": {
-            "padding": theme.spacing(1),
-            "&:hover": {
-                "backgroundColor": "unset",
-                "& svg": {
-                    "color": theme.colors.useCases.buttons.actionHoverPrimary,
+    const { useStyles } = makeStyles<{ disabled: boolean }>()(
+        (theme, { disabled }) => ({
+            "root": {
+                "padding": theme.spacing(1),
+                "&:hover": {
+                    "backgroundColor": "unset",
+                    "& svg": {
+                        "color":
+                            theme.colors.useCases.buttons.actionHoverPrimary,
+                    },
                 },
             },
-        },
-        "icon": {
-            "color": theme.colors.useCases.typography[disabled ? "textDisabled" : "textPrimary"],
-        },
-    }));
+            "icon": {
+                "color":
+                    theme.colors.useCases.typography[
+                        disabled ? "textDisabled" : "textPrimary"
+                    ],
+            },
+        }),
+    );
 
     const IconButton = memo(
         forwardRef<HTMLButtonElement, IconButtonProps<IconId>>((props, ref) => {
@@ -86,12 +93,12 @@ export function createIconButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
-            const { classNames } = useClassNames({ disabled });
+            const { classes, cx } = useStyles({ disabled });
 
             return (
                 <MuiIconButton
                     ref={ref}
-                    className={cx(classNames.root, className)}
+                    className={cx(classes.root, className)}
                     disabled={disabled}
                     aria-label={ariaLabel ?? undefined}
                     autoFocus={autoFocus}
@@ -109,14 +116,20 @@ export function createIconButton<IconId extends string = never>(params?: {
                         }
 
                         if ("href" in rest) {
-                            const { href, doOpenNewTabIfHref = true, ...restRest } = rest;
+                            const {
+                                href,
+                                doOpenNewTabIfHref = true,
+                                ...restRest
+                            } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
                             doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
                             return {
                                 href,
-                                "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                                "target": doOpenNewTabIfHref
+                                    ? "_blank"
+                                    : undefined,
                                 ...restRest,
                             };
                         }
@@ -134,7 +147,11 @@ export function createIconButton<IconId extends string = never>(params?: {
                         }
                     })()}
                 >
-                    <Icon iconId={iconId} className={cx(classNames.icon, iconClassName)} />
+                    <Icon
+                        iconId={iconId}
+                        className={cx(classes.icon, iconClassName)}
+                        size="default"
+                    />
                 </MuiIconButton>
             );
         }),

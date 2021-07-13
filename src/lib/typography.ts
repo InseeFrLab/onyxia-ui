@@ -8,7 +8,9 @@ export type TypographyDesc<CustomVariantName extends string> = {
     fontFamily: string;
     rootFontSizePx: number;
     variants: {
-        [VariantName in CustomVariantName | TypographyDesc.VariantNameBase]: TypographyDesc.Variant;
+        [VariantName in
+            | CustomVariantName
+            | TypographyDesc.VariantNameBase]: TypographyDesc.Variant;
     };
 };
 export declare namespace TypographyDesc {
@@ -48,10 +50,25 @@ export declare namespace TypographyDesc {
         | "lighter";
     export namespace FontWeightProperty {
         export type FontWeightAbsolute = number | "bold" | "normal";
-        export type Globals = "-moz-initial" | "inherit" | "initial" | "revert" | "unset";
+        export type Globals =
+            | "-moz-initial"
+            | "inherit"
+            | "initial"
+            | "revert"
+            | "unset";
     }
 
-    export type HtmlComponent = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div" | "a";
+    export type HtmlComponent =
+        | "h1"
+        | "h2"
+        | "h3"
+        | "h4"
+        | "h5"
+        | "h6"
+        | "p"
+        | "span"
+        | "div"
+        | "a";
 }
 
 export type ComputedTypography<CustomVariantName extends string> = {
@@ -66,6 +83,7 @@ export type ComputedTypography<CustomVariantName extends string> = {
 
 export type GetTypographyDesc<CustomVariantName extends string> = (params: {
     windowInnerWidth: number;
+    windowInnerHeight: number;
     browserFontSizeFactor: number;
 }) => TypographyDesc<CustomVariantName>;
 
@@ -356,9 +374,9 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
         };
     };
 
-    function getTypographyVariantStyleFactory<CustomVariantName extends string>(params: {
-        typographyDesc: TypographyDescLike<CustomVariantName>;
-    }) {
+    function getTypographyVariantStyleFactory<
+        CustomVariantName extends string,
+    >(params: { typographyDesc: TypographyDescLike<CustomVariantName> }) {
         const {
             typographyDesc: { fontFamily, rootFontSizePx, variants },
         } = params;
@@ -368,7 +386,8 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
         }): TypographyDesc.Variant.Style {
             const { variantName } = params;
 
-            const { fontSizeRem, lineHeightRem, fontWeight } = variants[variantName];
+            const { fontSizeRem, lineHeightRem, fontWeight } =
+                variants[variantName];
 
             return {
                 fontFamily,
@@ -386,7 +405,9 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
     }): ComputedTypography<CustomVariantName> {
         const { typographyDesc } = params;
 
-        const { getTypographyVariantStyle } = getTypographyVariantStyleFactory({ typographyDesc });
+        const { getTypographyVariantStyle } = getTypographyVariantStyleFactory({
+            typographyDesc,
+        });
 
         const computedTypography: ComputedTypography<CustomVariantName> = {
             "rootFontSizePx": typographyDesc.rootFontSizePx,
@@ -397,7 +418,8 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
             variantName =>
                 (computedTypography.variant[variantName] = {
                     "style": getTypographyVariantStyle({ variantName }),
-                    "htmlComponent": typographyDesc.variants[variantName].htmlComponent,
+                    "htmlComponent":
+                        typographyDesc.variants[variantName].htmlComponent,
                 }),
         );
 
@@ -409,19 +431,31 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
     }): MuiTypographyOptions {
         const { typographyDesc } = params;
 
-        const { getTypographyVariantStyle } = getTypographyVariantStyleFactory({ typographyDesc });
+        const { getTypographyVariantStyle } = getTypographyVariantStyleFactory({
+            typographyDesc,
+        });
 
         return {
             "fontFamily": typographyDesc.fontFamily,
             "fontWeightRegular": "normal",
             "fontWeightMedium": 500,
-            "h1": getTypographyVariantStyle({ "variantName": "display heading" }),
+            "h1": getTypographyVariantStyle({
+                "variantName": "display heading",
+            }),
             "h2": getTypographyVariantStyle({ "variantName": "page heading" }),
             "h3": getTypographyVariantStyle({ "variantName": "subtitle" }),
-            "h4": getTypographyVariantStyle({ "variantName": "section heading" }),
-            "h5": getTypographyVariantStyle({ "variantName": "object heading" }),
-            "h6": getTypographyVariantStyle({ "variantName": "navigation label" }),
-            "subtitle1": getTypographyVariantStyle({ "variantName": "label 1" }),
+            "h4": getTypographyVariantStyle({
+                "variantName": "section heading",
+            }),
+            "h5": getTypographyVariantStyle({
+                "variantName": "object heading",
+            }),
+            "h6": getTypographyVariantStyle({
+                "variantName": "navigation label",
+            }),
+            "subtitle1": getTypographyVariantStyle({
+                "variantName": "label 1",
+            }),
             "subtitle2": getTypographyVariantStyle({ "variantName": "body 2" }),
             "body1": getTypographyVariantStyle({ "variantName": "body 1" }),
             "body2": getTypographyVariantStyle({ "variantName": "body 2" }),

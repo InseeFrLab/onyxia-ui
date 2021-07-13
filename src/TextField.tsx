@@ -1,8 +1,7 @@
-import { createUseClassNames, Text } from "./lib/ThemeProvider";
-import { cx } from "tss-react";
+import { makeStyles, Text } from "./lib/ThemeProvider";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
-import { useConstCallback } from "powerhooks";
+import { useConstCallback } from "powerhooks/useConstCallback";
 import MuiTextField from "@material-ui/core/TextField";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
@@ -11,7 +10,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { createIconButton } from "./IconButton";
 import { createIcon } from "./Icon";
 import type { NonPostableEvt } from "evt";
-import { useEffectOnValueChange } from "powerhooks";
+import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
 import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
@@ -37,23 +36,31 @@ export type TextFieldProps = {
     disabled?: boolean;
     multiline?: boolean;
     /** Return false to e.preventDefault() and e.stopPropagation() */
-    onEscapeKeyDown?(params: { preventDefaultAndStopPropagation(): void }): void;
+    onEscapeKeyDown?(params: {
+        preventDefaultAndStopPropagation(): void;
+    }): void;
     onEnterKeyDown?(params: { preventDefaultAndStopPropagation(): void }): void;
     onBlur?(): void;
 
     /** To prevent onSubmit to be invoked (when data is being updated for example ) default true*/
     isSubmitAllowed?: boolean;
-    evtAction?: NonPostableEvt<"TRIGGER SUBMIT" | "RESTORE DEFAULT VALUE"> | null;
+    evtAction?: NonPostableEvt<
+        "TRIGGER SUBMIT" | "RESTORE DEFAULT VALUE"
+    > | null;
     /** Submit invoked on evtAction.post("TRIGGER SUBMIT") only if value being typed is valid */
     onSubmit?(value: string): void;
-    getIsValidValue?(value: string): { isValidValue: true } | { isValidValue: false; message: string };
+    getIsValidValue?(
+        value: string,
+    ): { isValidValue: true } | { isValidValue: false; message: string };
     /**
      * Invoked on first render,
      * called again if getIsValidValue have been updated and
      * the validity of the current value changes.
      */
     onValueBeingTypedChange?(
-        params: { value: string } & ReturnType<TextFieldProps["getIsValidValue"]>,
+        params: { value: string } & ReturnType<
+            TextFieldProps["getIsValidValue"]
+        >,
     ): void;
     transformValueBeingTyped?: (value: string) => string;
     label?: React.ReactNode;
@@ -115,58 +122,58 @@ export const textFieldDefaultProps: PickOptionals<TextFieldProps> = {
     "InputProps_endAdornment": null,
 };
 
-const { useClassNames } = createUseClassNames<Required<TextFieldProps> & { error: boolean }>()(
-    (theme, { error }) => ({
-        "root": {
-            "& .MuiFormHelperText-root": {
-                "position": "absolute",
-                "bottom": "-25px",
-            },
-            "& .MuiTypography-caption": {
-                "whiteSpace": "nowrap",
-            },
-            "& .MuiFormLabel-root, & .MuiTypography-caption": {
-                "color": error
-                    ? theme.colors.useCases.alertSeverity.error.main
-                    : theme.colors.useCases.typography.textSecondary,
-            },
-            "&:focus": {
-                "outline": "unset",
-            },
-            "& input:-webkit-autofill": {
-                ...(() => {
-                    switch (getBrowser()) {
-                        case "chrome":
-                        case "safari":
-                            return {
-                                "WebkitTextFillColor":
-                                    theme.colors.useCases.typography[
-                                        theme.isDarkModeEnabled ? "textPrimary" : "textSecondary"
-                                    ],
-                                "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
-                            };
-                        default:
-                            return {};
-                    }
-                })(),
-            },
-            "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                "borderBottomWidth": 1,
-            },
-            "& .MuiInput-underline:after": {
-                "borderBottomWidth": 1,
-            },
+const { useStyles } = makeStyles<{ error: boolean }>()((theme, { error }) => ({
+    "root": {
+        "& .MuiFormHelperText-root": {
+            "position": "absolute",
+            "bottom": "-25px",
         },
-        "helperText": {
-            "color": theme.colors.useCases.typography.textDisabled,
+        "& .MuiTypography-caption": {
+            "whiteSpace": "nowrap",
         },
-        "questionMark": {
-            "verticalAlign": "middle",
-            "color": theme.colors.useCases.typography.textDisabled,
-            "fontSize": `${theme.typography.rootFontSizePx * 1.25}px`,
+        "& .MuiFormLabel-root, & .MuiTypography-caption": {
+            "color": error
+                ? theme.colors.useCases.alertSeverity.error.main
+                : theme.colors.useCases.typography.textSecondary,
         },
-    }),
-);
+        "&:focus": {
+            "outline": "unset",
+        },
+        "& input:-webkit-autofill": {
+            ...(() => {
+                switch (getBrowser()) {
+                    case "chrome":
+                    case "safari":
+                        return {
+                            "WebkitTextFillColor":
+                                theme.colors.useCases.typography[
+                                    theme.isDarkModeEnabled
+                                        ? "textPrimary"
+                                        : "textSecondary"
+                                ],
+                            "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
+                        };
+                    default:
+                        return {};
+                }
+            })(),
+        },
+        "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+            "borderBottomWidth": 1,
+        },
+        "& .MuiInput-underline:after": {
+            "borderBottomWidth": 1,
+        },
+    },
+    "helperText": {
+        "color": theme.colors.useCases.typography.textDisabled,
+    },
+    "questionMark": {
+        "verticalAlign": "middle",
+        "color": theme.colors.useCases.typography.textDisabled,
+        "fontSize": `${theme.typography.rootFontSizePx * 1.25}px`,
+    },
+}));
 
 export const TextField = memo((props: TextFieldProps) => {
     const completedProps = { ...textFieldDefaultProps, ...noUndefined(props) };
@@ -221,7 +228,10 @@ export const TextField = memo((props: TextFieldProps) => {
         const [value, setValue] = useState(defaultValue);
 
         const transformAndSetValue = useConstCallback((value: string) => {
-            if (!isValidationEnabled && !doOnlyValidateInputAfterFistFocusLost) {
+            if (
+                !isValidationEnabled &&
+                !doOnlyValidateInputAfterFistFocusLost
+            ) {
                 enableValidation();
             }
 
@@ -231,19 +241,30 @@ export const TextField = memo((props: TextFieldProps) => {
         return { value, transformAndSetValue };
     })();
 
-    useEffectOnValueChange(() => transformAndSetValue(defaultValue), [defaultValue]);
+    useEffectOnValueChange(
+        () => transformAndSetValue(defaultValue),
+        [defaultValue],
+    );
 
-    const getIsValidValueResult = useMemo(() => getIsValidValue(value), [value, getIsValidValue]);
+    const getIsValidValueResult = useMemo(
+        () => getIsValidValue(value),
+        [value, getIsValidValue],
+    );
 
     useEffect(() => {
         onValueBeingTypedChange({ value, ...getIsValidValueResult });
     }, [
         value,
         getIsValidValueResult.isValidValue,
-        getIsValidValueResult.isValidValue ? Object : getIsValidValueResult.message,
+        getIsValidValueResult.isValidValue
+            ? Object
+            : getIsValidValueResult.message,
     ]);
 
-    const [isValidationEnabled, enableValidation] = useReducer(() => true, false);
+    const [isValidationEnabled, enableValidation] = useReducer(
+        () => true,
+        false,
+    );
 
     useEvt(
         ctx =>
@@ -253,7 +274,11 @@ export const TextField = memo((props: TextFieldProps) => {
                         transformAndSetValue(defaultValue);
                         return;
                     case "TRIGGER SUBMIT":
-                        if (!getIsValidValueResult.isValidValue || !isSubmitAllowed) return;
+                        if (
+                            !getIsValidValueResult.isValidValue ||
+                            !isSubmitAllowed
+                        )
+                            return;
                         onSubmit(value);
                         return;
                 }
@@ -269,17 +294,26 @@ export const TextField = memo((props: TextFieldProps) => {
         ],
     );
 
-    const error = isValidationEnabled ? !getIsValidValueResult.isValidValue : false;
+    const error = isValidationEnabled
+        ? !getIsValidValueResult.isValidValue
+        : false;
 
-    const { classNames } = useClassNames({
+    const { classes, cx } = useStyles({
         ...completedProps,
         error,
     });
 
-    const [isPasswordShown, toggleIsPasswordShown] = useReducer((v: boolean) => !v, false);
+    const [isPasswordShown, toggleIsPasswordShown] = useReducer(
+        (v: boolean) => !v,
+        false,
+    );
 
     const onKeyDown = useConstCallback(
-        (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>) => {
+        (
+            event: React.KeyboardEvent<
+                HTMLInputElement | HTMLTextAreaElement | HTMLDivElement
+            >,
+        ) => {
             const key = (() => {
                 switch (event.key) {
                     case "Escape":
@@ -320,25 +354,39 @@ export const TextField = memo((props: TextFieldProps) => {
                 ) : type === "password" ? (
                     <InputAdornment position="end">
                         <IconButton
-                            iconId={isPasswordShown ? "visibilityOff" : "visibility"}
+                            iconId={
+                                isPasswordShown ? "visibilityOff" : "visibility"
+                            }
                             onClick={toggleIsPasswordShown}
                         />
                     </InputAdornment>
                 ) : undefined,
         }),
-        [isPasswordShown, type, InputProps_endAdornment, isCircularProgressShown],
+        [
+            isPasswordShown,
+            type,
+            InputProps_endAdornment,
+            isCircularProgressShown,
+        ],
     );
 
     return (
         <MuiTextField
-            type={type !== "password" ? type : isPasswordShown ? "text" : "password"}
-            className={cx(classNames.root, className)}
+            type={
+                type !== "password"
+                    ? type
+                    : isPasswordShown
+                    ? "text"
+                    : "password"
+            }
+            className={cx(classes.root, className)}
             value={value}
             error={error}
             helperText={
                 <>
-                    <Text className={classNames.helperText} typo="caption">
-                        {isValidationEnabled && !getIsValidValueResult.isValidValue
+                    <Text className={classes.helperText} typo="caption">
+                        {isValidationEnabled &&
+                        !getIsValidValueResult.isValidValue
                             ? getIsValidValueResult.message || helperText
                             : helperText}
                     </Text>
@@ -346,7 +394,11 @@ export const TextField = memo((props: TextFieldProps) => {
                         <>
                             &nbsp;
                             <Tooltip title={questionMarkHelperText}>
-                                <Icon iconId="help" className={classNames.questionMark} />
+                                <Icon
+                                    iconId="help"
+                                    size="default"
+                                    className={classes.questionMark}
+                                />
                             </Tooltip>
                         </>
                     )}
@@ -358,12 +410,18 @@ export const TextField = memo((props: TextFieldProps) => {
                 onBlur();
             })}
             onChange={useConstCallback(
-                ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                ({
+                    target,
+                }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
                     transformAndSetValue(target.value),
             )}
             onKeyDown={onKeyDown}
             onFocus={useConstCallback(
-                ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                ({
+                    target,
+                }: React.ChangeEvent<
+                    HTMLInputElement | HTMLTextAreaElement
+                >) => {
                     if (!selectAllTextOnFocus) return;
                     target.setSelectionRange(0, target.value.length);
                 },

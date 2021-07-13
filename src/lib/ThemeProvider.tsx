@@ -1,34 +1,52 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { useEffect, useMemo } from "react";
+import { useMemo, useContext, createContext } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
-import { useIsDarkModeEnabled, evtIsDarkModeEnabled } from "./useIsDarkModeEnabled";
+import {
+    useIsDarkModeEnabled,
+    evtIsDarkModeEnabled,
+} from "./useIsDarkModeEnabled";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider as MuiThemeProvider, StylesProvider } from "@material-ui/core/styles";
-import { createMuiTheme, unstable_createMuiStrictModeTheme } from "@material-ui/core/styles";
-import { useWindowInnerSize } from "powerhooks";
-import { createObjectThatThrowsIfAccessed } from "../tools/createObjectThatThrowsIfAccessed";
+import {
+    ThemeProvider as MuiThemeProvider,
+    StylesProvider,
+} from "@material-ui/core/styles";
+import {
+    createTheme as createMuiTheme,
+    unstable_createMuiStrictModeTheme,
+} from "@material-ui/core/styles";
+import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 
-import type { PaletteBase, ColorUseCasesBase, CreateColorUseCase } from "./colors";
-import { defaultPalette, createDefaultColorUseCases } from "./colors";
+import type {
+    PaletteBase,
+    ColorUseCasesBase,
+    CreateColorUseCase,
+} from "./color";
+import { defaultPalette, createDefaultColorUseCases } from "./color";
 import type { ComputedTypography, GetTypographyDesc } from "./typography";
 import {
     defaultGetTypographyDesc,
     createMuiTypographyOptions,
     getComputedTypography,
 } from "./typography";
-import { createMuiPaletteOptions } from "./colors";
-import { createUseScopedState } from "powerhooks";
-import { createUseClassNamesFactory } from "tss-react";
+import { createMuiPaletteOptions } from "./color";
 import { shadows } from "./shadows";
-import { ZoomProvider } from "powerhooks";
+import { ViewPortTransformer } from "powerhooks/ViewPortTransformer";
+import type { ViewPortTransformerProps } from "powerhooks/ViewPortTransformer";
 import { createResponsive, breakpointsValues } from "./responsive";
 import type { Responsive } from "./responsive";
 import { createText } from "../Text";
-import type { ZoomProviderProps } from "powerhooks";
-import { useBrowserFontSizeFactor } from "powerhooks";
+import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig } from "./spacing";
+import { createMakeStyle } from "tss-react";
+import type { IconSizeName, GetIconSizeInPx } from "./icon";
+import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
+import { createSplashScreen } from "./SplashScreen";
+import type { SplashScreenProps } from "./SplashScreen";
+import { matchViewPortConfig } from "powerhooks/ViewPortTransformer";
+import { useConstCallback } from "powerhooks/useConstCallback";
+import { assert } from "tsafe/assert";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -47,33 +65,35 @@ export type Theme<
     muiTheme: MuiTheme;
     responsive: Responsive;
     custom: Custom;
+    iconSizesInPxByName: Record<IconSizeName, number>;
 };
 
-const { ThemeBaseProvider, useThemeBase: useWrappedThemeBase } = createUseScopedState(
-    "themeBase",
-    createObjectThatThrowsIfAccessed<Theme>({
-        "debugMessage": "Your app should be wrapped into ThemeProvider",
-    }),
-);
+const themeBaseContext = createContext<Theme | undefined>(undefined);
 
-/** Used internally, not exported */
-export const { createUseClassNames, useThemeBase, Text } = (() => {
-    function useThemeBase() {
-        const { themeBase } = useWrappedThemeBase();
-        return themeBase;
+/** Used internally, do not export globally */
+
+export function useThemeBase() {
+    const theme = useContext(themeBaseContext);
+
+    if (theme === undefined) {
+        throw new Error("Your app should be wrapped into ThemeProvider");
     }
 
-    const { createUseClassNames } = createUseClassNamesFactory({ "useTheme": useThemeBase });
+    return theme;
+}
 
-    const { Text } = createText({ "useTheme": useThemeBase });
+export const { makeStyles } = createMakeStyle({
+    "useTheme": useThemeBase,
+});
 
-    return { createUseClassNames, useThemeBase, Text };
-})();
+export const { Text } = createText({ "useTheme": useThemeBase });
 
 export type ThemeProviderProps = {
     children: ReactNode;
-    getZoomConfig?: ZoomProviderProps["getConfig"];
+    getViewPortConfig?: ViewPortTransformerProps["getConfig"];
+    splashScreen?: Omit<SplashScreenProps, "children">;
 };
+
 export declare namespace ThemeProviderProps {
     type WithChildren = {
         children: ReactNode;
@@ -106,32 +126,52 @@ export function createThemeProvider<
     spacingConfig?: SpacingConfig;
     custom?: Custom;
     defaultIsDarkModeEnabled?: boolean;
+    getIconSizeInPx?: GetIconSizeInPx;
 }) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
             typeof params["createColorUseCases"]
         >,
-        getTypographyDesc = defaultGetTypographyDesc as NonNullable<typeof params["getTypographyDesc"]>,
+        getTypographyDesc = defaultGetTypographyDesc as NonNullable<
+            typeof params["getTypographyDesc"]
+        >,
         isReactStrictModeEnabled = false,
         spacingConfig = defaultSpacingConfig,
         custom = {} as NonNullable<typeof params["custom"]>,
         defaultIsDarkModeEnabled,
+        getIconSizeInPx = defaultGetIconSizeInPx,
     } = params;
 
     if (defaultIsDarkModeEnabled !== undefined) {
         evtIsDarkModeEnabled.state = defaultIsDarkModeEnabled;
     }
 
-    function useTheme(): Theme<Palette, ColorUseCases, CustomTypographyVariantName, Custom> {
+    function useTheme(): Theme<
+        Palette,
+        ColorUseCases,
+        CustomTypographyVariantName,
+        Custom
+    > {
         const { isDarkModeEnabled } = useIsDarkModeEnabled();
-        const { windowInnerWidth } = useWindowInnerSize();
+        const { windowInnerWidth, windowInnerHeight } = useWindowInnerSize();
         const { browserFontSizeFactor } = useBrowserFontSizeFactor();
 
-        const theme = useMemo((): Theme<Palette, ColorUseCases, CustomTypographyVariantName, Custom> => {
-            const typographyDesc = getTypographyDesc({ windowInnerWidth, browserFontSizeFactor });
-
-            const useCases = createColorUseCases({ palette, isDarkModeEnabled });
+        const theme = useMemo((): Theme<
+            Palette,
+            ColorUseCases,
+            CustomTypographyVariantName,
+            Custom
+        > => {
+            const typographyDesc = getTypographyDesc({
+                windowInnerWidth,
+                windowInnerHeight,
+                browserFontSizeFactor,
+            });
+            const useCases = createColorUseCases({
+                palette,
+                isDarkModeEnabled,
+            });
 
             return {
                 "colors": { palette, useCases },
@@ -141,11 +181,19 @@ export function createThemeProvider<
                 "responsive": createResponsive({ windowInnerWidth }),
                 ...(() => {
                     const muiTheme = (
-                        isReactStrictModeEnabled ? unstable_createMuiStrictModeTheme : createMuiTheme
+                        isReactStrictModeEnabled
+                            ? unstable_createMuiStrictModeTheme
+                            : createMuiTheme
                     )({
                         // https://material-ui.com/customization/palette/#using-a-color-object
-                        "typography": createMuiTypographyOptions({ typographyDesc }),
-                        "palette": createMuiPaletteOptions({ isDarkModeEnabled, palette, useCases }),
+                        "typography": createMuiTypographyOptions({
+                            typographyDesc,
+                        }),
+                        "palette": createMuiPaletteOptions({
+                            isDarkModeEnabled,
+                            palette,
+                            useCases,
+                        }),
                         "spacing": factor =>
                             spacingConfig({
                                 factor,
@@ -162,6 +210,11 @@ export function createThemeProvider<
                         muiTheme,
                     };
                 })(),
+                "iconSizesInPxByName": getIconSizesInPxByName({
+                    getIconSizeInPx,
+                    windowInnerWidth,
+                    "rootFontSizePx": typographyDesc.rootFontSizePx,
+                }),
                 custom,
             };
         }, [isDarkModeEnabled, windowInnerWidth, browserFontSizeFactor]);
@@ -169,54 +222,65 @@ export function createThemeProvider<
         return theme;
     }
 
+    const { SplashScreen } = createSplashScreen({ useTheme });
+
     const { ThemeProvider } = (() => {
-        const { ThemeProviderInner } = (() => {
-            function ThemeProviderInnerInner(props: {
-                children: ReactNode;
-                theme: Theme<Palette, ColorUseCases, CustomTypographyVariantName, Custom>;
-            }) {
-                const { children, theme } = props;
+        function ThemeProviderInner(
+            props: Omit<ThemeProviderProps, "getViewPortConfig">,
+        ) {
+            const { splashScreen, children } = props;
 
-                const { setThemeBase } = useWrappedThemeBase();
+            const theme = useTheme();
 
-                useEffect(() => {
-                    setThemeBase(theme);
-                }, [theme]);
-
-                return (
+            return (
+                <themeBaseContext.Provider value={theme}>
                     <MuiThemeProvider theme={theme.muiTheme}>
                         <CssBaseline />
-                        <StylesProvider injectFirst>{children}</StylesProvider>
+                        <StylesProvider injectFirst>
+                            {splashScreen === undefined ? (
+                                children
+                            ) : (
+                                <SplashScreen {...splashScreen}>
+                                    {children}
+                                </SplashScreen>
+                            )}
+                        </StylesProvider>
                     </MuiThemeProvider>
+                </themeBaseContext.Provider>
+            );
+        }
+
+        function ThemeProvider(props: ThemeProviderProps) {
+            const { splashScreen, getViewPortConfig } = props;
+
+            const getConfig = useConstCallback<
+                ViewPortTransformerProps["getConfig"]
+            >(params => {
+                assert(getViewPortConfig !== undefined);
+
+                const configOrChildren = getViewPortConfig(params);
+
+                return !matchViewPortConfig(configOrChildren) ? (
+                    <ThemeProviderInner>{configOrChildren}</ThemeProviderInner>
+                ) : (
+                    configOrChildren
                 );
-            }
+            });
 
-            function ThemeProviderInner(props: { children: ReactNode }) {
-                const { children } = props;
+            const children = (
+                <ThemeProviderInner splashScreen={splashScreen}>
+                    {props.children}
+                </ThemeProviderInner>
+            );
 
-                const theme = useTheme();
-
-                return (
-                    <ThemeBaseProvider initialState={theme}>
-                        <ThemeProviderInnerInner theme={theme}>{children}</ThemeProviderInnerInner>
-                    </ThemeBaseProvider>
-                );
-            }
-
-            return { ThemeProviderInner };
-        })();
-
-        const ThemeProvider = (props: ThemeProviderProps) => {
-            const { getZoomConfig } = props;
-
-            const children = <ThemeProviderInner>{props.children}</ThemeProviderInner>;
-
-            return getZoomConfig === undefined ? (
+            return getViewPortConfig === undefined ? (
                 children
             ) : (
-                <ZoomProvider getConfig={getZoomConfig}>{children}</ZoomProvider>
+                <ViewPortTransformer getConfig={getConfig}>
+                    {children}
+                </ViewPortTransformer>
             );
-        };
+        }
 
         return { ThemeProvider };
     })();

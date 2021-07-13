@@ -28,21 +28,33 @@ export const { createResponsive } = (() => {
             (bpA, bpB) => breakpointsValues[bpA] - breakpointsValues[bpB],
         );
 
-        function getNextBreakpoint(breakpoint: Breakpoint): Breakpoint | undefined {
-            return ascendingOrderedBreakpoints[ascendingOrderedBreakpoints.indexOf(breakpoint) + 1];
+        function getNextBreakpoint(
+            breakpoint: Breakpoint,
+        ): Breakpoint | undefined {
+            return ascendingOrderedBreakpoints[
+                ascendingOrderedBreakpoints.indexOf(breakpoint) + 1
+            ];
         }
 
         return { getNextBreakpoint };
     })();
 
-    function createResponsive(params: { windowInnerWidth: number }): Responsive {
+    function createResponsive(params: {
+        windowInnerWidth: number;
+    }): Responsive {
         const { windowInnerWidth } = params;
 
         const out: Responsive = {
-            "up": arg => windowInnerWidth >= (typeof arg === "number" ? arg : breakpointsValues[arg]),
+            "up": arg =>
+                windowInnerWidth >=
+                (typeof arg === "number" ? arg : breakpointsValues[arg]),
             "down": arg => !out.up(arg),
             "between": (start, end) => out.up(start) && out.down(end),
-            "only": breakpoint => out.between(breakpoint, getNextBreakpoint(breakpoint) ?? Infinity),
+            "only": breakpoint =>
+                out.between(
+                    breakpoint,
+                    getNextBreakpoint(breakpoint) ?? Infinity,
+                ),
             windowInnerWidth,
         };
 

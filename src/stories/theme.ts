@@ -13,7 +13,10 @@ import { Param0 } from "tsafe";
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "isReactStrictModeEnabled": false,
     "getTypographyDesc": ({ windowInnerWidth, browserFontSizeFactor }) => ({
-        ...defaultGetTypographyDesc({ windowInnerWidth, browserFontSizeFactor }),
+        ...defaultGetTypographyDesc({
+            windowInnerWidth,
+            browserFontSizeFactor,
+        }),
         "fontFamily": '"Work Sans", sans-serif',
     }),
 });

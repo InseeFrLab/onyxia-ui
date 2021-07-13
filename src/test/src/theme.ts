@@ -2,23 +2,23 @@ import {
     createThemeProvider,
     defaultPalette,
     createDefaultColorUseCases,
-    defaultGetTypographyDesc,
-} from "../../lib";
-import { createIcon } from "../../Icon";
-import { createIconButton } from "../../IconButton";
-import { createButton } from "../../Button";
-import { createText } from "../../Text";
-import "onyxia-design-lab/assets/fonts/work-sans.css";
-import { createUseClassNamesFactory } from "tss-react";
+    defaultGetTypographyDesc
+} from "onyxia-ui/lib";
+import { createIcon } from "onyxia-ui/Icon";
+import { createIconButton } from "onyxia-ui/IconButton";
+import { createButton } from "onyxia-ui/Button";
+import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
+import { createMakeStyle } from "tss-react";
+import "onyxia-ui/assets/fonts/work-sans.css";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import EditIcon from "@material-ui/icons/Edit";
 
 //Import your custom icons
-import { ReactComponent as FooSvg } from "./assets/svg/foo.svg";
-import { ReactComponent as BarSvg } from "./assets/svg/bar.svg";
+import { ReactComponent as FooSvg } from "./assets/foo.svg";
+import { ReactComponent as BarSvg } from "./assets/bar.svg";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "getTypographyDesc": ({
@@ -26,10 +26,12 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
         //When users go to it's browser setting he can select the font size "small", "medium", "default"
         //You can choose to take that into account for example by doing "rootFontSizePx": 10 * browserFontSizeFactor (default)
         browserFontSizeFactor,
+        windowInnerHeight
     }) => {
         const typographyDesc = defaultGetTypographyDesc({
             windowInnerWidth,
             browserFontSizeFactor,
+            windowInnerHeight
         });
 
         return {
@@ -67,8 +69,6 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
     }),
 });
 
-export const { createUseClassNames } = createUseClassNamesFactory({ useTheme });
-
 export const { Icon } = createIcon({
     "hello": EmojiPeopleIcon,
     "edit": EditIcon,
@@ -81,3 +81,5 @@ export type IconId = Param0<typeof Icon>["iconId"];
 export const { IconButton } = createIconButton({ Icon });
 export const { Button } = createButton({ Icon });
 export const { Text } = createText({ useTheme });
+
+export const { makeStyles } = createMakeStyle({ useTheme });

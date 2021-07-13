@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { createUseClassNames, Icon, Text } from "./theme";
+import { makeStyles, Icon, Text, Button } from "./theme";
 //Cherry pick the custom components you wish to import.
-import { Alert } from "../../Alert";
+import { Alert } from "onyxia-ui/Alert";
 
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
-import { useIsDarkModeEnabled } from "../../lib";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
-import { useSplashScreen } from "../../splashScreen";
+import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui/lib";
 
 //See: https://github.com/garronej/tss-react
-const { useClassNames } = createUseClassNames()(theme => ({
+const { useStyles } = makeStyles()(theme => ({
     "root": {
         "backgroundColor": theme.colors.useCases.surfaces.background,
         /*
@@ -23,23 +22,26 @@ const { useClassNames } = createUseClassNames()(theme => ({
 }));
 
 export function MyComponent() {
+
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
-    const { classNames } = useClassNames({});
 
     {
         const { hideRootSplashScreen } = useSplashScreen();
 
         useEffect(() => {
+
             //Call this when your component is in a state ready to be shown
             hideRootSplashScreen();
+
         }, []);
     }
+
+    // This pattern let you display the splash screen when the isLoading state is true.
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoading, setIsLoading] = useState(false);
 
-    // This pattern let you display the splash screen when the isLoading state is true.
     {
         const { showSplashScreen, hideSplashScreen } = useSplashScreen();
 
@@ -49,20 +51,35 @@ export function MyComponent() {
             } else {
                 hideSplashScreen();
             }
+        // eslint-disable-next-line
         }, [isLoading]);
     }
 
+    const { classes } = useStyles();
+
     return (
-        <div className={classNames.root}>
+        <div className={classes.root}>
             <Alert severity="success">Onyxia UI successfully setup!</Alert>
             <Text typo="my hero">
                 <Icon iconId="hello" />
                 Hello World
             </Text>
+            <Text typo="body 1">Toggle dark mode</Text>
             <Switch
                 checked={isDarkModeEnabled}
                 onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
             />
+            <Button
+                onClick={async ()=> {
+
+                    setIsLoading(true);
+
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+
+                    setIsLoading(false);
+
+                }}
+            >Show splash screen a few seconds</Button>
         </div>
     );
 }

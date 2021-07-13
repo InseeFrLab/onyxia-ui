@@ -1,12 +1,14 @@
 import { createElement, useMemo, forwardRef, memo } from "react";
 import type { Theme } from "./lib/ThemeProvider";
 import { TypographyDesc } from "./lib/typography";
-import type { PaletteBase, ColorUseCasesBase } from "./lib/colors";
-import { cx, css } from "tss-react";
+import type { PaletteBase, ColorUseCasesBase } from "./lib/color";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
+import { css, cx } from "tss-react";
 
-export function createText<TypographyVariantNameCustom extends string = never>(params: {
+export function createText<
+    TypographyVariantNameCustom extends string = never,
+>(params: {
     useTheme(): Theme<
         PaletteBase,
         ColorUseCasesBase,
@@ -73,7 +75,8 @@ export function createText<TypographyVariantNameCustom extends string = never>(p
             );
 
             return createElement(
-                htmlComponent ?? theme.typography.variant[variantName].htmlComponent,
+                htmlComponent ??
+                    theme.typography.variant[variantName].htmlComponent,
                 {
                     className,
                     ref,

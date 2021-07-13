@@ -19,7 +19,10 @@ const variantNameBase = [
     "caption",
 ] as const;
 
-doExtends<Any.Equals<TypographyDesc.VariantNameBase, typeof variantNameBase[number]>, 1>();
+doExtends<
+    Any.Equals<TypographyDesc.VariantNameBase, typeof variantNameBase[number]>,
+    1
+>();
 
 const { meta, getStory } = getStoryFactory({
     sectionName,

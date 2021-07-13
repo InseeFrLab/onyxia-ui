@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@material-ui/core/Dialog";
-import { createUseClassNames } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
 import { Text } from "./lib/ThemeProvider";
 import Checkbox from "@material-ui/core/Checkbox";
-import { useConstCallback } from "powerhooks";
+import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { assert } from "tsafe/assert";
 
@@ -20,7 +20,7 @@ export type DialogProps = {
     doNotShowNextTimeText?: string;
 };
 
-const { useClassNames } = createUseClassNames()(theme => ({
+const { useStyles } = makeStyles()(theme => ({
     "root": {
         "padding": theme.spacing(3),
     },
@@ -64,7 +64,7 @@ export const Dialog = memo((props: DialogProps) => {
         doNotShowNextTimeText = "Don't show next time",
     } = props;
 
-    const { classNames } = useClassNames({});
+    const { classes } = useStyles();
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -84,17 +84,22 @@ export const Dialog = memo((props: DialogProps) => {
             onClose={onClose}
             aria-labelledby={labelledby}
             aria-describedby={describedby}
-            PaperComponent={({ children }) => <div className={classNames.paper}>{children}</div>}
+            PaperComponent={({ children }) => (
+                <div className={classes.paper}>{children}</div>
+            )}
         >
-            <div className={classNames.root}>
+            <div className={classes.root}>
                 {title !== undefined && (
-                    <Text typo="object heading" componentProps={{ "id": labelledby }}>
+                    <Text
+                        typo="object heading"
+                        componentProps={{ "id": labelledby }}
+                    >
                         {title}
                     </Text>
                 )}
                 {subtitle !== undefined && (
                     <Text
-                        className={classNames.subtitle}
+                        className={classes.subtitle}
                         componentProps={{ "id": describedby }}
                         typo="body 1"
                     >
@@ -102,13 +107,17 @@ export const Dialog = memo((props: DialogProps) => {
                     </Text>
                 )}
                 {body !== undefined && (
-                    <Text className={classNames.body} htmlComponent="div" typo="body 2">
+                    <Text
+                        className={classes.body}
+                        htmlComponent="div"
+                        typo="body 2"
+                    >
                         {body}
                     </Text>
                 )}
 
-                <div className={classNames.buttonWrapper}>
-                    <div className={classNames.checkBoxWrapper}>
+                <div className={classes.buttonWrapper}>
+                    <div className={classes.checkBoxWrapper}>
                         {onDoShowNextTimeValueChange !== undefined && (
                             <FormControlLabel
                                 control={

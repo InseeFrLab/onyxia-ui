@@ -17,7 +17,9 @@ export function getStoryFactory<Props>(params: {
 }) {
     const { sectionName, wrappedComponent, argTypes = {} } = params;
 
-    const Component: any = Object.entries(wrappedComponent).map(([, component]) => component)[0];
+    const Component: any = Object.entries(wrappedComponent).map(
+        ([, component]) => component,
+    )[0];
 
     const Template: Story<Props & { darkMode: boolean; width: number }> = ({
         darkMode,
@@ -38,7 +40,8 @@ export function getStoryFactory<Props>(params: {
                     <Box clone p={4} m={2} display="inline-block">
                         <Paper
                             style={{
-                                "backgroundColor": theme.colors.useCases.surfaces.background,
+                                "backgroundColor":
+                                    theme.colors.useCases.surfaces.background,
                             }}
                         >
                             <div
@@ -88,10 +91,15 @@ export function getStoryFactory<Props>(params: {
     };
 }
 
-export function logCallbacks<T extends string>(propertyNames: readonly T[]): Record<T, () => void> {
+export function logCallbacks<T extends string>(
+    propertyNames: readonly T[],
+): Record<T, () => void> {
     const out: Record<T, () => void> = id<Record<string, never>>({});
 
-    propertyNames.forEach(propertyName => (out[propertyName] = console.log.bind(console, propertyName)));
+    propertyNames.forEach(
+        propertyName =>
+            (out[propertyName] = console.log.bind(console, propertyName)),
+    );
 
     return out;
 }

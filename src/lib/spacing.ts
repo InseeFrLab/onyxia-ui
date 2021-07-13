@@ -1,14 +1,23 @@
 import { breakpointsValues } from "./responsive";
+import { assert } from "tsafe/assert";
 
+/** Return number of pixel */
 export type SpacingConfig = (params: {
+    /** Assert positive integer */
     factor: number;
     windowInnerWidth: number;
     rootFontSizePx: number;
 }) => number;
 
-export const defaultSpacingConfig: SpacingConfig = ({ factor, windowInnerWidth, rootFontSizePx }) =>
+export const defaultSpacingConfig: SpacingConfig = ({
+    factor,
+    windowInnerWidth,
+    rootFontSizePx,
+}) =>
     rootFontSizePx *
     (() => {
+        assert(Number.isInteger(factor), "Factor should be an integer");
+
         if (windowInnerWidth >= breakpointsValues.xl) {
             return 0.5 * factor;
         }
