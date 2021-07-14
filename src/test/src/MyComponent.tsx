@@ -34,6 +34,7 @@ export function MyComponent() {
             //Call this when your component is in a state ready to be shown
             hideRootSplashScreen();
 
+        // eslint-disable-next-line
         }, []);
     }
 

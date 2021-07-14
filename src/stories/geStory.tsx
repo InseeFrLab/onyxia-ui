@@ -1,13 +1,23 @@
 import type { Meta, Story } from "@storybook/react";
 import type { ArgType } from "@storybook/addons";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { symToStr } from "tsafe/symToStr";
 import { useIsDarkModeEnabled } from "../lib";
-import { ThemeProvider, useTheme } from "./theme";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
+import type { ThemeProviderProps } from "../lib";
+import { ThemeProvider } from "./theme";
 import { id } from "tsafe/id";
 import "../assets/fonts/work-sans.css";
+import { GlobalStyles } from "tss-react";
+
+const browserFontSizes = [
+    "Very small",
+    "Small",
+    "Medium (Recommended)",
+    "Large",
+    "Very Large",
+] as const;
+
+type BrowserFontSize = typeof browserFontSizes[number];
 
 export function getStoryFactory<Props>(params: {
     sectionName: string;
@@ -21,9 +31,18 @@ export function getStoryFactory<Props>(params: {
         ([, component]) => component,
     )[0];
 
-    const Template: Story<Props & { darkMode: boolean; width: number }> = ({
+    const Template: Story<
+        Props & {
+            darkMode: boolean;
+            width: number;
+            targetWindowInnerWidth: number;
+            browserFontSize: BrowserFontSize;
+        }
+    > = ({
         darkMode,
         width,
+        targetWindowInnerWidth,
+        browserFontSize,
         ...props
     }) => {
         const { setIsDarkModeEnabled } = useIsDarkModeEnabled();
@@ -32,30 +51,54 @@ export function getStoryFactory<Props>(params: {
             setIsDarkModeEnabled(darkMode);
         }, [darkMode]);
 
-        const theme = useTheme();
+        const getViewPortConfig = useCallback<
+            NonNullable<ThemeProviderProps["getViewPortConfig"]>
+        >(
+            () => ({
+                "targetBrowserFontSizeFactor": (() => {
+                    switch (browserFontSize) {
+                        case "Very small":
+                            return 0.5625;
+                        case "Small":
+                            return 0.75;
+                        case "Medium (Recommended)":
+                            return 1;
+                        case "Large":
+                            return 1.25;
+                        case "Very Large":
+                            return 1.5;
+                    }
+                })(),
+                targetWindowInnerWidth,
+            }),
+            [targetWindowInnerWidth, browserFontSizes],
+        );
 
         return (
-            <ThemeProvider>
-                <Box p={4} style={{ "backgroundColor": "white" }}>
-                    <Box clone p={4} m={2} display="inline-block">
-                        <Paper
-                            style={{
-                                "backgroundColor":
-                                    theme.colors.useCases.surfaces.background,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    "border": `1px dotted ${theme.colors.useCases.typography.textDisabled}`,
-                                    "width": width !== 0 ? width : undefined,
-                                }}
-                            >
-                                <Component {...props} />
-                            </div>
-                        </Paper>
-                    </Box>
-                </Box>
-            </ThemeProvider>
+            <>
+                {
+                    <GlobalStyles
+                        styles={{
+                            "html": {
+                                "font-size": "100% !important",
+                            },
+                            "body": {
+                                "padding": `0 !important`,
+                            },
+                        }}
+                    />
+                }
+                <ThemeProvider getViewPortConfig={getViewPortConfig}>
+                    <div
+                        style={{
+                            "width": width || undefined,
+                            "border": "1px solid black",
+                        }}
+                    >
+                        <Component {...props} />
+                    </div>
+                </ThemeProvider>
+            </>
         );
     };
 
@@ -65,6 +108,8 @@ export function getStoryFactory<Props>(params: {
         out.args = {
             "darkMode": false,
             "width": 0,
+            "targetWindowInnerWidth": 1920,
+            "browserFontSize": "Medium (Recommended)",
             ...props,
         };
 
@@ -83,6 +128,18 @@ export function getStoryFactory<Props>(params: {
                         "max": 1920,
                         "step": 1,
                     },
+                },
+                "targetWindowInnerWidth": {
+                    "control": {
+                        "type": "range",
+                        "min": 200,
+                        "max": 2560,
+                        "step": 1,
+                    },
+                },
+                "browserFontSize": {
+                    "options": browserFontSizes,
+                    "control": { "type": "select" },
                 },
                 ...argTypes,
             },

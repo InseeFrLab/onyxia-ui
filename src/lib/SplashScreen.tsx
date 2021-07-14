@@ -5,7 +5,7 @@ import Color from "color";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { createMakeStyle, keyframes, css } from "tss-react";
+import { createMakeStyles, keyframes, css } from "tss-react";
 import type { Theme } from "./ThemeProvider";
 
 let fadeOutDuration = 700;
@@ -190,7 +190,7 @@ export type SplashScreenProps = {
 export function createSplashScreen(params: { useTheme(): Theme }) {
     const { useTheme } = params;
 
-    const { makeStyles } = createMakeStyle({ useTheme });
+    const { makeStyles } = createMakeStyles({ useTheme });
 
     const { SplashScreen } = (() => {
         const { Overlay } = (() => {

@@ -20,7 +20,7 @@ export namespace ButtonProps {
         className?: string;
 
         /** Defaults to "primary" */
-        color?: "primary" | "secondary" | "ternary";
+        variant?: "primary" | "secondary" | "ternary";
 
         children: React.ReactNode;
 
@@ -64,18 +64,15 @@ export function createButton<IconId extends string = never>(params?: {
     };
 
     const { useStyles } = makeStyles<{
-        color: NonNullable<ButtonProps["color"]>;
+        variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-    }>()((theme, { color, disabled }) => {
-        const textColor = ({
-            color,
-            disabled,
-        }: Pick<Required<ButtonProps>, "color" | "disabled">) =>
+    }>()((theme, { variant, disabled }) => {
+        const textColor =
             theme.colors.useCases.typography[
                 disabled
                     ? "textDisabled"
                     : (() => {
-                          switch (color) {
+                          switch (variant) {
                               case "primary":
                                   return "textFocus";
                               case "secondary":
@@ -85,14 +82,12 @@ export function createButton<IconId extends string = never>(params?: {
                       })()
             ];
 
-        const hoverTextColor = ({
-            color,
-        }: Pick<Required<ButtonProps>, "color" | "disabled">) => {
+        const hoverTextColor = (() => {
             switch (theme.isDarkModeEnabled) {
                 case true:
                     return theme.colors.palette[
                         (() => {
-                            switch (color) {
+                            switch (variant) {
                                 case "primary":
                                     return "light";
                                 case "secondary":
@@ -104,14 +99,14 @@ export function createButton<IconId extends string = never>(params?: {
                 case false:
                     return theme.colors.palette.light.main;
             }
-        };
+        })();
 
         return {
             "root": (() => {
                 const hoverBackgroundColor =
                     theme.colors.useCases.buttons[
                         (() => {
-                            switch (color) {
+                            switch (variant) {
                                 case "primary":
                                     return "actionHoverPrimary";
                                 case "secondary":
@@ -126,7 +121,7 @@ export function createButton<IconId extends string = never>(params?: {
                     "backgroundColor": disabled
                         ? theme.colors.useCases.buttons.actionDisabledBackground
                         : (() => {
-                              switch (color) {
+                              switch (variant) {
                                   case "primary":
                                   case "secondary":
                                       return "transparent";
@@ -138,7 +133,7 @@ export function createButton<IconId extends string = never>(params?: {
                     "height": 36,
                     "borderRadius": 20,
                     "borderWidth": (() => {
-                        switch (color) {
+                        switch (variant) {
                             case "primary":
                             case "secondary":
                                 return 2;
@@ -152,21 +147,21 @@ export function createButton<IconId extends string = never>(params?: {
                         : hoverBackgroundColor,
                     "padding": theme.spacing(0, 2),
                     "&.MuiButton-text": {
-                        "color": textColor({ color, disabled }),
+                        "color": textColor,
                     },
                     "&:hover": {
                         "backgroundColor": hoverBackgroundColor,
                         "& .MuiSvgIcon-root": {
-                            "color": hoverTextColor({ color, disabled }),
+                            "color": hoverTextColor,
                         },
                         "&.MuiButton-text": {
-                            "color": hoverTextColor({ color, disabled }),
+                            "color": hoverTextColor,
                         },
                     },
                 };
             })(),
             "icon": {
-                "color": textColor({ color, disabled }),
+                "color": textColor,
             },
         };
     });
@@ -175,7 +170,7 @@ export function createButton<IconId extends string = never>(params?: {
         forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
             const {
                 className,
-                color = "primary",
+                variant = "primary",
                 disabled = false,
                 children,
                 startIcon,
@@ -189,7 +184,7 @@ export function createButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
-            const { classes, cx } = useStyles({ color, disabled });
+            const { classes, cx } = useStyles({ variant, disabled });
 
             const IconWd = useGuaranteedMemo(
                 () => (props: { iconId: IconId }) =>

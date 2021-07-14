@@ -23,10 +23,10 @@ const props: DialogProps = {
     /* spell-checker: enable */
     "buttons": (
         <>
-            <Button color="secondary" type="submit">
+            <Button variant="secondary" type="submit">
                 Cancel
             </Button>
-            <Button color="primary" type="submit">
+            <Button variant="primary" type="submit">
                 Ok
             </Button>
         </>

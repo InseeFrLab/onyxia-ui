@@ -11679,10 +11679,10 @@ postcss@^8.1.0:
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
 
-powerhooks@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.4.1.tgz#fcaeb11283336a9bfae13698674da70239de8e60"
-  integrity sha512-Hp9CqhM6oYimBZbGbDHrqQdkE8Rz8b4Z0GNOSZQh+BydP9uiiokE7dF4iTmfWgUGmyyXDfPVxIMOBSTNArNs9Q==
+powerhooks@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.4.4.tgz#8fe09a57502c5fd32348fe331d65c73b09ea8d1a"
+  integrity sha512-aEhuCxunqyLXbg8Uzu7qQZA9THrmwDVKCVaQo2stK58d3gCniLb0ioUJgGLwlSLJe+Kvx/qHVZ18A9WWXoppwA==
   dependencies:
     evt "2.0.0-beta.15"
     memoizee "^0.4.15"
@@ -14108,10 +14108,10 @@ tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
   integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
 
-tss-react@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-0.3.0.tgz#8b070a301146e61c70c84f12c07a69646311327c"
-  integrity sha512-gg0I38aznvB+FWZWx9OReXShA7RbpWaVDwKOvEqFoGmps8o5T6qQaGFAMtUVw4gA8/Fa3x2pJ1WYCaM097/sFQ==
+tss-react@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-0.3.2.tgz#7fecdfef49bcd238f2ff9314581bbd1e7325e1d9"
+  integrity sha512-TpkhO/VQS4WCVs5SMw3MsNb6/v1UhYSHivq3UliHT+563lf4w40MYqpNxpgfjaQL4xbWfdcPZns5ksaC4rTomA==
   dependencies:
     "@emotion/cache" "^11.0.0"
     "@emotion/react" "^11.0.0"

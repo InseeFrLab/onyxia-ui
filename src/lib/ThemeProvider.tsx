@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { useMemo, useContext, createContext } from "react";
+import { useMemo, useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
 import {
@@ -39,7 +39,7 @@ import { createText } from "../Text";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig } from "./spacing";
-import { createMakeStyle } from "tss-react";
+import { createMakeStyles } from "tss-react";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";
@@ -82,7 +82,7 @@ export function useThemeBase() {
     return theme;
 }
 
-export const { makeStyles } = createMakeStyle({
+export const { makeStyles } = createMakeStyles({
     "useTheme": useThemeBase,
 });
 
@@ -253,19 +253,24 @@ export function createThemeProvider<
         function ThemeProvider(props: ThemeProviderProps) {
             const { splashScreen, getViewPortConfig } = props;
 
-            const getConfig = useConstCallback<
+            const getConfig = useCallback<
                 ViewPortTransformerProps["getConfig"]
-            >(params => {
-                assert(getViewPortConfig !== undefined);
+            >(
+                params => {
+                    assert(getViewPortConfig !== undefined);
 
-                const configOrChildren = getViewPortConfig(params);
+                    const configOrChildren = getViewPortConfig(params);
 
-                return !matchViewPortConfig(configOrChildren) ? (
-                    <ThemeProviderInner>{configOrChildren}</ThemeProviderInner>
-                ) : (
-                    configOrChildren
-                );
-            });
+                    return !matchViewPortConfig(configOrChildren) ? (
+                        <ThemeProviderInner>
+                            {configOrChildren}
+                        </ThemeProviderInner>
+                    ) : (
+                        configOrChildren
+                    );
+                },
+                [getViewPortConfig],
+            );
 
             const children = (
                 <ThemeProviderInner splashScreen={splashScreen}>

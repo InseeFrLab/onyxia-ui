@@ -9,7 +9,7 @@ import { createIconButton } from "onyxia-ui/IconButton";
 import { createButton } from "onyxia-ui/Button";
 import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
-import { createMakeStyle } from "tss-react";
+import { createMakeStyles } from "tss-react";
 import "onyxia-ui/assets/fonts/work-sans.css";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
@@ -82,4 +82,4 @@ export const { IconButton } = createIconButton({ Icon });
 export const { Button } = createButton({ Icon });
 export const { Text } = createText({ useTheme });
 
-export const { makeStyles } = createMakeStyle({ useTheme });
+export const { makeStyles } = createMakeStyles({ useTheme });
