@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { useMemo, useContext, createContext, useCallback } from "react";
+import { useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
 import {
@@ -16,7 +16,6 @@ import {
     unstable_createMuiStrictModeTheme,
 } from "@material-ui/core/styles";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
-
 import type {
     PaletteBase,
     ColorUseCasesBase,
@@ -45,8 +44,9 @@ import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";
 import type { SplashScreenProps } from "./SplashScreen";
 import { matchViewPortConfig } from "powerhooks/ViewPortTransformer";
-import { useConstCallback } from "powerhooks/useConstCallback";
 import { assert } from "tsafe/assert";
+import memoize from "memoizee";
+import { id } from "tsafe/id";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -147,80 +147,96 @@ export function createThemeProvider<
         evtIsDarkModeEnabled.state = defaultIsDarkModeEnabled;
     }
 
-    function useTheme(): Theme<
-        Palette,
-        ColorUseCases,
-        CustomTypographyVariantName,
-        Custom
-    > {
-        const { isDarkModeEnabled } = useIsDarkModeEnabled();
-        const { windowInnerWidth, windowInnerHeight } = useWindowInnerSize();
-        const { browserFontSizeFactor } = useBrowserFontSizeFactor();
+    const { useTheme } = (() => {
+        const createTheme = memoize(
+            (
+                isDarkModeEnabled: boolean,
+                windowInnerWidth: number,
+                windowInnerHeight: number,
+                browserFontSizeFactor: number,
+            ) => {
+                const typographyDesc = getTypographyDesc({
+                    windowInnerWidth,
+                    windowInnerHeight,
+                    browserFontSizeFactor,
+                });
+                const useCases = createColorUseCases({
+                    palette,
+                    isDarkModeEnabled,
+                });
 
-        const theme = useMemo((): Theme<
-            Palette,
-            ColorUseCases,
-            CustomTypographyVariantName,
-            Custom
-        > => {
-            const typographyDesc = getTypographyDesc({
+                return id<
+                    Theme<
+                        Palette,
+                        ColorUseCases,
+                        CustomTypographyVariantName,
+                        Custom
+                    >
+                >({
+                    "colors": { palette, useCases },
+                    "typography": getComputedTypography({ typographyDesc }),
+                    isDarkModeEnabled,
+                    shadows,
+                    "responsive": createResponsive({ windowInnerWidth }),
+                    ...(() => {
+                        const muiTheme = (
+                            isReactStrictModeEnabled
+                                ? unstable_createMuiStrictModeTheme
+                                : createMuiTheme
+                        )({
+                            // https://material-ui.com/customization/palette/#using-a-color-object
+                            "typography": createMuiTypographyOptions({
+                                typographyDesc,
+                            }),
+                            "palette": createMuiPaletteOptions({
+                                isDarkModeEnabled,
+                                palette,
+                                useCases,
+                            }),
+                            "spacing": factor =>
+                                spacingConfig({
+                                    factor,
+                                    windowInnerWidth,
+                                    "rootFontSizePx":
+                                        typographyDesc.rootFontSizePx,
+                                }),
+                            "breakpoints": {
+                                "values": { "xs": 0, ...breakpointsValues },
+                            },
+                        });
+
+                        return {
+                            "spacing": muiTheme.spacing.bind(muiTheme),
+                            muiTheme,
+                        };
+                    })(),
+                    "iconSizesInPxByName": getIconSizesInPxByName({
+                        getIconSizeInPx,
+                        windowInnerWidth,
+                        "rootFontSizePx": typographyDesc.rootFontSizePx,
+                    }),
+                    custom,
+                });
+            },
+            { "max": 1 },
+        );
+
+        function useTheme() {
+            const { isDarkModeEnabled } = useIsDarkModeEnabled();
+            const { windowInnerWidth, windowInnerHeight } =
+                useWindowInnerSize();
+            const { browserFontSizeFactor } = useBrowserFontSizeFactor();
+
+            return createTheme(
+                isDarkModeEnabled,
                 windowInnerWidth,
                 windowInnerHeight,
                 browserFontSizeFactor,
-            });
-            const useCases = createColorUseCases({
-                palette,
-                isDarkModeEnabled,
-            });
+            );
+        }
 
-            return {
-                "colors": { palette, useCases },
-                "typography": getComputedTypography({ typographyDesc }),
-                isDarkModeEnabled,
-                shadows,
-                "responsive": createResponsive({ windowInnerWidth }),
-                ...(() => {
-                    const muiTheme = (
-                        isReactStrictModeEnabled
-                            ? unstable_createMuiStrictModeTheme
-                            : createMuiTheme
-                    )({
-                        // https://material-ui.com/customization/palette/#using-a-color-object
-                        "typography": createMuiTypographyOptions({
-                            typographyDesc,
-                        }),
-                        "palette": createMuiPaletteOptions({
-                            isDarkModeEnabled,
-                            palette,
-                            useCases,
-                        }),
-                        "spacing": factor =>
-                            spacingConfig({
-                                factor,
-                                windowInnerWidth,
-                                "rootFontSizePx": typographyDesc.rootFontSizePx,
-                            }),
-                        "breakpoints": {
-                            "values": { "xs": 0, ...breakpointsValues },
-                        },
-                    });
-
-                    return {
-                        "spacing": muiTheme.spacing.bind(muiTheme),
-                        muiTheme,
-                    };
-                })(),
-                "iconSizesInPxByName": getIconSizesInPxByName({
-                    getIconSizeInPx,
-                    windowInnerWidth,
-                    "rootFontSizePx": typographyDesc.rootFontSizePx,
-                }),
-                custom,
-            };
-        }, [isDarkModeEnabled, windowInnerWidth, browserFontSizeFactor]);
-
-        return theme;
-    }
+        return { useTheme };
+    })();
 
     const { SplashScreen } = createSplashScreen({ useTheme });
 

@@ -130,7 +130,7 @@ export function createButton<IconId extends string = never>(params?: {
                                           .background;
                               }
                           })(),
-                    "height": 36,
+                    //"height": 36,
                     "borderRadius": 20,
                     "borderWidth": (() => {
                         switch (variant) {
@@ -145,7 +145,7 @@ export function createButton<IconId extends string = never>(params?: {
                     "borderColor": disabled
                         ? "transparent"
                         : hoverBackgroundColor,
-                    "padding": theme.spacing(0, 2),
+                    "padding": theme.spacing(1, 2),
                     "&.MuiButton-text": {
                         "color": textColor,
                     },

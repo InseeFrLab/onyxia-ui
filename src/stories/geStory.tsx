@@ -4,7 +4,7 @@ import { useEffect, useCallback } from "react";
 import { symToStr } from "tsafe/symToStr";
 import { useIsDarkModeEnabled, chromeFontSizesFactors } from "../lib";
 import type { ThemeProviderProps, ChromeFontSize } from "../lib";
-import { ThemeProvider } from "./theme";
+import { ThemeProvider, useTheme } from "./theme";
 import { id } from "tsafe/id";
 import "../assets/fonts/work-sans.css";
 import { GlobalStyles } from "tss-react";
@@ -53,6 +53,8 @@ export function getStoryFactory<Props>(params: {
             [targetWindowInnerWidth, chromeFontSize],
         );
 
+        const theme = useTheme();
+
         return (
             <>
                 {
@@ -63,6 +65,7 @@ export function getStoryFactory<Props>(params: {
                             },
                             "body": {
                                 "padding": `0 !important`,
+                                "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
                             },
                         }}
                     />
