@@ -18,9 +18,16 @@ const { meta, getStory } = getStoryFactory({
             "options": iconIds,
             "control": { "type": "radio" },
         },
+        "size": {
+            "options": ["extra small", "small", "default", "medium", "large"],
+            "control": { "type": "radio" },
+        },
     },
 });
 
 export default meta;
 
-export const Home = getStory({ "iconId": "home" });
+export const Home = getStory({
+    "iconId": "home",
+    "size": "default",
+});

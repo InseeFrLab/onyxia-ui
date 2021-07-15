@@ -72,6 +72,7 @@ export function getStoryFactory<Props>(params: {
                         style={{
                             "width": width || undefined,
                             "border": "1px dotted grey",
+                            "display": "inline-block",
                         }}
                     >
                         <Component {...props} />
