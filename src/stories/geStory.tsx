@@ -2,22 +2,13 @@ import type { Meta, Story } from "@storybook/react";
 import type { ArgType } from "@storybook/addons";
 import { useEffect, useCallback } from "react";
 import { symToStr } from "tsafe/symToStr";
-import { useIsDarkModeEnabled } from "../lib";
-import type { ThemeProviderProps } from "../lib";
+import { useIsDarkModeEnabled, chromeFontSizesFactors } from "../lib";
+import type { ThemeProviderProps, ChromeFontSize } from "../lib";
 import { ThemeProvider } from "./theme";
 import { id } from "tsafe/id";
 import "../assets/fonts/work-sans.css";
 import { GlobalStyles } from "tss-react";
-
-const browserFontSizes = [
-    "Very small",
-    "Small",
-    "Medium (Recommended)",
-    "Large",
-    "Very Large",
-] as const;
-
-type BrowserFontSize = typeof browserFontSizes[number];
+import { objectKeys } from "tsafe/objectKeys";
 
 export function getStoryFactory<Props>(params: {
     sectionName: string;
@@ -36,13 +27,13 @@ export function getStoryFactory<Props>(params: {
             darkMode: boolean;
             width: number;
             targetWindowInnerWidth: number;
-            browserFontSize: BrowserFontSize;
+            chromeFontSize: ChromeFontSize;
         }
     > = ({
         darkMode,
         width,
         targetWindowInnerWidth,
-        browserFontSize,
+        chromeFontSize,
         ...props
     }) => {
         const { setIsDarkModeEnabled } = useIsDarkModeEnabled();
@@ -55,23 +46,11 @@ export function getStoryFactory<Props>(params: {
             NonNullable<ThemeProviderProps["getViewPortConfig"]>
         >(
             () => ({
-                "targetBrowserFontSizeFactor": (() => {
-                    switch (browserFontSize) {
-                        case "Very small":
-                            return 0.5625;
-                        case "Small":
-                            return 0.75;
-                        case "Medium (Recommended)":
-                            return 1;
-                        case "Large":
-                            return 1.25;
-                        case "Very Large":
-                            return 1.5;
-                    }
-                })(),
+                "targetBrowserFontSizeFactor":
+                    chromeFontSizesFactors[chromeFontSize],
                 targetWindowInnerWidth,
             }),
-            [targetWindowInnerWidth, browserFontSize],
+            [targetWindowInnerWidth, chromeFontSize],
         );
 
         return (
@@ -92,7 +71,7 @@ export function getStoryFactory<Props>(params: {
                     <div
                         style={{
                             "width": width || undefined,
-                            "border": "1px solid black",
+                            "border": "1px dotted grey",
                         }}
                     >
                         <Component {...props} />
@@ -109,7 +88,7 @@ export function getStoryFactory<Props>(params: {
             "darkMode": false,
             "width": 0,
             "targetWindowInnerWidth": 1920,
-            "browserFontSize": "Medium (Recommended)",
+            "chromeFontSize": "Medium (Recommended)",
             ...props,
         };
 
@@ -137,8 +116,8 @@ export function getStoryFactory<Props>(params: {
                         "step": 1,
                     },
                 },
-                "browserFontSize": {
-                    "options": browserFontSizes,
+                "chromeFontSize": {
+                    "options": objectKeys(chromeFontSizesFactors),
                     "control": { "type": "select" },
                 },
                 ...argTypes,

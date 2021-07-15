@@ -20,8 +20,8 @@ export { defaultGetTypographyDesc } from "./typography";
 
 export * from "./useIsDarkModeEnabled";
 
-export type { Breakpoint, Responsive } from "./responsive";
-export { breakpointsValues } from "./responsive";
+export type { Breakpoint, Responsive, ChromeFontSize } from "./responsive";
+export { breakpointsValues, chromeFontSizesFactors } from "./responsive";
 
 export { useDomRect } from "powerhooks";
 
