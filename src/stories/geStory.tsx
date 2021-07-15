@@ -71,7 +71,7 @@ export function getStoryFactory<Props>(params: {
                 })(),
                 targetWindowInnerWidth,
             }),
-            [targetWindowInnerWidth, browserFontSizes],
+            [targetWindowInnerWidth, browserFontSize],
         );
 
         return (
