@@ -1,3 +1,23 @@
+## **0.7.0** (2021-07-16)  
+  
+- Massive update  
+- Improve theme refresh  
+- Enumerate avalibles sizes for icons  
+- Export chromeFontSize to factor converter  
+- Fix browserFontSizes stories  
+- Update of the story  
+- Complete redesign  
+- Implement responsive spacing and refactor themeProvider  
+- Big update  
+- CI: Deploy on storybook only if new version  
+- Merge pull request #4 from marchufschmitt/patch-1
+
+Update typography.ts  
+- Update typography.ts
+
+Correction of differents sizes and lines height  
+- Big update    
+  
 ### **0.6.3** (2021-06-29)  
   
 - Update powerhooks    
