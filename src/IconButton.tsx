@@ -18,6 +18,7 @@ export namespace IconButtonProps {
         className?: string;
         iconClassName?: string;
         iconId: IconId;
+        size?: IconProps["size"];
         /** Defaults to false */
         disabled?: boolean;
 
@@ -81,6 +82,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                 className,
                 iconClassName,
                 iconId,
+                size,
                 disabled = false,
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 children,
@@ -150,7 +152,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                     <Icon
                         iconId={iconId}
                         className={cx(classes.icon, iconClassName)}
-                        size="default"
+                        size={size}
                     />
                 </MuiIconButton>
             );
