@@ -1,3 +1,7 @@
+### **0.8.2** (2021-07-16)  
+  
+- Re-exports ViewPortAdapter relevent hooks from powerhooks    
+  
 ### **0.8.1** (2021-07-16)  
   
 - Update getViewPortConfig documentation    
