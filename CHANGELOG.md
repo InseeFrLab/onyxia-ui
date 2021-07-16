@@ -1,3 +1,7 @@
+### **0.8.3** (2021-07-16)  
+  
+- Fix typo in api    
+  
 ### **0.8.2** (2021-07-16)  
   
 - Re-exports ViewPortAdapter relevent hooks from powerhooks    
