@@ -50,7 +50,7 @@ export function createText<
                 () =>
                     cx(
                         css({
-                            ...theme.typography.variant[variantName].style,
+                            ...theme.typography.variants[variantName].style,
                             "color":
                                 theme.colors.useCases.typography[
                                     (() => {
@@ -76,7 +76,7 @@ export function createText<
 
             return createElement(
                 htmlComponent ??
-                    theme.typography.variant[variantName].htmlComponent,
+                    theme.typography.variants[variantName].htmlComponent,
                 {
                     className,
                     ref,

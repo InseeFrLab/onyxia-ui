@@ -73,7 +73,8 @@ export declare namespace TypographyDesc {
 
 export type ComputedTypography<CustomVariantName extends string> = {
     rootFontSizePx: number;
-    variant: {
+    fontFamily: string;
+    variants: {
         [VariantName in CustomVariantName | TypographyDesc.VariantNameBase]: {
             htmlComponent: TypographyDesc.HtmlComponent;
             style: TypographyDesc.Variant.Style;
@@ -411,12 +412,13 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
 
         const computedTypography: ComputedTypography<CustomVariantName> = {
             "rootFontSizePx": typographyDesc.rootFontSizePx,
-            "variant": {} as any,
+            "fontFamily": typographyDesc.fontFamily,
+            "variants": {} as any,
         };
 
         objectKeys(typographyDesc.variants).forEach(
             variantName =>
-                (computedTypography.variant[variantName] = {
+                (computedTypography.variants[variantName] = {
                     "style": getTypographyVariantStyle({ variantName }),
                     "htmlComponent":
                         typographyDesc.variants[variantName].htmlComponent,
