@@ -1,3 +1,7 @@
+## **0.8.0** (2021-07-16)  
+  
+- Appropriate exports    
+  
 ## **0.7.0** (2021-07-16)  
   
 - Massive update  
