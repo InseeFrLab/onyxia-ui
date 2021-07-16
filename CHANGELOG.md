@@ -1,3 +1,7 @@
+### **0.8.1** (2021-07-16)  
+  
+- Update getViewPortConfig documentation    
+  
 ## **0.8.0** (2021-07-16)  
   
 - Appropriate exports    
