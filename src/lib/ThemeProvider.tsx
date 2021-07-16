@@ -92,6 +92,9 @@ export const { Text } = createText({ "useTheme": useThemeBase });
 
 export type ThemeProviderProps = {
     children: ReactNode;
+    /** NOTE: Each time the callback's ref update the
+     * the callback will be invoked again, it's best
+     * a cont callback */
     getViewPortConfig?: ViewPortAdapterProps["getConfig"];
     splashScreen?: Omit<SplashScreenProps, "children">;
 };
