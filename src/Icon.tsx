@@ -15,6 +15,16 @@ import type { IconSizeName } from "./lib/icon";
  * size manually with css using one of the typography
  * fontSize of the root in px.
  *
+ * If you place it inside a <Text> element you can define it's size proportional
+ * to the font-height:
+ * {
+ *     "fontHeight": "inherit",
+ *     ...(()=>{
+ *         const factor = 1.3;
+ *         return { "width": `${factor}em`, "height": `${factor}em` }
+ *     })()
+ * }
+ *
  * Color:
  *
  * By default icons inherit the color.

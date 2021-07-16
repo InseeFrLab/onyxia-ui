@@ -18,6 +18,7 @@ import { Tooltip } from "./Tooltip";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import Visibility from "@material-ui/icons/Visibility";
 import Help from "@material-ui/icons/Help";
+import { useDomRect } from "powerhooks/useDomRect";
 
 export type TextFieldProps = {
     className?: string | null;
@@ -122,11 +123,15 @@ export const textFieldDefaultProps: PickOptionals<TextFieldProps> = {
     "InputProps_endAdornment": null,
 };
 
-const { useStyles } = makeStyles<{ error: boolean }>()((theme, { error }) => ({
+const { useStyles } = makeStyles<{
+    error: boolean;
+    rootHeight: number;
+}>()((theme, { error, rootHeight }) => ({
     "root": {
         "& .MuiFormHelperText-root": {
             "position": "absolute",
-            "bottom": "-25px",
+            "top": rootHeight,
+            "visibility": rootHeight === 0 ? "hidden" : undefined,
         },
         "& .MuiTypography-caption": {
             "whiteSpace": "nowrap",
@@ -169,9 +174,15 @@ const { useStyles } = makeStyles<{ error: boolean }>()((theme, { error }) => ({
         "color": theme.colors.useCases.typography.textDisabled,
     },
     "questionMark": {
-        "verticalAlign": "middle",
-        "color": theme.colors.useCases.typography.textDisabled,
-        "fontSize": `${theme.typography.rootFontSizePx * 1.25}px`,
+        "fontSize": "inherit",
+        ...(() => {
+            const factor = 1.5;
+
+            return {
+                "width": `${factor}em`,
+                "height": `${factor}em`,
+            };
+        })(),
     },
 }));
 
@@ -298,9 +309,14 @@ export const TextField = memo((props: TextFieldProps) => {
         ? !getIsValidValueResult.isValidValue
         : false;
 
+    const {
+        domRect: { height: rootHeight },
+        ref,
+    } = useDomRect();
+
     const { classes, cx } = useStyles({
-        ...completedProps,
         error,
+        rootHeight,
     });
 
     const [isPasswordShown, toggleIsPasswordShown] = useReducer(
@@ -372,6 +388,7 @@ export const TextField = memo((props: TextFieldProps) => {
 
     return (
         <MuiTextField
+            ref={ref}
             type={
                 type !== "password"
                     ? type
@@ -383,26 +400,24 @@ export const TextField = memo((props: TextFieldProps) => {
             value={value}
             error={error}
             helperText={
-                <>
-                    <Text className={classes.helperText} typo="caption">
-                        {isValidationEnabled &&
-                        !getIsValidValueResult.isValidValue
-                            ? getIsValidValueResult.message || helperText
-                            : helperText}
-                    </Text>
+                <Text
+                    className={classes.helperText}
+                    typo="caption"
+                    htmlComponent="span"
+                >
+                    {isValidationEnabled && !getIsValidValueResult.isValidValue
+                        ? getIsValidValueResult.message || helperText
+                        : helperText}
+                    &nbsp;
                     {questionMarkHelperText !== "" && (
-                        <>
-                            &nbsp;
-                            <Tooltip title={questionMarkHelperText}>
-                                <Icon
-                                    iconId="help"
-                                    size="default"
-                                    className={classes.questionMark}
-                                />
-                            </Tooltip>
-                        </>
+                        <Tooltip title={questionMarkHelperText}>
+                            <Icon
+                                iconId="help"
+                                className={classes.questionMark}
+                            />
+                        </Tooltip>
                     )}
-                </>
+                </Text>
             }
             InputProps={InputProps}
             onBlur={useConstCallback(() => {

@@ -30,8 +30,6 @@ import {
 } from "./typography";
 import { createMuiPaletteOptions } from "./color";
 import { shadows } from "./shadows";
-import { ViewPortTransformer } from "powerhooks/ViewPortTransformer";
-import type { ViewPortTransformerProps } from "powerhooks/ViewPortTransformer";
 import { createResponsive, breakpointsValues } from "./responsive";
 import type { Responsive } from "./responsive";
 import { createText } from "../Text";
@@ -43,7 +41,11 @@ import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";
 import type { SplashScreenProps } from "./SplashScreen";
-import { matchViewPortConfig } from "powerhooks/ViewPortTransformer";
+import {
+    ViewPortAdapter,
+    matchViewPortConfig,
+} from "powerhooks/ViewPortAdapter";
+import type { ViewPortAdapterProps } from "powerhooks/ViewPortAdapter";
 import { assert } from "tsafe/assert";
 import memoize from "memoizee";
 import { id } from "tsafe/id";
@@ -90,7 +92,7 @@ export const { Text } = createText({ "useTheme": useThemeBase });
 
 export type ThemeProviderProps = {
     children: ReactNode;
-    getViewPortConfig?: ViewPortTransformerProps["getConfig"];
+    getViewPortConfig?: ViewPortAdapterProps["getConfig"];
     splashScreen?: Omit<SplashScreenProps, "children">;
 };
 
@@ -269,9 +271,7 @@ export function createThemeProvider<
         function ThemeProvider(props: ThemeProviderProps) {
             const { splashScreen, getViewPortConfig } = props;
 
-            const getConfig = useCallback<
-                ViewPortTransformerProps["getConfig"]
-            >(
+            const getConfig = useCallback<ViewPortAdapterProps["getConfig"]>(
                 params => {
                     assert(getViewPortConfig !== undefined);
 
@@ -297,9 +297,9 @@ export function createThemeProvider<
             return getViewPortConfig === undefined ? (
                 children
             ) : (
-                <ViewPortTransformer getConfig={getConfig}>
+                <ViewPortAdapter getConfig={getConfig}>
                     {children}
-                </ViewPortTransformer>
+                </ViewPortAdapter>
             );
         }
 
