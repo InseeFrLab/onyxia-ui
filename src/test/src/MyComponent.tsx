@@ -7,7 +7,7 @@ import { Alert } from "onyxia-ui/Alert";
 //and to toggle it's state.
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@material-ui/core/Switch";
-import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui/lib";
+import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
 
 //See: https://github.com/garronej/tss-react
 const { useStyles } = makeStyles()(theme => ({
