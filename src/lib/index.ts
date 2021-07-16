@@ -23,7 +23,11 @@ export * from "./useIsDarkModeEnabled";
 export type { Breakpoint, Responsive, ChromeFontSize } from "./responsive";
 export { breakpointsValues, chromeFontSizesFactors } from "./responsive";
 
-export { useDomRect } from "powerhooks";
+export {
+    useDomRect,
+    useWindowInnerSize,
+    useBrowserFontSizeFactor,
+} from "powerhooks";
 
 export * from "../tools/getIsPortraitOrientation";
 export { useSplashScreen } from "./SplashScreen";
