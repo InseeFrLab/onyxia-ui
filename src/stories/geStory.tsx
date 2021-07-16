@@ -15,9 +15,6 @@ import { GlobalStyles } from "tss-react";
 import { objectKeys } from "tsafe/objectKeys";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 
-const breakPointRanges = ["0-sm", "sm-md", "md-lg", "lg-xl", "xl-∞"] as const;
-type BreakPointRange = typeof breakPointRanges[number];
-
 export function getStoryFactory<Props>(params: {
     sectionName: string;
     wrappedComponent: Record<string, (props: Props) => ReturnType<React.FC>>;
@@ -64,14 +61,12 @@ export function getStoryFactory<Props>(params: {
         Props & {
             darkMode: boolean;
             width: number;
-            //screenSize: BreakPointRange;
             chromeFontSize: ChromeFontSize;
             targetWindowInnerWidth: number;
         }
     > = ({
         darkMode,
         width,
-        //screenSize,
         targetWindowInnerWidth,
         chromeFontSize,
         ...props
@@ -90,19 +85,7 @@ export function getStoryFactory<Props>(params: {
                     chromeFontSizesFactors[chromeFontSize],
                 "targetWindowInnerWidth":
                     targetWindowInnerWidth || windowInnerWidth,
-                /*
-                "targetWindowInnerWidth": (()=>{
-                    switch(screenSize){
-                        case "0-sm": return breakpointsValues["sm"] / 2;
-                        case "sm-md": return (breakpointsValues["md"] + breakpointsValues["sm"]) / 2;
-                        case "md-lg": return (breakpointsValues["lg"] + breakpointsValues["md"])/2;
-                        case "lg-xl": return (breakpointsValues["xl"] + breakpointsValues["lg"])/2;
-                        case "xl-∞": return 3/2 * breakpointsValues["xl"];
-                    }
-                })(),
-                */
             }),
-            //[screenSize, chromeFontSize],
             [targetWindowInnerWidth, chromeFontSize],
         );
 
@@ -145,7 +128,6 @@ export function getStoryFactory<Props>(params: {
         out.args = {
             "darkMode": false,
             "width": 0,
-            //"screenSize": id<BreakPointRange>("md-lg"),
             "targetWindowInnerWidth": 0,
             "chromeFontSize": "Medium (Recommended)",
             ...props,
@@ -167,12 +149,6 @@ export function getStoryFactory<Props>(params: {
                         "step": 1,
                     },
                 },
-                /*
-                "screenSize": {
-                    "options": breakPointRanges,
-                    "control": { "type": "select" },
-                },
-                */
                 "targetWindowInnerWidth": {
                     "control": {
                         "type": "range",
