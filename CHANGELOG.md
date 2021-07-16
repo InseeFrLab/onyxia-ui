@@ -1,3 +1,8 @@
+### **0.8.5** (2021-07-16)  
+  
+- Bump version (changeolog ignore)  
+- Size for IconButton    
+  
 ### **0.8.3** (2021-07-16)  
   
 - Fix typo in api    
