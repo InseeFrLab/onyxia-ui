@@ -298,7 +298,7 @@ export function createThemeProvider<
             );
 
             return getViewPortConfig === undefined ? (
-                children
+                <div style={{ "height": "100%" }}>{children}</div>
             ) : (
                 <ViewPortAdapter getConfig={getConfig}>
                     {children}
