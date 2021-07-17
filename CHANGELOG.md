@@ -1,3 +1,7 @@
+### **0.8.6** (2021-07-17)  
+  
+- Add wrapper so that we can disable the view port adapter tensparently    
+  
 ### **0.8.5** (2021-07-16)  
   
 - Bump version (changeolog ignore)  
