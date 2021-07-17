@@ -1,3 +1,7 @@
+### **0.8.7** (2021-07-17)  
+  
+- Fix previous commit    
+  
 ### **0.8.6** (2021-07-17)  
   
 - Add wrapper so that we can disable the view port adapter tensparently    
