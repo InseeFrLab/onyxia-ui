@@ -6708,10 +6708,10 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-evt@2.0.0-beta.21:
-  version "2.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/evt/-/evt-2.0.0-beta.21.tgz#3be2592566c2a99f9a4bc2b7f5d05d960463407d"
-  integrity sha512-8mBIrjyzOowmHfWKjaHBm9BBCs3s2iDD0gusmbBZAXmD0XL1g7gQ+wYt8kaSWSq9EVT9liX4H8Mx54jdk1cbRw==
+evt@2.0.0-beta.22:
+  version "2.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/evt/-/evt-2.0.0-beta.22.tgz#d7376d63b5407cc71f57d8ea13382cb889f1144f"
+  integrity sha512-7+GE5f9W03/2+vfmGwqtw2vxzyhtpYyWgbifa7fbvtfYazMV6QRDhrr4WXBFIHS7hRZdBQAZXBL4L76n/RUafw==
   dependencies:
     minimal-polyfills "^2.2.1"
     run-exclusive "^2.2.14"
@@ -11679,12 +11679,12 @@ postcss@^8.1.0:
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
 
-powerhooks@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.6.0.tgz#8cf47a4408aa8534486eedf2cf8a4c2e00291616"
-  integrity sha512-7Q6/Ly0FNQl3jbRe3WZpqq8rAm6VJG9/ice9wvtxzpUlId47/jlXuP2jzR3ZA7nJJIutlk58WDLDhmt1KbDORA==
+powerhooks@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.6.1.tgz#13cf19a83bfee398e0dc4ea9e4b91bd2d5abe399"
+  integrity sha512-OD41ukr1obT9UskgzRuKPLNPLjhWZdphJO6u7FcZI17Ss4Nw3oHVeNj1chlaxyuV0CeUPjt92YrxOK8X6kQ2eQ==
   dependencies:
-    evt "2.0.0-beta.21"
+    evt "2.0.0-beta.22"
     memoizee "^0.4.15"
     resize-observer-polyfill "^1.5.1"
     tsafe "^0.4.1"
