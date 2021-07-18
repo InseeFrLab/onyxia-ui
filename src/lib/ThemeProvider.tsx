@@ -2,10 +2,6 @@
 import { useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
-import {
-    useIsDarkModeEnabled,
-    evtIsDarkModeEnabled,
-} from "./useIsDarkModeEnabled";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {
     ThemeProvider as MuiThemeProvider,
@@ -21,7 +17,12 @@ import type {
     ColorUseCasesBase,
     CreateColorUseCase,
 } from "./color";
-import { defaultPalette, createDefaultColorUseCases } from "./color";
+import {
+    defaultPalette,
+    createDefaultColorUseCases,
+    useIsDarkModeEnabled,
+    evtIsDarkModeEnabled,
+} from "./color";
 import type { ComputedTypography, GetTypographyDesc } from "./typography";
 import {
     defaultGetTypographyDesc,
@@ -43,12 +44,16 @@ import { createSplashScreen } from "./SplashScreen";
 import type { SplashScreenProps } from "./SplashScreen";
 import {
     ViewPortAdapter,
-    matchViewPortConfig,
+    ViewPortOutOfRangeError,
 } from "powerhooks/ViewPortAdapter";
 import type { ViewPortAdapterProps } from "powerhooks/ViewPortAdapter";
 import { assert } from "tsafe/assert";
 import memoize from "memoizee";
 import { id } from "tsafe/id";
+
+export { useDomRect } from "powerhooks/useDomRect";
+export { useWindowInnerSize, useBrowserFontSizeFactor };
+export { ViewPortOutOfRangeError };
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -278,15 +283,27 @@ export function createThemeProvider<
                 params => {
                     assert(getViewPortConfig !== undefined);
 
-                    const configOrChildren = getViewPortConfig(params);
+                    let config: ReturnType<typeof getViewPortConfig>;
 
-                    return !matchViewPortConfig(configOrChildren) ? (
-                        <ThemeProviderInner>
-                            {configOrChildren}
-                        </ThemeProviderInner>
-                    ) : (
-                        configOrChildren
-                    );
+                    try {
+                        config = getViewPortConfig(params);
+                    } catch (error) {
+                        if (!(error instanceof ViewPortOutOfRangeError)) {
+                            throw error;
+                        }
+
+                        const { fallbackNode } = error;
+
+                        throw new ViewPortOutOfRangeError(
+                            (
+                                <ThemeProviderInner>
+                                    {fallbackNode}
+                                </ThemeProviderInner>
+                            ),
+                        );
+                    }
+
+                    return config;
                 },
                 [getViewPortConfig],
             );

@@ -3,6 +3,8 @@ import type { TypographyOptions as MuiTypographyOptions } from "@material-ui/cor
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./responsive";
 import { objectKeys } from "tsafe/objectKeys";
+export type { ChromeFontSize } from "powerhooks/ViewPortAdapter";
+export { chromeFontSizesFactors } from "powerhooks/ViewPortAdapter";
 
 export type TypographyDesc<CustomVariantName extends string> = {
     fontFamily: string;

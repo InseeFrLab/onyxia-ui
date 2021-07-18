@@ -4,30 +4,39 @@ export type {
     CreateColorUseCase,
 } from "./color";
 
-export { defaultPalette, createDefaultColorUseCases } from "./color";
-
-export * from "../tools/changeColorOpacity";
-
-export type { Theme, ThemeProviderProps } from "./ThemeProvider";
-export { createThemeProvider } from "./ThemeProvider";
+export {
+    defaultPalette,
+    createDefaultColorUseCases,
+    changeColorOpacity,
+    useIsDarkModeEnabled,
+    getIsDarkModeEnabledOsDefault,
+    evtIsDarkModeEnabled,
+} from "./color";
 
 export type {
     TypographyDesc,
     ComputedTypography,
     GetTypographyDesc,
+    ChromeFontSize,
 } from "./typography";
-export { defaultGetTypographyDesc } from "./typography";
+export { defaultGetTypographyDesc, chromeFontSizesFactors } from "./typography";
 
-export * from "./useIsDarkModeEnabled";
+export type { Breakpoint, Responsive } from "./responsive";
+export { breakpointsValues, getIsPortraitOrientation } from "./responsive";
 
-export type { Breakpoint, Responsive, ChromeFontSize } from "./responsive";
-export { breakpointsValues, chromeFontSizesFactors } from "./responsive";
+export type { SpacingConfig } from "./spacing";
+export { defaultSpacingConfig } from "./spacing";
 
+export type { IconSizeName, GetIconSizeInPx } from "./icon";
+export { defaultGetIconSizeInPx } from "./icon";
+
+export { useSplashScreen } from "./SplashScreen";
+
+export type { Theme, ThemeProviderProps } from "./ThemeProvider";
 export {
+    createThemeProvider,
     useDomRect,
     useWindowInnerSize,
     useBrowserFontSizeFactor,
-} from "powerhooks";
-
-export * from "../tools/getIsPortraitOrientation";
-export { useSplashScreen } from "./SplashScreen";
+    ViewPortOutOfRangeError,
+} from "./ThemeProvider";
