@@ -9,6 +9,7 @@ import { createMakeStyles, keyframes, css } from "tss-react";
 import type { Theme } from "./ThemeProvider";
 
 let fadeOutDuration = 700;
+let minimumDisplayDuration = 1000;
 
 const { useSplashScreen, useSplashScreenStatus } = (() => {
     const { evtDisplayState } = createUseGlobalState(
@@ -48,7 +49,9 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
             );
 
             if (getDoUseDelay()) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve =>
+                    setTimeout(resolve, minimumDisplayDuration),
+                );
             }
 
             evtDisplayState.state = {
@@ -127,9 +130,14 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
         function useSplashScreen(params?: {
             onHidden?(): void;
             fadeOutDuration?: number;
+            minimumDisplayDuration?: number;
         }) {
             if (params?.fadeOutDuration !== undefined) {
                 fadeOutDuration = params.fadeOutDuration;
+            }
+
+            if (params?.minimumDisplayDuration !== undefined) {
+                minimumDisplayDuration = params.minimumDisplayDuration;
             }
 
             const { showSplashScreen, hideSplashScreen } =
@@ -183,7 +191,10 @@ export type SplashScreenProps = {
     Logo(props: { className?: string }): ReturnType<FC>;
     /** Default to focus main */
     fillColor?: string;
+    /** Default 700ms */
     fadeOutDuration?: number;
+    /** Default 1000 (1 second)*/
+    minimumDisplayDuration?: number;
     children: ReactNode;
 };
 
@@ -333,6 +344,10 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
 
             if (props?.fadeOutDuration !== undefined) {
                 fadeOutDuration = props.fadeOutDuration;
+            }
+
+            if (props?.minimumDisplayDuration !== undefined) {
+                minimumDisplayDuration = props.minimumDisplayDuration;
             }
 
             const {
