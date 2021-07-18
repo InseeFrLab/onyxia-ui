@@ -1,3 +1,7 @@
+### **0.9.2** (2021-07-18)  
+  
+- Do not nessesary force the splash screen to be display a minimum amount of time    
+  
 ### **0.9.1** (2021-07-18)  
   
 - Update deps    
