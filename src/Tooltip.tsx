@@ -9,7 +9,7 @@ export type TooltipProps = {
     enterDelay?: number;
 };
 
-const { useStyles } = makeStyles()(theme => ({
+const useStyles = makeStyles()(theme => ({
     "root": {
         "color": theme.colors.palette.light.light,
     },

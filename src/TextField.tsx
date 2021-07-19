@@ -123,7 +123,7 @@ export const textFieldDefaultProps: PickOptionals<TextFieldProps> = {
     "InputProps_endAdornment": null,
 };
 
-const { useStyles } = makeStyles<{
+const useStyles = makeStyles<{
     error: boolean;
     rootHeight: number;
 }>()((theme, { error, rootHeight }) => ({

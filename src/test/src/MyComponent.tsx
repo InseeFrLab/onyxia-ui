@@ -10,7 +10,7 @@ import Switch from "@material-ui/core/Switch";
 import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
 
 //See: https://github.com/garronej/tss-react
-const { useStyles } = makeStyles()(theme => ({
+const useStyles= makeStyles()(theme => ({
     "root": {
         "backgroundColor": theme.colors.useCases.surfaces.background,
         /*

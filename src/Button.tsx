@@ -63,7 +63,7 @@ export function createButton<IconId extends string = never>(params?: {
         "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>),
     };
 
-    const { useStyles } = makeStyles<{
+    const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
     }>()((theme, { variant, disabled }) => {

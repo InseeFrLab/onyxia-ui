@@ -20,7 +20,7 @@ export type DialogProps = {
     doNotShowNextTimeText?: string;
 };
 
-const { useStyles } = makeStyles()(theme => ({
+const useStyles = makeStyles()(theme => ({
     "root": {
         "padding": theme.spacing(3),
     },

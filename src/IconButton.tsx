@@ -55,7 +55,7 @@ export function createIconButton<IconId extends string = never>(params?: {
         "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>),
     };
 
-    const { useStyles } = makeStyles<{ disabled: boolean }>()(
+    const useStyles = makeStyles<{ disabled: boolean }>()(
         (theme, { disabled }) => ({
             "root": {
                 "padding": theme.spacing(1),

@@ -27,7 +27,7 @@ const { IconButton } = createIconButton(
     }),
 );
 
-const { useStyles } = makeStyles<Pick<AlertProps, "severity">>()(
+const useStyles = makeStyles<Pick<AlertProps, "severity">>()(
     (theme, { severity }) => ({
         "root": {
             "color": theme.colors.useCases.typography.textPrimary,

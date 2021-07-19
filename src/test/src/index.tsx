@@ -3,7 +3,7 @@ import { ThemeProvider } from "./theme";
 import { MyComponent } from "./MyComponent";
 import { ReactComponent as CompanyLogo } from "./assets/company-logo.svg";
 import { Text } from "./theme";
-import { getIsPortraitOrientation } from "onyxia-ui";
+import { getIsPortraitOrientation, ViewPortOutOfRangeError } from "onyxia-ui";
 import type { ThemeProviderProps } from "onyxia-ui";
 
 const splashScreen: ThemeProviderProps["splashScreen"] = {
@@ -12,13 +12,15 @@ const splashScreen: ThemeProviderProps["splashScreen"] = {
 };
 
 const getViewPortConfig: ThemeProviderProps["getViewPortConfig"] =
-    ({ windowInnerWidth, windowInnerHeight, browserFontSizeFactor }) =>
-        getIsPortraitOrientation({ windowInnerWidth, windowInnerHeight }) ?
-            <Text typo="my hero">Rotate your screen</Text> :
-            {
-                "targetWindowInnerWidth": 1920,
-                "targetBrowserFontSizeFactor": browserFontSizeFactor
-            };
+    ({ windowInnerWidth, windowInnerHeight, browserFontSizeFactor }) => {
+        if (getIsPortraitOrientation({ windowInnerWidth, windowInnerHeight })) {
+            throw new ViewPortOutOfRangeError(<Text typo="my hero">Rotate your screen</Text>);
+        }
+        return {
+            "targetWindowInnerWidth": 1920,
+            "targetBrowserFontSizeFactor": browserFontSizeFactor
+        };
+    };
 
 render(
 

@@ -8,7 +8,7 @@ export type PaperProps = {
     className?: string;
 };
 
-const { useStyles } = makeStyles<Pick<Required<PaperProps>, "elevation">>()(
+const useStyles = makeStyles<Pick<Required<PaperProps>, "elevation">>()(
     (theme, { elevation }) => ({
         "root": {
             "backgroundColor": theme.colors.useCases.surfaces.surface1,

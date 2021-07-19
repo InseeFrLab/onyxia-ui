@@ -210,7 +210,7 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
                 "Logo" | "fillColor"
             > & { className?: string };
 
-            const { useStyles } = makeStyles<{
+            const useStyles = makeStyles<{
                 isVisible: boolean;
                 isFadingOut: boolean;
                 isTransparencyEnabled: boolean;

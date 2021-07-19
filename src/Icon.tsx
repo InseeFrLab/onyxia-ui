@@ -59,20 +59,18 @@ export function createIcon<IconId extends string>(
         readonly [iconId in IconId]: MuiIconLike | SvgComponentLike;
     },
 ) {
-    const { useStyles } = makeStyles<{ width: number }>()(
-        (...[, { width }]) => ({
-            "root": {
-                "color": "inherit",
-                // https://stackoverflow.com/a/24626986/3731798
-                //"verticalAlign": "top",
-                //"display": "inline-block"
-                "verticalAlign": "top",
-                "fontSize": width,
-                "width": "1em",
-                "height": "1em",
-            },
-        }),
-    );
+    const useStyles = makeStyles<{ width: number }>()((...[, { width }]) => ({
+        "root": {
+            "color": "inherit",
+            // https://stackoverflow.com/a/24626986/3731798
+            //"verticalAlign": "top",
+            //"display": "inline-block"
+            "verticalAlign": "top",
+            "fontSize": width,
+            "width": "1em",
+            "height": "1em",
+        },
+    }));
 
     const Icon = memo(
         forwardRef<SVGSVGElement, IconProps<IconId>>((props, ref) => {
