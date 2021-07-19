@@ -79,6 +79,12 @@ const themeBaseContext = createContext<Theme | undefined>(undefined);
 
 /** Used internally, do not export globally */
 
+export function useIsThemeProvided(): boolean {
+    const theme = useContext(themeBaseContext);
+
+    return theme !== undefined;
+}
+
 export function useThemeBase() {
     const theme = useContext(themeBaseContext);
 
