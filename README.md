@@ -54,7 +54,7 @@ UI built with this toolkit.
 # Quick start
 
 ```bash
-yarn add onyxia-ui tss-react @material-ui/core@^4.11.4
+yarn add onyxia-ui tss-react @material-ui/core@^4.12.1
 
 # If you plan on using icons from: https://material-ui.com/components/material-icons/
 yarn add @material-ui/icons@^4.11.2

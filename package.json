@@ -50,7 +50,7 @@
     "keywords": [],
     "homepage": "https://ui.onyxia.dev",
     "peerDependencies": {
-        "@material-ui/core": "^4.11.4",
+        "@material-ui/core": "^4.12.1",
         "react": "*"
     },
     "optionalDependencies": {
@@ -68,7 +68,7 @@
         "tsafe": "^0.4.1"
     },
     "devDependencies": {
-        "@material-ui/core": "^4.11.4",
+        "@material-ui/core": "^4.12.1",
         "@material-ui/lab": "^4.0.0-alpha.58",
         "@storybook/addon-actions": "^6.2.9",
         "@storybook/addon-essentials": "^6.2.9",
