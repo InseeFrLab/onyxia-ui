@@ -1,3 +1,7 @@
+### **0.9.4** (2021-07-19)  
+  
+- Add a way to detect if the theme has been provided    
+  
 ### **0.9.3** (2021-07-19)  
   
 - Update tss-react    
