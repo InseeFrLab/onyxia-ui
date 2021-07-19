@@ -1,3 +1,7 @@
+### **0.9.6** (2021-07-19)  
+  
+- Update deps    
+  
 ### **0.9.4** (2021-07-19)  
   
 - Add a way to detect if the theme has been provided    
