@@ -1,3 +1,7 @@
+### **0.9.3** (2021-07-19)  
+  
+- Update tss-react    
+  
 ### **0.9.2** (2021-07-18)  
   
 - Do not nessesary force the splash screen to be display a minimum amount of time    
