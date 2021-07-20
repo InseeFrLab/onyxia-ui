@@ -254,7 +254,7 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1.475,
+                        "fontSizeRem": 0.875,
                         "lineHeightRem": 1.28,
                     };
                 }
