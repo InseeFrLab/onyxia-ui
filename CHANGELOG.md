@@ -1,3 +1,7 @@
+### **0.9.7** (2021-07-20)  
+  
+- Many improvements and bugfixes on the SplashScreen    
+  
 ### **0.9.6** (2021-07-19)  
   
 - Update deps    
