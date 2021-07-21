@@ -11,6 +11,7 @@ import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
 import { useDomRect } from "powerhooks/useDomRect";
 import { breakpointsValues } from "./lib/responsive";
+import { useMergeRefs } from "./tools/useMergeRefs";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Clickable<IconId>
@@ -184,110 +185,119 @@ export function createButton<IconId extends string = never>(params?: {
     });
 
     const Button = memo(
-        forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
-            const {
-                className,
-                variant = "primary",
-                disabled = false,
-                children,
-                startIcon,
-                endIcon,
-                autoFocus = false,
-                tabIndex,
-                name,
-                htmlId,
-                "aria-label": ariaLabel,
-                //For the forwarding, rest should be empty (typewise)
-                ...rest
-            } = props;
+        forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps<IconId>>(
+            (props, forwardedRef) => {
+                const {
+                    className,
+                    variant = "primary",
+                    disabled = false,
+                    children,
+                    startIcon,
+                    endIcon,
+                    autoFocus = false,
+                    tabIndex,
+                    name,
+                    htmlId,
+                    "aria-label": ariaLabel,
+                    //For the forwarding, rest should be empty (typewise)
+                    ...rest
+                } = props;
 
-            const {
-                domRect: { height },
-            } = useDomRect({ ref });
+                const {
+                    ref: internalRef,
+                    domRect: { height },
+                } = useDomRect();
 
-            const { classes, cx } = useStyles({ variant, disabled, height });
+                const ref = useMergeRefs([internalRef, forwardedRef]);
 
-            const IconWd = useGuaranteedMemo(
-                () => (props: { iconId: IconId }) =>
-                    (
-                        <Icon
-                            iconId={props.iconId}
-                            className={classes.icon}
-                            size="default"
-                        />
-                    ),
-                [disabled, classes.icon],
-            );
+                const { classes, cx } = useStyles({
+                    variant,
+                    disabled,
+                    height,
+                });
 
-            return (
-                <MuiButton
-                    ref={ref}
-                    className={cx(classes.root, className)}
-                    //There is an error in @material-ui/core types, this should be correct.
-                    disabled={disabled}
-                    startIcon={
-                        startIcon === undefined ? undefined : (
-                            <IconWd iconId={startIcon} />
-                        )
-                    }
-                    endIcon={
-                        endIcon === undefined ? undefined : (
-                            <IconWd iconId={endIcon} />
-                        )
-                    }
-                    autoFocus={autoFocus}
-                    tabIndex={tabIndex}
-                    name={name}
-                    id={htmlId}
-                    aria-label={ariaLabel}
-                    {...(() => {
-                        if ("onClick" in rest) {
-                            const { onClick, href, ...restRest } = rest;
+                const IconWd = useGuaranteedMemo(
+                    () => (props: { iconId: IconId }) =>
+                        (
+                            <Icon
+                                iconId={props.iconId}
+                                className={classes.icon}
+                                size="default"
+                            />
+                        ),
+                    [disabled, classes.icon],
+                );
 
-                            //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
-
-                            return { onClick, href, ...restRest };
+                return (
+                    <MuiButton
+                        ref={ref}
+                        className={cx(classes.root, className)}
+                        //There is an error in @material-ui/core types, this should be correct.
+                        disabled={disabled}
+                        startIcon={
+                            startIcon === undefined ? undefined : (
+                                <IconWd iconId={startIcon} />
+                            )
                         }
-
-                        if ("href" in rest) {
-                            const {
-                                href,
-                                doOpenNewTabIfHref = true,
-                                ...restRest
-                            } = rest;
-
-                            //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
-
-                            return {
-                                href,
-                                "target": doOpenNewTabIfHref
-                                    ? "_blank"
-                                    : undefined,
-                                ...restRest,
-                            };
+                        endIcon={
+                            endIcon === undefined ? undefined : (
+                                <IconWd iconId={endIcon} />
+                            )
                         }
+                        autoFocus={autoFocus}
+                        tabIndex={tabIndex}
+                        name={name}
+                        id={htmlId}
+                        aria-label={ariaLabel}
+                        {...(() => {
+                            if ("onClick" in rest) {
+                                const { onClick, href, ...restRest } = rest;
 
-                        if ("type" in rest) {
-                            const { type, ...restRest } = rest;
+                                //For the forwarding, rest should be empty (typewise),
+                                doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
-                            //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                                return { onClick, href, ...restRest };
+                            }
 
-                            return {
-                                type,
-                                ...restRest,
-                            };
-                        }
-                    })()}
-                >
-                    {typeof children === "string"
-                        ? capitalize(children)
-                        : children}
-                </MuiButton>
-            );
-        }),
+                            if ("href" in rest) {
+                                const {
+                                    href,
+                                    doOpenNewTabIfHref = true,
+                                    ...restRest
+                                } = rest;
+
+                                //For the forwarding, rest should be empty (typewise),
+                                doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                                return {
+                                    href,
+                                    "target": doOpenNewTabIfHref
+                                        ? "_blank"
+                                        : undefined,
+                                    ...restRest,
+                                };
+                            }
+
+                            if ("type" in rest) {
+                                const { type, ...restRest } = rest;
+
+                                //For the forwarding, rest should be empty (typewise),
+                                doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                                return {
+                                    type,
+                                    ...restRest,
+                                };
+                            }
+                        })()}
+                    >
+                        {typeof children === "string"
+                            ? capitalize(children)
+                            : children}
+                    </MuiButton>
+                );
+            },
+        ),
     );
 
     return { Button };
