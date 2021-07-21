@@ -9,6 +9,8 @@ import MuiButton from "@material-ui/core/Button";
 import { capitalize } from "tsafe/capitalize";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
+import { useDomRect } from "powerhooks/useDomRect";
+import { breakpointsValues } from "./lib/responsive";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Clickable<IconId>
@@ -66,7 +68,8 @@ export function createButton<IconId extends string = never>(params?: {
     const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-    }>()((theme, { variant, disabled }) => {
+        height: number;
+    }>()((theme, { variant, disabled, height }) => {
         const textColor =
             theme.colors.useCases.typography[
                 disabled
@@ -130,8 +133,10 @@ export function createButton<IconId extends string = never>(params?: {
                                           .background;
                               }
                           })(),
-                    //"height": 36,
-                    "borderRadius": 20,
+                    "borderRadius":
+                        height === 0
+                            ? theme.typography.rootFontSizePx
+                            : height / 2,
                     "borderWidth": (() => {
                         switch (variant) {
                             case "primary":
@@ -145,7 +150,19 @@ export function createButton<IconId extends string = never>(params?: {
                     "borderColor": disabled
                         ? "transparent"
                         : hoverBackgroundColor,
-                    "padding": theme.spacing(1, 2),
+                    "padding": theme.spacing(
+                        2,
+                        (() => {
+                            if (
+                                theme.responsive.windowInnerWidth >=
+                                breakpointsValues.xl
+                            ) {
+                                return 3;
+                            }
+
+                            return 4;
+                        })(),
+                    ),
                     "&.MuiButton-text": {
                         "color": textColor,
                     },
@@ -184,7 +201,11 @@ export function createButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
-            const { classes, cx } = useStyles({ variant, disabled });
+            const {
+                domRect: { height },
+            } = useDomRect({ ref });
+
+            const { classes, cx } = useStyles({ variant, disabled, height });
 
             const IconWd = useGuaranteedMemo(
                 () => (props: { iconId: IconId }) =>

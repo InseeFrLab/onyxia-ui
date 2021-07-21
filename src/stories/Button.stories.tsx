@@ -23,7 +23,7 @@ export const VueNoIcon = getStory({
 
 export const VueWithStartIcon = getStory({
     "children": "Foo bar",
-    "startIcon": "home",
+    "startIcon": "help",
     "variant": "primary",
     ...logCallbacks(["onClick"]),
 });

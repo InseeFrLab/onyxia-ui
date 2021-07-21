@@ -22,13 +22,13 @@ export type DialogProps = {
 
 const useStyles = makeStyles()(theme => ({
     "root": {
-        "padding": theme.spacing(3),
+        "padding": theme.spacing(4),
     },
     "buttonWrapper": {
         "display": "flex",
-        "marginTop": theme.spacing(3),
+        "marginTop": theme.spacing(4),
         "& .MuiButton-root": {
-            "marginLeft": theme.spacing(1),
+            "marginLeft": theme.spacing(2),
         },
     },
     "checkBoxWrapper": {
@@ -41,10 +41,10 @@ const useStyles = makeStyles()(theme => ({
         "maxWidth": 573,
     },
     "subtitle": {
-        "marginTop": theme.spacing(2),
+        "marginTop": theme.spacing(3),
     },
     "body": {
-        "marginTop": theme.spacing(1),
+        "marginTop": theme.spacing(2),
         "color": theme.colors.useCases.typography.textSecondary,
     },
 }));

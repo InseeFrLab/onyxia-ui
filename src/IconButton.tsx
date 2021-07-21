@@ -58,7 +58,7 @@ export function createIconButton<IconId extends string = never>(params?: {
     const useStyles = makeStyles<{ disabled: boolean }>()(
         (theme, { disabled }) => ({
             "root": {
-                "padding": theme.spacing(1),
+                "padding": theme.spacing(2),
                 "&:hover": {
                     "backgroundColor": "unset",
                     "& svg": {
