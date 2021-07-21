@@ -1,3 +1,9 @@
+### **0.9.9** (2021-07-21)  
+  
+- Fix button border  
+- Adjustments with Marc  
+- Fix default typography    
+  
 ### **0.9.7** (2021-07-20)  
   
 - Many improvements and bugfixes on the SplashScreen    
