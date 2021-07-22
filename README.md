@@ -55,8 +55,6 @@ UI built with this toolkit.
     <img src="https://user-images.githubusercontent.com/6702424/126614698-183e797f-a1e3-4e03-98c3-82d4b1c09bc3.gif">
 </p>
 
-## [onyxia.dev](https://onyxia.dev)
-
 ## [sspcloud.fr](https://sspcloud.fr)
 
 # Quick start
