@@ -29,7 +29,7 @@ Also we find problematic how hard it is to build an app that won't break on any 
 In consequence, we wanted to create a ui toolkit that would be compatible with
 `material-ui`'s large library of components but that would also improves it in the following ways:
 
--   Optimized for typescript.
+-   Optimized for typescript, theme customization without module augmentation.
 -   Responsive design **way** more easy to implement.
 -   Built in support for the dark mode, persistent across reload, without white flashes.
 -   Easier, more guided, theme customization.
@@ -47,6 +47,14 @@ UI built with this toolkit.
 ![screen_main_services](https://user-images.githubusercontent.com/6702424/121828700-a93bfc80-ccc0-11eb-8149-f6c85c06cffd.png)
 ![my_secrets](https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png)
 
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/6702424/126612946-c9e0a0ce-3390-4d83-87e1-cdcb6ba623a5.gif">
+</p>
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/6702424/126614698-183e797f-a1e3-4e03-98c3-82d4b1c09bc3.gif">
+</p>
+
 ## [onyxia.dev](https://onyxia.dev)
 
 ## [sspcloud.fr](https://sspcloud.fr)
@@ -62,4 +70,16 @@ yarn add @material-ui/icons@^4.11.2
 # Only necessary for onyxia-ui/Alert and if you want
 # to use components from https://material-ui.com/components/material-icons/
 yarn add @material-ui/lab@^4.0.0-alpha.58
+```
+
+At this stage, the documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  
+The actual theme configuration [happens here](https://github.com/garronej/onyxia-ui/blob/main/src/test/src/theme.ts).  
+If you want to experiment with it you can run the demo app with:
+
+```bash
+git clone https://github.com/garronej/onyxia-ui
+cd onyxia-ui
+yarn
+yarn build
+yarn start
 ```
