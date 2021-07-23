@@ -1,3 +1,8 @@
+### **0.9.10** (2021-07-23)  
+  
+- Add PageHeader and SearchBar  
+- Update    
+  
 ### **0.9.9** (2021-07-21)  
   
 - Fix button border  
