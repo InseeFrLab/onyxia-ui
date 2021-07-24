@@ -21,6 +21,7 @@ export type SearchBarProps = {
     className?: string;
     search: string;
     onSearchChange(search: string): void;
+    onKeyPress?(key: "Enter" | "Escape"): void;
     evtAction?: NonPostableEvt<"CLEAR SEARCH">;
     /** Default "Search" */
     placeholder?: string;
@@ -78,6 +79,7 @@ export const SearchBar = memo((props: SearchBarProps) => {
     const {
         className,
         onSearchChange,
+        onKeyPress,
         search,
         placeholder = "Search",
         evtAction,
@@ -121,6 +123,8 @@ export const SearchBar = memo((props: SearchBarProps) => {
         if (key === "irrelevant") {
             return;
         }
+
+        onKeyPress?.(key);
 
         switch (key) {
             case "Enter":
