@@ -1,3 +1,7 @@
+### **0.9.11** (2021-07-24)  
+  
+- keyPress callback SearchBar    
+  
 ### **0.9.10** (2021-07-23)  
   
 - Add PageHeader and SearchBar  
