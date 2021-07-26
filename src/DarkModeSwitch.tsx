@@ -5,20 +5,10 @@ import { useIsDarkModeEnabled } from "./lib/index";
 import DarkModeIcon from "@material-ui/icons/Brightness4";
 import LightModeIcon from "@material-ui/icons/Brightness7";
 import { motion } from "framer-motion";
+import type { Transition } from "framer-motion";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
-import { makeStyles } from "./lib/ThemeProvider";
-
-const useStyles = makeStyles()({
-    "root": {
-        "display": "flex",
-        "width": 50,
-        "height": 50,
-        "alignItems": "center",
-        "justifyContent": "center",
-        "padding": 0,
-    },
-});
+import type { IconProps } from "./Icon";
 
 const { Icon } = createIcon({
     "darkModeIcon": DarkModeIcon,
@@ -29,10 +19,14 @@ const { IconButton } = createIconButton({ Icon });
 
 export type DarkModeSwitchProps = {
     className?: string;
+    /** Default: default */
+    size?: IconProps["size"];
 };
 
+const transition: Transition = { "duration": 0.5 };
+
 export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
-    const { className } = props;
+    const { className, size } = props;
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
     const { motionProps, setMotionProps } = useNamedState("motionProps", {
         "rotate": 0,
@@ -41,19 +35,19 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
     const onClick = useConstCallback(() => {
         setIsDarkModeEnabled(!isDarkModeEnabled);
         setMotionProps({
-            "rotate": motionProps.rotate === 0 ? 360 : 0,
+            "rotate": motionProps.rotate === 0 ? 180 : 0,
         });
     });
 
-    const { classes, cx } = useStyles();
-
     return (
         <motion.div
-            className={cx(classes.root, className)}
+            className={className}
             animate={motionProps}
+            transition={transition}
         >
             <IconButton
                 onClick={onClick}
+                size={size}
                 iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
             />
         </motion.div>
