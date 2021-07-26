@@ -1,3 +1,8 @@
+### **0.9.13** (2021-07-26)  
+  
+- Fix lint  
+- Fix DarkModeSwitch    
+  
 ### **0.9.11** (2021-07-24)  
   
 - keyPress callback SearchBar    
