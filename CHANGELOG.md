@@ -1,3 +1,10 @@
+### **0.9.12** (2021-07-26)  
+  
+- Fix DarkModeSwitch  
+- Merge pull request #5 from garronej/DarkModeSwitch-proposition  
+- DarkModeSwitch implementation  
+- added framer-motion as dependency for rotation animation    
+  
 ### **0.9.11** (2021-07-24)  
   
 - keyPress callback SearchBar    
