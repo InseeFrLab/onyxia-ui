@@ -16,9 +16,6 @@
 <p align="center">
   <a href="https://ui.onyxia.dev">Documentation</a>
 </p>
-
-`onyxia-ui` is a ui toolkit for React build on top of [`material-ui`](https://material-ui.com).
-
 Default design system carefully crafted by [Marc Hufschmitt](http://marchufschmitt.fr/)
 
 This project is under active development. It's APIs are susceptible to change until v1.
