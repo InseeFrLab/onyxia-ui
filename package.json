@@ -65,8 +65,7 @@
         "memoizee": "^0.4.15",
         "powerhooks": "^0.6.2",
         "ts-toolbelt": "^9.6.0",
-        "tsafe": "^0.4.1",
-        "framer-motion": "^4.1.17"
+        "tsafe": "^0.4.1"
     },
     "devDependencies": {
         "@material-ui/core": "^4.12.1",
