@@ -1,14 +1,20 @@
 import { memo } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { useNamedState } from "powerhooks";
 import { useIsDarkModeEnabled } from "./lib/index";
 import DarkModeIcon from "@material-ui/icons/Brightness4";
 import LightModeIcon from "@material-ui/icons/Brightness7";
-import { motion } from "framer-motion";
-import type { Transition } from "framer-motion";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
+import { makeStyles } from "./lib/ThemeProvider";
+
+const useStyles = makeStyles()(theme => ({
+    "root": {
+        "transition": "transform 500ms",
+        "transform": `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,
+        "transitionTimingFunction": "cubic-bezier(.34,1.27,1,1)",
+    },
+}));
 
 const { Icon } = createIcon({
     "darkModeIcon": DarkModeIcon,
@@ -23,33 +29,22 @@ export type DarkModeSwitchProps = {
     size?: IconProps["size"];
 };
 
-const transition: Transition = { "duration": 0.5 };
-
 export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
     const { className, size } = props;
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
-    const { motionProps, setMotionProps } = useNamedState("motionProps", {
-        "rotate": 0,
-    });
 
     const onClick = useConstCallback(() => {
         setIsDarkModeEnabled(!isDarkModeEnabled);
-        setMotionProps({
-            "rotate": motionProps.rotate === 0 ? 180 : 0,
-        });
     });
 
+    const { classes, cx } = useStyles();
+
     return (
-        <motion.div
-            className={className}
-            animate={motionProps}
-            transition={transition}
-        >
-            <IconButton
-                onClick={onClick}
-                size={size}
-                iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
-            />
-        </motion.div>
+        <IconButton
+            className={cx(classes.root, className)}
+            onClick={onClick}
+            size={size}
+            iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
+        />
     );
 });
