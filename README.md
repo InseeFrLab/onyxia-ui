@@ -21,6 +21,8 @@
 
 Default design system carefully crafted by [Marc Hufschmitt](http://marchufschmitt.fr/)
 
+This project is under active development. It's APIs are susceptible to change until v1.
+
 # Motivation
 
 [Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
