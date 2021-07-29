@@ -18,7 +18,8 @@
         "format:check": "npm run _format -- --list-different",
         "storybook": "start-storybook -p 6006 --static-dir ./.storybook/static",
         "link_test_projects_dependencies": "node dist/bin/link_test_projects_dependencies",
-        "start": "yarn link_test_projects_dependencies && cd src/test && yarn start"
+        "start": "yarn link_test_projects_dependencies && cd src/test && yarn start",
+        "link_inhouse_deps": "ts-node --skip-project src/bin/link_inhouse_deps.ts"
     },
     "lint-staged": {
         "*.{ts,tsx}": [
