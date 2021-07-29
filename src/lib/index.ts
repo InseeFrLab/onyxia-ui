@@ -41,4 +41,4 @@ export {
     ViewPortOutOfRangeError,
 } from "./ThemeProvider";
 
-import { pxToNumber } from "../tools/pxToNumber";
+export { pxToNumber } from "../tools/pxToNumber";
