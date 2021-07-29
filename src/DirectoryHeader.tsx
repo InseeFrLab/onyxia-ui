@@ -1,62 +1,65 @@
-import { makeStyles } from "app/theme";
+import type { ReactNode } from "react";
+import { makeStyles, Text } from "./lib/ThemeProvider";
+import { createIcon } from "./Icon";
+import { createIconButton } from "./IconButton";
 import { memo } from "react";
-import type { PickOptionals } from "tsafe";
-import { noUndefined } from "app/tools/noUndefined";
-import { FileOrDirectoryIcon } from "./FileOrDirectoryIcon";
-import { IconButton, Text } from "app/theme";
-import { useFormattedDate } from "app/i18n/useMoment";
-import { useWithProps } from "powerhooks/useWithProps";
+import type { ComponentType } from "./tools/ComponentType";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { pxToNumber } from "./tools/pxToNumber";
 
+/**
+ * Image:
+ *
+ * If it's an SVG component make sure it has no width and heigh
+ * property set on it.
+ * Setting the height css property on the component should define
+ * the width according to the image aspect ratio.
+ *
+ * If you pass an Avatar it has a defined width so you should
+ * unset it or the image will be distorted. (See story)
+ *
+ */
 export type Props = {
-    /** [HIGHER ORDER] What visual asset should be used to represent a file */
-    visualRepresentationOfAFile: "secret" | "file";
-
-    /** Tell if we are displaying an directory or a secret */
-    kind: "file" | "directory";
-
-    fileBasename: string;
-    date?: Date;
-    onBack(): void;
+    Image: ComponentType<{ className: string }>;
+    title: NonNullable<ReactNode>;
+    subtitle?: NonNullable<ReactNode>;
+    onGoBack(): void;
 };
 
-export const defaultProps: PickOptionals<Props> = {
-    "date": new Date(0),
-};
-
-const useStyles = makeStyles<{ isDateProvided: boolean }>()(
-    (theme, { isDateProvided }) => ({
-        "root": {
-            "display": "flex",
-            "alignItems": "center",
-            "gap": `0 ${theme.spacing(3)}px`,
-            "borderBottom": `1px solid ${theme.colors.useCases.typography.textTertiary}`,
-            "padding": theme.spacing(4, 0),
-        },
-        "basename": {
-            "marginBottom": isDateProvided ? theme.spacing(2) : undefined,
-        },
-        "date": {
-            "color": theme.colors.useCases.typography.textSecondary,
-            "textTransform": "capitalize",
-        },
+const { IconButton } = createIconButton(
+    createIcon({
+        "chevronLeft": ChevronLeftIcon,
     }),
 );
 
-export const ExplorerFileOrDirectoryHeader = memo((props: Props) => {
-    const completedProps = { ...defaultProps, ...noUndefined(props) };
+const useStyles = makeStyles()(theme => ({
+    "root": {
+        "display": "flex",
+        "alignItems": "center",
+        "borderBottom": `1px solid ${theme.colors.useCases.typography.textTertiary}`,
+    },
+    "image": {
+        "margin": theme.spacing(4, 3),
+        "marginLeft": theme.spacing(1),
+        "height":
+            pxToNumber(
+                theme.typography.variants["object heading"].style.lineHeight,
+            ) +
+            pxToNumber(theme.typography.variants["caption"].style.lineHeight) +
+            theme.spacing(2),
+        "display": "block",
+    },
+    "subtitle": {
+        "marginTop": theme.spacing(2),
+        "color": theme.colors.useCases.typography.textSecondary,
+        "textTransform": "capitalize",
+    },
+}));
 
-    const { visualRepresentationOfAFile, kind, fileBasename, date, onBack } =
-        completedProps;
+export const DirectoryHeader = memo((props: Props) => {
+    const { Image, title, subtitle, onGoBack } = props;
 
-    const Icon = useWithProps(FileOrDirectoryIcon, {
-        visualRepresentationOfAFile,
-    });
-
-    const formattedDate = useFormattedDate({ date });
-
-    const isDateProvided = date.getTime() !== 0;
-
-    const { classes } = useStyles({ isDateProvided });
+    const { classes } = useStyles();
 
     return (
         <div className={classes.root}>
@@ -64,19 +67,17 @@ export const ExplorerFileOrDirectoryHeader = memo((props: Props) => {
                 <IconButton
                     size="large"
                     iconId="chevronLeft"
-                    onClick={onBack}
+                    onClick={onGoBack}
                 />
             </div>
             <div>
-                <Icon kind={kind} standardizedWidth="big" />
+                <Image className={classes.image} />
             </div>
             <div>
-                <Text typo="object heading" className={classes.basename}>
-                    {fileBasename}
-                </Text>
-                {!isDateProvided ? null : (
-                    <Text typo="caption" className={classes.date}>
-                        {formattedDate}
+                <Text typo="object heading">{title}</Text>
+                {subtitle !== undefined && (
+                    <Text typo="caption" className={classes.subtitle}>
+                        {subtitle}
                     </Text>
                 )}
             </div>

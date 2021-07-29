@@ -1,7 +1,7 @@
 import { Tooltip } from "../Tooltip";
 import { Icon } from "./theme";
 import { sectionName } from "./sectionName";
-import { getStoryFactory } from "./geStory";
+import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,

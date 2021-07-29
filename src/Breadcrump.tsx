@@ -1,4 +1,4 @@
-import { makeStyles, Text, ThemeProviderProps } from "./lib/ThemeProvider";
+import { makeStyles, Text } from "./lib/ThemeProvider";
 import { useMemo, useState, useEffect, memo } from "react";
 import { basename as pathBasename, relative as pathRelative } from "path";
 import type { NonPostableEvt } from "evt";
@@ -8,7 +8,7 @@ import { Evt } from "evt";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { assert } from "tsafe/assert";
 
-export type Props = {
+export type BreadcrumpProps = {
     className?: string;
     path: string;
     /** Default: 0 */
@@ -22,7 +22,7 @@ export type Props = {
     }>;
 };
 
-export const Breadcrump = memo((props: Props) => {
+export const Breadcrump = memo((props: BreadcrumpProps) => {
     const {
         minDepth = 0,
         isNavigationDisabled = false,
@@ -164,6 +164,7 @@ const { Section } = (() => {
         Pick<Props, "isClickable" | "isFocused" | "isLast"> & { text: string }
     >()((theme, { isClickable, isFocused, isLast, text }) => ({
         "root": {
+            "cursor": "pointer",
             ...(!isClickable
                 ? {}
                 : {

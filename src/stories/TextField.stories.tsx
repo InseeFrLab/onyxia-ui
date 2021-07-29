@@ -1,6 +1,6 @@
 import { TextField, textFieldDefaultProps } from "../TextField";
 import { sectionName } from "./sectionName";
-import { getStoryFactory, logCallbacks } from "./geStory";
+import { getStoryFactory, logCallbacks } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,

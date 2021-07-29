@@ -1,6 +1,6 @@
 import { IconButton } from "./theme";
 import { sectionName } from "./sectionName";
-import { getStoryFactory, logCallbacks } from "./geStory";
+import { getStoryFactory, logCallbacks } from "./getStory";
 
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";

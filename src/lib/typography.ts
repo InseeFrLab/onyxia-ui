@@ -27,8 +27,8 @@ export declare namespace TypographyDesc {
         export type Style = {
             fontFamily: string;
             fontWeight: FontWeightProperty;
-            fontSize: string;
-            lineHeight: string;
+            fontSize: `${number}px`;
+            lineHeight: `${number}px`;
         };
     }
 

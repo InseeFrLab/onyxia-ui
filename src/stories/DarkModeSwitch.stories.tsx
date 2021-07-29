@@ -1,6 +1,6 @@
 import { DarkModeSwitch } from "../DarkModeSwitch";
 import { sectionName } from "./sectionName";
-import { getStoryFactory } from "./geStory";
+import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,

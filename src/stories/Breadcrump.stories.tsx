@@ -1,16 +1,16 @@
 import { css } from "tss-react";
 import { useReducer, useState } from "react";
 import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
-import { Breadcrump } from "app/components/shared/Explorer/Breadcrump";
-import type { Props } from "app/components/shared/Explorer/Breadcrump";
+import { Breadcrump } from "../Breadcrump";
+import type { BreadcrumpProps } from "../Breadcrump";
 import { sectionName } from "./sectionName";
-import { getStoryFactory, logCallbacks } from "stories/geStory";
-import { symToStr } from "app/tools/symToStr";
+import { getStoryFactory, logCallbacks } from "./getStory";
+import { symToStr } from "tsafe/symToStr";
 import type { UnpackEvt } from "evt";
 import { Evt } from "evt";
 
 function Component(
-    props: Omit<Props, "evtAction"> & {
+    props: Omit<BreadcrumpProps, "evtAction"> & {
         width: number;
         /** Toggle to fire a translation event */
         tick: boolean;
@@ -26,7 +26,7 @@ function Component(
     }, [tick]);
 
     const [evtAction] = useState(() =>
-        Evt.create<UnpackEvt<Props["evtAction"]>>(),
+        Evt.create<UnpackEvt<BreadcrumpProps["evtAction"]>>(),
     );
 
     useEffectOnValueChange(() => {
@@ -54,12 +54,7 @@ function Component(
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { [symToStr({ Breadcrump })]: Component },
-});
-
-export default {
-    ...meta,
     "argTypes": {
-        ...meta.argTypes,
         "width": {
             "control": {
                 "type": "range",
@@ -74,7 +69,9 @@ export default {
             },
         },
     },
-};
+});
+
+export default meta;
 
 export const Vue1 = getStory({
     "path": "aaa/bbb/cccc/dddd/",
@@ -85,7 +82,7 @@ export const Vue1 = getStory({
     ...logCallbacks(["callback"]),
 });
 
-export const VueRelativeMinDepthNot0 = getStory({
+export const VueMinDepthNot0 = getStory({
     "path": "aaa/bbb/cccc/dddd/",
     "isNavigationDisabled": false,
     "minDepth": 1,

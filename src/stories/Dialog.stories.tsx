@@ -2,7 +2,7 @@ import { Dialog } from "../Dialog";
 import { Button } from "./theme";
 import type { DialogProps } from "../Dialog";
 import { sectionName } from "./sectionName";
-import { getStoryFactory, logCallbacks } from "./geStory";
+import { getStoryFactory, logCallbacks } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
