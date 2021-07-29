@@ -11,7 +11,7 @@ import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
 import { useDomRect } from "powerhooks/useDomRect";
 import { breakpointsValues } from "./lib/responsive";
-import { useMergeRefs } from "./tools/useMergeRefs";
+import { useMergeRefs } from "powerhooks/useMergeRef";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Clickable<IconId>
