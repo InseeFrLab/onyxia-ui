@@ -40,3 +40,5 @@ export {
     useBrowserFontSizeFactor,
     ViewPortOutOfRangeError,
 } from "./ThemeProvider";
+
+import { pxToNumber } from "../tools/pxToNumber";
