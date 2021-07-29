@@ -1,7 +1,7 @@
 import { Text } from "./theme";
 import type { TypographyDesc } from "../lib/typography";
 import { sectionName } from "./sectionName";
-import { getStoryFactory } from "./geStory";
+import { getStoryFactory } from "./getStory";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
 

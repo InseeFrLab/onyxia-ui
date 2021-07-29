@@ -1,6 +1,6 @@
 import { useTheme } from "./theme";
 import { sectionName } from "./sectionName";
-import { getStoryFactory } from "./geStory";
+import { getStoryFactory } from "./getStory";
 
 function TestSpacing() {
     const theme = useTheme();

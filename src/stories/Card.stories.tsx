@@ -1,7 +1,7 @@
 import { Card } from "../Card";
 import { Text } from "./theme";
 import { sectionName } from "./sectionName";
-import { getStoryFactory } from "./geStory";
+import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
