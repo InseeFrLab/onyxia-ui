@@ -1,3 +1,9 @@
+### **0.9.15** (2021-07-30)  
+  
+- Update deps  
+- Uspport default width in sory  
+- Fix previous commit    
+  
 ### **0.9.14** (2021-07-30)  
   
 - Add CollapsibleSectionHeader  
