@@ -1,3 +1,26 @@
+### **0.9.14** (2021-07-30)  
+  
+- Add CollapsibleSectionHeader  
+- Fix build  
+- remove responsive, useless abstraction  
+- #7  
+- Fix previous commit  
+- Exprots pxToNumber  
+- Use useMergeRefs from powerhooks  
+- Merge pull request #8 from garronej/new_components
+
+New components  
+- Add DirectoryHeader and Breadcrump  
+- Merge remote-tracking branch 'origin/main' into new_components  
+- Merge pull request #6 from garronej/DarkModeSwitch-corrections
+
+Dark mode switch corrections  
+- Improve readme  
+- New components  
+- deleted framer-motion from dependency list  
+- DarkModeSwitch new version with css transition and that does not have the icon wrapped in a div that created bugs  
+- Delete Paper and add Card    
+  
 ### **0.9.13** (2021-07-26)  
   
 - Fix lint  
