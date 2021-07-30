@@ -1,34 +1,35 @@
 import { makeStyles, Text } from "./lib/ThemeProvider";
 import { useMemo, useState, useEffect, memo } from "react";
-import { basename as pathBasename, relative as pathRelative } from "path";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
-import { join as pathJoin } from "path";
 import { Evt } from "evt";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { assert } from "tsafe/assert";
 
 export type BreadcrumpProps = {
     className?: string;
-    path: string;
+    path: string[];
     /** Default: 0 */
     minDepth?: number;
     /** Default false */
     isNavigationDisabled?: boolean;
-    callback(params: { relativePath: string }): void;
+    onNavigate(params: { path: string[]; upCount: number }): void;
     evtAction?: NonPostableEvt<{
         action: "DISPLAY COPY FEEDBACK";
-        basename: string;
+        basename?: string;
     }>;
+    /** Default "/", can be for example ">" or "\\" */
+    separatorChar?: string;
 };
 
 export const Breadcrump = memo((props: BreadcrumpProps) => {
     const {
         minDepth = 0,
         isNavigationDisabled = false,
-        callback,
+        onNavigate,
         className,
         evtAction,
+        separatorChar = "/",
     } = props;
 
     const [path, setPath] = useState(props.path);
@@ -36,10 +37,10 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
     const [isFocused, setIsFocused] = useState(false);
 
     //TODO: Design custom hook for that
-    const [evtPropsPath] = useState(() => Evt.create<string>(props.path));
+    const [evtPropsPath] = useState(() => Evt.create<string[]>(props.path));
     useEffect(() => {
         evtPropsPath.state = props.path;
-    });
+    }, [JSON.stringify(props.path)]);
 
     useEvt(
         ctx =>
@@ -62,7 +63,10 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
         ctx =>
             evtDisplayFeedback?.attach(ctx, ({ basename }) => {
                 setIsFocused(true);
-                setPath(pathJoin(evtPropsPath.state, basename));
+                setPath([
+                    ...evtPropsPath.state,
+                    ...(basename ? [basename] : []),
+                ]);
 
                 const scopedCtx = Evt.newCtx();
 
@@ -90,25 +94,29 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
         [evtDisplayFeedback, evtPropsPath],
     );
 
-    const onClickFactory = useCallbackFactory<[string, boolean], []>(
+    const onClickFactory = useCallbackFactory<[string[], boolean], []>(
         ([partialPath, isClickable]) =>
             !isClickable
                 ? assert(false)
-                : callback({ "relativePath": pathRelative(path, partialPath) }),
+                : onNavigate({
+                      "path": partialPath,
+                      "upCount": path.length - partialPath.length,
+                  }),
     );
 
     const partialPaths = useMemo(
         () => getPartialPaths({ path, minDepth, isNavigationDisabled }),
-        [path, minDepth, isNavigationDisabled],
+        [JSON.stringify(path), minDepth, isNavigationDisabled],
     );
 
     return (
         <div className={className}>
             {partialPaths.map(({ isClickable, isLast, partialPath }) => (
                 <Section
-                    key={partialPath}
+                    key={JSON.stringify(partialPath)}
                     {...{ isClickable, isLast, partialPath, isFocused }}
                     onClick={onClickFactory(partialPath, isClickable)}
+                    separatorChar={separatorChar}
                 />
             ))}
         </div>
@@ -116,34 +124,18 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
 });
 
 function getPartialPaths(params: {
-    path: string;
+    path: string[];
     minDepth: number;
     isNavigationDisabled: boolean;
 }) {
     const { path, isNavigationDisabled } = params;
-    let { minDepth } = params;
+    const { minDepth } = params;
 
-    const split = (() => {
-        if (!/^[^./]/.test(path)) {
-            return path;
-        }
-
-        if (minDepth !== 0) {
-            minDepth--;
-
-            return path;
-        }
-
-        return `./${path}`;
-    })()
-        .replace(/\/$/, "")
-        .split("/");
-
-    return split.map((...[, i]) => {
-        const isLast = i === split.length - 1;
+    return path.map((...[, i]) => {
+        const isLast = i === path.length - 1;
 
         return {
-            "partialPath": [...split].splice(0, i + 1).join("/") || "/",
+            "partialPath": [...path].splice(0, i + 1),
             isLast,
             "isClickable": isNavigationDisabled
                 ? false
@@ -156,6 +148,7 @@ const { Section } = (() => {
     type Props = ReturnType<typeof getPartialPaths>[number] & {
         onClick: (() => void) | undefined;
         isFocused: boolean;
+        separatorChar: string;
     };
 
     const hoverFontWeight = 500;
@@ -164,10 +157,10 @@ const { Section } = (() => {
         Pick<Props, "isClickable" | "isFocused" | "isLast"> & { text: string }
     >()((theme, { isClickable, isFocused, isLast, text }) => ({
         "root": {
-            "cursor": "pointer",
             ...(!isClickable
                 ? {}
                 : {
+                      "cursor": "pointer",
                       "&:hover": {
                           "fontWeight": hoverFontWeight,
                           "color": theme.colors.useCases.typography.textPrimary,
@@ -204,10 +197,20 @@ const { Section } = (() => {
     }));
 
     function Section(props: Props) {
-        const { partialPath, isLast, onClick, isFocused, isClickable } = props;
+        const {
+            partialPath,
+            isLast,
+            onClick,
+            isFocused,
+            isClickable,
+            separatorChar,
+        } = props;
 
         const text = useMemo(
-            () => `${pathBasename(partialPath)}${isLast ? "" : " /"}`,
+            () =>
+                `${partialPath.slice(-1)[0]}${
+                    isLast ? "" : ` ${separatorChar}`
+                }`,
             [partialPath, isLast],
         );
 
