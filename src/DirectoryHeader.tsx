@@ -15,8 +15,7 @@ import { pxToNumber } from "./tools/pxToNumber";
  * Setting the height css property on the component should define
  * the width according to the image aspect ratio.
  *
- * If you pass an Avatar it has a defined width so you should
- * unset it or the image will be distorted. (See story)
+ * NOTE: The width is unset to adapt according the the width
  *
  */
 export type Props = {
@@ -48,6 +47,7 @@ const useStyles = makeStyles()(theme => ({
             pxToNumber(theme.typography.variants["caption"].style.lineHeight) +
             theme.spacing(2),
         "display": "block",
+        "width": "unset",
     },
     "subtitle": {
         "marginTop": theme.spacing(2),

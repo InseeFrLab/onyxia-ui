@@ -21,8 +21,14 @@ export function getStoryFactory<Props extends Record<string, unknown>>(params: {
     wrappedComponent: Record<string, ComponentType<Props>>;
     /** https://storybook.js.org/docs/react/essentials/controls */
     argTypes?: Partial<Record<keyof Props, ArgType>>;
+    defaultWidth?: number;
 }) {
-    const { sectionName, wrappedComponent, argTypes = {} } = params;
+    const {
+        sectionName,
+        wrappedComponent,
+        argTypes = {},
+        defaultWidth,
+    } = params;
 
     const Component: any = Object.entries(wrappedComponent).map(
         ([, component]) => component,
@@ -112,7 +118,7 @@ export function getStoryFactory<Props extends Record<string, unknown>>(params: {
                     <div
                         style={{
                             "width": width || undefined,
-                            "border": "1px dotted grey",
+                            "border": "1px dashed #e8e8e8",
                             "display": "inline-block",
                         }}
                     >
@@ -128,7 +134,7 @@ export function getStoryFactory<Props extends Record<string, unknown>>(params: {
 
         out.args = {
             "darkMode": false,
-            "width": 0,
+            "width": defaultWidth ?? 0,
             "targetWindowInnerWidth": 0,
             "chromeFontSize": "Medium (Recommended)",
             ...props,

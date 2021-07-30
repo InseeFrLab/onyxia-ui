@@ -5,6 +5,7 @@ import { getStoryFactory, logCallbacks } from "./getStory";
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { CollapsibleSectionHeader },
+    "defaultWidth": 600,
 });
 
 export default meta;

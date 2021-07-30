@@ -10,6 +10,7 @@ import Avatar from "@material-ui/core/Avatar";
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { DirectoryHeader },
+    "defaultWidth": 600,
 });
 
 export default meta;
@@ -42,20 +43,10 @@ export const VueWithoutSubtitle = getStory({
     ...logCallbacks(["onGoBack"]),
 });
 
-const Image = (props: { className: string }) => {
-    const { className } = props;
-
-    return (
-        <Avatar
-            className={cx(css({ "width": "unset" }), className)}
-            src={imgUrl}
-            alt=""
-        />
-    );
-};
-
 export const VueImg = getStory({
-    Image,
+    "Image": ({ className }) => (
+        <Avatar className={className} src={imgUrl} alt="" />
+    ),
     "title": "This is the title",
     "subtitle": "This is the subtitle",
     ...logCallbacks(["onGoBack"]),
