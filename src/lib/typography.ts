@@ -364,6 +364,8 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
     },
 });
 
+export const variantNameUsedForMuiButton = "label 1";
+
 export const { createMuiTypographyOptions, getComputedTypography } = (() => {
     type TypographyDescLike<CustomVariantName extends string> = {
         fontFamily: string;
@@ -464,7 +466,9 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
             "body1": getTypographyVariantStyle({ "variantName": "body 1" }),
             "body2": getTypographyVariantStyle({ "variantName": "body 2" }),
             "caption": getTypographyVariantStyle({ "variantName": "caption" }),
-            "button": getTypographyVariantStyle({ "variantName": "label 1" }),
+            "button": getTypographyVariantStyle({
+                "variantName": variantNameUsedForMuiButton,
+            }),
         };
     }
 

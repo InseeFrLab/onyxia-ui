@@ -30,6 +30,7 @@ const useStyles = makeStyles()(theme => ({
         "& .MuiButton-root": {
             "marginLeft": theme.spacing(2),
         },
+        "alignItems": "center",
     },
     "checkBoxWrapper": {
         "flex": 1,

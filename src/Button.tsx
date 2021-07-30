@@ -9,9 +9,9 @@ import MuiButton from "@material-ui/core/Button";
 import { capitalize } from "tsafe/capitalize";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
-import { useDomRect } from "powerhooks/useDomRect";
 import { breakpointsValues } from "./lib/responsive";
-import { useMergeRefs } from "powerhooks/useMergeRef";
+import { variantNameUsedForMuiButton } from "./lib/typography";
+import { pxToNumber } from "./tools/pxToNumber";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Clickable<IconId>
@@ -69,8 +69,7 @@ export function createButton<IconId extends string = never>(params?: {
     const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-        height: number;
-    }>()((theme, { variant, disabled, height }) => {
+    }>()((theme, { variant, disabled }) => {
         const textColor =
             theme.colors.useCases.typography[
                 disabled
@@ -120,6 +119,26 @@ export function createButton<IconId extends string = never>(params?: {
                         })()
                     ];
 
+                const paddingSpacingTopBottom = 2;
+
+                const borderWidth = (() => {
+                    switch (variant) {
+                        case "primary":
+                        case "secondary":
+                            return 2;
+                        case "ternary":
+                            return 0;
+                    }
+                })();
+
+                const approxHeight =
+                    2 * theme.spacing(paddingSpacingTopBottom) +
+                    2 * borderWidth +
+                    pxToNumber(
+                        theme.typography.variants[variantNameUsedForMuiButton]
+                            .style.lineHeight,
+                    );
+
                 return {
                     "textTransform": "unset" as const,
                     "backgroundColor": disabled
@@ -134,25 +153,14 @@ export function createButton<IconId extends string = never>(params?: {
                                           .background;
                               }
                           })(),
-                    "borderRadius":
-                        height === 0
-                            ? theme.typography.rootFontSizePx
-                            : height / 2,
-                    "borderWidth": (() => {
-                        switch (variant) {
-                            case "primary":
-                            case "secondary":
-                                return 2;
-                            case "ternary":
-                                return 0;
-                        }
-                    })(),
+                    "borderRadius": approxHeight / 2,
+                    borderWidth,
                     "borderStyle": "solid",
                     "borderColor": disabled
                         ? "transparent"
                         : hoverBackgroundColor,
                     "padding": theme.spacing(
-                        2,
+                        paddingSpacingTopBottom,
                         (() => {
                             if (
                                 theme.responsive.windowInnerWidth >=
@@ -185,119 +193,109 @@ export function createButton<IconId extends string = never>(params?: {
     });
 
     const Button = memo(
-        forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps<IconId>>(
-            (props, forwardedRef) => {
-                const {
-                    className,
-                    variant = "primary",
-                    disabled = false,
-                    children,
-                    startIcon,
-                    endIcon,
-                    autoFocus = false,
-                    tabIndex,
-                    name,
-                    htmlId,
-                    "aria-label": ariaLabel,
-                    //For the forwarding, rest should be empty (typewise)
-                    ...rest
-                } = props;
+        forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
+            const {
+                className,
+                variant = "primary",
+                disabled = false,
+                children,
+                startIcon,
+                endIcon,
+                autoFocus = false,
+                tabIndex,
+                name,
+                htmlId,
+                "aria-label": ariaLabel,
+                //For the forwarding, rest should be empty (typewise)
+                ...rest
+            } = props;
 
-                const {
-                    ref: internalRef,
-                    domRect: { height },
-                } = useDomRect();
+            const { classes, cx } = useStyles({
+                variant,
+                disabled,
+            });
 
-                const ref = useMergeRefs([internalRef, forwardedRef]);
+            const IconWd = useGuaranteedMemo(
+                () => (props: { iconId: IconId }) =>
+                    (
+                        <Icon
+                            iconId={props.iconId}
+                            className={classes.icon}
+                            size="default"
+                        />
+                    ),
+                [disabled, classes.icon],
+            );
 
-                const { classes, cx } = useStyles({
-                    variant,
-                    disabled,
-                    height,
-                });
+            return (
+                <MuiButton
+                    ref={ref}
+                    className={cx(classes.root, className)}
+                    //There is an error in @material-ui/core types, this should be correct.
+                    disabled={disabled}
+                    startIcon={
+                        startIcon === undefined ? undefined : (
+                            <IconWd iconId={startIcon} />
+                        )
+                    }
+                    endIcon={
+                        endIcon === undefined ? undefined : (
+                            <IconWd iconId={endIcon} />
+                        )
+                    }
+                    autoFocus={autoFocus}
+                    tabIndex={tabIndex}
+                    name={name}
+                    id={htmlId}
+                    aria-label={ariaLabel}
+                    {...(() => {
+                        if ("onClick" in rest) {
+                            const { onClick, href, ...restRest } = rest;
 
-                const IconWd = useGuaranteedMemo(
-                    () => (props: { iconId: IconId }) =>
-                        (
-                            <Icon
-                                iconId={props.iconId}
-                                className={classes.icon}
-                                size="default"
-                            />
-                        ),
-                    [disabled, classes.icon],
-                );
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
-                return (
-                    <MuiButton
-                        ref={ref}
-                        className={cx(classes.root, className)}
-                        //There is an error in @material-ui/core types, this should be correct.
-                        disabled={disabled}
-                        startIcon={
-                            startIcon === undefined ? undefined : (
-                                <IconWd iconId={startIcon} />
-                            )
+                            return { onClick, href, ...restRest };
                         }
-                        endIcon={
-                            endIcon === undefined ? undefined : (
-                                <IconWd iconId={endIcon} />
-                            )
+
+                        if ("href" in rest) {
+                            const {
+                                href,
+                                doOpenNewTabIfHref = true,
+                                ...restRest
+                            } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+
+                            return {
+                                href,
+                                "target": doOpenNewTabIfHref
+                                    ? "_blank"
+                                    : undefined,
+                                ...restRest,
+                            };
                         }
-                        autoFocus={autoFocus}
-                        tabIndex={tabIndex}
-                        name={name}
-                        id={htmlId}
-                        aria-label={ariaLabel}
-                        {...(() => {
-                            if ("onClick" in rest) {
-                                const { onClick, href, ...restRest } = rest;
 
-                                //For the forwarding, rest should be empty (typewise),
-                                doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                        if ("type" in rest) {
+                            const { type, ...restRest } = rest;
 
-                                return { onClick, href, ...restRest };
-                            }
+                            //For the forwarding, rest should be empty (typewise),
+                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
 
-                            if ("href" in rest) {
-                                const {
-                                    href,
-                                    doOpenNewTabIfHref = true,
-                                    ...restRest
-                                } = rest;
-
-                                //For the forwarding, rest should be empty (typewise),
-                                doExtends<Any.Equals<typeof restRest, {}>, 1>();
-
-                                return {
-                                    href,
-                                    "target": doOpenNewTabIfHref
-                                        ? "_blank"
-                                        : undefined,
-                                    ...restRest,
-                                };
-                            }
-
-                            if ("type" in rest) {
-                                const { type, ...restRest } = rest;
-
-                                //For the forwarding, rest should be empty (typewise),
-                                doExtends<Any.Equals<typeof restRest, {}>, 1>();
-
-                                return {
-                                    type,
-                                    ...restRest,
-                                };
-                            }
-                        })()}
-                    >
-                        {typeof children === "string"
-                            ? capitalize(children)
-                            : children}
-                    </MuiButton>
-                );
-            },
-        ),
+                            return {
+                                type,
+                                ...restRest,
+                            };
+                        }
+                    })()}
+                >
+                    {typeof children === "string"
+                        ? capitalize(children)
+                        : children}
+                </MuiButton>
+            );
+        }),
     );
 
     return { Button };
