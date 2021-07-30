@@ -5,6 +5,7 @@ import MuiLink from "@material-ui/core/Link";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { createIconButton } from "./IconButton";
 import { createIcon } from "./Icon";
+import { pxToNumber } from "./tools/pxToNumber";
 
 export type CollapsibleSectionHeaderProps = {
     className?: string;
@@ -21,7 +22,7 @@ const { IconButton } = createIconButton(
 );
 
 const useStyles = makeStyles<{ isCollapsed: boolean }>()(
-    (...[, { isCollapsed }]) => ({
+    (...[theme, { isCollapsed }]) => ({
         "root": {
             "display": "flex",
             "alignItems": "center",
@@ -37,6 +38,13 @@ const useStyles = makeStyles<{ isCollapsed: boolean }>()(
         },
         "link": {
             "cursor": "pointer",
+            //Ugly solution to vertically align with text
+            "paddingTop":
+                0.183 *
+                pxToNumber(
+                    theme.typography.variants["section heading"].style
+                        .lineHeight,
+                ),
         },
     }),
 );
