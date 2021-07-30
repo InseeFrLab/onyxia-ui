@@ -21,8 +21,8 @@ export type {
 } from "./typography";
 export { defaultGetTypographyDesc, chromeFontSizesFactors } from "./typography";
 
-export type { Breakpoint, Responsive } from "./responsive";
-export { breakpointsValues, getIsPortraitOrientation } from "./responsive";
+export * from "./breakpoints";
+export { breakpointsValues, getIsPortraitOrientation } from "./breakpoints";
 
 export type { SpacingConfig } from "./spacing";
 export { defaultSpacingConfig } from "./spacing";

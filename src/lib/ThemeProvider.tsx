@@ -31,8 +31,6 @@ import {
 } from "./typography";
 import { createMuiPaletteOptions } from "./color";
 import { shadows } from "./shadows";
-import { createResponsive, breakpointsValues } from "./responsive";
-import type { Responsive } from "./responsive";
 import { createText } from "../Text";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
@@ -50,6 +48,7 @@ import type { ViewPortAdapterProps } from "powerhooks/ViewPortAdapter";
 import { assert } from "tsafe/assert";
 import memoize from "memoizee";
 import { id } from "tsafe/id";
+import { breakpointsValues } from "./breakpoints";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
@@ -70,9 +69,9 @@ export type Theme<
     shadows: typeof shadows;
     spacing: MuiTheme["spacing"];
     muiTheme: MuiTheme;
-    responsive: Responsive;
     custom: Custom;
     iconSizesInPxByName: Record<IconSizeName, number>;
+    windowInnerWidth: number;
 };
 
 const themeBaseContext = createContext<Theme | undefined>(undefined);
@@ -193,7 +192,6 @@ export function createThemeProvider<
                     "typography": getComputedTypography({ typographyDesc }),
                     isDarkModeEnabled,
                     shadows,
-                    "responsive": createResponsive({ windowInnerWidth }),
                     ...(() => {
                         const muiTheme = (
                             isReactStrictModeEnabled
@@ -231,6 +229,7 @@ export function createThemeProvider<
                         windowInnerWidth,
                         "rootFontSizePx": typographyDesc.rootFontSizePx,
                     }),
+                    windowInnerWidth,
                     custom,
                 });
             },

@@ -9,7 +9,7 @@ import MuiButton from "@material-ui/core/Button";
 import { capitalize } from "tsafe/capitalize";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
-import { breakpointsValues } from "./lib/responsive";
+import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
 
@@ -163,8 +163,7 @@ export function createButton<IconId extends string = never>(params?: {
                         paddingSpacingTopBottom,
                         (() => {
                             if (
-                                theme.responsive.windowInnerWidth >=
-                                breakpointsValues.xl
+                                theme.windowInnerWidth >= breakpointsValues.xl
                             ) {
                                 return 3;
                             }

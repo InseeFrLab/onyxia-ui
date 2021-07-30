@@ -1,4 +1,4 @@
-import { breakpointsValues } from "./responsive";
+import { breakpointsValues } from "./breakpoints";
 import { assert } from "tsafe/assert";
 
 /** Return number of pixel */

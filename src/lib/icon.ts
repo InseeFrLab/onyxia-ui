@@ -1,4 +1,4 @@
-import { breakpointsValues } from "./responsive";
+import { breakpointsValues } from "./breakpoints";
 
 export const iconSizeNames = [
     "extra small",
