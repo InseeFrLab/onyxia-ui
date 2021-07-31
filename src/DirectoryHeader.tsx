@@ -3,23 +3,31 @@ import { makeStyles, Text } from "./lib/ThemeProvider";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import { memo } from "react";
-import type { ComponentType } from "./tools/ComponentType";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { pxToNumber } from "./tools/pxToNumber";
 
 /**
- * Image:
+ * image:
  *
- * If it's an SVG component make sure it has no width and heigh
- * property set on it.
- * Setting the height css property on the component should define
- * the width according to the image aspect ratio.
+ * If you pass an <Avatar /> (always square) make sure to set width and height: 100%
  *
- * NOTE: The width is unset to adapt according the the width
+ * If it's an SVG define the CSS as follow
+ * Put "100%" on the BIGGER dimension and "unset" on the other. (You can tell by the viewBox)
+ *
+ * e.g:
+ *
+ * -----
+ * |   |
+ * |   |
+ * |   |
+ * -----
+ *
+ * "height": "100%",
+ * "width": "unset"
  *
  */
 export type Props = {
-    Image: ComponentType<{ className: string }>;
+    image: ReactNode;
     title: NonNullable<ReactNode>;
     subtitle?: NonNullable<ReactNode>;
     onGoBack(): void;
@@ -37,17 +45,28 @@ const useStyles = makeStyles()(theme => ({
         "alignItems": "center",
         "borderBottom": `1px solid ${theme.colors.useCases.typography.textTertiary}`,
     },
-    "image": {
+    "imageWrapper": {
         "margin": theme.spacing(4, 3),
         "marginLeft": theme.spacing(1),
-        "height":
-            pxToNumber(
-                theme.typography.variants["object heading"].style.lineHeight,
-            ) +
-            pxToNumber(theme.typography.variants["caption"].style.lineHeight) +
-            theme.spacing(2),
-        "display": "block",
-        "width": "unset",
+        ...(() => {
+            const height =
+                pxToNumber(
+                    theme.typography.variants["object heading"].style
+                        .lineHeight,
+                ) +
+                pxToNumber(
+                    theme.typography.variants["caption"].style.lineHeight,
+                ) +
+                theme.spacing(2);
+
+            return {
+                "width": height,
+                height,
+            };
+        })(),
+        "display": "flex",
+        "justifyContent": "center",
+        "alignItems": "center",
     },
     "subtitle": {
         "marginTop": theme.spacing(2),
@@ -57,7 +76,7 @@ const useStyles = makeStyles()(theme => ({
 }));
 
 export const DirectoryHeader = memo((props: Props) => {
-    const { Image, title, subtitle, onGoBack } = props;
+    const { image, title, subtitle, onGoBack } = props;
 
     const { classes } = useStyles();
 
@@ -70,9 +89,7 @@ export const DirectoryHeader = memo((props: Props) => {
                     onClick={onGoBack}
                 />
             </div>
-            <div>
-                <Image className={classes.image} />
-            </div>
+            <div className={classes.imageWrapper}>{image}</div>
             <div>
                 <Text typo="object heading">{title}</Text>
                 {subtitle !== undefined && (

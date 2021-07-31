@@ -4,7 +4,7 @@ import { getStoryFactory, logCallbacks } from "./getStory";
 import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
 import imgUrl from "./assets/img/utilitr.png";
 import { useThemeBase } from "../lib/ThemeProvider";
-import { css, cx } from "tss-react";
+import { css } from "tss-react";
 import Avatar from "@material-ui/core/Avatar";
 
 const { meta, getStory } = getStoryFactory({
@@ -15,37 +15,40 @@ const { meta, getStory } = getStoryFactory({
 
 export default meta;
 
-const ImageSvg = (props: { className: string }) => {
-    const { className } = props;
-
+const ImageSvg = () => {
     const theme = useThemeBase();
 
     return (
         <ServicesSvg
-            className={cx(
-                css({ "fill": theme.colors.useCases.typography.textPrimary }),
-                className,
-            )}
+            className={css({
+                "fill": theme.colors.useCases.typography.textPrimary,
+                "height": "100%",
+                "width": "unset",
+            })}
         ></ServicesSvg>
     );
 };
 
 export const VueDefaultSvg = getStory({
-    "Image": ImageSvg,
+    "image": <ImageSvg />,
     "title": "This is the title",
     "subtitle": "This is the subtitle",
     ...logCallbacks(["onGoBack"]),
 });
 
 export const VueWithoutSubtitle = getStory({
-    "Image": ImageSvg,
+    "image": <ImageSvg />,
     "title": "This is the title",
     ...logCallbacks(["onGoBack"]),
 });
 
 export const VueImg = getStory({
-    "Image": ({ className }) => (
-        <Avatar className={className} src={imgUrl} alt="" />
+    "image": (
+        <Avatar
+            style={{ "height": "100%", "width": "100%" }}
+            src={imgUrl}
+            alt=""
+        />
     ),
     "title": "This is the title",
     "subtitle": "This is the subtitle",
