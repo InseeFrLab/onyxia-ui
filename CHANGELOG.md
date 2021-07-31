@@ -1,3 +1,7 @@
+### **0.9.17** (2021-07-31)  
+  
+- Make total optional in CollapsibleSectionHeader    
+  
 ### **0.9.16** (2021-07-31)  
   
 - Fix TextField  
