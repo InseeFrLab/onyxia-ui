@@ -12,7 +12,7 @@ export type CollapsibleSectionHeaderProps = {
     isCollapsed: boolean;
     onToggleIsCollapsed(): void;
     title: string;
-    total: number;
+    total?: number;
     /** Default "Show all", provide your own string for internationalization. */
     showAllStr?: string;
 };
@@ -77,7 +77,8 @@ export const CollapsibleSectionHeader = memo(
                         onClick={onToggleIsCollapsed}
                         className={classes.link}
                     >
-                        {showAllStr} ({total})
+                        {showAllStr}
+                        {total !== undefined && <span>&nbsp;({total}</span>}
                     </MuiLink>
                 )}
             </div>
