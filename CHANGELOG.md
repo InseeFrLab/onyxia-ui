@@ -1,3 +1,8 @@
+### **0.9.16** (2021-07-31)  
+  
+- Fix TextField  
+- Fix directory header on Safari    
+  
 ### **0.9.15** (2021-07-30)  
   
 - Update deps  
