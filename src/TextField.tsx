@@ -133,10 +133,7 @@ const useStyles = makeStyles<{
             "top": rootHeight,
             "visibility": rootHeight === 0 ? "hidden" : undefined,
         },
-        "& .MuiTypography-caption": {
-            "whiteSpace": "nowrap",
-        },
-        "& .MuiFormLabel-root, & .MuiTypography-caption": {
+        "& .MuiFormLabel-root": {
             "color": error
                 ? theme.colors.useCases.alertSeverity.error.main
                 : theme.colors.useCases.typography.textSecondary,
@@ -171,7 +168,10 @@ const useStyles = makeStyles<{
         },
     },
     "helperText": {
-        "color": theme.colors.useCases.typography.textDisabled,
+        "color": error
+            ? theme.colors.useCases.alertSeverity.error.main
+            : theme.colors.useCases.typography.textDisabled,
+        "whiteSpace": "nowrap",
     },
     "questionMark": {
         "fontSize": "inherit",
