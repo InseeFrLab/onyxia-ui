@@ -78,7 +78,7 @@ export const CollapsibleSectionHeader = memo(
                         className={classes.link}
                     >
                         {showAllStr}
-                        {total !== undefined && <span>&nbsp;({total}</span>}
+                        {total !== undefined && <span>&nbsp;({total})</span>}
                     </MuiLink>
                 )}
             </div>

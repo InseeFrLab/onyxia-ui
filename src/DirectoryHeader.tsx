@@ -25,8 +25,11 @@ import { pxToNumber } from "./tools/pxToNumber";
  * "height": "100%",
  * "width": "unset"
  *
+ * It's ok to set padding (top bottom) to configure the spacing with the divider.
+ *
  */
 export type Props = {
+    className: string;
     image: ReactNode;
     title: NonNullable<ReactNode>;
     subtitle?: NonNullable<ReactNode>;
@@ -76,12 +79,12 @@ const useStyles = makeStyles()(theme => ({
 }));
 
 export const DirectoryHeader = memo((props: Props) => {
-    const { image, title, subtitle, onGoBack } = props;
+    const { className, image, title, subtitle, onGoBack } = props;
 
-    const { classes } = useStyles();
+    const { classes, cx } = useStyles();
 
     return (
-        <div className={classes.root}>
+        <div className={cx(classes.root, className)}>
             <div>
                 <IconButton
                     size="large"
