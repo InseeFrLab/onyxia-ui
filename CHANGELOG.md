@@ -1,3 +1,7 @@
+### **0.9.18** (2021-08-02)  
+  
+- Add className for directory header    
+  
 ### **0.9.17** (2021-07-31)  
   
 - Make total optional in CollapsibleSectionHeader    
