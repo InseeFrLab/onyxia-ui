@@ -60,7 +60,7 @@ UI built with this toolkit.
 # Quick start
 
 ```bash
-yarn add onyxia-ui @material-ui/core@^5.0.0-beta.4 @emotion/react tss-react
+yarn add onyxia-ui @material-ui/core@^5.0.0-beta.4 tss-react
 
 # If you plan on using icons from: https://material-ui.com/components/material-icons/
 yarn add @material-ui/icons@^5.0.0-beta.4
