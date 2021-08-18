@@ -1,3 +1,7 @@
+### **0.9.19** (2021-08-17)  
+  
+- Add sliders    
+  
 ### **0.9.18** (2021-08-02)  
   
 - Add className for directory header    
