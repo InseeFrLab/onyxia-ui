@@ -2,7 +2,7 @@
 
 import { memo, forwardRef, ElementType } from "react";
 import type { ForwardedRef, MouseEventHandler } from "react";
-import { makeStyles, useThemeBase } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
@@ -59,18 +59,20 @@ export function createIcon<IconId extends string>(
         readonly [iconId in IconId]: MuiIconLike | SvgComponentLike;
     },
 ) {
-    const useStyles = makeStyles<{ width: number }>()((...[, { width }]) => ({
-        "root": {
-            "color": "inherit",
-            // https://stackoverflow.com/a/24626986/3731798
-            //"verticalAlign": "top",
-            //"display": "inline-block"
-            "verticalAlign": "top",
-            "fontSize": width,
-            "width": "1em",
-            "height": "1em",
-        },
-    }));
+    const useStyles = makeStyles<{ size: IconSizeName }>()(
+        (theme, { size }) => ({
+            "root": {
+                "color": "inherit",
+                // https://stackoverflow.com/a/24626986/3731798
+                //"verticalAlign": "top",
+                //"display": "inline-block"
+                "verticalAlign": "top",
+                "fontSize": theme.iconSizesInPxByName[size],
+                "width": "1em",
+                "height": "1em",
+            },
+        }),
+    );
 
     const Icon = memo(
         forwardRef<SVGSVGElement, IconProps<IconId>>((props, ref) => {
@@ -87,11 +89,7 @@ export function createIcon<IconId extends string>(
             //For the forwarding, rest should be empty (typewise),
             doExtends<Any.Equals<typeof rest, {}>, 1>();
 
-            const theme = useThemeBase();
-
-            const { classes, cx } = useStyles({
-                "width": theme.iconSizesInPxByName[size],
-            });
+            const { classes, cx } = useStyles({ size });
 
             const Component: MuiIconLike | SvgComponentLike =
                 componentByIconId[iconId];

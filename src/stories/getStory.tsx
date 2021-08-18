@@ -99,33 +99,29 @@ export function getStoryFactory<Props extends Record<string, unknown>>(params: {
         const theme = useTheme();
 
         return (
-            <>
-                {
-                    <GlobalStyles
-                        styles={{
-                            "html": {
-                                "font-size": "100% !important",
-                            },
-                            "body": {
-                                "padding": `0 !important`,
-                                "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
-                            },
-                        }}
-                    />
-                }
-                <ThemeProvider getViewPortConfig={getViewPortConfig}>
-                    <ScreenSize />
-                    <div
-                        style={{
-                            "width": width || undefined,
-                            "border": "1px dashed #e8e8e8",
-                            "display": "inline-block",
-                        }}
-                    >
-                        <Component {...props} />
-                    </div>
-                </ThemeProvider>
-            </>
+            <ThemeProvider getViewPortConfig={getViewPortConfig}>
+                <GlobalStyles
+                    styles={{
+                        "html": {
+                            "font-size": "100% !important",
+                        },
+                        "body": {
+                            "padding": `0 !important`,
+                            "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
+                        },
+                    }}
+                />
+                <ScreenSize />
+                <div
+                    style={{
+                        "width": width || undefined,
+                        "border": "1px dashed #e8e8e8",
+                        "display": "inline-block",
+                    }}
+                >
+                    <Component {...props} />
+                </div>
+            </ThemeProvider>
         );
     };
 

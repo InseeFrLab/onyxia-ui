@@ -2,7 +2,7 @@ import { useReducer, memo } from "react";
 import type { ReactNode } from "react";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
-import MuiAlert from "@material-ui/lab/Alert";
+import MuiAlert from "@material-ui/core/Alert";
 import { Text } from "./lib/ThemeProvider";
 import { makeStyles } from "./lib/ThemeProvider";
 import type { PickOptionals } from "tsafe";

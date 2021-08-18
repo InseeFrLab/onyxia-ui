@@ -74,6 +74,7 @@ export const CollapsibleSectionHeader = memo(
                 <div style={{ "flex": "1" }} />
                 {isCollapsed && (
                     <MuiLink
+                        underline="hover"
                         onClick={onToggleIsCollapsed}
                         className={classes.link}
                     >

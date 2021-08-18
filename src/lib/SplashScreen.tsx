@@ -5,8 +5,9 @@ import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { createMakeStyles, keyframes, css } from "tss-react";
+import { createMakeStyles, keyframes } from "tss-react";
 import type { Theme } from "./ThemeProvider";
+import { useStyles } from "./ThemeProvider";
 import { Evt } from "evt";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
@@ -366,6 +367,8 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
                 ref,
                 domRect: { width, height },
             } = useDomRect();
+
+            const { css } = useStyles();
 
             return (
                 <div ref={ref} className={css({ "height": "100%" })}>

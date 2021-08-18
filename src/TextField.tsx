@@ -389,6 +389,7 @@ export const TextField = memo((props: TextFieldProps) => {
     return (
         <MuiTextField
             ref={ref}
+            variant="standard"
             type={
                 type !== "password"
                     ? type

@@ -60,14 +60,10 @@ UI built with this toolkit.
 # Quick start
 
 ```bash
-yarn add onyxia-ui tss-react @material-ui/core@^4.12.1
+yarn add onyxia-ui @material-ui/core@^5.0.0-beta.4 @emotion/react tss-react
 
 # If you plan on using icons from: https://material-ui.com/components/material-icons/
-yarn add @material-ui/icons@^4.11.2
-
-# Only necessary for onyxia-ui/Alert and if you want
-# to use components from https://material-ui.com/components/material-icons/
-yarn add @material-ui/lab@^4.0.0-alpha.58
+yarn add @material-ui/icons@^5.0.0-beta.4
 ```
 
 At this stage, the documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  

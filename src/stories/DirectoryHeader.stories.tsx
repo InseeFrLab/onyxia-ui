@@ -1,10 +1,10 @@
+import { memo } from "react";
 import { DirectoryHeader } from "../DirectoryHeader";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
 import imgUrl from "./assets/img/utilitr.png";
-import { useThemeBase } from "../lib/ThemeProvider";
-import { css } from "tss-react";
+import { useStyles } from "../lib/ThemeProvider";
 import Avatar from "@material-ui/core/Avatar";
 
 const { meta, getStory } = getStoryFactory({
@@ -15,8 +15,8 @@ const { meta, getStory } = getStoryFactory({
 
 export default meta;
 
-const ImageSvg = () => {
-    const theme = useThemeBase();
+const ImageSvg = memo(() => {
+    const { css, theme } = useStyles();
 
     return (
         <ServicesSvg
@@ -27,7 +27,7 @@ const ImageSvg = () => {
             })}
         ></ServicesSvg>
     );
-};
+});
 
 export const VueDefaultSvg = getStory({
     "image": <ImageSvg />,

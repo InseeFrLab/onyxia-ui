@@ -1,6 +1,13 @@
 import { breakpointsValues } from "./breakpoints";
 import { assert } from "tsafe/assert";
 
+export interface Spacing {
+    (value: number): number;
+    (topBottom: number, rightLeft: number): string;
+    (top: number, rightLeft: number, bottom: number): string;
+    (top: number, right: number, bottom: number, left: number): string;
+}
+
 /** Return number of pixel */
 export type SpacingConfig = (params: {
     /** Assert positive integer */

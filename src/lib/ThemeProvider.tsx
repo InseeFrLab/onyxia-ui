@@ -3,10 +3,7 @@ import { useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {
-    ThemeProvider as MuiThemeProvider,
-    StylesProvider,
-} from "@material-ui/core/styles";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import {
     createTheme as createMuiTheme,
     unstable_createMuiStrictModeTheme,
@@ -34,7 +31,7 @@ import { shadows } from "./shadows";
 import { createText } from "../Text";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
-import type { SpacingConfig } from "./spacing";
+import type { SpacingConfig, Spacing } from "./spacing";
 import { createMakeStyles } from "tss-react";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
@@ -49,10 +46,13 @@ import { assert } from "tsafe/assert";
 import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
+import { EmotionCache } from "@emotion/react";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
 export { ViewPortOutOfRangeError };
+import { CacheProvider } from "@emotion/react";
+import { getCache } from "tss-react/cache";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -67,7 +67,7 @@ export type Theme<
     isDarkModeEnabled: boolean;
     typography: ComputedTypography<CustomTypographyVariantName>;
     shadows: typeof shadows;
-    spacing: MuiTheme["spacing"];
+    spacing: Spacing;
     muiTheme: MuiTheme;
     custom: Custom;
     iconSizesInPxByName: Record<IconSizeName, number>;
@@ -84,7 +84,7 @@ export function useIsThemeProvided(): boolean {
     return theme !== undefined;
 }
 
-export function useThemeBase() {
+function useThemeBase() {
     const theme = useContext(themeBaseContext);
 
     if (theme === undefined) {
@@ -94,7 +94,7 @@ export function useThemeBase() {
     return theme;
 }
 
-export const { makeStyles } = createMakeStyles({
+export const { makeStyles, useStyles } = createMakeStyles({
     "useTheme": useThemeBase,
 });
 
@@ -142,6 +142,7 @@ export function createThemeProvider<
     custom?: Custom;
     defaultIsDarkModeEnabled?: boolean;
     getIconSizeInPx?: GetIconSizeInPx;
+    cache?: EmotionCache;
 }) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
@@ -156,6 +157,7 @@ export function createThemeProvider<
         custom = {} as NonNullable<typeof params["custom"]>,
         defaultIsDarkModeEnabled,
         getIconSizeInPx = defaultGetIconSizeInPx,
+        cache = getCache(),
     } = params;
 
     if (defaultIsDarkModeEnabled !== undefined) {
@@ -207,7 +209,7 @@ export function createThemeProvider<
                                 palette,
                                 useCases,
                             }),
-                            "spacing": factor =>
+                            "spacing": (factor: number) =>
                                 spacingConfig({
                                     factor,
                                     windowInnerWidth,
@@ -220,7 +222,21 @@ export function createThemeProvider<
                         });
 
                         return {
-                            "spacing": muiTheme.spacing.bind(muiTheme),
+                            "spacing": id<Spacing>((...args: any[]) => {
+                                const result = muiTheme.spacing(
+                                    ...(args as Parameters<
+                                        MuiTheme["spacing"]
+                                    >),
+                                );
+
+                                return (
+                                    typeof result === "string"
+                                        ? Number.parseFloat(
+                                              result.split("px")[0],
+                                          )
+                                        : result
+                                ) as any;
+                            }),
                             muiTheme,
                         };
                     })(),
@@ -265,9 +281,9 @@ export function createThemeProvider<
 
             return (
                 <themeBaseContext.Provider value={theme}>
-                    <MuiThemeProvider theme={theme.muiTheme}>
-                        <CssBaseline />
-                        <StylesProvider injectFirst>
+                    <CacheProvider value={cache}>
+                        <MuiThemeProvider theme={theme.muiTheme}>
+                            <CssBaseline />
                             {splashScreen === undefined ? (
                                 children
                             ) : (
@@ -275,8 +291,8 @@ export function createThemeProvider<
                                     {children}
                                 </SplashScreen>
                             )}
-                        </StylesProvider>
-                    </MuiThemeProvider>
+                        </MuiThemeProvider>
+                    </CacheProvider>
                 </themeBaseContext.Provider>
             );
         }

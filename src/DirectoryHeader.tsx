@@ -29,7 +29,7 @@ import { pxToNumber } from "./tools/pxToNumber";
  *
  */
 export type Props = {
-    className: string;
+    className?: string;
     image: ReactNode;
     title: NonNullable<ReactNode>;
     subtitle?: NonNullable<ReactNode>;

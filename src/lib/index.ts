@@ -24,7 +24,7 @@ export { defaultGetTypographyDesc, chromeFontSizesFactors } from "./typography";
 export * from "./breakpoints";
 export { breakpointsValues, getIsPortraitOrientation } from "./breakpoints";
 
-export type { SpacingConfig } from "./spacing";
+export type { SpacingConfig, Spacing } from "./spacing";
 export { defaultSpacingConfig } from "./spacing";
 
 export type { IconSizeName, GetIconSizeInPx } from "./icon";

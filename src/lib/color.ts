@@ -145,7 +145,7 @@ export function createMuiPaletteOptions(params: {
     const { isDarkModeEnabled, palette, useCases } = params;
 
     return {
-        "type": isDarkModeEnabled ? "dark" : "light",
+        "mode": isDarkModeEnabled ? "dark" : "light",
         "primary": {
             "main": palette.focus.main,
             "light": palette.focus.light,
@@ -178,7 +178,6 @@ export function createMuiPaletteOptions(params: {
             "primary": useCases.typography.textPrimary,
             "secondary": useCases.typography.textSecondary,
             "disabled": useCases.typography.textDisabled,
-            "hint": useCases.typography.textFocus,
         },
         "divider": useCases.buttons.actionDisabledBackground,
         "background": {

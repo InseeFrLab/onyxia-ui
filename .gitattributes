@@ -1,2 +1,1 @@
-docs/**/* linguist-documentation
-src/test/**/* linguist-documentation
+src/test/spa/**/* linguist-documentation
