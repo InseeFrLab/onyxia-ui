@@ -33,7 +33,7 @@ const useStyles = makeStyles<Pick<AlertProps, "severity">>()(
             "color": theme.colors.useCases.typography.textPrimary,
             "backgroundColor":
                 theme.colors.useCases.alertSeverity[severity].background,
-            "& $icon": {
+            "& .MuiAlert-icon": {
                 "color": theme.colors.useCases.alertSeverity[severity].main,
             },
         },
