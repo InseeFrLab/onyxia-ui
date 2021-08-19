@@ -1,5 +1,6 @@
-import { makeStyles, Text } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
 import { useMemo, useState, useEffect, memo } from "react";
+import { Text } from "./Text/TextBase";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { Evt } from "evt";

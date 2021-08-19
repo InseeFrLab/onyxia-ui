@@ -1,4 +1,5 @@
-import { makeStyles, Text } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
+import { Text } from "./Text/TextBase";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";

@@ -1,5 +1,6 @@
 import { memo } from "react";
-import { makeStyles, Text } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
+import { Text } from "./Text/TextBase";
 import { useDomRect } from "powerhooks/useDomRect";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { id } from "tsafe/id";

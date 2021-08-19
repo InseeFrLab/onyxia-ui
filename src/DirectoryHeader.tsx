@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { makeStyles, Text } from "./lib/ThemeProvider";
+import { makeStyles } from "./lib/ThemeProvider";
+import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import { memo } from "react";
