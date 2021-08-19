@@ -27,7 +27,7 @@ This project is under active development. It's APIs are susceptible to change un
 We argue that the experience for TypeScript developers is not optimal and somewhat frustrating.
 Also we find problematic how hard it is to build an app that won't break on any other screen size.
 In consequence, we wanted to create a ui toolkit that would be compatible with
-`material-ui`'s large library of components but that would also improves it in the following ways:
+`material-ui` v5 large library of components but that would also improves it in the following ways:
 
 -   Optimized for typescript, theme customization without module augmentation.
 -   Responsive design **way** more easy to implement.
