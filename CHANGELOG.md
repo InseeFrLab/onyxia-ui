@@ -1,3 +1,15 @@
+## **0.10.0** (2021-08-19)  
+  
+- Mention that the library runs with mui v5  
+- Fix spacing  
+- Fix kebab style font-size  
+- Add note for storybook users  
+- Fix Alert  
+- Configure storybook to use @emotion 11  
+- @emotion/styled is a peer dependency of mui v5  
+- Fix alert and add story  
+- Upgrade to MUI v5    
+  
 ### **0.9.19** (2021-08-17)  
   
 - Add sliders    
