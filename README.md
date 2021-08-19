@@ -70,6 +70,10 @@ At this stage, the documentation is under the form of a very simple [demo projec
 The actual theme configuration [happens here](https://github.com/garronej/onyxia-ui/blob/main/src/test/src/theme.ts).  
 If you want to experiment with it you can run the demo app with:
 
+NOTE for [Storybook](https://storybook.js.org) users: As of writing this lines storybook still uses by default emotion 10.  
+Material-ui and TSS runs emotion 11 so there is [some changes](https://github.com/garronej/onyxia-ui/blob/324de62248074582b227e584c53fb2e123f5325f/.storybook/main.js#L31-L32)
+to be made to your `.storybook/main.js` to make it uses emotion 11.
+
 ```bash
 git clone https://github.com/garronej/onyxia-ui
 cd onyxia-ui
