@@ -28,7 +28,6 @@ import {
 } from "./typography";
 import { createMuiPaletteOptions } from "./color";
 import { shadows } from "./shadows";
-import { createText } from "../Text";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig, Spacing } from "./spacing";
@@ -97,8 +96,6 @@ function useThemeBase() {
 export const { makeStyles, useStyles } = createMakeStyles({
     "useTheme": useThemeBase,
 });
-
-export const { Text } = createText({ "useTheme": useThemeBase });
 
 export type ThemeProviderProps = {
     children: ReactNode;

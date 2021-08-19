@@ -7,7 +7,6 @@ import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { createMakeStyles, keyframes } from "tss-react";
 import type { Theme } from "./ThemeProvider";
-import { useStyles } from "./ThemeProvider";
 import { Evt } from "evt";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
@@ -214,7 +213,7 @@ export type SplashScreenProps = {
 export function createSplashScreen(params: { useTheme(): Theme }) {
     const { useTheme } = params;
 
-    const { makeStyles } = createMakeStyles({ useTheme });
+    const { makeStyles, useStyles } = createMakeStyles({ useTheme });
 
     const { SplashScreen } = (() => {
         const { Overlay } = (() => {

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
-import { Text } from "./lib/ThemeProvider";
+import { Text } from "./Text/TextBase";
 import MuiLink from "@material-ui/core/Link";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { createIconButton } from "./IconButton";

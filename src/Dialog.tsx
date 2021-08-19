@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@material-ui/core/Dialog";
 import { makeStyles } from "./lib/ThemeProvider";
-import { Text } from "./lib/ThemeProvider";
+import { Text } from "./Text/TextBase";
 import Checkbox from "@material-ui/core/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@material-ui/core/FormControlLabel";

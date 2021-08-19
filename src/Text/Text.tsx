@@ -1,8 +1,8 @@
 import { createElement, useMemo, forwardRef, memo } from "react";
-import { useStyles } from "./lib/ThemeProvider";
-import type { Theme } from "./lib/ThemeProvider";
-import { TypographyDesc } from "./lib/typography";
-import type { PaletteBase, ColorUseCasesBase } from "./lib/color";
+import { useStyles } from "../lib/ThemeProvider";
+import type { Theme } from "../lib/ThemeProvider";
+import { TypographyDesc } from "../lib/typography";
+import type { PaletteBase, ColorUseCasesBase } from "../lib/color";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
 

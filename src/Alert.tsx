@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import MuiAlert from "@material-ui/core/Alert";
-import { Text } from "./lib/ThemeProvider";
+import { Text } from "./Text/TextBase";
 import { makeStyles } from "./lib/ThemeProvider";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
