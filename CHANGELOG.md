@@ -1,3 +1,7 @@
+### **0.10.1** (2021-08-19)  
+  
+- Fix peed rependencies    
+  
 ## **0.10.0** (2021-08-19)  
   
 - Mention that the library runs with mui v5  
