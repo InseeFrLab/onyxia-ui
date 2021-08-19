@@ -103,7 +103,7 @@ export function getStoryFactory<Props extends Record<string, unknown>>(params: {
                 <GlobalStyles
                     styles={{
                         "html": {
-                            "font-size": "100% !important",
+                            "fontSize": "100% !important",
                         },
                         "body": {
                             "padding": `0 !important`,
