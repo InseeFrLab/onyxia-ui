@@ -1,3 +1,8 @@
+### **0.10.2** (2021-08-19)  
+  
+- update  
+- Resolve circular dependencies    
+  
 ### **0.10.1** (2021-08-19)  
   
 - Fix peed rependencies    
