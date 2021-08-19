@@ -229,13 +229,11 @@ export function createThemeProvider<
                                     >),
                                 );
 
-                                return (
-                                    typeof result === "string"
-                                        ? Number.parseFloat(
-                                              result.split("px")[0],
-                                          )
-                                        : result
-                                ) as any;
+                                const match = result.match(/^([^p]+)px$/);
+
+                                return match === null
+                                    ? result
+                                    : (Number.parseFloat(match[1]) as any);
                             }),
                             muiTheme,
                         };
