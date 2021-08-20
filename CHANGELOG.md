@@ -1,3 +1,8 @@
+### **0.10.4** (2021-08-20)  
+  
+- Tabs: Fix side arrow shadow  
+- Feat: Tabs transition    
+  
 ### **0.10.3** (2021-08-19)  
   
 - Feature Tabs components    
