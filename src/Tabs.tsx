@@ -5,6 +5,7 @@ import { makeStyles } from "./lib/ThemeProvider";
 import { useState, useMemo, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
+import { useConstCallback } from "powerhooks/useConstCallback";
 import { useDomRect } from "powerhooks";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
@@ -362,6 +363,16 @@ const { CustomButton } = (() => {
                 }
             })();
 
+            const onMouseDown = useConstCallback(
+                (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                    e.preventDefault();
+                    if (isDisabled || e.button !== 0) {
+                        return;
+                    }
+                    onClick();
+                },
+            );
+
             //For the forwarding, rest should be empty (typewise),
             // eslint-disable-next-line @typescript-eslint/ban-types
             doExtends<Any.Equals<typeof rest, {}>, 1>();
@@ -381,7 +392,7 @@ const { CustomButton } = (() => {
                     ref={ref}
                     className={cx(classes.root, className)}
                     color="secondary"
-                    onMouseDown={isDisabled ? undefined : onClick}
+                    onMouseDown={onMouseDown}
                     {...rest}
                 >
                     {(() => {
