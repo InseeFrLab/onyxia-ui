@@ -164,6 +164,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         isDisabled={firstTabIndex === 0}
                         isSelected={false}
                         onClick={onArrowClickFactory("left")}
+                        isVisible={true}
                     />
                 )}
                 <div className={classes.tabsWrapper}>
@@ -191,6 +192,10 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                                 key={id}
                                 onClick={onTabClickFactory(id)}
                                 isSelected={isSelected}
+                                isVisible={
+                                    i >= firstTabIndex &&
+                                    i < firstTabIndex + maxTabCount
+                                }
                             />
                         ))}
                 </div>
@@ -204,6 +209,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         isDisabled={tabs.length - firstTabIndex === maxTabCount}
                         isSelected={false}
                         onClick={onArrowClickFactory("right")}
+                        isVisible={true}
                     />
                 )}
             </div>
@@ -220,6 +226,7 @@ const { CustomButton } = (() => {
         isDisabled: boolean;
         isSelected: boolean;
         isFirst: boolean;
+        isVisible: boolean;
         onClick(): void;
     } & (
         | {
@@ -235,34 +242,60 @@ const { CustomButton } = (() => {
     const useStyles = makeStyles<
         Pick<
             CustomButtonProps,
-            "isSelected" | "isFirst" | "size" | "isDisabled"
-        >
-    >()((theme, { isSelected, isFirst, size, isDisabled }) => ({
-        "root": {
-            "backgroundColor":
-                theme.colors.useCases.surfaces[
-                    isSelected ? "surface1" : "surface2"
-                ],
-            "boxShadow": [
-                theme.shadows[4],
-                ...(isSelected || isFirst ? [theme.shadows[5]] : []),
-            ].join(", "),
-            "padding": (() => {
-                switch (size) {
-                    case "big":
-                        return theme.spacing(3, 4);
-                    case "small":
-                        return theme.spacing(2, 3);
-                }
-            })(),
-            "display": "flex",
-            "alignItems": "center",
-            "cursor": !isDisabled ? "pointer" : "default",
-        },
-        "typo": {
-            "fontWeight": isSelected ? 600 : undefined,
-        },
-    }));
+            "isSelected" | "isFirst" | "size" | "isDisabled" | "isVisible"
+        > & {
+            "arrowDirection": undefined | "left" | "right";
+        }
+    >()(
+        (
+            theme,
+            {
+                isSelected,
+                isFirst,
+                size,
+                isDisabled,
+                arrowDirection,
+                isVisible,
+            },
+        ) => ({
+            "root": {
+                "backgroundColor":
+                    theme.colors.useCases.surfaces[
+                        isSelected ? "surface1" : "surface2"
+                    ],
+                "boxShadow":
+                    arrowDirection === undefined && isVisible
+                        ? [
+                              theme.shadows[4],
+                              ...(isSelected || isFirst
+                                  ? [theme.shadows[5]]
+                                  : []),
+                          ].join(", ")
+                        : (() => {
+                              switch (arrowDirection) {
+                                  case "right":
+                                      return `inset ${theme.shadows[4]}`;
+                                  case "left":
+                                      return `inset ${theme.shadows[5]}`;
+                              }
+                          })(),
+                "padding": (() => {
+                    switch (size) {
+                        case "big":
+                            return theme.spacing(3, 4);
+                        case "small":
+                            return theme.spacing(2, 3);
+                    }
+                })(),
+                "display": "flex",
+                "alignItems": "center",
+                "cursor": !isDisabled ? "pointer" : "default",
+            },
+            "typo": {
+                "fontWeight": isSelected ? 600 : undefined,
+            },
+        }),
+    );
 
     const CustomButton = memo(
         forwardRef<any, CustomButtonProps>((props, ref) => {
@@ -273,6 +306,7 @@ const { CustomButton } = (() => {
                 isDisabled,
                 isSelected,
                 isFirst,
+                isVisible,
                 //For the forwarding, rest should be empty (typewise)
                 ...restTmp
             } = props;
@@ -307,6 +341,9 @@ const { CustomButton } = (() => {
                 isFirst,
                 size,
                 isDisabled,
+                "arrowDirection":
+                    props.type !== "arrow" ? undefined : props.direction,
+                isVisible,
             });
 
             return (
