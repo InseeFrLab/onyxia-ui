@@ -1,3 +1,8 @@
+### **0.10.5** (2021-08-20)  
+  
+- bump version  
+- Tabs.tsx added mouse wheel function to scroll through tabs    
+  
 ### **0.10.4** (2021-08-20)  
   
 - Tabs: Fix side arrow shadow  
