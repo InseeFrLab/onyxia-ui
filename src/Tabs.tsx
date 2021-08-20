@@ -5,6 +5,7 @@ import { makeStyles } from "./lib/ThemeProvider";
 import { useState, useMemo, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
+import { useConstCallback } from "powerhooks/useConstCallback";
 import { useDomRect } from "powerhooks";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
@@ -150,6 +151,28 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         onRequestChangeActiveTab(id),
     );
 
+    const onWheelFactory = useConstCallback(
+        (e: React.WheelEvent<HTMLDivElement>) => {
+            const sign = (() => {
+                if (e.deltaY < 0) {
+                    return firstTabIndex === 0 ? undefined : -1;
+                }
+
+                return tabs.length - firstTabIndex === maxTabCount
+                    ? undefined
+                    : 1;
+            })();
+
+            if (sign === undefined) {
+                return;
+            }
+
+            setFirstTabIndex(firstTabIndex + sign);
+
+            setOffset(offset - sign);
+        },
+    );
+
     return (
         <div className={cx(classes.root, className)} ref={rootRef}>
             <div className={classes.top}>
@@ -167,7 +190,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         isVisible={true}
                     />
                 )}
-                <div className={classes.tabsWrapper}>
+                <div onWheel={onWheelFactory} className={classes.tabsWrapper}>
                     {tabs
                         .map(({ id, ...rest }) => ({
                             id,
