@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { memo } from "react";
+import { forwardRef, memo } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 
 const useStyles = makeStyles()(theme => ({
@@ -33,17 +33,19 @@ export type CardProps = {
     children: ReactNode;
 };
 
-export const Card = memo((props: CardProps) => {
-    const { className, aboveDivider, children } = props;
+export const Card = memo(
+    forwardRef<any, CardProps>((props, ref) => {
+        const { className, aboveDivider, children } = props;
 
-    const { classes, cx } = useStyles();
+        const { classes, cx } = useStyles();
 
-    return (
-        <div className={cx(classes.root, className)}>
-            {aboveDivider !== undefined && (
-                <div className={classes.aboveDivider}>{aboveDivider}</div>
-            )}
-            <div className={classes.belowDivider}>{children}</div>
-        </div>
-    );
-});
+        return (
+            <div ref={ref} className={cx(classes.root, className)}>
+                {aboveDivider !== undefined && (
+                    <div className={classes.aboveDivider}>{aboveDivider}</div>
+                )}
+                <div className={classes.belowDivider}>{children}</div>
+            </div>
+        );
+    }),
+);
