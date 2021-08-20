@@ -5,10 +5,11 @@ import { makeStyles } from "./lib/ThemeProvider";
 import { useState, useMemo, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
-import { useConstCallback } from "powerhooks/useConstCallback";
 import { useDomRect } from "powerhooks";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
+import { useElementEvt } from "evt/hooks";
+import { Evt } from "evt";
 
 const { Icon } = createIcon({
     chevronLeft,
@@ -132,7 +133,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
 
     const onArrowClickFactory = useCallbackFactory(
         ([direction]: ["left" | "right"]) => {
-            const sign = (() => {
+            const delta = (() => {
                 switch (direction) {
                     case "left":
                         return -1;
@@ -141,9 +142,9 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                 }
             })();
 
-            setFirstTabIndex(firstTabIndex + sign);
+            setFirstTabIndex(firstTabIndex + delta);
 
-            setOffset(offset - sign);
+            setOffset(offset - delta);
         },
     );
 
@@ -151,26 +152,32 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         onRequestChangeActiveTab(id),
     );
 
-    const onWheelFactory = useConstCallback(
-        (e: React.WheelEvent<HTMLDivElement>) => {
-            const sign = (() => {
-                if (e.deltaY < 0) {
-                    return firstTabIndex === 0 ? undefined : -1;
+    const isLeftArrowDisabled = firstTabIndex === 0;
+    const isRightArrowDisabled = tabs.length - firstTabIndex === maxTabCount;
+
+    const { ref: tabWrapperRef } = useElementEvt<HTMLDivElement>(
+        ({ ctx, element }) =>
+            Evt.from(ctx, element, "wheel").attach(wheelEvent => {
+                wheelEvent.preventDefault();
+
+                const direction = wheelEvent.deltaY < 0 ? "left" : "right";
+
+                switch (direction) {
+                    case "left":
+                        if (isLeftArrowDisabled) {
+                            return;
+                        }
+                        break;
+                    case "right":
+                        if (isRightArrowDisabled) {
+                            return;
+                        }
+                        break;
                 }
 
-                return tabs.length - firstTabIndex === maxTabCount
-                    ? undefined
-                    : 1;
-            })();
-
-            if (sign === undefined) {
-                return;
-            }
-
-            setFirstTabIndex(firstTabIndex + sign);
-
-            setOffset(offset - sign);
-        },
+                onArrowClickFactory(direction)();
+            }),
+        [firstTabIndex, offset],
     );
 
     return (
@@ -184,13 +191,13 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         size={size}
                         isFirst={false}
                         className={classes.leftArrow}
-                        isDisabled={firstTabIndex === 0}
+                        isDisabled={isLeftArrowDisabled}
                         isSelected={false}
                         onClick={onArrowClickFactory("left")}
                         isVisible={true}
                     />
                 )}
-                <div onWheel={onWheelFactory} className={classes.tabsWrapper}>
+                <div ref={tabWrapperRef} className={classes.tabsWrapper}>
                     {tabs
                         .map(({ id, ...rest }) => ({
                             id,
@@ -229,7 +236,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         size={size}
                         isFirst={false}
                         className={classes.rightArrow}
-                        isDisabled={tabs.length - firstTabIndex === maxTabCount}
+                        isDisabled={isRightArrowDisabled}
                         isSelected={false}
                         onClick={onArrowClickFactory("right")}
                         isVisible={true}
