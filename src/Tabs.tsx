@@ -185,7 +185,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         <div className={cx(classes.root, className)} ref={rootRef}>
             <div className={classes.top}>
                 {areArrowsVisible && (
-                    <CustomButton
+                    <Tab
                         ref={leftArrowRef}
                         type="arrow"
                         direction="left"
@@ -206,7 +206,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                             ...rest,
                         }))
                         .map(({ id, title, isSelected }, i) => (
-                            <CustomButton
+                            <Tab
                                 type="tab"
                                 text={title}
                                 size={size}
@@ -231,7 +231,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         ))}
                 </div>
                 {areArrowsVisible && (
-                    <CustomButton
+                    <Tab
                         type="arrow"
                         direction="right"
                         size={size}
@@ -250,8 +250,8 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     );
 }
 
-const { CustomButton } = (() => {
-    type CustomButtonProps = {
+const { Tab } = (() => {
+    type TabProps = {
         size: "big" | "small";
         className?: string;
         isDisabled: boolean;
@@ -272,7 +272,7 @@ const { CustomButton } = (() => {
 
     const useStyles = makeStyles<
         Pick<
-            CustomButtonProps,
+            TabProps,
             "isSelected" | "isFirst" | "size" | "isDisabled" | "isVisible"
         > & {
             "arrowDirection": undefined | "left" | "right";
@@ -328,8 +328,8 @@ const { CustomButton } = (() => {
         }),
     );
 
-    const CustomButton = memo(
-        forwardRef<any, CustomButtonProps>((props, ref) => {
+    const Tab = memo(
+        forwardRef<any, TabProps>((props, ref) => {
             const {
                 onClick,
                 className,
@@ -449,5 +449,5 @@ const { CustomButton } = (() => {
         }),
     );
 
-    return { CustomButton };
+    return { Tab };
 })();
