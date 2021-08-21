@@ -192,23 +192,54 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
 
         tabs.forEach(({ id }) => (out[id] = 0));
 
-        (out as any)["tab2"] = 2;
-        (out as any)["tab4"] = -2;
-
         return out;
     });
 
     {
-        const d = ~~(dragOffset / tabWidth + 1 / 2);
+        const d = ~~(dragOffset / tabWidth + (dragOffset < 0 ? -1 / 2 : 1 / 2));
+        const [evtD] = useState(() => Evt.create<number>(d));
 
         useEffect(() => {
-            console.log(`Dragged tab moved: ${d}`);
+            const tabToMoveId = (() => {
+                if (evtDraggedTabId.state === undefined) {
+                    return "";
+                }
+
+                const draggedTabIndex = tabs.findIndex(
+                    tab => tab.id === evtDraggedTabId.state,
+                );
+
+                const out = (() => {
+                    if (evtD.state < d) {
+                        return evtD.state < 0
+                            ? draggedTabIndex + d
+                            : draggedTabIndex + d + 1;
+                    }
+                    if (evtD.state === 0) {
+                        return draggedTabIndex;
+                    }
+                    if (evtD.state < 0) {
+                        return draggedTabIndex + evtD.state;
+                    }
+                    return draggedTabIndex + evtD.state + 1;
+                })();
+
+                return `tab${out}`;
+            })();
+
+            (relativePositionByTabId as any)[tabToMoveId] +=
+                evtD.state < d ? -1 : 1;
+
+            setRelativePositionByTabId({ ...relativePositionByTabId });
+
+            evtD.post(d);
         }, [d]);
     }
 
+    //console.log(relativePositionByTabId);
+
     const onTabClickFactory = useCallbackFactory(([id]: [TabId]) => {
         evtDraggedTabId.state = id;
-
         onRequestChangeActiveTab(id);
     });
 
@@ -243,10 +274,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         }
 
                         Evt.from(ctxBis, document, "mouseup").attachOnce(() => {
-                            console.log("mouseUp");
-
                             evtDraggedTabId.state = undefined;
-
                             ctxBis.done();
                         });
                     },
