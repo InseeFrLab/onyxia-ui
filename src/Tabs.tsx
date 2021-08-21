@@ -2,15 +2,17 @@ import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
 import chevronLeft from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "./lib/ThemeProvider";
-import { useState, useMemo, memo, forwardRef } from "react";
+import { useState, useMemo, useEffect, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useDomRect } from "powerhooks";
 import { doExtends } from "tsafe/doExtends";
 import type { Any } from "ts-toolbelt";
-import { useElementEvt } from "evt/hooks";
 import { Evt } from "evt";
+import { useElementEvt } from "evt/hooks/useElementEvt";
+import { useEvt } from "evt/hooks/useEvt";
+import { objectKeys } from "tsafe/objectKeys";
 
 const { Icon } = createIcon({
     chevronLeft,
@@ -104,7 +106,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     const {
         ref: rootRef,
         domRect: { width: rootWidth },
-    } = useDomRect();
+    } = useDomRect<HTMLDivElement>();
     const {
         ref: leftArrowRef,
         domRect: { width: leftArrowWidth, height: leftArrowHeight },
@@ -149,10 +151,6 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         },
     );
 
-    const onTabClickFactory = useCallbackFactory(([id]: [TabId]) =>
-        onRequestChangeActiveTab(id),
-    );
-
     const isLeftArrowDisabled = firstTabIndex === 0;
     const isRightArrowDisabled = tabs.length - firstTabIndex === maxTabCount;
 
@@ -181,6 +179,81 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         [firstTabIndex, offset],
     );
 
+    const [evtDraggedTabId] = useState(() =>
+        Evt.create<TabId | undefined>(undefined),
+    );
+
+    const [dragOffset, setDragOffset] = useState(0);
+
+    const [relativePositionByTabId, setRelativePositionByTabId] = useState<
+        Record<TabId, number>
+    >(() => {
+        const out: Record<TabId, number> = {} as any;
+
+        tabs.forEach(({ id }) => (out[id] = 0));
+
+        (out as any)["tab2"] = 2;
+        (out as any)["tab4"] = -2;
+
+        return out;
+    });
+
+    {
+        const d = ~~(dragOffset / tabWidth + 1 / 2);
+
+        useEffect(() => {
+            console.log(`Dragged tab moved: ${d}`);
+        }, [d]);
+    }
+
+    const onTabClickFactory = useCallbackFactory(([id]: [TabId]) => {
+        evtDraggedTabId.state = id;
+
+        onRequestChangeActiveTab(id);
+    });
+
+    useEvt(
+        ctx =>
+            evtDraggedTabId
+                .pipe(ctx)
+                .attach(
+                    draggedTabId => draggedTabId === undefined,
+                    () => setDragOffset(0),
+                )
+                .attach(
+                    draggedTabId => draggedTabId !== undefined,
+                    () => {
+                        const ctxBis = Evt.newCtx();
+
+                        ctx.evtDoneOrAborted.attach(ctxBis, () =>
+                            ctxBis.done(),
+                        );
+
+                        {
+                            let initialPageX: number;
+
+                            Evt.from(ctxBis, document, "mousemove")
+                                .attachOnce(
+                                    ({ pageX, movementX }) =>
+                                        (initialPageX = pageX - movementX),
+                                )
+                                .attach(({ pageX }) =>
+                                    setDragOffset(pageX - initialPageX),
+                                );
+                        }
+
+                        Evt.from(ctxBis, document, "mouseup").attachOnce(() => {
+                            console.log("mouseUp");
+
+                            evtDraggedTabId.state = undefined;
+
+                            ctxBis.done();
+                        });
+                    },
+                ),
+        [],
+    );
+
     return (
         <div className={cx(classes.root, className)} ref={rootRef}>
             <div className={classes.top}>
@@ -194,7 +267,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         className={classes.leftArrow}
                         isDisabled={isLeftArrowDisabled}
                         isSelected={false}
-                        onClick={onArrowClickFactory("left")}
+                        onMouseDown={onArrowClickFactory("left")}
                         isVisible={true}
                     />
                 )}
@@ -215,13 +288,20 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                                 className={cx(
                                     classes.tab,
                                     css({
-                                        "zIndex": isSelected
-                                            ? maxTabCount + 1
-                                            : maxTabCount - i,
+                                        "zIndex":
+                                            maxTabCount -
+                                            relativePositionByTabId[id] +
+                                            (isSelected ? 1 : -i),
+                                        "left":
+                                            relativePositionByTabId[id] *
+                                                tabWidth +
+                                                (evtDraggedTabId.state === id
+                                                    ? dragOffset
+                                                    : 0) || undefined,
                                     }),
                                 )}
                                 key={id}
-                                onClick={onTabClickFactory(id)}
+                                onMouseDown={onTabClickFactory(id)}
                                 isSelected={isSelected}
                                 isVisible={
                                     i >= firstTabIndex &&
@@ -239,7 +319,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         className={classes.rightArrow}
                         isDisabled={isRightArrowDisabled}
                         isSelected={false}
-                        onClick={onArrowClickFactory("right")}
+                        onMouseDown={onArrowClickFactory("right")}
                         isVisible={true}
                     />
                 )}
@@ -258,7 +338,7 @@ const { Tab } = (() => {
         isSelected: boolean;
         isFirst: boolean;
         isVisible: boolean;
-        onClick(): void;
+        onMouseDown(): void;
     } & (
         | {
               type: "arrow";
@@ -275,7 +355,7 @@ const { Tab } = (() => {
             TabProps,
             "isSelected" | "isFirst" | "size" | "isDisabled" | "isVisible"
         > & {
-            "arrowDirection": undefined | "left" | "right";
+            arrowDirection: undefined | "left" | "right";
         }
     >()(
         (
@@ -290,6 +370,7 @@ const { Tab } = (() => {
             },
         ) => ({
             "root": {
+                "position": "relative",
                 "backgroundColor":
                     theme.colors.useCases.surfaces[
                         isSelected ? "surface1" : "surface2"
@@ -331,7 +412,7 @@ const { Tab } = (() => {
     const Tab = memo(
         forwardRef<any, TabProps>((props, ref) => {
             const {
-                onClick,
+                onMouseDown: props_onMouseDown,
                 className,
                 size,
                 isDisabled,
@@ -366,10 +447,11 @@ const { Tab } = (() => {
             const onMouseDown = useConstCallback(
                 (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                     e.preventDefault();
+                    //On right click do nothing.
                     if (isDisabled || e.button !== 0) {
                         return;
                     }
-                    onClick();
+                    props_onMouseDown();
                 },
             );
 
