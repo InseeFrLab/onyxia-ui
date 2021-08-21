@@ -79,7 +79,7 @@ const useStyles = makeStyles<{
             },
             "tab": {
                 "flex": 1,
-                "height": leftArrowHeight,
+                "height": leftArrowHeight || undefined,
             },
             "content": {
                 "padding": theme.spacing(4),
@@ -111,7 +111,10 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     } = useDomRect();
 
     const tabWidth = useMemo(
-        () => (rootWidth - 2 * leftArrowWidth) / maxTabCount,
+        () =>
+            tabs.length > maxTabCount
+                ? (rootWidth - 2 * leftArrowWidth) / maxTabCount
+                : rootWidth / tabs.length,
         [rootWidth, leftArrowWidth, maxTabCount],
     );
 
