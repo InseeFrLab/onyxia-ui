@@ -33,6 +33,8 @@ const useStyles = makeStyles<{ isCollapsed: boolean }>()(
                 ? {}
                 : {
                       "width": 0,
+                      "paddingLeft": 0,
+                      "paddingRight": 0,
                       "visibility": "hidden",
                   }),
         },
