@@ -50,7 +50,7 @@ const useStyles = makeStyles()(theme => ({
         "borderBottom": `1px solid ${theme.colors.useCases.typography.textTertiary}`,
     },
     "imageWrapper": {
-        "margin": theme.spacing(4, 3),
+        "margin": theme.spacing({ "topBottom": 4, "rightLeft": 3 }),
         "marginLeft": theme.spacing(1),
         ...(() => {
             const height =

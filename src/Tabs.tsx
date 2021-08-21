@@ -310,14 +310,16 @@ const { CustomButton } = (() => {
                                       return `inset ${theme.shadows[5]}`;
                               }
                           })(),
-                "padding": (() => {
-                    switch (size) {
-                        case "big":
-                            return theme.spacing(3, 4);
-                        case "small":
-                            return theme.spacing(2, 3);
-                    }
-                })(),
+                "padding": theme.spacing(
+                    (() => {
+                        switch (size) {
+                            case "big":
+                                return { "topBottom": 3, "rightLeft": 4 };
+                            case "small":
+                                return { "topBottom": 2, "rightLeft": 3 };
+                        }
+                    })(),
+                ),
                 "display": "flex",
                 "alignItems": "center",
                 "cursor": !isDisabled ? "pointer" : "default",

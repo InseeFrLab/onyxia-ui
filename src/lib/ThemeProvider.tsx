@@ -46,6 +46,8 @@ import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { EmotionCache } from "@emotion/react";
+import { capitalize } from "tsafe/capitalize";
+import "minimal-polyfills/Object.fromEntries";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
@@ -179,6 +181,15 @@ export function createThemeProvider<
                     isDarkModeEnabled,
                 });
 
+                const spacing = (
+                    factorOrExplicitNumberOfPx: number | `${number}px`,
+                ) =>
+                    spacingConfig({
+                        factorOrExplicitNumberOfPx,
+                        windowInnerWidth,
+                        "rootFontSizePx": typographyDesc.rootFontSizePx,
+                    });
+
                 return id<
                     Theme<
                         Palette,
@@ -206,32 +217,78 @@ export function createThemeProvider<
                                 palette,
                                 useCases,
                             }),
-                            "spacing": (factor: number) =>
-                                spacingConfig({
-                                    factor,
-                                    windowInnerWidth,
-                                    "rootFontSizePx":
-                                        typographyDesc.rootFontSizePx,
-                                }),
+                            spacing,
                             "breakpoints": {
                                 "values": { "xs": 0, ...breakpointsValues },
                             },
                         });
 
                         return {
-                            "spacing": id<Spacing>((...args: any[]) => {
-                                const result = muiTheme.spacing(
-                                    ...(args as Parameters<
-                                        MuiTheme["spacing"]
-                                    >),
-                                );
+                            "spacing": (() => {
+                                const toFinalValue = (value: number | string) =>
+                                    typeof value === "number"
+                                        ? `${spacing(value)}px`
+                                        : value;
 
-                                const match = result.match(/^([^p]+)px$/);
+                                const out = ((
+                                    valueOrObject:
+                                        | number
+                                        | Record<
+                                              "topBottom" | "rightLeft",
+                                              number | string
+                                          >,
+                                ): string | number => {
+                                    if (typeof valueOrObject === "number") {
+                                        return spacing(valueOrObject);
+                                    }
 
-                                return match === null
-                                    ? result
-                                    : (Number.parseFloat(match[1]) as any);
-                            }),
+                                    const { rightLeft, topBottom } =
+                                        valueOrObject;
+
+                                    return [
+                                        topBottom,
+                                        rightLeft,
+                                        topBottom,
+                                        rightLeft,
+                                    ]
+                                        .map(toFinalValue)
+                                        .join(" ");
+                                }) as any as Spacing;
+
+                                const f = (params: {
+                                    axis: "vertical" | "horizontal";
+                                    kind: "padding" | "margin";
+                                    value: number | string;
+                                }): Record<string, string> => {
+                                    const { axis, kind, value } = params;
+
+                                    const finalValue =
+                                        typeof value === "number"
+                                            ? `${spacing(value)}px`
+                                            : value;
+
+                                    return Object.fromEntries(
+                                        (() => {
+                                            switch (axis) {
+                                                case "horizontal":
+                                                    return ["left", "right"];
+                                                case "vertical":
+                                                    return ["top", "bottom"];
+                                            }
+                                        })().map(direction => [
+                                            `${kind}${capitalize(direction)}`,
+                                            finalValue,
+                                        ]),
+                                    );
+                                };
+
+                                out.rightLeft = (kind, value) =>
+                                    f({ "axis": "horizontal", kind, value });
+                                out.rightLeft = (kind, value) =>
+                                    f({ "axis": "vertical", kind, value });
+
+                                return out;
+                            })(),
                             muiTheme,
                         };
                     })(),

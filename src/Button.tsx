@@ -159,8 +159,12 @@ export function createButton<IconId extends string = never>(params?: {
                     "borderColor": disabled
                         ? "transparent"
                         : hoverBackgroundColor,
-                    "padding": theme.spacing(
+                    ...theme.spacing.topBottom(
+                        "padding",
                         paddingSpacingTopBottom,
+                    ),
+                    ...theme.spacing.rightLeft(
+                        "padding",
                         (() => {
                             if (
                                 theme.windowInnerWidth >= breakpointsValues.xl

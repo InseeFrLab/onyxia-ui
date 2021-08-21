@@ -47,7 +47,8 @@ const useStyles = makeStyles<{ isRange: boolean }>()((theme, { isRange }) => ({
     },
     "slider": {
         "flex": 1,
-        "margin": theme.spacing(0, 4),
+        //"margin": theme.spacing(0, 4),
+        "margin": theme.spacing({ "topBottom": 0, "rightLeft": 4 }),
         "marginLeft": isRange ? undefined : 0,
         "minWidth": 150,
     },

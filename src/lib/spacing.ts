@@ -1,28 +1,50 @@
 import { breakpointsValues } from "./breakpoints";
 import { assert } from "tsafe/assert";
-
 export interface Spacing {
     (value: number): number;
-    (topBottom: number, rightLeft: number): string;
-    (top: number, rightLeft: number, bottom: number): string;
-    (top: number, right: number, bottom: number, left: number): string;
+    (params: Record<"topBottom" | "rightLeft", number | string>): string;
+    rightLeft<Kind extends "padding" | "margin">(
+        kind: Kind,
+        value: number | string,
+    ): Record<`${"left" | "right"}${Capitalize<Kind>}`, string>;
+    topBottom<Kind extends "padding" | "margin">(
+        kind: Kind,
+        value: number | string,
+    ): Record<`${"top" | "bottom"}${Capitalize<Kind>}`, string>;
 }
 
 /** Return number of pixel */
 export type SpacingConfig = (params: {
     /** Assert positive integer */
-    factor: number;
+    factorOrExplicitNumberOfPx: number | `${number}px`;
     windowInnerWidth: number;
     rootFontSizePx: number;
 }) => number;
 
 export const defaultSpacingConfig: SpacingConfig = ({
-    factor,
+    factorOrExplicitNumberOfPx,
     windowInnerWidth,
     rootFontSizePx,
 }) =>
     rootFontSizePx *
-    (function callee(factor: number): number {
+    (function callee(
+        factorOrExplicitNumberOfPx: number | `${number}px`,
+    ): number {
+        if (typeof factorOrExplicitNumberOfPx === "string") {
+            const match = factorOrExplicitNumberOfPx.match(
+                /^([+-]?([0-9]*[.])?[0-9]+)px$/,
+            );
+
+            assert(
+                match !== null,
+                `${factorOrExplicitNumberOfPx} don't match \\d+px`,
+            );
+
+            return Number.parseFloat(match[1]);
+        }
+
+        const factor = factorOrExplicitNumberOfPx;
+
         assert(factor >= 0, "factor must be positive");
 
         if (!Number.isInteger(factor)) {
@@ -90,4 +112,4 @@ export const defaultSpacingConfig: SpacingConfig = ({
         }
 
         assert(false);
-    })(factor);
+    })(factorOrExplicitNumberOfPx);
