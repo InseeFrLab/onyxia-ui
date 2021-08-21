@@ -284,7 +284,7 @@ export function createThemeProvider<
 
                                 out.rightLeft = (kind, value) =>
                                     f({ "axis": "horizontal", kind, value });
-                                out.rightLeft = (kind, value) =>
+                                out.topBottom = (kind, value) =>
                                     f({ "axis": "vertical", kind, value });
 
                                 return out;
