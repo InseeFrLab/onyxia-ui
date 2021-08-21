@@ -10,11 +10,12 @@ import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
 import type { FC } from "react";
 import CloseSharp from "@material-ui/icons/CloseSharp";
+import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 
 export type PageHeaderProps<IconId extends string> = {
     mainIcon?: IconId;
     title: string;
-    helpIcon?: IconId;
+    helpIcon?: IconId | "sentimentSatisfied";
     helpTitle: NonNullable<React.ReactNode>;
     helpContent: NonNullable<React.ReactNode>;
     className?: string;
@@ -24,7 +25,6 @@ const useStyles = makeStyles<{ helperHeight: number }>()(
     (theme, { helperHeight }) => ({
         "root": {
             "backgroundColor": "inherit",
-            "paddingBottom": theme.spacing(5),
         },
         "title": {
             "display": "flex",
@@ -61,7 +61,12 @@ const { usePageHeaderClosedHelpers } = createUseGlobalState(
     { "persistance": false },
 );
 
-const { IconButton } = createIconButton(createIcon({ "close": CloseSharp }));
+const { Icon: LocalIcon } = createIcon({
+    "close": CloseSharp,
+    "sentimentSatisfied": SentimentSatisfiedIcon,
+});
+
+const { IconButton } = createIconButton({ "Icon": LocalIcon });
 
 export function createPageHeader<IconId extends string>(params?: {
     Icon(props: IconProps<IconId>): ReturnType<FC>;
@@ -112,10 +117,17 @@ export function createPageHeader<IconId extends string>(params?: {
                     <div ref={helperRef} className={classes.helperRoot}>
                         {helpIcon && (
                             <div>
-                                <Icon
-                                    iconId={helpIcon}
-                                    className={classes.helperIcon}
-                                />
+                                {helpIcon === "sentimentSatisfied" ? (
+                                    <LocalIcon
+                                        iconId="sentimentSatisfied"
+                                        className={classes.helperIcon}
+                                    />
+                                ) : (
+                                    <Icon
+                                        iconId={helpIcon}
+                                        className={classes.helperIcon}
+                                    />
+                                )}
                             </div>
                         )}
                         <div className={classes.helperMiddle}>
