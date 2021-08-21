@@ -2,7 +2,7 @@ import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
 import chevronLeft from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "./lib/ThemeProvider";
-import { useState, useMemo, useEffect, memo, forwardRef } from "react";
+import { useState, useMemo, useEffect, useRef, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -12,7 +12,10 @@ import type { Any } from "ts-toolbelt";
 import { Evt } from "evt";
 import { useElementEvt } from "evt/hooks/useElementEvt";
 import { useEvt } from "evt/hooks/useEvt";
+import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
 import { objectKeys } from "tsafe/objectKeys";
+import { assert } from "tsafe/assert";
+import "minimal-polyfills/Object.fromEntries";
 
 const { Icon } = createIcon({
     chevronLeft,
@@ -183,58 +186,30 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         Evt.create<TabId | undefined>(undefined),
     );
 
-    const [dragOffset, setDragOffset] = useState(0);
-
-    const [relativePositionByTabId, setRelativePositionByTabId] = useState<
-        Record<TabId, number>
-    >(() => {
-        const out: Record<TabId, number> = {} as any;
-
-        tabs.forEach(({ id }) => (out[id] = 0));
-
-        return out;
-    });
-
+    /*
     {
-        const d = ~~(dragOffset / tabWidth + (dragOffset < 0 ? -1 / 2 : 1 / 2));
-        const [evtD] = useState(() => Evt.create<number>(d));
+        const draggedTabRelativePlacing = ~~(dragOffset / tabWidth + Math.sign(dragOffset) / 2);
 
         useEffect(() => {
-            const tabToMoveId = (() => {
-                if (evtDraggedTabId.state === undefined) {
-                    return "";
-                }
+            if (evtDraggedTabId.state === undefined) {
+                return;
+            }
 
-                const draggedTabIndex = tabs.findIndex(
-                    tab => tab.id === evtDraggedTabId.state,
-                );
+            const newTabsRelativePlacing: Record<TabId, number> = {
+                ...tabsRelativePlacing,
+            };
 
-                const out = (() => {
-                    if (evtD.state < d) {
-                        return evtD.state < 0
-                            ? draggedTabIndex + d
-                            : draggedTabIndex + d + 1;
-                    }
-                    if (evtD.state === 0) {
-                        return draggedTabIndex;
-                    }
-                    if (evtD.state < 0) {
-                        return draggedTabIndex + evtD.state;
-                    }
-                    return draggedTabIndex + evtD.state + 1;
-                })();
+            const draggedTabId = evtDraggedTabId.state;
 
-                return `tab${out}`;
-            })();
+            const draggedTabIndex = tabs.findIndex(({ id }) => id === draggedTabId,);
 
-            (relativePositionByTabId as any)[tabToMoveId] +=
-                evtD.state < d ? -1 : 1;
+            newTabsRelativePlacing[tabs[draggedTabIndex + draggedTabRelativePlacing].id] += -1 * Math.sign(draggedTabRelativePlacing);
 
-            setRelativePositionByTabId({ ...relativePositionByTabId });
+            setTabsRelativePlacing(newTabsRelativePlacing);
 
-            evtD.post(d);
-        }, [d]);
+        }, [draggedTabRelativePlacing]);
     }
+    */
 
     //console.log(relativePositionByTabId);
 
@@ -243,44 +218,93 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         onRequestChangeActiveTab(id);
     });
 
-    useEvt(
-        ctx =>
-            evtDraggedTabId
-                .pipe(ctx)
-                .attach(
-                    draggedTabId => draggedTabId === undefined,
-                    () => setDragOffset(0),
-                )
-                .attach(
-                    draggedTabId => draggedTabId !== undefined,
-                    () => {
-                        const ctxBis = Evt.newCtx();
+    const { dragDelta, dragOffset } = (function useClosure() {
+        const [dragOffset, setDragOffset] = useState(0);
 
-                        ctx.evtDoneOrAborted.attach(ctxBis, () =>
-                            ctxBis.done(),
-                        );
+        useEvt(
+            ctx =>
+                evtDraggedTabId
+                    .pipe(ctx)
+                    .attach(
+                        draggedTabId => draggedTabId === undefined,
+                        () => setDragOffset(0),
+                    )
+                    .attach(
+                        draggedTabId => draggedTabId !== undefined,
+                        () => {
+                            const ctxBis = Evt.newCtx();
 
-                        {
-                            let initialPageX: number;
+                            ctx.evtDoneOrAborted.attach(ctxBis, () =>
+                                ctxBis.done(),
+                            );
 
-                            Evt.from(ctxBis, document, "mousemove")
-                                .attachOnce(
-                                    ({ pageX, movementX }) =>
-                                        (initialPageX = pageX - movementX),
-                                )
-                                .attach(({ pageX }) =>
-                                    setDragOffset(pageX - initialPageX),
-                                );
-                        }
+                            {
+                                let initialPageX: number;
 
-                        Evt.from(ctxBis, document, "mouseup").attachOnce(() => {
-                            evtDraggedTabId.state = undefined;
-                            ctxBis.done();
-                        });
-                    },
-                ),
-        [],
-    );
+                                Evt.from(ctxBis, document, "mousemove")
+                                    .attachOnce(
+                                        ({ pageX, movementX }) =>
+                                            (initialPageX = pageX - movementX),
+                                    )
+                                    .attach(({ pageX }) =>
+                                        setDragOffset(pageX - initialPageX),
+                                    );
+                            }
+
+                            Evt.from(ctxBis, document, "mouseup").attachOnce(
+                                () => {
+                                    evtDraggedTabId.state = undefined;
+                                    ctxBis.done();
+                                },
+                            );
+                        },
+                    ),
+            [],
+        );
+
+        const a = tabWidth / 2;
+        const x = dragOffset;
+
+        const dragDelta = x - 2 * a - Math.floor((x - a) / (2 * a)) * 2 * a;
+
+        return { dragDelta, dragOffset };
+    })();
+
+    const [tabsRelativePlacing, setTabsRelativePlacing] = useState<
+        Record<TabId, number>
+    >(() => Object.fromEntries(tabs.map(({ id }) => [id, 0])) as any);
+
+    {
+        const isSwap = Math.abs(dragOffset) > tabWidth / 2;
+
+        useEffect(() => {
+            if (!isSwap) {
+                return;
+            }
+
+            const newTabsRelativePlacing: Record<TabId, number> = {
+                ...tabsRelativePlacing,
+            };
+
+            const draggedTabId = evtDraggedTabId.state;
+
+            assert(draggedTabId !== undefined);
+
+            newTabsRelativePlacing[draggedTabId] += Math.sign(dragOffset);
+
+            {
+                const draggedTabIndex = tabs.findIndex(
+                    ({ id }) => id === draggedTabId,
+                );
+
+                newTabsRelativePlacing[
+                    tabs[draggedTabIndex + Math.sign(dragOffset)].id
+                ] -= Math.sign(dragOffset);
+            }
+
+            setTabsRelativePlacing(newTabsRelativePlacing);
+        }, [isSwap]);
+    }
 
     return (
         <div className={cx(classes.root, className)} ref={rootRef}>
@@ -318,13 +342,12 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                                     css({
                                         "zIndex":
                                             maxTabCount -
-                                            relativePositionByTabId[id] +
+                                            tabsRelativePlacing[id] +
                                             (isSelected ? 1 : -i),
                                         "left":
-                                            relativePositionByTabId[id] *
-                                                tabWidth +
+                                            tabsRelativePlacing[id] * tabWidth +
                                                 (evtDraggedTabId.state === id
-                                                    ? dragOffset
+                                                    ? dragDelta
                                                     : 0) || undefined,
                                     }),
                                 )}
