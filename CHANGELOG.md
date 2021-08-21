@@ -1,3 +1,8 @@
+## **0.11.0** (2021-08-21)  
+  
+- Fix spacing function  
+- Reforming spacing    
+  
 ### **0.10.11** (2021-08-21)  
   
 - PageHeader: EvenSpacing    
