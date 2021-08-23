@@ -6,6 +6,7 @@ import { getStoryFactory } from "./getStory";
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { Alert },
+    "defaultWidth": 500,
 });
 
 export default meta;

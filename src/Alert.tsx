@@ -38,7 +38,6 @@ const useStyles = makeStyles<Pick<AlertProps, "severity">>()(
                 "color": theme.colors.useCases.alertSeverity[severity].main,
             },
             "& .MuiAlert-action": {
-                "marginLeft": theme.spacing(3),
                 "alignItems": "center",
                 "padding": 0,
             },
