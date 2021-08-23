@@ -1,3 +1,7 @@
+### **0.11.1** (2021-08-22)  
+  
+- Fix tabs sizing    
+  
 ## **0.11.0** (2021-08-21)  
   
 - Fix spacing function  
