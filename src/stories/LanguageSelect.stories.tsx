@@ -49,6 +49,6 @@ export default meta;
 
 export const VueNoTitle = getStory({
     "doShowIcon": true,
-    "tooltipText": "Change language",
+    "changeLanguageText": "Change language",
     "variant": "for header",
 });

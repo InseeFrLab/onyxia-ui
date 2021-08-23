@@ -21,7 +21,8 @@ export type LanguageSelectProps<Language extends string = string> = {
     /** Example "en" or "fr" */
     language: Language;
     onLanguageChange(language: Language): void;
-    tooltipText?: string;
+    /** If provided a tooltip will show up on hover with this text */
+    selectLanguageText?: string;
 };
 
 const { Icon } = createIcon({
@@ -85,7 +86,7 @@ export function createLanguageSelect<Language extends string>(params: {
             className,
             doShowIcon = true,
             variant,
-            tooltipText,
+            selectLanguageText,
             language,
             onLanguageChange,
         } = props;
@@ -116,13 +117,13 @@ export function createLanguageSelect<Language extends string>(params: {
 
         return (
             <>
-                <Tooltip title={tooltipText} enterDelay={300}>
+                <Tooltip title={selectLanguageText} enterDelay={300}>
                     <MuiButton
                         className={cx(classes.button, className)}
                         ref={buttonRef}
                         aria-owns={languageMenu ? menuId : undefined}
                         aria-haspopup="true"
-                        aria-label={tooltipText ?? "change language"}
+                        aria-label={selectLanguageText ?? "change language"}
                         onClick={onClick}
                         data-ga-event-category="header"
                         data-ga-event-action="language"
