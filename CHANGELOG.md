@@ -1,3 +1,9 @@
+## **0.12.0** (2021-08-23)  
+  
+- Feat ButtonBar  
+- Alert: Fix cross  
+- Add language switcher    
+  
 ### **0.11.1** (2021-08-22)  
   
 - Fix tabs sizing    
