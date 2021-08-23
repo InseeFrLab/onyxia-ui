@@ -36,10 +36,7 @@ const { meta, getStory } = getStoryFactory({
     "wrappedComponent": { [symToStr({ LanguageSelect })]: Component },
     "argTypes": {
         "variant": {
-            "options": id<LanguageSelectProps["variant"][]>([
-                "for footer",
-                "for header",
-            ]),
+            "options": id<LanguageSelectProps["variant"][]>(["big", "small"]),
             "control": { "type": "radio" },
         },
     },
@@ -50,5 +47,5 @@ export default meta;
 export const VueNoTitle = getStory({
     "doShowIcon": true,
     "changeLanguageText": "Change language",
-    "variant": "for header",
+    "variant": "big",
 });

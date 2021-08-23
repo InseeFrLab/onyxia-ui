@@ -17,7 +17,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 export type LanguageSelectProps<Language extends string = string> = {
     className?: string;
     doShowIcon?: boolean;
-    variant: "for footer" | "for header";
+    variant: "small" | "big";
     /** Example "en" or "fr" */
     language: Language;
     onLanguageChange(language: Language): void;
@@ -43,14 +43,12 @@ export function createLanguageSelect<Language extends string>(params: {
         variant: LanguageSelectProps["variant"];
     }>()((theme, { buttonWidth, variant }) => ({
         "button": {
-            ...(() => {
+            "padding": (() => {
                 switch (variant) {
-                    case "for header":
-                        return {};
-                    case "for footer":
-                        return {
-                            "padding": 0,
-                        };
+                    case "big":
+                        return undefined;
+                    case "small":
+                        return 0;
                 }
             })(),
         },
@@ -60,7 +58,14 @@ export function createLanguageSelect<Language extends string>(params: {
             },
             "& .MuiPaper-root": {
                 "backgroundColor": theme.colors.useCases.surfaces.background,
-                "width": buttonWidth,
+                "width": (() => {
+                    switch (variant) {
+                        case "big":
+                            return buttonWidth;
+                        case "small":
+                            return undefined;
+                    }
+                })(),
             },
             "& a": {
                 "color": theme.colors.useCases.typography.textPrimary,
@@ -68,16 +73,6 @@ export function createLanguageSelect<Language extends string>(params: {
         },
         "icon": {
             "color": theme.colors.useCases.typography.textPrimary,
-            ...(() => {
-                switch (variant) {
-                    case "for header":
-                        return {};
-                    case "for footer":
-                        return {
-                            "transform": "rotate(-180deg)",
-                        };
-                }
-            })(),
         },
     }));
 
@@ -129,10 +124,28 @@ export function createLanguageSelect<Language extends string>(params: {
                         data-ga-event-action="language"
                     >
                         {doShowIcon && (
-                            <Icon iconId="public" className={classes.icon} />
+                            <Icon
+                                iconId="public"
+                                className={classes.icon}
+                                size={(() => {
+                                    switch (variant) {
+                                        case "big":
+                                            return "default";
+                                        case "small":
+                                            return "extra small";
+                                    }
+                                })()}
+                            />
                         )}
                         <Text
-                            typo="label 1"
+                            typo={(() => {
+                                switch (variant) {
+                                    case "big":
+                                        return "label 1";
+                                    case "small":
+                                        return "body 2";
+                                }
+                            })()}
                             className={css({
                                 "marginLeft": theme.spacing(2),
                                 "textTransform": "capitalize",
@@ -140,7 +153,12 @@ export function createLanguageSelect<Language extends string>(params: {
                         >
                             {languagesPrettyPrint[language]}
                         </Text>
-                        <Icon className={classes.icon} iconId="expandMore" />
+                        {variant === "big" && (
+                            <Icon
+                                className={classes.icon}
+                                iconId="expandMore"
+                            />
+                        )}
                     </MuiButton>
                 </Tooltip>
                 <Menu
