@@ -1,3 +1,8 @@
+### **0.12.2** (2021-08-23)  
+  
+- Bump version (changlog ignore)  
+- LanguageSelect: fixes    
+  
 ### **0.12.1** (2021-08-23)  
   
   
