@@ -16,7 +16,7 @@ import { objectKeys } from "tsafe/objectKeys";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { ComponentType } from "../tools/ComponentType";
 
-export function getStoryFactory<Props extends Record<string, unknown>>(params: {
+export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
     wrappedComponent: Record<string, ComponentType<Props>>;
     /** https://storybook.js.org/docs/react/essentials/controls */
