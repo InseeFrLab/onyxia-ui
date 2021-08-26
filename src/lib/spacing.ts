@@ -25,91 +25,91 @@ export const defaultSpacingConfig: SpacingConfig = ({
     factorOrExplicitNumberOfPx,
     windowInnerWidth,
     rootFontSizePx,
-}) =>
-    rootFontSizePx *
-    (function callee(
-        factorOrExplicitNumberOfPx: number | `${number}px`,
-    ): number {
-        if (typeof factorOrExplicitNumberOfPx === "string") {
-            const match = factorOrExplicitNumberOfPx.match(
-                /^([+-]?([0-9]*[.])?[0-9]+)px$/,
-            );
+}) => {
+    if (typeof factorOrExplicitNumberOfPx === "string") {
+        const match = factorOrExplicitNumberOfPx.match(
+            /^([+-]?([0-9]*[.])?[0-9]+)px$/,
+        );
 
-            assert(
-                match !== null,
-                `${factorOrExplicitNumberOfPx} don't match \\d+px`,
-            );
+        assert(
+            match !== null,
+            `${factorOrExplicitNumberOfPx} don't match \\d+px`,
+        );
 
-            return Number.parseFloat(match[1]);
-        }
+        return Number.parseFloat(match[1]);
+    }
 
-        const factor = factorOrExplicitNumberOfPx;
+    return (
+        rootFontSizePx *
+        (function callee(factor: number): number {
+            assert(factor >= 0, "factor must be positive");
 
-        assert(factor >= 0, "factor must be positive");
+            if (!Number.isInteger(factor)) {
+                return (
+                    (callee(Math.floor(factor)) +
+                        callee(Math.floor(factor) + 1)) /
+                    2
+                );
+            }
 
-        if (!Number.isInteger(factor)) {
-            return (
-                (callee(Math.floor(factor)) + callee(Math.floor(factor) + 1)) /
-                2
-            );
-        }
+            if (factor === 0) {
+                return 0;
+            }
 
-        if (factor === 0) {
-            return 0;
-        }
+            if (factor > 6) {
+                return (factor - 5) * callee(6);
+            }
 
-        if (factor > 6) {
-            return (factor - 5) * callee(6);
-        }
+            if (windowInnerWidth >= breakpointsValues.xl) {
+                switch (factor) {
+                    case 1:
+                        return 0.25;
+                    case 2:
+                        return 0.5;
+                    case 3:
+                        return 1;
+                    case 4:
+                        return 1.5;
+                    case 5:
+                        return 2;
+                    case 6:
+                        return 2.5;
+                }
+            }
 
-        if (windowInnerWidth >= breakpointsValues.xl) {
+            if (windowInnerWidth >= breakpointsValues.lg) {
+                switch (factor) {
+                    case 1:
+                        return 0.25;
+                    case 2:
+                        return 0.5;
+                    case 3:
+                        return 1;
+                    case 4:
+                        return 1;
+                    case 5:
+                        return 1.5;
+                    case 6:
+                        return 2;
+                }
+            }
+
             switch (factor) {
                 case 1:
                     return 0.25;
                 case 2:
-                    return 0.5;
-                case 3:
-                    return 1;
-                case 4:
-                    return 1.5;
-                case 5:
-                    return 2;
-                case 6:
-                    return 2.5;
-            }
-        }
-
-        if (windowInnerWidth >= breakpointsValues.lg) {
-            switch (factor) {
-                case 1:
                     return 0.25;
-                case 2:
-                    return 0.5;
                 case 3:
-                    return 1;
+                    return 0.5;
                 case 4:
                     return 1;
                 case 5:
-                    return 1.5;
+                    return 1;
                 case 6:
-                    return 2;
+                    return 1.5;
             }
-        }
 
-        switch (factor) {
-            case 1:
-                return 0.25;
-            case 2:
-                return 0.25;
-            case 3:
-                return 0.5;
-            case 4:
-                return 1;
-            case 5:
-                return 1;
-            case 6:
-                return 1.5;
-        }
-
-        assert(false);
-    })(factorOrExplicitNumberOfPx);
+            assert(false);
+        })(factorOrExplicitNumberOfPx)
+    );
+};
