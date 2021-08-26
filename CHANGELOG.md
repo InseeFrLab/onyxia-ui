@@ -1,3 +1,7 @@
+### **0.12.4** (2021-08-26)  
+  
+- Rename ComponentType -> ReactComponent    
+  
 ### **0.12.3** (2021-08-26)  
   
 - Fix spacing  
