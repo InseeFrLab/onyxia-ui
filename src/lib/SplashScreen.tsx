@@ -1,4 +1,11 @@
-import { useState, useEffect, useRef, memo } from "react";
+import {
+    useState,
+    useEffect,
+    useRef,
+    useContext,
+    createContext,
+    memo,
+} from "react";
 import type { ReactNode } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import Color from "color";
@@ -96,71 +103,76 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
         };
     }
 
-    const { useSplashScreen } = (() => {
-        function useSplashScreen(params?: {
-            onHidden?(): void;
-            fadeOutDuration?: number;
-            minimumDisplayDuration?: number;
-        }) {
-            if (params?.fadeOutDuration !== undefined) {
-                fadeOutDuration = params.fadeOutDuration;
+    function useSplashScreen(params?: {
+        onHidden?(): void;
+        fadeOutDuration?: number;
+        minimumDisplayDuration?: number;
+    }) {
+        if (params?.fadeOutDuration !== undefined) {
+            fadeOutDuration = params.fadeOutDuration;
+        }
+
+        if (params?.minimumDisplayDuration !== undefined) {
+            minimumDisplayDuration = params.minimumDisplayDuration;
+        }
+
+        useState(() => {
+            const { onHidden } = params ?? {};
+
+            if (onHidden === undefined) {
+                return;
             }
 
-            if (params?.minimumDisplayDuration !== undefined) {
-                minimumDisplayDuration = params.minimumDisplayDuration;
+            evtDisplayState.state.onHiddens.push(onHidden);
+        });
+
+        const isUsingSplashScreen = useContext(context);
+
+        useEffect(() => {
+            if (isUsingSplashScreen) {
+                return;
             }
 
-            useState(() => {
-                const { onHidden } = params ?? {};
+            params?.onHidden?.();
+        }, []);
 
-                if (onHidden === undefined) {
+        const { showSplashScreen, hideSplashScreen } = (function useClosure() {
+            const countRef = useRef<number>(0);
+
+            const showSplashScreen = useConstCallback<
+                typeof globalShowSplashScreen
+            >(({ enableTransparency }) => {
+                countRef.current++;
+
+                globalShowSplashScreen({ enableTransparency });
+            });
+
+            const hideSplashScreen = useConstCallback<
+                typeof globalHideSplashScreen
+            >(async () => {
+                if (countRef.current === 0) {
                     return;
                 }
 
-                evtDisplayState.state.onHiddens.push(onHidden);
+                countRef.current--;
+
+                await globalHideSplashScreen();
             });
 
-            const { showSplashScreen, hideSplashScreen } =
-                (function useClosure() {
-                    const countRef = useRef<number>(0);
+            return { showSplashScreen, hideSplashScreen };
+        })();
 
-                    const showSplashScreen = useConstCallback<
-                        typeof globalShowSplashScreen
-                    >(({ enableTransparency }) => {
-                        countRef.current++;
+        const { isSplashScreenShown, isTransparencyEnabled } =
+            useSplashScreenStatusInternal();
 
-                        globalShowSplashScreen({ enableTransparency });
-                    });
-
-                    const hideSplashScreen = useConstCallback<
-                        typeof globalHideSplashScreen
-                    >(async () => {
-                        if (countRef.current === 0) {
-                            return;
-                        }
-
-                        countRef.current--;
-
-                        await globalHideSplashScreen();
-                    });
-
-                    return { showSplashScreen, hideSplashScreen };
-                })();
-
-            const { isSplashScreenShown, isTransparencyEnabled } =
-                useSplashScreenStatusInternal();
-
-            return {
-                isSplashScreenShown,
-                isTransparencyEnabled,
-                "hideRootSplashScreen": globalHideSplashScreen,
-                showSplashScreen,
-                hideSplashScreen,
-            };
-        }
-
-        return { useSplashScreen };
-    })();
+        return {
+            isSplashScreenShown,
+            isTransparencyEnabled,
+            "hideRootSplashScreen": globalHideSplashScreen,
+            showSplashScreen,
+            hideSplashScreen,
+        };
+    }
 
     function useSplashScreenStatus() {
         const { isSplashScreenShown, isTransparencyEnabled } =
@@ -210,6 +222,8 @@ export type SplashScreenProps = {
     minimumDisplayDuration?: number;
     children: ReactNode;
 };
+
+const context = createContext<boolean>(false);
 
 export function createSplashScreen(params: { useTheme(): Theme }) {
     const { useTheme } = params;
@@ -372,17 +386,19 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
 
             return (
                 <div ref={ref} className={css({ "height": "100%" })}>
-                    <Overlay
-                        className={css({
-                            "width": width,
-                            "position": "absolute",
-                            "height": height,
-                            "zIndex": 10,
-                        })}
-                        Logo={Logo}
-                        fillColor={fillColor}
-                    />
-                    {width !== 0 && children}
+                    <context.Provider value={true}>
+                        <Overlay
+                            className={css({
+                                "width": width,
+                                "position": "absolute",
+                                "height": height,
+                                "zIndex": 10,
+                            })}
+                            Logo={Logo}
+                            fillColor={fillColor}
+                        />
+                        {width !== 0 && children}
+                    </context.Provider>
                 </div>
             );
         }
