@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, memo } from "react";
-import type { ReactNode, FC } from "react";
+import type { ReactNode } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
@@ -10,6 +10,7 @@ import type { Theme } from "./ThemeProvider";
 import { Evt } from "evt";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
+import type { ReactComponent } from "../tools/ReactComponent";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -200,7 +201,7 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 export { useSplashScreen };
 
 export type SplashScreenProps = {
-    Logo(props: { className?: string }): ReturnType<FC>;
+    Logo: ReactComponent<{ className: string }>;
     /** Default to focus main */
     fillColor?: string;
     /** Default 700ms */
