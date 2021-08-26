@@ -1,3 +1,7 @@
+### **0.12.5** (2021-08-26)  
+  
+- Improve typing splashScreen    
+  
 ### **0.12.4** (2021-08-26)  
   
 - Rename ComponentType -> ReactComponent    
