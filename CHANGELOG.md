@@ -1,3 +1,7 @@
+### **0.12.6** (2021-08-26)  
+  
+- Splashscreen: execute onHidden even if splashscreen not mounter at all    
+  
 ### **0.12.5** (2021-08-26)  
   
 - Improve typing splashScreen    
