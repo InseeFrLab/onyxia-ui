@@ -10,17 +10,16 @@ import { createButton } from "onyxia-ui/Button";
 import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
 import { createMakeStyles } from "tss-react";
-import "onyxia-ui/assets/fonts/work-sans.css";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import EditIcon from "@material-ui/icons/Edit";
 
 //Import your custom icons
-import { ReactComponent as FooSvg } from "./assets/foo.svg";
-import { ReactComponent as BarSvg } from "./assets/bar.svg";
+import { ReactComponent as FooSvg } from "../assets/foo.svg";
+import { ReactComponent as BarSvg } from "../assets/bar.svg";
 
-export const { ThemeProvider, useTheme } = createThemeProvider({
+export const { ThemeProvider, useTheme, muiCache } = createThemeProvider({
     "getTypographyDesc": ({
         windowInnerWidth,
         //When users go to it's browser setting he can select the font size "small", "medium", "default"

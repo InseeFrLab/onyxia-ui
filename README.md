@@ -21,6 +21,8 @@ Default design system carefully crafted by [Marc Hufschmitt](http://marchufschmi
 
 This project is under active development. It's APIs are susceptible to change until v1.
 
+WARNING: `onyxia-ui` isn't currently working with SSR. (You can't use it with Next.js)
+
 # Motivation
 
 [Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
@@ -31,7 +33,7 @@ In consequence, we wanted to create a ui toolkit that would be compatible with
 
 -   Optimized for typescript, theme customization without module augmentation.
 -   Responsive design **way** more easy to implement.
--   Built in support for the dark mode, persistent across reload, without white flashes.
+-   Built in support for the dark mode, persistent across reload.
 -   Easier, more guided, theme customization.
 -   Provide splash screen that hides your components while they are not yet loaded.
 -   Leverages an arguably better styling API: [TSS](https://github.com/garronej/tss-react).

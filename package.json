@@ -18,8 +18,9 @@
         "format:check": "npm run _format -- --list-different",
         "storybook": "start-storybook -p 6006 --static-dir ./.storybook/static",
         "start": "yarn link_test_projects_dependencies && cd src/test && yarn start",
-        "yarn_link": "node dist/bin/yarn_link",
-        "start_spa": "yarn yarn_link && cd src/test/spa && yarn start"
+        "yarn_link": "ts-node src/bin/yarn_link.ts",
+        "start_spa": "yarn yarn_link && cd src/test/spa && yarn start",
+        "start_ssr": "yarn yarn_link && cd src/test/ssr && yarn dev"
     },
     "lint-staged": {
         "*.{ts,tsx}": [
@@ -58,12 +59,12 @@
         "@material-ui/core": "^5.0.0-beta.4",
         "@emotion/react": "^11.4.1",
         "@emotion/styled": "^11.3.0",
-        "tss-react": "^0.7.3",
+        "tss-react": "^0.8.1",
         "@material-ui/icons": "^5.0.0-beta.4",
         "color": "3.1.3",
         "evt": "2.0.0-beta.29",
         "memoizee": "^0.4.15",
-        "powerhooks": "^0.7.1",
+        "powerhooks": "^0.7.2",
         "tsafe": "^0.4.1",
         "minimal-polyfills": "^2.2.1"
     },
@@ -93,6 +94,8 @@
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-scripts": "4.0.3",
-        "typescript": "4.2.2"
+        "typescript": "4.2.2",
+        "ts-node": "^10.2.1",
+        "next": "11.0.1"
     }
 }

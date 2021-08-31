@@ -17,5 +17,5 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": ["src"],
-    "exclude": ["src/stories", "src/test"]
+    "exclude": ["bin/", "src/stories", "src/test"]
 }

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
+import "minimal-polyfills/Object.fromEntries";
 import { useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@material-ui/core";
@@ -45,15 +45,13 @@ import { assert } from "tsafe/assert";
 import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
-import { EmotionCache } from "@emotion/react";
 import { capitalize } from "tsafe/capitalize";
-import "minimal-polyfills/Object.fromEntries";
+import createCache from "tss-react/@emotion/cache";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
 export { ViewPortOutOfRangeError };
 import { CacheProvider } from "@emotion/react";
-import { getCache } from "tss-react/cache";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -141,7 +139,6 @@ export function createThemeProvider<
     custom?: Custom;
     defaultIsDarkModeEnabled?: boolean;
     getIconSizeInPx?: GetIconSizeInPx;
-    cache?: EmotionCache;
 }) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
@@ -156,7 +153,6 @@ export function createThemeProvider<
         custom = {} as NonNullable<typeof params["custom"]>,
         defaultIsDarkModeEnabled,
         getIconSizeInPx = defaultGetIconSizeInPx,
-        cache = getCache(),
     } = params;
 
     if (defaultIsDarkModeEnabled !== undefined) {
@@ -323,6 +319,11 @@ export function createThemeProvider<
 
     const { SplashScreen } = createSplashScreen({ useTheme });
 
+    const muiCache = createCache({
+        "key": "mui",
+        "prepend": true,
+    });
+
     const { ThemeProvider } = (() => {
         function ThemeProviderInner(
             props: Omit<ThemeProviderProps, "getViewPortConfig">,
@@ -333,7 +334,7 @@ export function createThemeProvider<
 
             return (
                 <themeBaseContext.Provider value={theme}>
-                    <CacheProvider value={cache}>
+                    <CacheProvider value={muiCache}>
                         <MuiThemeProvider theme={theme.muiTheme}>
                             <CssBaseline />
                             {splashScreen === undefined ? (
