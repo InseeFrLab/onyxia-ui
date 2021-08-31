@@ -12005,10 +12005,10 @@ postcss@^8.1.0:
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
 
-powerhooks@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.7.2.tgz#51e348061665b33ebaa5ba0d0e31c569a59cf70b"
-  integrity sha512-iS0Mt5ToIzj4hzlfEsNDZqLlHj32X/+Lmn4rMgbAKGbdMQffURDvUbBJd0worsd+A+3IjAZNBlfKnTuhLEluHQ==
+powerhooks@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.7.3.tgz#904d76bfbcee77d0c19e30ef1c9aa5552a378870"
+  integrity sha512-5CpUwelVPrZbWGjhUsLLeEuPUenvyYngOh7PBy2rW+KZBPQcuTi6zWkVrQ2WBn6KS2sDRmfNK+25L5KqIQQDUw==
   dependencies:
     evt "2.0.0-beta.29"
     memoizee "^0.4.15"
