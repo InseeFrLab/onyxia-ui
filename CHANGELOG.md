@@ -1,3 +1,8 @@
+### **0.12.7** (2021-08-31)  
+  
+- Update powerhooks  
+- Update tss-react and acnoelage that it isn't compatible with SSR    
+  
 ### **0.12.6** (2021-08-26)  
   
 - Splashscreen: execute onHidden even if splashscreen not mounter at all    
