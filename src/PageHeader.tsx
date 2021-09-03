@@ -19,42 +19,61 @@ export type PageHeaderProps<IconId extends string> = {
     helpTitle: NonNullable<React.ReactNode>;
     helpContent: NonNullable<React.ReactNode>;
     className?: string;
+    /** Default true */
+    isTitleVisible?: boolean;
+    /** Default true */
+    isHelpVisible?: boolean;
 };
 
-const useStyles = makeStyles<{ helperHeight: number }>()(
-    (theme, { helperHeight }) => ({
-        "root": {
-            "backgroundColor": "inherit",
-            "marginBottom": theme.spacing(3),
-        },
-        "title": {
-            "display": "flex",
-            "alignItems": "center",
-        },
-        "titleIcon": {
-            "marginRight": theme.spacing(3),
-        },
-        "helperRoot": {
-            "display": "flex",
-            "backgroundColor": theme.colors.useCases.surfaces.surface2,
-            "alignItems": "start",
-            "padding": theme.spacing(3),
-            "borderRadius": helperHeight * 0.15,
-            "marginTop": theme.spacing(3),
-        },
-        "helperMiddle": {
-            "flex": 1,
-        },
-        "helperIcon": {
-            "marginRight": theme.spacing(3),
-            "color": theme.colors.useCases.typography.textFocus,
-        },
-        "closeButton": {
-            "padding": 0,
-            "marginLeft": theme.spacing(3),
-        },
-    }),
-);
+const useStyles = makeStyles<{
+    helperHeight: number;
+    titleWrapperHeight: number | undefined;
+    helpWrapperHeight: number | undefined;
+}>()((theme, { helperHeight, titleWrapperHeight, helpWrapperHeight }) => ({
+    "root": {
+        "backgroundColor": "inherit",
+        "marginBottom":
+            titleWrapperHeight !== 0 || helpWrapperHeight !== 0
+                ? theme.spacing(3)
+                : 0,
+    },
+    "title": {
+        "display": "flex",
+        "alignItems": "center",
+    },
+    "titleIcon": {
+        "marginRight": theme.spacing(3),
+    },
+    "help": {
+        "display": "flex",
+        "backgroundColor": theme.colors.useCases.surfaces.surface2,
+        "alignItems": "start",
+        "padding": theme.spacing(3),
+        "borderRadius": helperHeight * 0.15,
+    },
+    "helpMiddle": {
+        "flex": 1,
+    },
+    "helpIcon": {
+        "marginRight": theme.spacing(3),
+        "color": theme.colors.useCases.typography.textFocus,
+    },
+    "closeButton": {
+        "padding": 0,
+        "marginLeft": theme.spacing(3),
+    },
+    "titleWrapper": {
+        "height": titleWrapperHeight,
+        "transition": "height 250ms",
+        "overflow": "hidden",
+    },
+    "helpWrapper": {
+        "marginTop": helpWrapperHeight !== 0 ? theme.spacing(3) : 0,
+        "height": helpWrapperHeight,
+        "transition": "height 250ms",
+        "overflow": "hidden",
+    },
+}));
 
 const { usePageHeaderClosedHelpers } = createUseGlobalState(
     "pageHeaderClosedHelpers",
@@ -79,71 +98,104 @@ export function createPageHeader<IconId extends string>(params?: {
     };
 
     const PageHeader = memo((props: PageHeaderProps<IconId>) => {
-        const { mainIcon, title, helpTitle, helpIcon, helpContent, className } =
-            props;
+        const {
+            mainIcon,
+            title,
+            helpTitle,
+            helpIcon,
+            helpContent,
+            className,
+            isTitleVisible = true,
+            isHelpVisible = true,
+        } = props;
 
+        const {
+            ref: titleRef,
+            domRect: { height: titleHeight },
+        } = useDomRect<HTMLElement>();
         const {
             ref: helperRef,
             domRect: { height: helperHeight },
-        } = useDomRect();
+        } = useDomRect<HTMLDivElement>();
 
-        const { classes, cx } = useStyles({ helperHeight });
-
-        const { isHelpShown, hideHelp } = (function useClosure() {
+        const { isHelpClosed, closeHelp } = (function useClosure() {
             const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
                 usePageHeaderClosedHelpers();
 
-            const isHelpShown = !pageHeaderClosedHelpers.includes(title);
+            const isHelpClosed = pageHeaderClosedHelpers.includes(title);
 
-            const hideHelp = useConstCallback(() =>
+            const closeHelp = useConstCallback(() =>
                 setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]),
             );
 
-            return { isHelpShown, hideHelp };
+            return { isHelpClosed, closeHelp };
         })();
+
+        const { classes, cx } = useStyles({
+            helperHeight,
+            "titleWrapperHeight":
+                titleHeight === 0
+                    ? undefined
+                    : isTitleVisible
+                    ? titleHeight
+                    : 0,
+            "helpWrapperHeight": isHelpClosed
+                ? 0
+                : helperHeight === 0
+                ? undefined
+                : isHelpVisible
+                ? helperHeight
+                : 0,
+        });
 
         return (
             <div className={cx(classes.root, className)}>
-                <Text typo="page heading" className={classes.title}>
-                    {mainIcon && (
-                        <Icon
-                            iconId={mainIcon}
-                            className={classes.titleIcon}
-                            size="large"
-                        />
-                    )}
-                    {title}
-                </Text>
-                {isHelpShown && (
-                    <div ref={helperRef} className={classes.helperRoot}>
+                <div className={classes.titleWrapper}>
+                    <Text
+                        typo="page heading"
+                        className={classes.title}
+                        ref={titleRef}
+                    >
+                        {mainIcon && (
+                            <Icon
+                                iconId={mainIcon}
+                                className={classes.titleIcon}
+                                size="large"
+                            />
+                        )}
+                        {title}
+                    </Text>
+                </div>
+                <div className={classes.helpWrapper}>
+                    <div ref={helperRef} className={classes.help}>
                         {helpIcon && (
                             <div>
                                 {helpIcon === "sentimentSatisfied" ? (
                                     <LocalIcon
                                         iconId="sentimentSatisfied"
-                                        className={classes.helperIcon}
+                                        className={classes.helpIcon}
                                     />
                                 ) : (
                                     <Icon
                                         iconId={helpIcon}
-                                        className={classes.helperIcon}
+                                        className={classes.helpIcon}
                                     />
                                 )}
                             </div>
                         )}
-                        <div className={classes.helperMiddle}>
+                        <div className={classes.helpMiddle}>
                             <Text typo="navigation label">{helpTitle}</Text>
                             <Text typo="body 1">{helpContent}</Text>
                         </div>
                         <div>
                             <IconButton
                                 iconId="close"
-                                onClick={hideHelp}
+                                onClick={closeHelp}
                                 className={classes.closeButton}
                             />
                         </div>
                     </div>
-                )}
+                </div>
             </div>
         );
     });
