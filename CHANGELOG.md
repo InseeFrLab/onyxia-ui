@@ -1,3 +1,7 @@
+### **0.12.8** (2021-09-03)  
+  
+- Make page header retractable on demand    
+  
 ### **0.12.7** (2021-08-31)  
   
 - Update powerhooks  
