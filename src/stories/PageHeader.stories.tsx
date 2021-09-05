@@ -19,6 +19,6 @@ export const VueDefault = getStory({
     "helpTitle": "This is the help title",
     "mainIcon": "home",
     "title": "This is the title",
-    "isTitleVisible": true,
-    "isHelpVisible": true,
+    "isTitleCollapsed": false,
+    "isHelpCollapsed": false,
 });

@@ -11,6 +11,7 @@ import type { IconProps } from "./Icon";
 import type { FC } from "react";
 import CloseSharp from "@material-ui/icons/CloseSharp";
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
+import { CollapsibleWrapper } from "./tools/CollapsibleWrapper";
 
 export type PageHeaderProps<IconId extends string> = {
     mainIcon?: IconId;
@@ -19,23 +20,21 @@ export type PageHeaderProps<IconId extends string> = {
     helpTitle: NonNullable<React.ReactNode>;
     helpContent: NonNullable<React.ReactNode>;
     className?: string;
-    /** Default true */
-    isTitleVisible?: boolean;
-    /** Default true */
-    isHelpVisible?: boolean;
+    /** Default false */
+    isTitleCollapsed?: boolean;
+    /** Default false */
+    isHelpCollapsed?: boolean;
 };
 
 const useStyles = makeStyles<{
     helperHeight: number;
-    titleWrapperHeight: number | undefined;
-    helpWrapperHeight: number | undefined;
-}>()((theme, { helperHeight, titleWrapperHeight, helpWrapperHeight }) => ({
+    isTitleCollapsed: boolean;
+    isHelpCollapsed: boolean;
+}>()((theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
     "root": {
         "backgroundColor": "inherit",
         "marginBottom":
-            titleWrapperHeight !== 0 || helpWrapperHeight !== 0
-                ? theme.spacing(3)
-                : 0,
+            !isTitleCollapsed || !isHelpCollapsed ? theme.spacing(3) : 0,
     },
     "title": {
         "display": "flex",
@@ -62,18 +61,8 @@ const useStyles = makeStyles<{
         "padding": 0,
         "marginLeft": theme.spacing(3),
     },
-    "titleWrapper": {
-        "height": titleWrapperHeight,
-        "transition": "height 250ms",
-        "overflow": "hidden",
-    },
-    "helpWrapper": {
-        "marginTop": helpWrapperHeight !== 0 ? theme.spacing(3) : 0,
-        "height": helpWrapperHeight,
-        "transition": ["height", "margin"]
-            .map(prop => `${prop} 250ms`)
-            .join(", "),
-        "overflow": "hidden",
+    "helpCollapsibleWrapper": {
+        "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
     },
 }));
 
@@ -107,14 +96,9 @@ export function createPageHeader<IconId extends string>(params?: {
             helpIcon,
             helpContent,
             className,
-            isTitleVisible = true,
-            isHelpVisible = true,
+            isTitleCollapsed = false,
         } = props;
 
-        const {
-            ref: titleRef,
-            domRect: { height: titleHeight },
-        } = useDomRect<HTMLElement>();
         const {
             ref: helperRef,
             domRect: { height: helperHeight },
@@ -133,31 +117,19 @@ export function createPageHeader<IconId extends string>(params?: {
             return { isHelpClosed, closeHelp };
         })();
 
+        const isHelpCollapsed =
+            isHelpClosed || (props.isHelpCollapsed ?? false);
+
         const { classes, cx } = useStyles({
             helperHeight,
-            "titleWrapperHeight":
-                titleHeight === 0
-                    ? undefined
-                    : isTitleVisible
-                    ? titleHeight
-                    : 0,
-            "helpWrapperHeight": isHelpClosed
-                ? 0
-                : helperHeight === 0
-                ? undefined
-                : isHelpVisible
-                ? helperHeight
-                : 0,
+            isTitleCollapsed,
+            isHelpCollapsed,
         });
 
         return (
             <div className={cx(classes.root, className)}>
-                <div className={classes.titleWrapper}>
-                    <Text
-                        typo="page heading"
-                        className={classes.title}
-                        ref={titleRef}
-                    >
+                <CollapsibleWrapper isCollapsed={isTitleCollapsed}>
+                    <Text typo="page heading" className={classes.title}>
                         {mainIcon && (
                             <Icon
                                 iconId={mainIcon}
@@ -167,8 +139,11 @@ export function createPageHeader<IconId extends string>(params?: {
                         )}
                         {title}
                     </Text>
-                </div>
-                <div className={classes.helpWrapper}>
+                </CollapsibleWrapper>
+                <CollapsibleWrapper
+                    className={classes.helpCollapsibleWrapper}
+                    isCollapsed={isHelpCollapsed}
+                >
                     <div ref={helperRef} className={classes.help}>
                         {helpIcon && (
                             <div>
@@ -197,7 +172,7 @@ export function createPageHeader<IconId extends string>(params?: {
                             />
                         </div>
                     </div>
-                </div>
+                </CollapsibleWrapper>
             </div>
         );
     });
