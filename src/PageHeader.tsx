@@ -70,7 +70,9 @@ const useStyles = makeStyles<{
     "helpWrapper": {
         "marginTop": helpWrapperHeight !== 0 ? theme.spacing(3) : 0,
         "height": helpWrapperHeight,
-        "transition": "height 250ms",
+        "transition": ["height", "margin"]
+            .map(prop => `${prop} 250ms`)
+            .join(", "),
         "overflow": "hidden",
     },
 }));
