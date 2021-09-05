@@ -9,6 +9,7 @@ import { id } from "tsafe/id";
 import { objectKeys } from "tsafe/objectKeys";
 import { createIcon } from "./Icon";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { useDomRect } from "powerhooks/useDomRect";
 
 export type Item<IconId extends string = string> = {
     iconId: IconId;
@@ -41,16 +42,12 @@ export function createLeftBar<IconId extends string>(params?: {
     };
 
     const useStyles = makeStyles()(theme => ({
-        "root": {
-            "overflow": "visible",
-        },
         "nav": {
             ...theme.spacing.topBottom("padding", 3),
             "backgroundColor": theme.colors.useCases.surfaces.surface1,
             "borderRadius": 16,
             "boxShadow": theme.shadows[3],
             "overflow": "auto",
-            "height": "100%",
         },
         "button": {
             "marginTop": theme.spacing(2),
@@ -87,32 +84,37 @@ export function createLeftBar<IconId extends string>(params?: {
 
             const { classes, cx } = useStyles();
 
+            const {
+                ref,
+                domRect: { width },
+            } = useDomRect();
+
+            console.log(width);
+
             return (
-                <section className={cx(classes.root, className)}>
-                    <nav className={classes.nav}>
+                <nav className={cx(classes.nav, className)} ref={ref}>
+                    <CustomButton
+                        key={"toggleIsCollapsed"}
+                        isCollapsed={isCollapsed}
+                        collapsedWidth={collapsedWidth}
+                        isCurrent={undefined}
+                        iconId="chevronLeft"
+                        label={reduceText}
+                        hasDividerBelow={undefined}
+                        link={toggleIsCollapsedLink}
+                    />
+                    {objectKeys(items).map(itemId => (
                         <CustomButton
-                            key={"toggleIsCollapsed"}
+                            className={classes.button}
+                            key={itemId}
                             isCollapsed={isCollapsed}
                             collapsedWidth={collapsedWidth}
-                            isCurrent={undefined}
-                            iconId="chevronLeft"
-                            label={reduceText}
-                            hasDividerBelow={undefined}
-                            link={toggleIsCollapsedLink}
+                            isCurrent={itemId === currentItemId}
+                            isButtonForTogglingIsCollapsed={false}
+                            {...items[itemId]}
                         />
-                        {objectKeys(items).map(itemId => (
-                            <CustomButton
-                                className={classes.button}
-                                key={itemId}
-                                isCollapsed={isCollapsed}
-                                collapsedWidth={collapsedWidth}
-                                isCurrent={itemId === currentItemId}
-                                isButtonForTogglingIsCollapsed={false}
-                                {...items[itemId]}
-                            />
-                        ))}
-                    </nav>
-                </section>
+                    ))}
+                </nav>
             );
         },
     );
