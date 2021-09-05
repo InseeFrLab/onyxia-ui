@@ -1,3 +1,8 @@
+### **0.12.9** (2021-09-05)  
+  
+- Add story for search bar  
+- Page header: Smotther transition    
+  
 ### **0.12.8** (2021-09-03)  
   
 - Make page header retractable on demand    
