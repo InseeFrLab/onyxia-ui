@@ -31,6 +31,7 @@ export type LeftBarProps<IconId extends string, ItemId extends string> = {
     reduceText?: string;
 };
 
+//TODO: The component cannot be scrolled
 export function createLeftBar<IconId extends string>(params?: {
     Icon: (props: IconProps<IconId>) => ReturnType<FC>;
     persistIsPanelOpen: boolean;
@@ -41,13 +42,24 @@ export function createLeftBar<IconId extends string>(params?: {
         }),
     };
 
-    const useStyles = makeStyles()(theme => ({
-        "nav": {
-            ...theme.spacing.topBottom("padding", 3),
+    const useStyles = makeStyles<{
+        rootWidth: number;
+        rootHeight: number;
+        paddingTopBottomFactor: number;
+    }>()((theme, { rootWidth, rootHeight, paddingTopBottomFactor }) => ({
+        "root": {
+            "width": rootWidth,
+            "height": rootHeight,
+            ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
             "backgroundColor": theme.colors.useCases.surfaces.surface1,
             "borderRadius": 16,
             "boxShadow": theme.shadows[3],
-            "overflow": "auto",
+            "transition": "width 250ms",
+            "position": "relative",
+            "overflow": "hidden",
+        },
+        "wrapper": {
+            "position": "absolute",
         },
         "button": {
             "marginTop": theme.spacing(2),
@@ -58,11 +70,15 @@ export function createLeftBar<IconId extends string>(params?: {
         "persistance": persistIsPanelOpen ? "localStorage" : false,
     });
 
+    const iconSize = "large";
+
     const LeftBar = memo(
         <ItemId extends string>(props: LeftBarProps<IconId, ItemId>) => {
+            const { theme } = useTheme();
+
             const {
                 className,
-                collapsedWidth,
+                collapsedWidth = 2 * theme.iconSizesInPxByName[iconSize],
                 currentItemId,
                 items,
                 reduceText = "reduce",
@@ -82,38 +98,49 @@ export function createLeftBar<IconId extends string>(params?: {
                 [],
             );
 
-            const { classes, cx } = useStyles();
-
             const {
                 ref,
-                domRect: { width },
+                domRect: { width: wrapperWidth, height: wrapperHeight },
             } = useDomRect();
 
-            console.log(width);
+            const { classes, cx } = useStyles({
+                "rootWidth": isCollapsed ? collapsedWidth : wrapperWidth,
+                ...(() => {
+                    const paddingTopBottomFactor = 3;
+                    return {
+                        paddingTopBottomFactor,
+                        "rootHeight":
+                            wrapperHeight +
+                            theme.spacing(paddingTopBottomFactor) * 2,
+                    };
+                })(),
+            });
 
             return (
-                <nav className={cx(classes.nav, className)} ref={ref}>
-                    <CustomButton
-                        key={"toggleIsCollapsed"}
-                        isCollapsed={isCollapsed}
-                        collapsedWidth={collapsedWidth}
-                        isCurrent={undefined}
-                        iconId="chevronLeft"
-                        label={reduceText}
-                        hasDividerBelow={undefined}
-                        link={toggleIsCollapsedLink}
-                    />
-                    {objectKeys(items).map(itemId => (
+                <nav className={cx(classes.root, className)}>
+                    <div ref={ref} className={classes.wrapper}>
                         <CustomButton
-                            className={classes.button}
-                            key={itemId}
+                            key={"toggleIsCollapsed"}
                             isCollapsed={isCollapsed}
                             collapsedWidth={collapsedWidth}
-                            isCurrent={itemId === currentItemId}
-                            isButtonForTogglingIsCollapsed={false}
-                            {...items[itemId]}
+                            isCurrent={undefined}
+                            iconId="chevronLeft"
+                            label={reduceText}
+                            hasDividerBelow={undefined}
+                            link={toggleIsCollapsedLink}
                         />
-                    ))}
+                        {objectKeys(items).map(itemId => (
+                            <CustomButton
+                                className={classes.button}
+                                key={itemId}
+                                isCollapsed={isCollapsed}
+                                collapsedWidth={collapsedWidth}
+                                isCurrent={itemId === currentItemId}
+                                isButtonForTogglingIsCollapsed={false}
+                                {...items[itemId]}
+                            />
+                        ))}
+                    </div>
                 </nav>
             );
         },
@@ -123,7 +150,7 @@ export function createLeftBar<IconId extends string>(params?: {
         type Props = {
             className?: string;
             isCollapsed: boolean;
-            collapsedWidth: number | undefined;
+            collapsedWidth: number;
             isCurrent: boolean | undefined;
         } & Item<IconId | "chevronLeft">;
 
@@ -131,80 +158,94 @@ export function createLeftBar<IconId extends string>(params?: {
             collapsedWidth: number;
             isCollapsed: boolean;
             isCurrent: boolean | undefined;
-        }>()((theme, { collapsedWidth, isCollapsed, isCurrent }, css) => {
-            const iconHoverBox = {
-                "display": "inline-block",
-                "position": "absolute",
-                "height": "100%",
-                ...(() => {
-                    const offset = collapsedWidth / 8;
+            width: number;
+        }>()(
+            (theme, { collapsedWidth, isCollapsed, isCurrent, width }, css) => {
+                const iconHoverBox = {
+                    "display": "inline-block",
+                    "position": "absolute",
+                    "height": "100%",
+                    ...(() => {
+                        const offset = collapsedWidth / 8;
 
-                    return {
-                        "left": offset,
-                        "right": isCollapsed ? offset : 0,
-                    };
-                })(),
-                "zIndex": 1,
-                "borderRadius": `10px ${
-                    isCollapsed ? "10px 10px" : "0 0"
-                } 10px`,
-            } as const;
+                        return {
+                            "left": offset,
+                            "right": isCollapsed ? offset : 0,
+                        };
+                    })(),
+                    "zIndex": 1,
+                    "borderRadius": `10px ${
+                        isCollapsed ? "10px 10px" : "0 0"
+                    } 10px`,
+                } as const;
 
-            const typoWrapper = {
-                "paddingRight": theme.spacing(2),
-                "flex": 1,
-                "borderRadius": "0 10px 10px 0",
-                "display": "flex",
-                "alignItems": "center",
-                "marginRight": theme.spacing(5),
-            } as const;
-
-            return {
-                "root": {
-                    "color": theme.colors.useCases.typography.textPrimary,
-                    "textDecoration": "none",
+                const typoWrapper = {
+                    "paddingRight": theme.spacing(2),
+                    "flex": 1,
+                    "borderRadius": "0 10px 10px 0",
                     "display": "flex",
-                    "cursor": "pointer",
-                    [[iconHoverBox, typoWrapper]
-                        .map(cssObject => `&:hover .${css(cssObject)}`)
-                        .join(", ")]: {
-                        "backgroundColor":
-                            theme.colors.useCases.surfaces.background,
-                    },
-                    [[".MuiSvgIcon-root", "h6"]
-                        .map(name => `&${isCurrent ? "" : ":active"} ${name}`)
-                        .join(", ")]: {
-                        "color": theme.colors.useCases.typography.textFocus,
-                    },
-                },
-                "iconWrapper": {
-                    "width": collapsedWidth,
-                    "textAlign": "center",
-                    "position": "relative",
-                },
+                    "alignItems": "center",
+                    "marginRight": theme.spacing(5),
+                } as const;
 
-                "icon": {
-                    "position": "relative",
-                    "zIndex": 2,
-                    ...theme.spacing.topBottom("margin", 2),
-                    ...(isCurrent !== undefined
-                        ? {}
-                        : {
-                              "transform": isCollapsed
-                                  ? "rotate(-180deg)"
-                                  : "rotate(0)",
-                          }),
-                    "transition": `transform 250ms`,
-                },
-                iconHoverBox,
-                typoWrapper,
-                "divider": {
-                    "marginTop": theme.spacing(2),
-                    "borderColor":
-                        theme.colors.useCases.typography.textTertiary,
-                },
-            };
-        });
+                return {
+                    "root": {
+                        "color": theme.colors.useCases.typography.textPrimary,
+                        "textDecoration": "none",
+                        "display": "flex",
+                        "cursor": "pointer",
+                        [`&:hover .${css(iconHoverBox)}`]: {
+                            "backgroundColor":
+                                theme.colors.useCases.surfaces.background,
+                        },
+                        [`&:hover .${css(typoWrapper)}`]: {
+                            "backgroundColor": !isCollapsed
+                                ? theme.colors.useCases.surfaces.background
+                                : undefined,
+                        },
+                        [[".MuiSvgIcon-root", "h6"]
+                            .map(
+                                name =>
+                                    `&${isCurrent ? "" : ":active"} ${name}`,
+                            )
+                            .join(", ")]: {
+                            "color": theme.colors.useCases.typography.textFocus,
+                        },
+                    },
+                    "iconWrapper": {
+                        "width": collapsedWidth,
+                        "textAlign": "center",
+                        "position": "relative",
+                    },
+
+                    "icon": {
+                        "position": "relative",
+                        "zIndex": 2,
+                        ...theme.spacing.topBottom("margin", 2),
+                        ...(isCurrent !== undefined
+                            ? {}
+                            : {
+                                  "transform": isCollapsed
+                                      ? "rotate(-180deg)"
+                                      : "rotate(0)",
+                              }),
+                        "transition": `transform 250ms`,
+                    },
+                    iconHoverBox,
+                    typoWrapper,
+                    "divider": {
+                        "marginTop": theme.spacing(2),
+                        "borderColor":
+                            theme.colors.useCases.typography.textTertiary,
+                        "width":
+                            (isCollapsed ? collapsedWidth : width) -
+                            2 * theme.spacing(2),
+                        "marginLeft": theme.spacing(2),
+                        "transition": "width 250ms",
+                    },
+                };
+            },
+        );
 
         const { Icon: InternalIcon } = createIcon({
             "chevronLeft": ChevronLeftIcon,
@@ -222,20 +263,28 @@ export function createLeftBar<IconId extends string>(params?: {
                 hasDividerBelow = false,
             } = props;
 
-            const iconSize = "large";
-
             const { theme } = useTheme();
 
-            const { classes, cx } = useStyles({
+            const {
+                ref,
+                domRect: { width },
+            } = useDomRect();
+
+            const { classes, cx, css } = useStyles({
                 "collapsedWidth":
                     collapsedWidth ?? 2 * theme.iconSizesInPxByName[iconSize],
                 isCollapsed,
                 isCurrent,
+                width,
             });
 
             return (
                 <>
-                    <a className={cx(classes.root, className)} {...link}>
+                    <a
+                        ref={ref}
+                        className={cx(classes.root, className)}
+                        {...link}
+                    >
                         <div className={classes.iconWrapper}>
                             <div className={classes.iconHoverBox} />
                             {(() => {
@@ -256,14 +305,20 @@ export function createLeftBar<IconId extends string>(params?: {
                                 );
                             })()}
                         </div>
-                        {!isCollapsed && (
-                            <div className={classes.typoWrapper}>
-                                <Text typo="label 1">{label}</Text>
-                            </div>
-                        )}
+                        <div className={classes.typoWrapper}>
+                            <Text
+                                typo="label 1"
+                                className={css({ "whiteSpace": "nowrap" })}
+                            >
+                                {label}
+                            </Text>
+                        </div>
                     </a>
                     {hasDividerBelow && (
-                        <Divider className={classes.divider} variant="middle" />
+                        <Divider
+                            className={classes.divider}
+                            variant="fullWidth"
+                        />
                     )}
                 </>
             );
