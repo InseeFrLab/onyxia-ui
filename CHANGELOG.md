@@ -1,3 +1,10 @@
+## **0.13.0** (2021-09-06)  
+  
+- Feature animation on the left bar  
+- Better LeftBar  
+- Fix previous commit  
+- Feat: tools/CollapibleWrapper    
+  
 ### **0.12.9** (2021-09-05)  
   
 - Add story for search bar  
