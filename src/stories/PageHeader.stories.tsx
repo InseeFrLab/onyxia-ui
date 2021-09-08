@@ -13,9 +13,11 @@ function Component(
     props: Omit<
         PageHeaderProps<IconId>,
         "titleCollapseParams" | "helpCollapseParams"
-    >,
+    > & {
+        transitionDuration: number;
+    },
 ) {
-    const { ...rest } = props;
+    const { transitionDuration, ...rest } = props;
 
     const scrollableElementRef = useRef<HTMLDivElement>();
 
@@ -33,11 +35,13 @@ function Component(
                     "behavior": "collapses on scroll",
                     "scrollTopThreshold": 500,
                     scrollableElementRef,
+                    transitionDuration,
                 }}
                 helpCollapseParams={{
                     "behavior": "collapses on scroll",
                     "scrollTopThreshold": 200,
                     scrollableElementRef,
+                    transitionDuration,
                 }}
             />
             <span>Scroll below dit to trigger collapse</span>
@@ -81,4 +85,5 @@ export const VueDefault = getStory({
     "helpTitle": "This is the help title",
     "mainIcon": "home",
     "title": "This is the title",
+    "transitionDuration": 250,
 });

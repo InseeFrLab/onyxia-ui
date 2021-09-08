@@ -106,7 +106,8 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
                     "height": isCollapsed
                         ? 0
                         : childrenWrapperHeight || undefined,
-                    "transition": ["height", "padding", "margin"]
+                    "opacity": isCollapsed ? 0 : 1,
+                    "transition": ["height", "padding", "margin", "opacity"]
                         .map(prop => `${prop} ${transitionDuration}ms`)
                         .join(", "),
                     "overflow": "hidden",
