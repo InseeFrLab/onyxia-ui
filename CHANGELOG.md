@@ -1,3 +1,8 @@
+## **0.14.0** (2021-09-08)  
+  
+- Add transition on opacity CollapsibleWrapper  
+- Much better collapsing mechanism    
+  
 ## **0.13.0** (2021-09-06)  
   
 - Feature animation on the left bar  
