@@ -61,7 +61,7 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
     const dummyRef = useRef<HTMLDivElement>();
 
     useElementEvt<HTMLDivElement>(
-        ({ ctx, element }) => {
+        ({ ctx, element, registerSideEffect }) => {
             if (rest.behavior !== "collapses on scroll") {
                 return;
             }
@@ -70,11 +70,15 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
 
             Evt.from(ctx, element, "scroll")
                 .pipe(event => [(event as any).target.scrollTop as number])
+                .toStateful(element.scrollTop)
                 .attach(scrollTop =>
-                    setIsCollapsedIfDependsOfScroll(isCollapsed =>
-                        isCollapsed
-                            ? scrollTop + rootHeight * 1.05 > scrollTopThreshold
-                            : scrollTop > scrollTopThreshold,
+                    registerSideEffect(() =>
+                        setIsCollapsedIfDependsOfScroll(isCollapsed =>
+                            isCollapsed
+                                ? scrollTop + rootHeight * 1.05 >
+                                  scrollTopThreshold
+                                : scrollTop > scrollTopThreshold,
+                        ),
                     ),
                 );
         },
