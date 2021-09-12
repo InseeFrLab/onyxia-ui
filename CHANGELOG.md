@@ -1,3 +1,7 @@
+### **0.14.2** (2021-09-12)  
+  
+- Fix CollapsibleHeaderWrapper    
+  
 ### **0.14.1** (2021-09-12)  
   
 - CollapsibleWrapper: fix    
