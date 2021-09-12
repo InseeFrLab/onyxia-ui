@@ -1,3 +1,7 @@
+### **0.14.1** (2021-09-12)  
+  
+- CollapsibleWrapper: fix    
+  
 ## **0.14.0** (2021-09-08)  
   
 - Add transition on opacity CollapsibleWrapper  
