@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef, memo } from "react";
+import { useEffect, useRef, memo } from "react";
 import type { RefObject } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
 import { useCssAndCx } from "tss-react";
 import { Evt } from "evt";
 import { useElementEvt } from "evt/hooks";
+import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -40,23 +41,30 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         ref: childrenWrapperRef,
         domRect: { height: childrenWrapperHeight },
     } = useDomRect();
-    const {
-        ref: rootRef,
-        domRect: { height: rootHeight },
-    } = useDomRect();
 
     const { css, cx } = useCssAndCx();
 
-    const [isCollapsedIfDependsOfScroll, setIsCollapsedIfDependsOfScroll] =
-        useState(false);
+    //We use a ref instead of a state because we want to be able to
+    //synchronously reset the state when the div that scrolls have been changed
+    const isCollapsedIfDependsOfScrollRef = useRef(false);
+
+    useGuaranteedMemo(() => {
+        isCollapsedIfDependsOfScrollRef.current = false;
+    }, [
+        rest.behavior === "collapses on scroll"
+            ? rest.scrollableElementRef.current ?? Object
+            : Object,
+    ]);
 
     useEffect(() => {
         if (rest.behavior !== "collapses on scroll") {
             return;
         }
 
-        rest.onIsCollapsedValueChange?.(isCollapsedIfDependsOfScroll);
-    }, [isCollapsedIfDependsOfScroll]);
+        rest.onIsCollapsedValueChange?.(
+            isCollapsedIfDependsOfScrollRef.current,
+        );
+    }, [isCollapsedIfDependsOfScrollRef.current]);
 
     const dummyRef = useRef<HTMLDivElement>();
 
@@ -71,16 +79,16 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
             Evt.from(ctx, element, "scroll")
                 .pipe(event => [(event as any).target.scrollTop as number])
                 .toStateful(element.scrollTop)
-                .attach(scrollTop =>
-                    registerSideEffect(() =>
-                        setIsCollapsedIfDependsOfScroll(isCollapsed =>
-                            isCollapsed
-                                ? scrollTop + rootHeight * 1.05 >
-                                  scrollTopThreshold
-                                : scrollTop > scrollTopThreshold,
-                        ),
-                    ),
-                );
+                .attach(scrollTop => {
+                    isCollapsedIfDependsOfScrollRef.current =
+                        isCollapsedIfDependsOfScrollRef.current
+                            ? scrollTop + childrenWrapperHeight * 1.05 >
+                              scrollTopThreshold
+                            : scrollTop > scrollTopThreshold;
+
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    registerSideEffect(() => {}); //This triggers update
+                });
         },
         rest.behavior !== "collapses on scroll"
             ? dummyRef
@@ -88,15 +96,19 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         [
             rest.behavior,
             ...(rest.behavior !== "collapses on scroll"
-                ? [Object, Object]
-                : [rest.scrollTopThreshold, rest.scrollableElementRef]),
+                ? [Object, Object, Object]
+                : [
+                      rest.scrollTopThreshold,
+                      rest.scrollableElementRef,
+                      childrenWrapperHeight,
+                  ]),
         ],
     );
 
     const isCollapsed = (() => {
         switch (rest.behavior) {
             case "collapses on scroll":
-                return isCollapsedIfDependsOfScroll;
+                return isCollapsedIfDependsOfScrollRef.current;
             case "controlled":
                 return rest.isCollapsed;
         }
@@ -104,7 +116,6 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
 
     return (
         <div
-            ref={rootRef}
             className={cx(
                 css({
                     "height": isCollapsed
