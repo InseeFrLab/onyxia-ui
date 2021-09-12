@@ -54,11 +54,9 @@ function isMuiIcon(
     return "type" in (Component as any);
 }
 
-export function createIcon<IconId extends string>(
-    componentByIconId: {
-        readonly [iconId in IconId]: MuiIconLike | SvgComponentLike;
-    },
-) {
+export function createIcon<IconId extends string>(componentByIconId: {
+    readonly [iconId in IconId]: MuiIconLike | SvgComponentLike;
+}) {
     const useStyles = makeStyles<{ size: IconSizeName }>()(
         (theme, { size }) => ({
             "root": {
