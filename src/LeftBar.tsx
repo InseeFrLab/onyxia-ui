@@ -1,4 +1,4 @@
-import { useMemo, memo } from "react";
+import { useMemo, useState, memo } from "react";
 import type { FC } from "react";
 import { makeStyles, useStyles as useTheme } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
@@ -46,25 +46,36 @@ export function createLeftBar<IconId extends string>(params?: {
         rootWidth: number;
         rootHeight: number;
         paddingTopBottomFactor: number;
-    }>()((theme, { rootWidth, rootHeight, paddingTopBottomFactor }) => ({
-        "root": {
-            "width": rootWidth,
-            "height": rootHeight,
-            ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
-            "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            "borderRadius": 16,
-            "boxShadow": theme.shadows[3],
-            "transition": "width 250ms",
-            "position": "relative",
-            "overflow": "hidden",
-        },
-        "wrapper": {
-            "position": "absolute",
-        },
-        "button": {
-            "marginTop": theme.spacing(2),
-        },
-    }));
+        areTransitionEnabled: boolean;
+    }>()(
+        (
+            theme,
+            {
+                rootWidth,
+                rootHeight,
+                paddingTopBottomFactor,
+                areTransitionEnabled,
+            },
+        ) => ({
+            "root": {
+                "width": rootWidth,
+                "height": rootHeight,
+                ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
+                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                "borderRadius": 16,
+                "boxShadow": theme.shadows[3],
+                "transition": areTransitionEnabled ? "width 250ms" : undefined,
+                "position": "relative",
+                "overflow": "hidden",
+            },
+            "wrapper": {
+                "position": "absolute",
+            },
+            "button": {
+                "marginTop": theme.spacing(2),
+            },
+        }),
+    );
 
     const { useIsCollapsed } = createUseGlobalState("isCollapsed", false, {
         "persistance": persistIsPanelOpen ? "localStorage" : false,
@@ -92,6 +103,7 @@ export function createLeftBar<IconId extends string>(params?: {
                         "href": "#",
                         "onClick": event => {
                             event.preventDefault();
+                            setAreTransitionEnabled(true);
                             setIsCollapsed(isCollapsed => !isCollapsed);
                         },
                     }),
@@ -102,6 +114,10 @@ export function createLeftBar<IconId extends string>(params?: {
                 ref,
                 domRect: { width: wrapperWidth, height: wrapperHeight },
             } = useDomRect();
+
+            //We don't want animations to trigger on first render.
+            const [areTransitionEnabled, setAreTransitionEnabled] =
+                useState(false);
 
             const { classes, cx } = useStyles({
                 "rootWidth": isCollapsed ? collapsedWidth : wrapperWidth,
@@ -114,6 +130,7 @@ export function createLeftBar<IconId extends string>(params?: {
                             theme.spacing(paddingTopBottomFactor) * 2,
                     };
                 })(),
+                areTransitionEnabled,
             });
 
             return (
