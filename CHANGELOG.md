@@ -1,3 +1,7 @@
+### **0.14.4** (2021-09-13)  
+  
+- Tabs: Fix wheel scroll when all tabs are visible    
+  
 ### **0.14.3** (2021-09-13)  
   
 - Bump version (chnagelog ignore)  
