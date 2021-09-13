@@ -116,24 +116,21 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
             minimumDisplayDuration = params.minimumDisplayDuration;
         }
 
-        useState(() => {
+        const isUsingSplashScreen = useContext(context);
+
+        useEffect(() => {
             const { onHidden } = params ?? {};
 
             if (onHidden === undefined) {
                 return;
             }
 
-            evtDisplayState.state.onHiddens.push(onHidden);
-        });
-
-        const isUsingSplashScreen = useContext(context);
-
-        useEffect(() => {
-            if (isUsingSplashScreen) {
+            if (!isUsingSplashScreen) {
+                onHidden();
                 return;
             }
 
-            params?.onHidden?.();
+            evtDisplayState.state.onHiddens.push(onHidden);
         }, []);
 
         const { showSplashScreen, hideSplashScreen } = (function useClosure() {
