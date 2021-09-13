@@ -160,7 +160,11 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     const isRightArrowDisabled = tabs.length - firstTabIndex === maxTabCount;
 
     const { ref: tabWrapperRef } = useElementEvt<HTMLDivElement>(
-        ({ ctx, element }) =>
+        ({ ctx, element }) => {
+            if (tabs.length <= maxTabCount) {
+                return;
+            }
+
             Evt.from(ctx, element, "wheel").attach(wheelEvent => {
                 wheelEvent.preventDefault();
 
@@ -180,7 +184,8 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                 }
 
                 onArrowClickFactory(direction)();
-            }),
+            });
+        },
         [firstTabIndex, offset],
     );
 
