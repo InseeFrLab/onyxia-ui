@@ -1,3 +1,9 @@
+### **0.14.3** (2021-09-13)  
+  
+- Bump version (chnagelog ignore)  
+- LeftBar: Do not animate on first render  
+- SplashScreen: Make onHidden works even in strict mode    
+  
 ### **0.14.2** (2021-09-12)  
   
 - Fix CollapsibleHeaderWrapper    
