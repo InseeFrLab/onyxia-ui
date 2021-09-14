@@ -177,8 +177,13 @@ export function createLeftBar<IconId extends string>(params?: {
             isCurrent: boolean | undefined;
             width: number;
         }>()(
-            (theme, { collapsedWidth, isCollapsed, isCurrent, width }, css) => {
+            (
+                theme,
+                { collapsedWidth, isCollapsed, isCurrent, width },
+                createRef,
+            ) => {
                 const iconHoverBox = {
+                    "ref": createRef(),
                     "display": "inline-block",
                     "position": "absolute",
                     "height": "100%",
@@ -197,6 +202,7 @@ export function createLeftBar<IconId extends string>(params?: {
                 } as const;
 
                 const typoWrapper = {
+                    "ref": createRef(),
                     "paddingRight": theme.spacing(2),
                     "flex": 1,
                     "borderRadius": "0 10px 10px 0",
@@ -211,11 +217,11 @@ export function createLeftBar<IconId extends string>(params?: {
                         "textDecoration": "none",
                         "display": "flex",
                         "cursor": "pointer",
-                        [`&:hover .${css(iconHoverBox)}`]: {
+                        [`&:hover .${iconHoverBox.ref}`]: {
                             "backgroundColor":
                                 theme.colors.useCases.surfaces.background,
                         },
-                        [`&:hover .${css(typoWrapper)}`]: {
+                        [`&:hover .${typoWrapper.ref}`]: {
                             "backgroundColor": !isCollapsed
                                 ? theme.colors.useCases.surfaces.background
                                 : undefined,
