@@ -58,12 +58,15 @@ export function createLeftBar<IconId extends string>(params?: {
             },
         ) => ({
             "root": {
+                "borderRadius": 16,
+                "boxShadow": theme.shadows[3],
+                "overflow": "auto",
+            },
+            "nav": {
                 "width": rootWidth,
                 "height": rootHeight,
                 ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
                 "backgroundColor": theme.colors.useCases.surfaces.surface1,
-                "borderRadius": 16,
-                "boxShadow": theme.shadows[3],
                 "transition": areTransitionEnabled ? "width 250ms" : undefined,
                 "position": "relative",
                 "overflow": "hidden",
@@ -134,31 +137,33 @@ export function createLeftBar<IconId extends string>(params?: {
             });
 
             return (
-                <nav className={cx(classes.root, className)}>
-                    <div ref={ref} className={classes.wrapper}>
-                        <CustomButton
-                            key={"toggleIsCollapsed"}
-                            isCollapsed={isCollapsed}
-                            collapsedWidth={collapsedWidth}
-                            isCurrent={undefined}
-                            iconId="chevronLeft"
-                            label={reduceText}
-                            hasDividerBelow={undefined}
-                            link={toggleIsCollapsedLink}
-                        />
-                        {objectKeys(items).map(itemId => (
+                <div className={cx(classes.root, className)}>
+                    <nav className={classes.nav}>
+                        <div ref={ref} className={classes.wrapper}>
                             <CustomButton
-                                className={classes.button}
-                                key={itemId}
+                                key={"toggleIsCollapsed"}
                                 isCollapsed={isCollapsed}
                                 collapsedWidth={collapsedWidth}
-                                isCurrent={itemId === currentItemId}
-                                isButtonForTogglingIsCollapsed={false}
-                                {...items[itemId]}
+                                isCurrent={undefined}
+                                iconId="chevronLeft"
+                                label={reduceText}
+                                hasDividerBelow={undefined}
+                                link={toggleIsCollapsedLink}
                             />
-                        ))}
-                    </div>
-                </nav>
+                            {objectKeys(items).map(itemId => (
+                                <CustomButton
+                                    className={classes.button}
+                                    key={itemId}
+                                    isCollapsed={isCollapsed}
+                                    collapsedWidth={collapsedWidth}
+                                    isCurrent={itemId === currentItemId}
+                                    isButtonForTogglingIsCollapsed={false}
+                                    {...items[itemId]}
+                                />
+                            ))}
+                        </div>
+                    </nav>
+                </div>
             );
         },
     );
