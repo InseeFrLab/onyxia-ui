@@ -61,12 +61,12 @@ export function createLeftBar<IconId extends string>(params?: {
                 "borderRadius": 16,
                 "boxShadow": theme.shadows[3],
                 "overflow": "auto",
+                "backgroundColor": theme.colors.useCases.surfaces.surface1,
             },
             "nav": {
                 "width": rootWidth,
                 "height": rootHeight,
                 ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
                 "transition": areTransitionEnabled ? "width 250ms" : undefined,
                 "position": "relative",
                 "overflow": "hidden",
