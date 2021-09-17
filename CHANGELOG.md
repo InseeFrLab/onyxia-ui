@@ -1,3 +1,7 @@
+### **0.14.8** (2021-09-17)  
+  
+- LeftBar: fixes    
+  
 ### **0.14.7** (2021-09-16)  
   
 - LeftBar: Fix shadow visibility and scrollability    
