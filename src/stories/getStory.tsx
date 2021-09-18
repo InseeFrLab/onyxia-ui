@@ -14,11 +14,11 @@ import "../assets/fonts/work-sans.css";
 import { GlobalStyles } from "tss-react";
 import { objectKeys } from "tsafe/objectKeys";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
-import type { ComponentType } from "../tools/ComponentType";
+import type { ReactComponent } from "../tools/ReactComponent";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
-    wrappedComponent: Record<string, ComponentType<Props>>;
+    wrappedComponent: Record<string, ReactComponent<Props>>;
     /** https://storybook.js.org/docs/react/essentials/controls */
     argTypes?: Partial<Record<keyof Props, ArgType>>;
     defaultWidth?: number;
