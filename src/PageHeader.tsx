@@ -139,6 +139,24 @@ export function createPageHeader<IconId extends string>(params?: {
                 return { isTitleCollapsed, titleCollapseParams };
             })();
 
+        const {
+            ref: helperRef,
+            domRect: { height: helperHeight },
+        } = useDomRect<HTMLDivElement>();
+
+        const { isHelpClosed, closeHelp } = (function useClosure() {
+            const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
+                usePageHeaderClosedHelpers();
+
+            const isHelpClosed = pageHeaderClosedHelpers.includes(title);
+
+            const closeHelp = useConstCallback(() =>
+                setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]),
+            );
+
+            return { isHelpClosed, closeHelp };
+        })();
+
         const { isHelpCollapsed, helpCollapseParams } = (function useClosure() {
             const [
                 isHelpCollapsedIfDependsOnScroll,
@@ -181,25 +199,15 @@ export function createPageHeader<IconId extends string>(params?: {
                     break;
             }
 
-            return { isHelpCollapsed, helpCollapseParams };
-        })();
-
-        const {
-            ref: helperRef,
-            domRect: { height: helperHeight },
-        } = useDomRect<HTMLDivElement>();
-
-        const { isHelpClosed, closeHelp } = (function useClosure() {
-            const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
-                usePageHeaderClosedHelpers();
-
-            const isHelpClosed = pageHeaderClosedHelpers.includes(title);
-
-            const closeHelp = useConstCallback(() =>
-                setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]),
-            );
-
-            return { isHelpClosed, closeHelp };
+            return {
+                isHelpCollapsed,
+                "helpCollapseParams": isHelpClosed
+                    ? {
+                          "behavior": "controlled" as const,
+                          "isCollapsed": true,
+                      }
+                    : helpCollapseParams,
+            };
         })();
 
         const { classes, cx } = useStyles({

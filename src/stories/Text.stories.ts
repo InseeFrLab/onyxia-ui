@@ -2,8 +2,8 @@ import { Text } from "./theme";
 import type { TypographyDesc } from "../lib/typography";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 
 const variantNameBase = [
     "display heading",
@@ -19,9 +19,8 @@ const variantNameBase = [
     "caption",
 ] as const;
 
-doExtends<
-    Any.Equals<TypographyDesc.VariantNameBase, typeof variantNameBase[number]>,
-    1
+assert<
+    Equals<TypographyDesc.VariantNameBase, typeof variantNameBase[number]>
 >();
 
 const { meta, getStory } = getStoryFactory({
