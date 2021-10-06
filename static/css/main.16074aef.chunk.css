@@ -1,14 +1,13 @@
-
-/*@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap");*/
-
 /* latin */
 @font-face {
   font-family: 'Work Sans';
   font-style: normal;
-  font-weight: normal; /*400*/
+  font-weight: normal;
+  /*400*/
   font-display: swap;
   src: url(../../static/media/worksans-regular-webfont.3d45de00.woff2) format("woff2");
 }
+
 /* latin */
 @font-face {
   font-family: 'Work Sans';
@@ -17,6 +16,7 @@
   font-display: swap;
   src: url(../../static/media/worksans-medium-webfont.3d45de00.woff2) format("woff2");
 }
+
 /* latin */
 @font-face {
   font-family: 'Work Sans';
@@ -25,13 +25,43 @@
   font-display: swap;
   src: url(../../static/media/worksans-semibold-webfont.3d45de00.woff2) format("woff2");
 }
+
 /* latin */
 @font-face {
   font-family: 'Work Sans';
   font-style: normal;
-  font-weight: bold; /*700*/
+  font-weight: bold;
+  /*700*/
   font-display: swap;
   src: url(../../static/media/worksans-bold-webfont.3d45de00.woff2) format("woff2");
 }
+/* latin */
+@font-face {
+  font-family: Marianne;
+  font-style: normal;
+  font-weight: normal;
+  /*400*/
+  font-display: swap;
+  src: url(../../static/media/Marianne-Regular.8d566232.woff2) format("woff2");
+}
 
-/*# sourceMappingURL=main.8c8ac5e4.chunk.css.map*/
+/* latin */
+@font-face {
+  font-family: Marianne;
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../../static/media/Marianne-Medium.05b552bd.woff2) format("woff2");
+}
+
+/* latin */
+@font-face {
+  font-family: Marianne;
+  font-style: normal;
+  font-weight: bold;
+  /*700*/
+  font-display: swap;
+  src: url(../../static/media/Marianne-Bold.587c38a9.woff2) format("woff2");
+}
+
+/*# sourceMappingURL=main.16074aef.chunk.css.map*/
