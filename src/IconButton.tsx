@@ -5,8 +5,8 @@ import { forwardRef, memo } from "react";
 import MuiIconButton from "@material-ui/core/IconButton";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 
 export type IconButtonProps<IconId extends string = never> =
     | IconButtonProps.Clickable<IconId>
@@ -112,7 +112,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                             const { onClick, href, ...restRest } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                            assert<Equals<typeof restRest, {}>>();
 
                             return { onClick, href, ...restRest };
                         }
@@ -125,7 +125,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                             } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                            assert<Equals<typeof restRest, {}>>();
 
                             return {
                                 href,
@@ -140,7 +140,7 @@ export function createIconButton<IconId extends string = never>(params?: {
                             const { type, ...restRest } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                            assert<Equals<typeof restRest, {}>>();
 
                             return {
                                 type,

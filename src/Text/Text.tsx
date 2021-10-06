@@ -3,8 +3,8 @@ import { useStyles } from "../lib/ThemeProvider";
 import type { Theme } from "../lib/ThemeProvider";
 import { TypographyDesc } from "../lib/typography";
 import type { PaletteBase, ColorUseCasesBase } from "../lib/color";
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 
 export function createText<
     TypographyVariantNameCustom extends string = never,
@@ -42,7 +42,7 @@ export function createText<
 
             //For the forwarding, rest should be empty (typewise),
             // eslint-disable-next-line @typescript-eslint/ban-types
-            doExtends<Any.Equals<typeof rest, {}>, 1>();
+            assert<Equals<typeof rest, {}>>();
 
             const theme = useTheme();
 

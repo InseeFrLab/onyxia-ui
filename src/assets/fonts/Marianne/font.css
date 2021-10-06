@@ -1,0 +1,28 @@
+/* latin */
+@font-face {
+  font-family: Marianne;
+  font-style: normal;
+  font-weight: normal;
+  /*400*/
+  font-display: swap;
+  src: url("./Marianne-Regular.woff2") format("woff2");
+}
+
+/* latin */
+@font-face {
+  font-family: Marianne;
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./Marianne-Medium.woff2") format("woff2");
+}
+
+/* latin */
+@font-face {
+  font-family: Marianne;
+  font-style: normal;
+  font-weight: bold;
+  /*700*/
+  font-display: swap;
+  src: url("./Marianne-Bold.woff2") format("woff2");
+}

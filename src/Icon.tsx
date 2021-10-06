@@ -4,8 +4,8 @@ import { memo, forwardRef, ElementType } from "react";
 import type { ForwardedRef, MouseEventHandler } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 import type { IconSizeName } from "./lib/icon";
 
 /**
@@ -85,7 +85,7 @@ export function createIcon<IconId extends string>(componentByIconId: {
             } = props;
 
             //For the forwarding, rest should be empty (typewise),
-            doExtends<Any.Equals<typeof rest, {}>, 1>();
+            assert<Equals<typeof rest, {}>>();
 
             const { classes, cx } = useStyles({ size });
 

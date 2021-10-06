@@ -7,8 +7,8 @@ import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useDomRect } from "powerhooks";
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 import { useElementEvt } from "evt/hooks";
 import { Evt } from "evt";
 
@@ -385,7 +385,7 @@ const { CustomButton } = (() => {
 
             //For the forwarding, rest should be empty (typewise),
             // eslint-disable-next-line @typescript-eslint/ban-types
-            doExtends<Any.Equals<typeof rest, {}>, 1>();
+            assert<Equals<typeof rest, {}>>();
 
             const { classes, cx, css, theme } = useStyles({
                 isSelected,

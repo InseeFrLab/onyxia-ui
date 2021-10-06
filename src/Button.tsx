@@ -7,8 +7,8 @@ import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import MuiButton from "@material-ui/core/Button";
 import { capitalize } from "tsafe/capitalize";
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
+import { assert } from "tsafe";
+import type { Equals } from "tsafe/Equals";
 import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
@@ -256,7 +256,7 @@ export function createButton<IconId extends string = never>(params?: {
                             const { onClick, href, ...restRest } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                            assert<Equals<typeof restRest, {}>>();
 
                             return { onClick, href, ...restRest };
                         }
@@ -269,7 +269,7 @@ export function createButton<IconId extends string = never>(params?: {
                             } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                            assert<Equals<typeof restRest, {}>>();
 
                             return {
                                 href,
@@ -284,7 +284,7 @@ export function createButton<IconId extends string = never>(params?: {
                             const { type, ...restRest } = rest;
 
                             //For the forwarding, rest should be empty (typewise),
-                            doExtends<Any.Equals<typeof restRest, {}>, 1>();
+                            assert<Equals<typeof restRest, {}>>();
 
                             return {
                                 type,

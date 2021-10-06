@@ -17,8 +17,8 @@ export type CreateColorUseCase<
 export const defaultPalette = {
     "focus": {
         "main": "#FF562C",
-        "light": "#FFAD99",
-        "light2": "#FFF2E5",
+        "light": "#FF562C",
+        "light2": "#FFAD99",
     },
     "dark": {
         "main": "#2C323F",
@@ -54,6 +54,31 @@ export const defaultPalette = {
     },
 };
 
+export const defaultFrancePalette: typeof defaultPalette = {
+    ...defaultPalette,
+    "focus": {
+        "main": "#000091",
+        "light": "#9A9AFF",
+        "light2": "#E5E5F4",
+    },
+    "dark": {
+        "main": "#2A2A2A",
+        "light": "#383838",
+        "greyVariant1": "#161616",
+        "greyVariant2": "#9C9C9C",
+        "greyVariant3": "#CECECE",
+        "greyVariant4": "#E5E5E5",
+    },
+    "light": {
+        "main": "#F1F0EB",
+        "light": "#FDFDFC",
+        "greyVariant1": "#E6E6E6",
+        "greyVariant2": "#C9C9C9",
+        "greyVariant3": "#9E9E9E",
+        "greyVariant4": "#747474",
+    },
+};
+
 export function createDefaultColorUseCases(
     params: Param0<CreateColorUseCase<PaletteBase, any>>,
 ) {
@@ -68,70 +93,66 @@ export function createDefaultColorUseCases(
                 palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
             "textDisabled":
                 palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
-            "textFocus": palette.focus.main,
+            "textFocus": palette.focus[isDarkModeEnabled ? "light" : "main"],
         },
         "buttons": {
-            "actionHoverPrimary": defaultPalette.focus.main,
+            "actionHoverPrimary":
+                palette.focus[isDarkModeEnabled ? "light" : "main"],
             "actionHoverSecondary": isDarkModeEnabled
-                ? defaultPalette.light.light
-                : defaultPalette.dark.main,
-            "actionHoverTernary": defaultPalette.light.main,
+                ? palette.light.light
+                : palette.dark.main,
+            "actionHoverTernary": palette.light.main,
             "actionSelected": isDarkModeEnabled
-                ? defaultPalette.dark.light
-                : defaultPalette.light.greyVariant1,
-            "actionActive": defaultPalette.focus.main,
+                ? palette.dark.light
+                : palette.light.greyVariant1,
+            "actionActive": palette.focus[isDarkModeEnabled ? "light" : "main"],
             "actionDisabled":
-                defaultPalette[isDarkModeEnabled ? "dark" : "light"]
-                    .greyVariant3,
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant3,
             "actionDisabledBackground":
-                defaultPalette[isDarkModeEnabled ? "dark" : "light"]
-                    .greyVariant1,
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
         },
         "surfaces": {
-            "background":
-                defaultPalette[isDarkModeEnabled ? "dark" : "light"].main,
-            "surface1":
-                defaultPalette[isDarkModeEnabled ? "dark" : "light"].light,
+            "background": palette[isDarkModeEnabled ? "dark" : "light"].main,
+            "surface1": palette[isDarkModeEnabled ? "dark" : "light"].light,
             "surface2":
-                defaultPalette[isDarkModeEnabled ? "dark" : "light"]
-                    .greyVariant1,
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
         },
         "alertSeverity": {
             "error": {
-                "main": defaultPalette.redError.main,
+                "main": palette.redError.main,
                 "background": isDarkModeEnabled
                     ? changeColorOpacity({
-                          "color": defaultPalette.redError.main,
+                          "color": palette.redError.main,
                           "opacity": 0.2,
                       })
-                    : defaultPalette.redError.light,
+                    : palette.redError.light,
             },
             "success": {
-                "main": defaultPalette.greenSuccess.main,
+                "main": palette.greenSuccess.main,
                 "background": isDarkModeEnabled
                     ? changeColorOpacity({
-                          "color": defaultPalette.greenSuccess.main,
+                          "color": palette.greenSuccess.main,
                           "opacity": 0.2,
                       })
-                    : defaultPalette.greenSuccess.light,
+                    : palette.greenSuccess.light,
             },
             "warning": {
-                "main": defaultPalette.orangeWarning.main,
+                "main": palette.orangeWarning.main,
                 "background": isDarkModeEnabled
                     ? changeColorOpacity({
-                          "color": defaultPalette.orangeWarning.main,
+                          "color": palette.orangeWarning.main,
                           "opacity": 0.2,
                       })
-                    : defaultPalette.orangeWarning.light,
+                    : palette.orangeWarning.light,
             },
             "info": {
-                "main": defaultPalette.blueInfo.main,
+                "main": palette.blueInfo.main,
                 "background": isDarkModeEnabled
                     ? changeColorOpacity({
-                          "color": defaultPalette.blueInfo.main,
+                          "color": palette.blueInfo.main,
                           "opacity": 0.2,
                       })
-                    : defaultPalette.blueInfo.light,
+                    : palette.blueInfo.light,
             },
         },
     };
@@ -147,8 +168,8 @@ export function createMuiPaletteOptions(params: {
     return {
         "mode": isDarkModeEnabled ? "dark" : "light",
         "primary": {
-            "main": palette.focus.main,
-            "light": palette.focus.light,
+            "main": palette.focus[isDarkModeEnabled ? "light" : "main"],
+            "light": palette.focus.light2,
         },
         "secondary": {
             "main": useCases.typography.textPrimary,

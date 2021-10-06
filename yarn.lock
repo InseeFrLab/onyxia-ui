@@ -12020,10 +12020,10 @@ postcss@^8.1.0:
     nanoid "^3.1.23"
     source-map-js "^0.6.2"
 
-powerhooks@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.9.2.tgz#d889163e3f87334a20a5c83f5ef42abd1f39a85d"
-  integrity sha512-HPZLMBSajV3tUdEeyGCBXXITVON/+OcWSHOMp1GuXeiFHxyRuTMv9ApYKwbiKreV4z8MtwdXausqMBHDTOBhLg==
+powerhooks@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.9.3.tgz#e54553dd0da79380130f5646f403fca93d205988"
+  integrity sha512-/UMoLQM6Lbfd1DF88v0hxgQMNB438fimLgxYj6dmij6jGmh3QGynxBj+tM6Ueg2gJ7EOLNizfU3NQ+nicFb19Q==
   dependencies:
     evt "2.0.0-beta.38"
     memoizee "^0.4.15"
@@ -14523,15 +14523,15 @@ ts-pnp@1.2.0, ts-pnp@^1.1.6:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
 
-ts-toolbelt@^9.6.0:
-  version "9.6.0"
-  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-9.6.0.tgz#50a25426cfed500d4a09bd1b3afb6f28879edfd5"
-  integrity sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==
-
 tsafe@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-0.4.1.tgz#00af1be2db82abb4be531209b90232d7954e1a03"
   integrity sha512-+OZ0gdgmwcru+MOSheCx+ymAvQz+1/ui+KFJRuaq0t2m8RNrlf7eSzEieptoPQXPY67Mdkqgkdjknn8azoD5sw==
+
+tsafe@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-0.8.1.tgz#9af7e1540bc04313a82d60c98056a5017c8b086b"
+  integrity sha512-EfPjxQHzndQAV/uh0SMGP26Wg3dCuaw8dRv2VPEuGHen5qzg2oqsMvZw2wkQFkiMisZq2fm95m5lheimW2Fpvg==
 
 tsconfig-paths@^3.11.0:
   version "3.11.0"

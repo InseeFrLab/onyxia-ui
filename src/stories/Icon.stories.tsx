@@ -1,14 +1,13 @@
 import { Icon } from "./theme";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-
-import { doExtends } from "tsafe/doExtends";
-import type { Any } from "ts-toolbelt";
 import type { IconId } from "./theme";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 
 const iconIds = ["tour", "services", "help", "home"] as const;
 
-doExtends<Any.Equals<IconId, typeof iconIds[number]>, 1>();
+assert<Equals<IconId, typeof iconIds[number]>>();
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
