@@ -1,3 +1,7 @@
+### **0.14.13** (2021-10-06)  
+  
+- Fix throtlling    
+  
 ### **0.14.12** (2021-10-06)  
   
 - Trying to fix vibration issue  
