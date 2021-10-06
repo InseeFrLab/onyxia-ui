@@ -1,3 +1,8 @@
+### **0.14.12** (2021-10-06)  
+  
+- Trying to fix vibration issue  
+- Fix PageHeader non closing help    
+  
 ### **0.14.11** (2021-10-06)  
   
 - France design system  
