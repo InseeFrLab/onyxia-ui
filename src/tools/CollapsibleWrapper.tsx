@@ -82,7 +82,7 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
                 .attach(scrollTop => {
                     isCollapsedIfDependsOfScrollRef.current =
                         isCollapsedIfDependsOfScrollRef.current
-                            ? scrollTop + childrenWrapperHeight * 1.05 >
+                            ? scrollTop + childrenWrapperHeight * 1.07 >
                               scrollTopThreshold
                             : scrollTop > scrollTopThreshold;
 
