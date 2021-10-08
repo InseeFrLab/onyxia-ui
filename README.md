@@ -64,7 +64,6 @@ UI built with this toolkit.
 ![image](https://user-images.githubusercontent.com/6702424/136541792-3e267d15-3e56-4f27-9b62-57500f69bbaa.png)
 ![image](https://user-images.githubusercontent.com/6702424/136541968-a3c718ae-1a1a-48aa-823f-afcecb475e55.png)
 
-
 # Quick start
 
 ```bash
