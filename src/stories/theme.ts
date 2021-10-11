@@ -3,7 +3,7 @@ import "../assets/fonts/Marianne/font.css";
 import {
     createThemeProvider,
     defaultGetTypographyDesc,
-   defaultAUSPalette,
+    defaultAUSPalette,
 } from "../lib";
 import { createIcon } from "../Icon";
 import { createIconButton } from "../IconButton";
