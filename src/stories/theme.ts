@@ -3,7 +3,7 @@ import "../assets/fonts/Marianne/font.css";
 import {
     createThemeProvider,
     defaultGetTypographyDesc,
-    defaultFrancePalette,
+    defaultAUSPalette,
 } from "../lib";
 import { createIcon } from "../Icon";
 import { createIconButton } from "../IconButton";
@@ -18,7 +18,7 @@ import { Param0 } from "tsafe";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "isReactStrictModeEnabled": false,
-    "palette": defaultFrancePalette,
+    "palette": defaultAUSPalette,
     "getTypographyDesc": ({
         windowInnerWidth,
         browserFontSizeFactor,
