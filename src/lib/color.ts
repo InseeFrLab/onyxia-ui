@@ -79,6 +79,31 @@ export const defaultFrancePalette: typeof defaultPalette = {
     },
 };
 
+export const defaultAUSPalette: typeof defaultPalette = {
+    ...defaultPalette,
+    "focus": {
+        "main": "#067A76",
+        "light": "#0AD6CF",
+        "light2": "#AEE4E3",
+    },
+    "dark": {
+        "main": "#2D1C3A",
+        "light": "#4A3957",
+        "greyVariant1": "#22122E",
+        "greyVariant2": "#493E51",
+        "greyVariant3": "#918A98",
+        "greyVariant4": "#C0B8C6",
+    },
+    "light": {
+        "main": "#F7F5F4",
+        "light": "#F1F0EB",
+        "greyVariant1": "#E6E6E6",
+        "greyVariant2": "#C9C9C9",
+        "greyVariant3": "#9E9E9E",
+        "greyVariant4": "#747474",
+    },
+};
+
 export function createDefaultColorUseCases(
     params: Param0<CreateColorUseCase<PaletteBase, any>>,
 ) {
