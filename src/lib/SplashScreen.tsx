@@ -12,7 +12,7 @@ import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { createMakeStyles, keyframes } from "tss-react";
+import { createMakeStyles, keyframes } from "tss-react/compat";
 import type { Theme } from "./ThemeProvider";
 import { Evt } from "evt";
 import { id } from "tsafe/id";

@@ -1,6 +1,6 @@
 import { useMemo, memo } from "react";
-import Slider from "@material-ui/core/Slider";
-import type { SliderProps } from "@material-ui/core/Slider";
+import Slider from "@mui/material/Slider";
+import type { SliderProps } from "@mui/material/Slider";
 import { assert } from "tsafe/assert";
 import { is } from "tsafe/is";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -13,7 +13,7 @@ import { useWithProps } from "powerhooks/useWithProps";
 import { useDomRect } from "powerhooks/useDomRect";
 import { Tooltip } from "../Tooltip";
 import { createIcon } from "../Icon";
-import HelpIcon from "@material-ui/icons/Help";
+import HelpIcon from "@mui/icons-material/Help";
 
 export type SimpleOrRangeSliderProps = {
     className?: string;

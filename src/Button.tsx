@@ -5,7 +5,7 @@ import { makeStyles } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
-import MuiButton from "@material-ui/core/Button";
+import MuiButton from "@mui/material/Button";
 import { capitalize } from "tsafe/capitalize";
 import { assert } from "tsafe";
 import type { Equals } from "tsafe/Equals";
@@ -234,7 +234,7 @@ export function createButton<IconId extends string = never>(params?: {
                 <MuiButton
                     ref={ref}
                     className={cx(classes.root, className)}
-                    //There is an error in @material-ui/core types, this should be correct.
+                    //There is an error in @mui/material types, this should be correct.
                     disabled={disabled}
                     startIcon={
                         startIcon === undefined ? undefined : (

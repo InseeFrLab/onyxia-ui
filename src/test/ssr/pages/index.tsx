@@ -13,7 +13,7 @@ import { Alert } from "onyxia-ui/Alert";
 //Use this hook to know if the dark mode is currently enabled.
 //and to toggle it's state.
 //Yo can import and use Materia-UI components, they will blend in nicely.
-import Switch from "@material-ui/core/Switch";
+import Switch from "@mui/material/Switch";
 import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
 
 
@@ -61,7 +61,7 @@ const { MyComponent } = (() => {
             /*
             theme.colors.palette.shinyPink.main <- your custom color
             theme.colors.useCases.flashes.cute  <- your custom use case
-            theme.muiTheme                      <- the theme object as defined by @material-ui/core
+            theme.muiTheme                      <- the theme object as defined by @mui/material
             */
         },
     }));

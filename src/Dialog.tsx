@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
-import MuiDialog from "@material-ui/core/Dialog";
+import MuiDialog from "@mui/material/Dialog";
 import { makeStyles } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
-import Checkbox from "@material-ui/core/Checkbox";
+import Checkbox from "@mui/material/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
 
 export type DialogProps = {

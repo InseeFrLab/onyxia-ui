@@ -9,8 +9,8 @@ import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
 import type { FC } from "react";
-import CloseSharp from "@material-ui/icons/CloseSharp";
-import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
+import CloseSharp from "@mui/icons-material/CloseSharp";
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import { CollapsibleWrapper } from "./tools/CollapsibleWrapper";
 import type { CollapseParams } from "./tools/CollapsibleWrapper";
 

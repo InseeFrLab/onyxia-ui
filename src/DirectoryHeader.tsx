@@ -4,7 +4,7 @@ import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import { memo } from "react";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { pxToNumber } from "./tools/pxToNumber";
 
 /**

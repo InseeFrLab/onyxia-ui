@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useIsDarkModeEnabled } from "./lib/index";
-import DarkModeIcon from "@material-ui/icons/Brightness4";
-import LightModeIcon from "@material-ui/icons/Brightness7";
+import DarkModeIcon from "@mui/icons-material/Brightness4";
+import LightModeIcon from "@mui/icons-material/Brightness7";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";

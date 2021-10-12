@@ -2,12 +2,12 @@ import { useReducer, memo } from "react";
 import type { ReactNode } from "react";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
-import MuiAlert from "@material-ui/core/Alert";
+import MuiAlert from "@mui/material/Alert";
 import { Text } from "./Text/TextBase";
 import { makeStyles } from "./lib/ThemeProvider";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
-import CloseSharp from "@material-ui/icons/CloseSharp";
+import CloseSharp from "@mui/icons-material/CloseSharp";
 
 export type AlertProps = {
     className?: string | null;

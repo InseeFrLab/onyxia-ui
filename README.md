@@ -5,7 +5,7 @@
     <i>A disruptive UI toolkit</i><br>
     <i>Optimized for TypeScript</i><br>
     <i>Highly customizable but looks great out of the box.</i><br>
-    <i>Compatible with material-ui large library of components</i>
+    <i>Compatible with mui large library of components</i>
     <br>
     <br>
     <img src="https://github.com/garronej/onyxia-ui/workflows/ci/badge.svg?branch=main">
@@ -25,11 +25,11 @@ WARNING: `onyxia-ui` isn't currently working with SSR. (You can't use it with Ne
 
 # Motivation
 
-[Material-ui](https://material-ui.com) is at it's core a vanilla JavaScript library.  
+[Material-ui](https://mui.com) is at it's core a vanilla JavaScript library.  
 We argue that the experience for TypeScript developers is not optimal and somewhat frustrating.
 Also we find problematic how hard it is to build an app that won't break on any other screen size.
 In consequence, we wanted to create a ui toolkit that would be compatible with
-`material-ui` v5 large library of components but that would also improves it in the following ways:
+`mui` v5 large library of components but that would also improves it in the following ways:
 
 -   Optimized for typescript, theme customization without module augmentation.
 -   Responsive design **way** more easy to implement.
@@ -67,10 +67,10 @@ UI built with this toolkit.
 # Quick start
 
 ```bash
-yarn add onyxia-ui @material-ui/core@^5.0.0-beta.4 tss-react
+yarn add onyxia-ui @mui/material @emotion/react @emotion/styled tss-react
 
-# If you plan on using icons from: https://material-ui.com/components/material-icons/
-yarn add @material-ui/icons@^5.0.0-beta.4
+# If you plan on using icons from: https://mui.com/components/material-icons/
+yarn add @mui/icons-material
 ```
 
 At this stage, the documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  
@@ -78,7 +78,7 @@ The actual theme configuration [happens here](https://github.com/garronej/onyxia
 If you want to experiment with it you can run the demo app with:
 
 NOTE for [Storybook](https://storybook.js.org) users: As of writing this lines storybook still uses by default emotion 10.  
-Material-ui and TSS runs emotion 11 so there is [some changes](https://github.com/garronej/onyxia-ui/blob/324de62248074582b227e584c53fb2e123f5325f/.storybook/main.js#L31-L32)
+mui and TSS runs emotion 11 so there is [some changes](https://github.com/garronej/onyxia-ui/blob/324de62248074582b227e584c53fb2e123f5325f/.storybook/main.js#L31-L32)
 to be made to your `.storybook/main.js` to make it uses emotion 11.
 
 ```bash

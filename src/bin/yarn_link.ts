@@ -31,7 +31,7 @@ fs.writeFileSync(
 );
 
 const commonThirdPartyDeps = (() => {
-    const namespaceModuleNames = ["@emotion", "@material-ui"];
+    const namespaceModuleNames = ["@emotion", "@mui"];
     const standaloneModuleNames = ["react", "@types/react", "tss-react"];
 
     return [

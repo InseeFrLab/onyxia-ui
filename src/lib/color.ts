@@ -3,7 +3,7 @@ export * from "../tools/changeColorOpacity";
 import { createUseGlobalState } from "powerhooks";
 import type { StatefulEvt } from "powerhooks";
 
-import type { PaletteOptions as MuiPaletteOptions } from "@material-ui/core/styles/createPalette";
+import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles/createPalette";
 import type { Param0 } from "tsafe";
 
 export type PaletteBase = typeof defaultPalette;

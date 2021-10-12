@@ -9,12 +9,12 @@ import { createIconButton } from "onyxia-ui/IconButton";
 import { createButton } from "onyxia-ui/Button";
 import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
-import { createMakeStyles } from "tss-react";
+import { createMakeStyles } from "tss-react/compat";
 import "onyxia-ui/assets/fonts/work-sans.css";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
-import EditIcon from "@material-ui/icons/Edit";
+import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
+import EditIcon from "@mui/icons-material/Edit";
 
 //Import your custom icons
 import { ReactComponent as FooSvg } from "./assets/foo.svg";

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { ReactNode, ReactElement } from "react";
-import MuiTooltip from "@material-ui/core/Tooltip";
+import MuiTooltip from "@mui/material/Tooltip";
 import { makeStyles } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 

@@ -12,8 +12,8 @@ import { createText } from "../Text";
 
 import { ReactComponent as TourSvg } from "./assets/svg/Tour.svg";
 import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
-import HelpIcon from "@material-ui/icons/Help";
-import HomeIcon from "@material-ui/icons/Home";
+import HelpIcon from "@mui/icons-material/Help";
+import HomeIcon from "@mui/icons-material/Home";
 import { Param0 } from "tsafe";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({

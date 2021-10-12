@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from "react";
-import MuiCheckbox from "@material-ui/core/Checkbox";
-import type { CheckboxProps as MuiCheckboxProps } from "@material-ui/core/Checkbox";
+import MuiCheckbox from "@mui/material/Checkbox";
+import type { CheckboxProps as MuiCheckboxProps } from "@mui/material/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
 
 export type CheckboxProps = MuiCheckboxProps;

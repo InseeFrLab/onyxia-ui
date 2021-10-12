@@ -3,11 +3,11 @@ import { Text } from "./Text/TextBase";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import MuiTextField from "@material-ui/core/TextField";
+import MuiTextField from "@mui/material/TextField";
 import type { PickOptionals } from "tsafe";
 import { noUndefined } from "./tools/noUndefined";
 import { getBrowser } from "./tools/getBrowser";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import InputAdornment from "@mui/material/InputAdornment";
 import { createIconButton } from "./IconButton";
 import { createIcon } from "./Icon";
 import type { NonPostableEvt } from "evt";
@@ -16,9 +16,9 @@ import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
 import { Tooltip } from "./Tooltip";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Visibility from "@material-ui/icons/Visibility";
-import Help from "@material-ui/icons/Help";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
 
 export type TextFieldProps = {

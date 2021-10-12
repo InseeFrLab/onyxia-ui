@@ -1,6 +1,6 @@
 import { makeStyles } from "./lib/ThemeProvider";
 import { memo } from "react";
-import MuiCircularProgress from "@material-ui/core/CircularProgress";
+import MuiCircularProgress from "@mui/material/CircularProgress";
 
 export type CircularProgressProps = {
     className?: string;

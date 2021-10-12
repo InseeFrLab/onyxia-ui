@@ -7,8 +7,8 @@ import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import CancelIcon from "@material-ui/icons/Cancel";
+import SearchIcon from "@mui/icons-material/Search";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const { Icon } = createIcon({
     "search": SearchIcon,

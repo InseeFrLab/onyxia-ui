@@ -3,12 +3,12 @@ import type { FC } from "react";
 import { makeStyles, useStyles as useTheme } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
-import Divider from "@material-ui/core/Divider";
+import Divider from "@mui/material/Divider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
 import { objectKeys } from "tsafe/objectKeys";
 import { createIcon } from "./Icon";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useDomRect } from "powerhooks/useDomRect";
 
 export type Item<IconId extends string = string> = {

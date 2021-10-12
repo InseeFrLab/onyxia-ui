@@ -1,6 +1,6 @@
 import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
-import chevronLeft from "@material-ui/icons/ChevronLeft";
+import chevronLeft from "@mui/icons-material/ChevronLeft";
 import { makeStyles } from "./lib/ThemeProvider";
 import { useState, useMemo, memo, forwardRef } from "react";
 import type { ReactNode } from "react";

@@ -3,7 +3,7 @@
 import { memo, forwardRef, ElementType } from "react";
 import type { ForwardedRef, MouseEventHandler } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
-import SvgIcon from "@material-ui/core/SvgIcon";
+import SvgIcon from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import type { IconSizeName } from "./lib/icon";

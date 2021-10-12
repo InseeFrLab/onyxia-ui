@@ -10,7 +10,7 @@ import {
 import type { ThemeProviderProps, ChromeFontSize } from "../lib";
 import { ThemeProvider, Text, useTheme } from "./theme";
 import { id } from "tsafe/id";
-import { GlobalStyles } from "tss-react";
+import { GlobalStyles } from "tss-react/compat";
 import { objectKeys } from "tsafe/objectKeys";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { ReactComponent } from "../tools/ReactComponent";

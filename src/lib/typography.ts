@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import type { TypographyOptions as MuiTypographyOptions } from "@material-ui/core/styles/createTypography";
+import type { TypographyOptions as MuiTypographyOptions } from "@mui/material/styles/createTypography";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { objectKeys } from "tsafe/objectKeys";

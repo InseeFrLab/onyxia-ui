@@ -1,13 +1,13 @@
 import "minimal-polyfills/Object.fromEntries";
 import { useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
-import type { Theme as MuiTheme } from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import type { Theme as MuiTheme } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import {
     createTheme as createMuiTheme,
     unstable_createMuiStrictModeTheme,
-} from "@material-ui/core/styles";
+} from "@mui/material/styles";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type {
     PaletteBase,
@@ -31,7 +31,7 @@ import { shadows } from "./shadows";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig, Spacing } from "./spacing";
-import { createMakeStyles } from "tss-react";
+import { createMakeStyles } from "tss-react/compat";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";
@@ -46,7 +46,7 @@ import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { capitalize } from "tsafe/capitalize";
-import createCache from "tss-react/@emotion/cache";
+import createCache from "@emotion/cache";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };

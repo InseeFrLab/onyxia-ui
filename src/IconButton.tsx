@@ -2,7 +2,7 @@
 import type { FC } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import { forwardRef, memo } from "react";
-import MuiIconButton from "@material-ui/core/IconButton";
+import MuiIconButton from "@mui/material/IconButton";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";

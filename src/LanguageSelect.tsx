@@ -6,13 +6,13 @@ import { createIcon } from "./Icon";
 import { Text } from "./Text/TextBase";
 import { useDomRect } from "powerhooks/useDomRect";
 import { Tooltip } from "./Tooltip";
-import MuiButton from "@material-ui/core/Button";
-import type { ButtonProps as MuiButtonProps } from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import MuiButton from "@mui/material/Button";
+import type { ButtonProps as MuiButtonProps } from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { objectKeys } from "tsafe/objectKeys";
-import PublicIcon from "@material-ui/icons/Public";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import PublicIcon from "@mui/icons-material/Public";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export type LanguageSelectProps<Language extends string = string> = {
     className?: string;

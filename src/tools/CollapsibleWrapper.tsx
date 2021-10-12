@@ -2,7 +2,7 @@ import { useEffect, useRef, memo } from "react";
 import type { RefObject } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
-import { useCssAndCx } from "tss-react";
+import { useCssAndCx } from "tss-react/compat";
 import { Evt } from "evt";
 import { useElementEvt } from "evt/hooks";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";

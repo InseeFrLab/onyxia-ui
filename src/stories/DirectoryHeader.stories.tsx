@@ -5,7 +5,7 @@ import { getStoryFactory, logCallbacks } from "./getStory";
 import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
 import imgUrl from "./assets/img/utilitr.png";
 import { useStyles } from "../lib/ThemeProvider";
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from "@mui/material/Avatar";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
