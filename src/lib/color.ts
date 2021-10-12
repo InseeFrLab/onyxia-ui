@@ -96,7 +96,7 @@ export const defaultAUSPalette: typeof defaultPalette = {
     },
     "light": {
         "main": "#F7F5F4",
-        "light": "#F1F0EB",
+        "light": "#FDFDFC",
         "greyVariant1": "#E6E6E6",
         "greyVariant2": "#C9C9C9",
         "greyVariant3": "#9E9E9E",
