@@ -1,3 +1,16 @@
+### **0.14.14** (2021-10-12)  
+  
+- Updat dependencies  
+- Update color.ts  
+- Update theme.ts  
+- Update ci.yaml  
+- Change theme (defaultAUSPalette)  
+- Add new color range (defaultAUSPalette)  
+- Fmt  
+- Update README.md  
+- Update README.md  
+- Update README.md    
+  
 ### **0.14.13** (2021-10-06)  
   
 - Fix throtlling    
