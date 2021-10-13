@@ -1,3 +1,7 @@
+### **0.14.16** (2021-10-13)  
+  
+- Use typography focus instead of palette main for splash screen    
+  
 ### **0.14.15** (2021-10-13)  
   
 - Update tss-react    
