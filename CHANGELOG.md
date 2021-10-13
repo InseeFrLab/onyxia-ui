@@ -1,3 +1,7 @@
+### **0.14.15** (2021-10-13)  
+  
+- Update tss-react    
+  
 ### **0.14.14** (2021-10-12)  
   
 - Updat dependencies  
