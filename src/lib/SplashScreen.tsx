@@ -363,7 +363,7 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
             const {
                 children,
                 Logo,
-                fillColor = theme.colors.palette.focus.main,
+                fillColor = theme.colors.useCases.typography.textFocus,
             } = props;
 
             if (props?.fadeOutDuration !== undefined) {
