@@ -1,3 +1,8 @@
+## **0.15.0** (2021-10-15)  
+  
+- Make it possilbe to use different fonts for other variant  
+- Make powerhooks peer dependency    
+  
 ### **0.14.17** (2021-10-13)  
   
   
