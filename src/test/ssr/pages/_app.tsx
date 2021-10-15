@@ -1,4 +1,4 @@
-import "onyxia-ui/assets/fonts/work-sans.css";
+import "onyxia-ui/assets/fonts/WorkSans/font.css";
 
 import type { AppProps } from 'next/app'
 

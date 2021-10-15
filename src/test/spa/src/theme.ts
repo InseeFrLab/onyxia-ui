@@ -10,7 +10,8 @@ import { createButton } from "onyxia-ui/Button";
 import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
 import { createMakeStyles } from "tss-react/compat";
-import "onyxia-ui/assets/fonts/work-sans.css";
+import "onyxia-ui/assets/fonts/WorkSans/font.css";
+import "onyxia-ui/assets/fonts/Marianne/font.css";
 
 //Import icons from https://material-ui.com/components/material-icons/ that you plan to use
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
@@ -39,6 +40,10 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
             "rootFontSizePx": typographyDesc.rootFontSizePx,
             "variants": {
                 ...typographyDesc.variants,
+                "display heading": {
+                    ...typographyDesc.variants["display heading"],
+                    "fontFamily": "Marianne, sans-serif"
+                },
                 //We add a typography variant to the default ones
                 "my hero": {
                     "htmlComponent": "h1",

@@ -65,6 +65,7 @@ export function MyComponent() {
                 <Icon iconId="hello" />
                 Hello World
             </Text>
+            <Text typo="display heading">Display heading with Marianne font</Text>
             <Text typo="body 1">Toggle dark mode</Text>
             <Switch
                 checked={isDarkModeEnabled}

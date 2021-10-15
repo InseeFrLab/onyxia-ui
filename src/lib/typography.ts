@@ -21,6 +21,7 @@ export declare namespace TypographyDesc {
         fontWeight: FontWeightProperty;
         fontSizeRem: number;
         lineHeightRem: number;
+        fontFamily?: string;
     };
 
     export namespace Variant {
@@ -375,6 +376,7 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
                 fontWeight: TypographyDesc.FontWeightProperty;
                 fontSizeRem: number;
                 lineHeightRem: number;
+                fontFamily?: string;
             };
         };
     };
@@ -391,11 +393,15 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
         }): TypographyDesc.Variant.Style {
             const { variantName } = params;
 
-            const { fontSizeRem, lineHeightRem, fontWeight } =
-                variants[variantName];
+            const {
+                fontSizeRem,
+                lineHeightRem,
+                fontWeight,
+                fontFamily: variantFontFamily,
+            } = variants[variantName];
 
             return {
-                fontFamily,
+                "fontFamily": variantFontFamily ?? fontFamily,
                 fontWeight,
                 //NOTE: We put as any because we use TS 4.2.2 for Storybook but with newer version is not necessary.
                 "fontSize": `${fontSizeRem * rootFontSizePx}px` as any,
