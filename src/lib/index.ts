@@ -6,8 +6,8 @@ export type {
 
 export {
     defaultPalette,
-    defaultFrancePalette,
-    defaultAUSPalette,
+    francePalette,
+    ultravioletPalette,
     createDefaultColorUseCases,
     changeColorOpacity,
     useIsDarkModeEnabled,

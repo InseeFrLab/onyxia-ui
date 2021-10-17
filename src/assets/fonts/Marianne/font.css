@@ -1,28 +1,57 @@
-/* latin */
+/*
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Light_Italic.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Light.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Regular_Italic.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Regular.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Medium.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Bold.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Bold_Italic.woff2" as="font" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/fonts/Marianne/font.css">
+*/
+
 @font-face {
   font-family: Marianne;
+  src: url("./Marianne-Light.woff2") format("woff2");
+  font-weight: 300;
   font-style: normal;
-  font-weight: normal;
-  /*400*/
-  font-display: swap;
-  src: url("./Marianne-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: Marianne;
+  src: url("./Marianne-Light_Italic.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
 }
 
-/* latin */
 @font-face {
   font-family: Marianne;
+  src: url("./Marianne-Regular.woff2") format("woff2");
+  font-weight: normal; /*400*/
   font-style: normal;
+}
+@font-face {
+  font-family: Marianne;
+  src: url("./Marianne-Regular_Italic.woff2") format("woff2");
+  font-weight: normal; /*400*/
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Marianne;
+  src: url("./Marianne-Medium.woff2") format("woff2");
   font-weight: 500;
   font-display: swap;
-  src: url("./Marianne-Medium.woff2") format("woff2");
+  font-style: normal;
 }
 
-/* latin */
 @font-face {
   font-family: Marianne;
-  font-style: normal;
-  font-weight: bold;
-  /*700*/
-  font-display: swap;
   src: url("./Marianne-Bold.woff2") format("woff2");
+  font-weight: bold /*700*/;
+  font-style: normal;
+}
+@font-face {
+  font-family: Marianne;
+  src: url("./Marianne-Bold_Italic.woff2") format("woff2");
+  font-weight: bold; /*700*/
+  font-style: italic;
 }

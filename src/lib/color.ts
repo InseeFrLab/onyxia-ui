@@ -54,7 +54,7 @@ export const defaultPalette = {
     },
 };
 
-export const defaultFrancePalette: typeof defaultPalette = {
+export const francePalette: typeof defaultPalette = {
     ...defaultPalette,
     "focus": {
         "main": "#000091",
@@ -79,7 +79,7 @@ export const defaultFrancePalette: typeof defaultPalette = {
     },
 };
 
-export const defaultAUSPalette: typeof defaultPalette = {
+export const ultravioletPalette: typeof defaultPalette = {
     ...defaultPalette,
     "focus": {
         "main": "#067A76",
