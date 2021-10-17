@@ -1,0 +1,98 @@
+/*
+<link rel="preload" href="%PUBLIC_URL%/fonts/WorkSans/worksans-bold-webfont.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/WorkSans/worksans-medium-webfont.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/WorkSans/worksans-regular-webfont.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/WorkSans/worksans-semibold-webfont.woff2" as="font" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/fonts/WorkSans/font.css">
+*/
+
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: normal; /*400*/
+  font-display: swap;
+  src: url(../../static/media/worksans-regular-webfont.3d45de00.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../../static/media/worksans-medium-webfont.3d45de00.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../static/media/worksans-semibold-webfont.3d45de00.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: bold; /*700*/
+  font-display: swap;
+  src: url(../../static/media/worksans-bold-webfont.3d45de00.woff2) format("woff2");
+}
+/*
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Light_Italic.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Light.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Regular_Italic.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Regular.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Medium.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Bold.woff2" as="font" crossorigin="anonymous">
+<link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Bold_Italic.woff2" as="font" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/fonts/Marianne/font.css">
+*/
+
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Light.ec511194.woff2) format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Light_Italic.3126003b.woff2) format("woff2");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Regular.8d566232.woff2) format("woff2");
+  font-weight: normal; /*400*/
+  font-style: normal;
+}
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Regular_Italic.cb6e9e65.woff2) format("woff2");
+  font-weight: normal; /*400*/
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Medium.05b552bd.woff2) format("woff2");
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Bold.587c38a9.woff2) format("woff2");
+  font-weight: bold /*700*/;
+  font-style: normal;
+}
+@font-face {
+  font-family: Marianne;
+  src: url(../../static/media/Marianne-Bold_Italic.192ebcfe.woff2) format("woff2");
+  font-weight: bold; /*700*/
+  font-style: italic;
+}
+
+/*# sourceMappingURL=main.301d8030.chunk.css.map*/
