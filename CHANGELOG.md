@@ -1,3 +1,7 @@
+## **0.17.0** (2021-10-17)  
+  
+- Feat: LeftBar allow to disable item    
+  
 ## **0.16.0** (2021-10-17)  
   
 - Rename alternative palette    
