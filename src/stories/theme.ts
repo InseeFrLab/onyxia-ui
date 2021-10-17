@@ -1,10 +1,6 @@
 import "../assets/fonts/WorkSans/font.css";
 import "../assets/fonts/Marianne/font.css";
-import {
-    createThemeProvider,
-    defaultGetTypographyDesc,
-    defaultAUSPalette,
-} from "../lib";
+import { createThemeProvider, defaultGetTypographyDesc } from "../lib";
 import { createIcon } from "../Icon";
 import { createIconButton } from "../IconButton";
 import { createButton } from "../Button";
@@ -18,7 +14,6 @@ import { Param0 } from "tsafe";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "isReactStrictModeEnabled": false,
-    "palette": defaultAUSPalette,
     "getTypographyDesc": ({
         windowInnerWidth,
         browserFontSizeFactor,
@@ -29,8 +24,8 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
             browserFontSizeFactor,
             windowInnerHeight,
         }),
-        //"fontFamily": '"Work Sans", sans-serif',
-        "fontFamily": "Marianne, sans-serif",
+        "fontFamily": '"Work Sans", sans-serif',
+        //"fontFamily": "Marianne, sans-serif",
     }),
 });
 

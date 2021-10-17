@@ -14,6 +14,8 @@ import { useDomRect } from "powerhooks/useDomRect";
 export type Item<IconId extends string = string> = {
     iconId: IconId;
     label: string;
+    /** Defaults to available */
+    availability?: "available" | "greyed" | "not visible";
     /** Default false */
     hasDividerBelow?: boolean;
     link: {
@@ -181,10 +183,11 @@ export function createLeftBar<IconId extends string>(params?: {
             isCollapsed: boolean;
             isCurrent: boolean | undefined;
             width: number;
+            isDisabled: boolean;
         }>()(
             (
                 theme,
-                { collapsedWidth, isCollapsed, isCurrent, width },
+                { collapsedWidth, isCollapsed, isCurrent, width, isDisabled },
                 createRef,
             ) => {
                 const iconHoverBox = {
@@ -218,6 +221,7 @@ export function createLeftBar<IconId extends string>(params?: {
 
                 return {
                     "root": {
+                        ...(isDisabled ? { "pointerEvents": "none" } : {}),
                         "color": theme.colors.useCases.typography.textPrimary,
                         "textDecoration": "none",
                         "display": "flex",
@@ -244,6 +248,9 @@ export function createLeftBar<IconId extends string>(params?: {
                         "width": collapsedWidth,
                         "textAlign": "center",
                         "position": "relative",
+                        "color": isDisabled
+                            ? theme.colors.useCases.typography.textDisabled
+                            : undefined,
                     },
 
                     "icon": {
@@ -261,6 +268,12 @@ export function createLeftBar<IconId extends string>(params?: {
                     },
                     iconHoverBox,
                     typoWrapper,
+                    "typo": {
+                        "color": isDisabled
+                            ? theme.colors.useCases.typography.textDisabled
+                            : undefined,
+                        "whiteSpace": "nowrap",
+                    },
                     "divider": {
                         "marginTop": theme.spacing(2),
                         "borderColor":
@@ -289,6 +302,7 @@ export function createLeftBar<IconId extends string>(params?: {
                 label,
                 link,
                 hasDividerBelow = false,
+                availability = "available",
             } = props;
 
             const { theme } = useTheme();
@@ -298,13 +312,18 @@ export function createLeftBar<IconId extends string>(params?: {
                 domRect: { width },
             } = useDomRect();
 
-            const { classes, cx, css } = useStyles({
+            const { classes, cx } = useStyles({
                 "collapsedWidth":
                     collapsedWidth ?? 2 * theme.iconSizesInPxByName[iconSize],
                 isCollapsed,
                 isCurrent,
                 width,
+                "isDisabled": availability === "greyed",
             });
+
+            if (availability === "not visible") {
+                return null;
+            }
 
             return (
                 <>
@@ -334,10 +353,7 @@ export function createLeftBar<IconId extends string>(params?: {
                             })()}
                         </div>
                         <div className={classes.typoWrapper}>
-                            <Text
-                                typo="label 1"
-                                className={css({ "whiteSpace": "nowrap" })}
-                            >
+                            <Text typo="label 1" className={classes.typo}>
                                 {label}
                             </Text>
                         </div>

@@ -40,6 +40,7 @@ export const VueNoTitle = getStory({
             "link": {
                 "href": "#",
             },
+            "availability": "greyed",
         },
         "item4": {
             "iconId": "home",
