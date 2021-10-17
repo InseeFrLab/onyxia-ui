@@ -1,3 +1,7 @@
+## **0.16.0** (2021-10-17)  
+  
+- Rename alternative palette    
+  
 ## **0.15.0** (2021-10-15)  
   
 - Make it possilbe to use different fonts for other variant  
