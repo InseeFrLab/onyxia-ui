@@ -1,3 +1,7 @@
+## **0.18.0** (2021-10-29)  
+  
+- Setup for proper documentation    
+  
 ## **0.17.0** (2021-10-17)  
   
 - Feat: LeftBar allow to disable item    
