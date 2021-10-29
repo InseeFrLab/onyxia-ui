@@ -1,1 +1,1 @@
-export const sectionName = "designSystem";
+export const sectionName = "sandbox";

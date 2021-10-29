@@ -11,7 +11,7 @@ import CloseSharp from "@mui/icons-material/CloseSharp";
 
 export type AlertProps = {
     className?: string | null;
-    severity: "warning" | "info" | "error" | "info" | "success";
+    severity: "warning" | "info" | "error" | "success";
     children: NonNullable<ReactNode>;
     doDisplayCross?: boolean;
 };

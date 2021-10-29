@@ -12,7 +12,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import HomeIcon from "@mui/icons-material/Home";
 import { Param0 } from "tsafe";
 
-export const { ThemeProvider, useTheme } = createThemeProvider({
+export const { ThemeProvider, StoryProvider, useTheme } = createThemeProvider({
     "isReactStrictModeEnabled": false,
     "getTypographyDesc": ({
         windowInnerWidth,

@@ -2,7 +2,7 @@ import "minimal-polyfills/Object.fromEntries";
 import { useContext, createContext, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import {
     createTheme as createMuiTheme,
@@ -52,6 +52,7 @@ export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
 export { ViewPortOutOfRangeError };
 import { CacheProvider } from "@emotion/react";
+import type { ReactComponent } from "../tools/ReactComponent";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -74,6 +75,9 @@ export type Theme<
 };
 
 const themeBaseContext = createContext<Theme | undefined>(undefined);
+const isDarkModeEnabledOverrideContext = createContext<boolean | undefined>(
+    undefined,
+);
 
 /** Used internally, do not export globally */
 
@@ -139,6 +143,7 @@ export function createThemeProvider<
     custom?: Custom;
     defaultIsDarkModeEnabled?: boolean;
     getIconSizeInPx?: GetIconSizeInPx;
+    /** Default true */
 }) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
@@ -306,8 +311,12 @@ export function createThemeProvider<
                 useWindowInnerSize();
             const { browserFontSizeFactor } = useBrowserFontSizeFactor();
 
+            const isDarkModeEnabledOverride = useContext(
+                isDarkModeEnabledOverrideContext,
+            );
+
             return createTheme(
-                isDarkModeEnabled,
+                isDarkModeEnabledOverride ?? isDarkModeEnabled,
                 windowInnerWidth,
                 windowInnerHeight,
                 browserFontSizeFactor,
@@ -336,22 +345,29 @@ export function createThemeProvider<
                 <themeBaseContext.Provider value={theme}>
                     <CacheProvider value={muiCache}>
                         <MuiThemeProvider theme={theme.muiTheme}>
-                            <CssBaseline />
-                            {splashScreen === undefined ? (
-                                children
-                            ) : (
-                                <SplashScreen {...splashScreen}>
-                                    {children}
-                                </SplashScreen>
-                            )}
+                            <ScopedCssBaseline>
+                                {splashScreen === undefined ? (
+                                    children
+                                ) : (
+                                    <SplashScreen {...splashScreen}>
+                                        {children}
+                                    </SplashScreen>
+                                )}
+                            </ScopedCssBaseline>
                         </MuiThemeProvider>
                     </CacheProvider>
                 </themeBaseContext.Provider>
             );
         }
 
-        function ThemeProvider(props: ThemeProviderProps) {
-            const { splashScreen, getViewPortConfig } = props;
+        function ThemeProvider(
+            props: ThemeProviderProps & { doUseVh100?: boolean },
+        ) {
+            const {
+                splashScreen,
+                getViewPortConfig,
+                doUseVh100 = true,
+            } = props;
 
             const getConfig = useCallback<ViewPortAdapterProps["getConfig"]>(
                 params => {
@@ -389,7 +405,11 @@ export function createThemeProvider<
             );
 
             return getViewPortConfig === undefined ? (
-                <div style={{ "height": "100vh" }}>{children}</div>
+                !doUseVh100 ? (
+                    children
+                ) : (
+                    <div style={{ "height": "100vh" }}>{children}</div>
+                )
             ) : (
                 <ViewPortAdapter getConfig={getConfig}>
                     {children}
@@ -400,5 +420,19 @@ export function createThemeProvider<
         return { ThemeProvider };
     })();
 
-    return { ThemeProvider, useTheme };
+    function StoryProvider(props: { dark?: boolean; children: ReactNode }) {
+        const { dark = false, children } = props;
+
+        return (
+            <isDarkModeEnabledOverrideContext.Provider value={dark}>
+                <ThemeProvider doUseVh100={false}>{children}</ThemeProvider>
+            </isDarkModeEnabledOverrideContext.Provider>
+        );
+    }
+
+    return {
+        "ThemeProvider": id<ReactComponent<ThemeProviderProps>>(ThemeProvider),
+        useTheme,
+        StoryProvider,
+    };
 }
