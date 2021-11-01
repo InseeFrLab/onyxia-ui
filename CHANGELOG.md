@@ -1,3 +1,7 @@
+### **0.18.1** (2021-11-01)  
+  
+- Improve type def of TextField autoComplete    
+  
 ## **0.18.0** (2021-10-29)  
   
 - Setup for proper documentation    
