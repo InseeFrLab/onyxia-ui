@@ -44,25 +44,37 @@ UI built with this toolkit.
 
 ## [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
 
-![gif_onyxia](https://user-images.githubusercontent.com/6702424/136545513-f623d8c7-260d-4d93-a01e-2dc5af6ad473.gif)
-![scree_myservices](https://user-images.githubusercontent.com/6702424/121828699-a8a36600-ccc0-11eb-903c-1cd4b6cbb0ff.png)
-![screen_launcher](https://user-images.githubusercontent.com/6702424/121828696-a80acf80-ccc0-11eb-86fb-c7d0bca55d4f.png)
-![screen_main_services](https://user-images.githubusercontent.com/6702424/121828700-a93bfc80-ccc0-11eb-8149-f6c85c06cffd.png)
-![my_secrets](https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png)
-
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/6702424/126612946-c9e0a0ce-3390-4d83-87e1-cdcb6ba623a5.gif">
+  <img src="https://user-images.githubusercontent.com/6702424/136545513-f623d8c7-260d-4d93-a01e-2dc5af6ad473.gif"/>
+  <img src="https://user-images.githubusercontent.com/6702424/121828699-a8a36600-ccc0-11eb-903c-1cd4b6cbb0ff.png"/>
+  <img src="https://user-images.githubusercontent.com/6702424/121828696-a80acf80-ccc0-11eb-86fb-c7d0bca55d4f.png"/>
+  <img src="https://user-images.githubusercontent.com/6702424/121828700-a93bfc80-ccc0-11eb-8149-f6c85c06cffd.png" />
+  <img src="https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png"/>
+  <img src="https://user-images.githubusercontent.com/6702424/126612946-c9e0a0ce-3390-4d83-87e1-cdcb6ba623a5.gif">
+  <img src="https://user-images.githubusercontent.com/6702424/126614698-183e797f-a1e3-4e03-98c3-82d4b1c09bc3.gif">
 </p>
 
+## [datalab.sspcloud.fr with "France" palette](https://datalab.sspcloud.fr/?palette=france&title=Etalab)
+
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/6702424/126614698-183e797f-a1e3-4e03-98c3-82d4b1c09bc3.gif">
+    <img src="https://user-images.githubusercontent.com/6702424/139843650-8907ac5b-9fde-41ce-9c7d-9df9e10ce3e1.png" />
+    <img src="https://user-images.githubusercontent.com/6702424/139843848-8fe5d132-5cd2-4840-8719-e6d5929b07d3.png" />
 </p>
 
-## [sspcloud.fr](https://sspcloud.fr)
+## [datalab.sspcloud.fr with "Ultraviolet" palette](https://datalab.sspcloud.fr/?palette=ultraviolet&title=AUS)
 
-![image](https://user-images.githubusercontent.com/6702424/136541663-bc1672c7-d4e2-4b65-ae6e-7a222d7ef71d.png)
-![image](https://user-images.githubusercontent.com/6702424/136541792-3e267d15-3e56-4f27-9b62-57500f69bbaa.png)
-![image](https://user-images.githubusercontent.com/6702424/136541968-a3c718ae-1a1a-48aa-823f-afcecb475e55.png)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/6702424/139844196-0079858c-6778-4569-a7f8-409f1ce9652d.png" />
+    <img src="https://user-images.githubusercontent.com/6702424/139844260-b4948b34-eca1-4d5b-a5c9-e856500fe921.png" />
+</p>
+
+## [www.sspcloud.fr](https://www.sspcloud.fr)
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/6702424/136541663-bc1672c7-d4e2-4b65-ae6e-7a222d7ef71d.png" />
+    <img src="https://user-images.githubusercontent.com/6702424/136541792-3e267d15-3e56-4f27-9b62-57500f69bbaa.png" />
+    <img src="https://user-images.githubusercontent.com/6702424/136541968-a3c718ae-1a1a-48aa-823f-afcecb475e55.png" />
+</p>
 
 # Quick start
 
