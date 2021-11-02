@@ -1,3 +1,7 @@
+### **0.18.2** (2021-11-02)  
+  
+- TextField: Errors can be ReactNode    
+  
 ### **0.18.1** (2021-11-01)  
   
 - Improve type def of TextField autoComplete    
