@@ -1,3 +1,8 @@
+### **0.18.3** (2021-11-02)  
+  
+- Allow helperText and questionMarkHelperText to be JSX  
+- Update screenshot    
+  
 ### **0.18.2** (2021-11-02)  
   
 - TextField: Errors can be ReactNode    
