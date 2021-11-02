@@ -52,7 +52,9 @@ export type TextFieldProps = {
     onSubmit?(value: string): void;
     getIsValidValue?(
         value: string,
-    ): { isValidValue: true } | { isValidValue: false; message: string };
+    ):
+        | { isValidValue: true }
+        | { isValidValue: false; message: string | ReactNode };
     /**
      * Invoked on first render,
      * called again if getIsValidValue have been updated and
