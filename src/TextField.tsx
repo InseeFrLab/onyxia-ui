@@ -67,8 +67,8 @@ export type TextFieldProps = {
     ): void;
     transformValueBeingTyped?: (value: string) => string;
     label?: React.ReactNode;
-    helperText?: string;
-    questionMarkHelperText?: string;
+    helperText?: string | ReactNode;
+    questionMarkHelperText?: string | NonNullable<ReactNode>;
     doOnlyValidateInputAfterFistFocusLost?: boolean;
     isCircularProgressShown?: boolean;
     selectAllTextOnFocus?: boolean;
