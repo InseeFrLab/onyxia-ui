@@ -69,7 +69,7 @@ export const Alert = memo((props: AlertProps) => {
             }
         >
             {typeof children === "string" ? (
-                <Text typo="body 1">{children}</Text>
+                <Text typo="label 2">{children}</Text>
             ) : (
                 children
             )}
