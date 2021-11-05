@@ -5,6 +5,13 @@ import { getStoryFactory, logCallbacks } from "./getStory";
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { TextField },
+    "argTypes": {
+        "inputProps_aria-invalid": {
+            "control": {
+                "type": "boolean",
+            },
+        },
+    },
 });
 
 export default meta;

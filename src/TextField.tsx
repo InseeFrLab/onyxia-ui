@@ -32,7 +32,13 @@ export type TextFieldProps = {
     inputProps_tabIndex?: number;
     inputProps_spellCheck?: boolean;
     inputProps_autoFocus?: boolean;
+    /**
+     * If true, it sets the helper text in red.
+     * Will be set automatically if getIsValidValue is provided
+     * */
+    "inputProps_aria-invalid"?: boolean;
     InputProps_endAdornment?: ReactNode;
+    /** Only use when getIsValidValue isn't used */
     disabled?: boolean;
     multiline?: boolean;
     /** Return false to e.preventDefault() and e.stopPropagation() */
@@ -162,27 +168,11 @@ export const TextField = memo((props: TextFieldProps) => {
         inputProps_tabIndex,
         inputProps_spellCheck,
         inputProps_autoFocus,
+        "inputProps_aria-invalid": inputProps_ariaInvalid,
         InputProps_endAdornment,
         questionMarkHelperText,
         ...completedPropsRest
     } = props;
-
-    const inputProps = useMemo(
-        () => ({
-            "ref": inputProps_ref,
-            "aria-label": inputProps_ariaLabel,
-            "tabIndex": inputProps_tabIndex,
-            "spellCheck": inputProps_spellCheck,
-            "autoFocus": inputProps_autoFocus,
-        }),
-        [
-            inputProps_ref ?? Object,
-            inputProps_ariaLabel ?? Object,
-            inputProps_tabIndex ?? Object,
-            inputProps_spellCheck ?? Object,
-            inputProps_autoFocus ?? Object,
-        ],
-    );
 
     const { value, transformAndSetValue } = (function useClosure() {
         const [value, setValue] = useState(defaultValue);
@@ -257,7 +247,7 @@ export const TextField = memo((props: TextFieldProps) => {
 
     const error = isValidationEnabled
         ? !getIsValidValueResult.isValidValue
-        : false;
+        : inputProps_ariaInvalid ?? false;
 
     const {
         domRect: { height: rootHeight },
@@ -333,6 +323,32 @@ export const TextField = memo((props: TextFieldProps) => {
             type,
             InputProps_endAdornment,
             isCircularProgressShown,
+        ],
+    );
+
+    const inputProps = useMemo(
+        () => ({
+            "ref": inputProps_ref,
+            "aria-label": inputProps_ariaLabel,
+            "tabIndex": inputProps_tabIndex,
+            "spellCheck": inputProps_spellCheck,
+            "autoFocus": inputProps_autoFocus,
+            ...(inputProps_ariaInvalid !== undefined
+                ? {
+                      "aria-invalid": inputProps_ariaInvalid,
+                  }
+                : error
+                ? { "aria-invalid": true }
+                : {}),
+        }),
+        [
+            inputProps_ref ?? Object,
+            inputProps_ariaLabel ?? Object,
+            inputProps_tabIndex ?? Object,
+            inputProps_spellCheck ?? Object,
+            inputProps_autoFocus ?? Object,
+            inputProps_ariaInvalid ?? Object,
+            error,
         ],
     );
 
