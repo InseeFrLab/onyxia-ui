@@ -1,3 +1,7 @@
+### **0.18.4** (2021-11-04)  
+  
+- Change default typo in label    
+  
 ### **0.18.3** (2021-11-02)  
   
 - Allow helperText and questionMarkHelperText to be JSX  
