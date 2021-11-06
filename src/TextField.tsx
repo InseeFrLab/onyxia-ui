@@ -19,6 +19,8 @@ import Visibility from "@mui/icons-material/Visibility";
 import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
 
+console.log("wesh");
+
 export type TextFieldProps = {
     className?: string;
     id?: string;
@@ -376,7 +378,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         ? getIsValidValueResult.message || helperText
                         : helperText}
                     &nbsp;
-                    {questionMarkHelperText !== "" && (
+                    {questionMarkHelperText !== undefined && (
                         <Tooltip title={questionMarkHelperText}>
                             <Icon
                                 iconId="help"
