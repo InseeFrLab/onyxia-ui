@@ -1,3 +1,7 @@
+### **0.18.6** (2021-11-06)  
+  
+- TextField: fix    
+  
 ### **0.18.5** (2021-11-05)  
   
 - TextField: Enable to put the helper text red on demand  
