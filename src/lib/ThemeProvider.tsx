@@ -1,7 +1,8 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useCallback } from "react";
+import { useContext, createContext, useCallback, useMemo } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import {
@@ -341,11 +342,29 @@ export function createThemeProvider<
 
             const theme = useTheme();
 
+            const isStoryProvider =
+                useContext(isDarkModeEnabledOverrideContext) !== undefined;
+
+            const CssBaselineOrScopedCssBaseline = useMemo(
+                (): ReactComponent<{ children: ReactNode }> =>
+                    isStoryProvider
+                        ? ({ children }) => (
+                              <ScopedCssBaseline>{children}</ScopedCssBaseline>
+                          )
+                        : ({ children }) => (
+                              <>
+                                  <CssBaseline />
+                                  {children}
+                              </>
+                          ),
+                [isStoryProvider],
+            );
+
             return (
                 <themeBaseContext.Provider value={theme}>
                     <CacheProvider value={muiCache}>
                         <MuiThemeProvider theme={theme.muiTheme}>
-                            <ScopedCssBaseline>
+                            <CssBaselineOrScopedCssBaseline>
                                 {splashScreen === undefined ? (
                                     children
                                 ) : (
@@ -353,7 +372,7 @@ export function createThemeProvider<
                                         {children}
                                     </SplashScreen>
                                 )}
-                            </ScopedCssBaseline>
+                            </CssBaselineOrScopedCssBaseline>
                         </MuiThemeProvider>
                     </CacheProvider>
                 </themeBaseContext.Provider>
