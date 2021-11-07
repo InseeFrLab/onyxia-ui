@@ -19,8 +19,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
 
-console.log("wesh");
-
 export type TextFieldProps = {
     className?: string;
     id?: string;
@@ -247,9 +245,9 @@ export const TextField = memo((props: TextFieldProps) => {
         ],
     );
 
-    const error = isValidationEnabled
-        ? !getIsValidValueResult.isValidValue
-        : inputProps_ariaInvalid ?? false;
+    const hasError =
+        inputProps_ariaInvalid ??
+        (isValidationEnabled ? !getIsValidValueResult.isValidValue : false);
 
     const {
         domRect: { height: rootHeight },
@@ -257,7 +255,7 @@ export const TextField = memo((props: TextFieldProps) => {
     } = useDomRect();
 
     const { classes, cx } = useStyles({
-        error,
+        hasError,
         rootHeight,
     });
 
@@ -339,7 +337,7 @@ export const TextField = memo((props: TextFieldProps) => {
                 ? {
                       "aria-invalid": inputProps_ariaInvalid,
                   }
-                : error
+                : hasError
                 ? { "aria-invalid": true }
                 : {}),
         }),
@@ -350,7 +348,7 @@ export const TextField = memo((props: TextFieldProps) => {
             inputProps_spellCheck ?? Object,
             inputProps_autoFocus ?? Object,
             inputProps_ariaInvalid ?? Object,
-            error,
+            hasError,
         ],
     );
 
@@ -367,7 +365,7 @@ export const TextField = memo((props: TextFieldProps) => {
             }
             className={cx(classes.root, className)}
             value={value}
-            error={error}
+            error={hasError}
             helperText={
                 <Text
                     className={classes.helperText}
@@ -419,9 +417,9 @@ export const TextField = memo((props: TextFieldProps) => {
 });
 
 const useStyles = makeStyles<{
-    error: boolean;
+    hasError: boolean;
     rootHeight: number;
-}>()((theme, { error, rootHeight }) => ({
+}>()((theme, { hasError, rootHeight }) => ({
     "root": {
         "& .MuiFormHelperText-root": {
             "position": "absolute",
@@ -429,7 +427,7 @@ const useStyles = makeStyles<{
             "visibility": rootHeight === 0 ? "hidden" : undefined,
         },
         "& .MuiFormLabel-root": {
-            "color": error
+            "color": hasError
                 ? theme.colors.useCases.alertSeverity.error.main
                 : theme.colors.useCases.typography.textSecondary,
         },
@@ -463,7 +461,7 @@ const useStyles = makeStyles<{
         },
     },
     "helperText": {
-        "color": error
+        "color": hasError
             ? theme.colors.useCases.alertSeverity.error.main
             : theme.colors.useCases.typography.textDisabled,
         "whiteSpace": "nowrap",
