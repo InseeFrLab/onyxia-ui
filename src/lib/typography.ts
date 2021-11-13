@@ -44,6 +44,7 @@ export declare namespace TypographyDesc {
         | "navigation label"
         | "body 1"
         | "body 2"
+        | "body 3"
         | "caption";
 
     export type FontWeightProperty =
@@ -317,6 +318,30 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
         "body 2": {
             "htmlComponent": "p",
             "fontWeight": id<TypographyDesc.FontWeightProperty>("normal"),
+            ...(() => {
+                if (windowInnerWidth >= breakpointsValues.xl) {
+                    return {
+                        "fontSizeRem": 0.875,
+                        "lineHeightRem": 1.28,
+                    };
+                }
+
+                if (windowInnerWidth >= breakpointsValues.lg) {
+                    return {
+                        "fontSizeRem": 0.75,
+                        "lineHeightRem": 1,
+                    };
+                }
+
+                return {
+                    "fontSizeRem": 0.625,
+                    "lineHeightRem": 0.69,
+                };
+            })(),
+        },
+        "body 3": {
+            "htmlComponent": "p",
+            "fontWeight": "normal",
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
