@@ -1,3 +1,8 @@
+## **0.20.0** (2021-11-13)  
+  
+- augmentation of the theme should be alongside the other values  
+- theme.custom may depend on the other theme values    
+  
 ## **0.19.0** (2021-11-13)  
   
 - Add <Tag>    
