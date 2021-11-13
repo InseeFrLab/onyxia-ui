@@ -59,7 +59,7 @@ export type Theme<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
     CustomTypographyVariantName extends string = never,
-    Custom extends Record<string, unknown> = Record<string, unknown>,
+    Custom extends Record<string, unknown> = {},
 > = {
     colors: {
         palette: Palette;
@@ -70,10 +70,9 @@ export type Theme<
     shadows: typeof shadows;
     spacing: Spacing;
     muiTheme: MuiTheme;
-    custom: Custom;
     iconSizesInPxByName: Record<IconSizeName, number>;
     windowInnerWidth: number;
-};
+} & Custom;
 
 const themeBaseContext = createContext<Theme | undefined>(undefined);
 const isDarkModeEnabledOverrideContext = createContext<boolean | undefined>(
@@ -304,12 +303,11 @@ export function createThemeProvider<
                         "rootFontSizePx": typographyDesc.rootFontSizePx,
                     }),
                     windowInnerWidth,
-                    "custom": {},
                 });
 
                 return {
                     ...themeWithoutCustom,
-                    "custom": getCustom(themeWithoutCustom),
+                    ...getCustom(themeWithoutCustom),
                 };
             },
             { "max": 1 },
