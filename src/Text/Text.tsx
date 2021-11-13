@@ -12,8 +12,7 @@ export function createText<
     useTheme(): Theme<
         PaletteBase,
         ColorUseCasesBase,
-        TypographyVariantNameCustom,
-        Record<string, unknown>
+        TypographyVariantNameCustom
     >;
 }) {
     const { useTheme } = params;
