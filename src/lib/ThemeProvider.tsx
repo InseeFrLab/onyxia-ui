@@ -141,7 +141,9 @@ export function createThemeProvider<
     palette?: Palette;
     createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
     spacingConfig?: SpacingConfig;
-    custom?: Custom;
+    getCustom?: (
+        theme: Theme<Palette, ColorUseCases, CustomTypographyVariantName, {}>,
+    ) => Custom;
     defaultIsDarkModeEnabled?: boolean;
     getIconSizeInPx?: GetIconSizeInPx;
     /** Default true */
@@ -156,7 +158,9 @@ export function createThemeProvider<
         >,
         isReactStrictModeEnabled = false,
         spacingConfig = defaultSpacingConfig,
-        custom = {} as NonNullable<typeof params["custom"]>,
+        getCustom = (() => ({})) as unknown as NonNullable<
+            typeof params["getCustom"]
+        >,
         defaultIsDarkModeEnabled,
         getIconSizeInPx = defaultGetIconSizeInPx,
     } = params;
@@ -192,12 +196,12 @@ export function createThemeProvider<
                         "rootFontSizePx": typographyDesc.rootFontSizePx,
                     });
 
-                return id<
+                const themeWithoutCustom = id<
                     Theme<
                         Palette,
                         ColorUseCases,
                         CustomTypographyVariantName,
-                        Custom
+                        {}
                     >
                 >({
                     "colors": { palette, useCases },
@@ -300,8 +304,13 @@ export function createThemeProvider<
                         "rootFontSizePx": typographyDesc.rootFontSizePx,
                     }),
                     windowInnerWidth,
-                    custom,
+                    "custom": {},
                 });
+
+                return {
+                    ...themeWithoutCustom,
+                    "custom": getCustom(themeWithoutCustom),
+                };
             },
             { "max": 1 },
         );
