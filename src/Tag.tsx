@@ -8,7 +8,23 @@ export type TagProps = {
     text: NonNullable<ReactNode>;
 };
 
-const useStyles = makeStyles()(theme => ({
+export const Tag = memo((props: TagProps) => {
+    const { text, className } = props;
+
+    const { classes, cx } = useStyles();
+
+    return (
+        <div className={cx(classes.root, className)}>
+            <Text className={classes.text} typo="body 3">
+                {text}
+            </Text>
+        </div>
+    );
+});
+
+const useStyles = makeStyles({
+    "label": { Tag },
+})(theme => ({
     "root": {
         "backgroundColor":
             theme.colors.palette[theme.isDarkModeEnabled ? "light" : "dark"]
@@ -23,17 +39,3 @@ const useStyles = makeStyles()(theme => ({
                 .main,
     },
 }));
-
-export const Tag = memo((props: TagProps) => {
-    const { text, className } = props;
-
-    const { classes, cx } = useStyles();
-
-    return (
-        <div className={cx(classes.root, className)}>
-            <Text className={classes.text} typo="body 3">
-                {text}
-            </Text>
-        </div>
-    );
-});

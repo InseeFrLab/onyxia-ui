@@ -38,44 +38,6 @@ export function createLanguageSelect<Language extends string>(params: {
 }) {
     const { languagesPrettyPrint } = params;
 
-    const useStyles = makeStyles<{
-        buttonWidth: number;
-        variant: LanguageSelectProps["variant"];
-    }>()((theme, { buttonWidth, variant }) => ({
-        "button": {
-            "padding": (() => {
-                switch (variant) {
-                    case "big":
-                        return undefined;
-                    case "small":
-                        return 0;
-                }
-            })(),
-        },
-        "menu": {
-            "& .Mui-selected": {
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            },
-            "& .MuiPaper-root": {
-                "backgroundColor": theme.colors.useCases.surfaces.background,
-                "width": (() => {
-                    switch (variant) {
-                        case "big":
-                            return buttonWidth;
-                        case "small":
-                            return undefined;
-                    }
-                })(),
-            },
-            "& a": {
-                "color": theme.colors.useCases.typography.textPrimary,
-            },
-        },
-        "icon": {
-            "color": theme.colors.useCases.typography.textPrimary,
-        },
-    }));
-
     const LanguageSelect = memo((props: LanguageSelectProps<Language>) => {
         const {
             className,
@@ -190,6 +152,44 @@ export function createLanguageSelect<Language extends string>(params: {
             </>
         );
     });
+
+    const useStyles = makeStyles<{
+        buttonWidth: number;
+        variant: LanguageSelectProps["variant"];
+    }>({ "label": { LanguageSelect } })((theme, { buttonWidth, variant }) => ({
+        "button": {
+            "padding": (() => {
+                switch (variant) {
+                    case "big":
+                        return undefined;
+                    case "small":
+                        return 0;
+                }
+            })(),
+        },
+        "menu": {
+            "& .Mui-selected": {
+                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+            },
+            "& .MuiPaper-root": {
+                "backgroundColor": theme.colors.useCases.surfaces.background,
+                "width": (() => {
+                    switch (variant) {
+                        case "big":
+                            return buttonWidth;
+                        case "small":
+                            return undefined;
+                    }
+                })(),
+            },
+            "& a": {
+                "color": theme.colors.useCases.typography.textPrimary,
+            },
+        },
+        "icon": {
+            "color": theme.colors.useCases.typography.textPrimary,
+        },
+    }));
 
     return { LanguageSelect };
 }

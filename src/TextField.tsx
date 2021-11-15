@@ -419,7 +419,9 @@ export const TextField = memo((props: TextFieldProps) => {
 const useStyles = makeStyles<{
     hasError: boolean;
     rootHeight: number;
-}>()((theme, { hasError, rootHeight }) => ({
+}>({
+    "label": { TextField },
+})((theme, { hasError, rootHeight }) => ({
     "root": {
         "& .MuiFormHelperText-root": {
             "position": "absolute",

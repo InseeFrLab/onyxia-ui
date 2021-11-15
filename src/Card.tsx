@@ -2,7 +2,30 @@ import type { ReactNode } from "react";
 import { forwardRef, memo } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 
-const useStyles = makeStyles()(theme => ({
+export type CardProps = {
+    className?: string;
+    aboveDivider?: ReactNode;
+    children: ReactNode;
+};
+
+export const Card = memo(
+    forwardRef<any, CardProps>((props, ref) => {
+        const { className, aboveDivider, children } = props;
+
+        const { classes, cx } = useStyles();
+
+        return (
+            <div ref={ref} className={cx(classes.root, className)}>
+                {aboveDivider !== undefined && (
+                    <div className={classes.aboveDivider}>{aboveDivider}</div>
+                )}
+                <div className={classes.belowDivider}>{children}</div>
+            </div>
+        );
+    }),
+);
+
+const useStyles = makeStyles({ "label": { Card } })(theme => ({
     "root": {
         "borderRadius": 8,
         "boxShadow": theme.shadows[1],
@@ -26,26 +49,3 @@ const useStyles = makeStyles()(theme => ({
         "flexDirection": "column",
     },
 }));
-
-export type CardProps = {
-    className?: string;
-    aboveDivider?: ReactNode;
-    children: ReactNode;
-};
-
-export const Card = memo(
-    forwardRef<any, CardProps>((props, ref) => {
-        const { className, aboveDivider, children } = props;
-
-        const { classes, cx } = useStyles();
-
-        return (
-            <div ref={ref} className={cx(classes.root, className)}>
-                {aboveDivider !== undefined && (
-                    <div className={classes.aboveDivider}>{aboveDivider}</div>
-                )}
-                <div className={classes.belowDivider}>{children}</div>
-            </div>
-        );
-    }),
-);

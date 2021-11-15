@@ -27,24 +27,6 @@ const { IconButton } = createIconButton(
     }),
 );
 
-const useStyles = makeStyles<Pick<AlertProps, "severity">>()(
-    (theme, { severity }) => ({
-        "root": {
-            "alignItems": "center",
-            "color": theme.colors.useCases.typography.textPrimary,
-            "backgroundColor":
-                theme.colors.useCases.alertSeverity[severity].background,
-            "& .MuiAlert-icon": {
-                "color": theme.colors.useCases.alertSeverity[severity].main,
-            },
-            "& .MuiAlert-action": {
-                "alignItems": "center",
-                "padding": 0,
-            },
-        },
-    }),
-);
-
 export const Alert = memo((props: AlertProps) => {
     const completedProps = { ...alertDefaultProps, ...noUndefined(props) };
 
@@ -76,3 +58,21 @@ export const Alert = memo((props: AlertProps) => {
         </MuiAlert>
     );
 });
+
+const useStyles = makeStyles<Pick<AlertProps, "severity">>({
+    "label": { Alert },
+})((theme, { severity }) => ({
+    "root": {
+        "alignItems": "center",
+        "color": theme.colors.useCases.typography.textPrimary,
+        "backgroundColor":
+            theme.colors.useCases.alertSeverity[severity].background,
+        "& .MuiAlert-icon": {
+            "color": theme.colors.useCases.alertSeverity[severity].main,
+        },
+        "& .MuiAlert-action": {
+            "alignItems": "center",
+            "padding": 0,
+        },
+    },
+}));

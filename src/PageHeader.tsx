@@ -25,46 +25,6 @@ export type PageHeaderProps<IconId extends string> = {
     helpCollapseParams?: CollapseParams;
 };
 
-const useStyles = makeStyles<{
-    helperHeight: number;
-    isTitleCollapsed: boolean;
-    isHelpCollapsed: boolean;
-}>()((theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
-    "root": {
-        "backgroundColor": "inherit",
-        "marginBottom":
-            !isTitleCollapsed || !isHelpCollapsed ? theme.spacing(3) : 0,
-    },
-    "title": {
-        "display": "flex",
-        "alignItems": "center",
-    },
-    "titleIcon": {
-        "marginRight": theme.spacing(3),
-    },
-    "help": {
-        "display": "flex",
-        "backgroundColor": theme.colors.useCases.surfaces.surface2,
-        "alignItems": "start",
-        "padding": theme.spacing(3),
-        "borderRadius": helperHeight * 0.15,
-    },
-    "helpMiddle": {
-        "flex": 1,
-    },
-    "helpIcon": {
-        "marginRight": theme.spacing(3),
-        "color": theme.colors.useCases.typography.textFocus,
-    },
-    "closeButton": {
-        "padding": 0,
-        "marginLeft": theme.spacing(3),
-    },
-    "helpCollapsibleWrapper": {
-        "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
-    },
-}));
-
 const { usePageHeaderClosedHelpers } = createUseGlobalState(
     "pageHeaderClosedHelpers",
     id<string[]>([]),
@@ -266,6 +226,50 @@ export function createPageHeader<IconId extends string>(params?: {
             </div>
         );
     });
+
+    const useStyles = makeStyles<{
+        helperHeight: number;
+        isTitleCollapsed: boolean;
+        isHelpCollapsed: boolean;
+    }>({ "label": { PageHeader } })(
+        (theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
+            "root": {
+                "backgroundColor": "inherit",
+                "marginBottom":
+                    !isTitleCollapsed || !isHelpCollapsed
+                        ? theme.spacing(3)
+                        : 0,
+            },
+            "title": {
+                "display": "flex",
+                "alignItems": "center",
+            },
+            "titleIcon": {
+                "marginRight": theme.spacing(3),
+            },
+            "help": {
+                "display": "flex",
+                "backgroundColor": theme.colors.useCases.surfaces.surface2,
+                "alignItems": "start",
+                "padding": theme.spacing(3),
+                "borderRadius": helperHeight * 0.15,
+            },
+            "helpMiddle": {
+                "flex": 1,
+            },
+            "helpIcon": {
+                "marginRight": theme.spacing(3),
+                "color": theme.colors.useCases.typography.textFocus,
+            },
+            "closeButton": {
+                "padding": 0,
+                "marginLeft": theme.spacing(3),
+            },
+            "helpCollapsibleWrapper": {
+                "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
+            },
+        }),
+    );
 
     return { PageHeader };
 }

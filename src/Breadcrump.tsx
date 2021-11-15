@@ -6,6 +6,7 @@ import { useEvt } from "evt/hooks";
 import { Evt } from "evt";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { assert } from "tsafe/assert";
+import { symToStr } from "tsafe/symToStr";
 
 export type BreadcrumpProps = {
     className?: string;
@@ -154,9 +155,44 @@ const { Section } = (() => {
 
     const hoverFontWeight = 500;
 
+    function Section(props: Props) {
+        const {
+            partialPath,
+            isLast,
+            onClick,
+            isFocused,
+            isClickable,
+            separatorChar,
+        } = props;
+
+        const text = useMemo(
+            () =>
+                `${partialPath.slice(-1)[0]}${
+                    isLast ? "" : ` ${separatorChar}`
+                }`,
+            [partialPath, isLast],
+        );
+
+        const { classes } = useStyles({ isClickable, isFocused, isLast, text });
+
+        return (
+            <Text
+                typo="body 1"
+                className={classes.root}
+                componentProps={{
+                    "onClick": isClickable ? onClick : undefined,
+                }}
+            >
+                {text}
+            </Text>
+        );
+    }
+
     const useStyles = makeStyles<
         Pick<Props, "isClickable" | "isFocused" | "isLast"> & { text: string }
-    >()((theme, { isClickable, isFocused, isLast, text }) => ({
+    >({
+        "label": `${symToStr({ Breadcrump })}${symToStr({ Section })}`,
+    })((theme, { isClickable, isFocused, isLast, text }) => ({
         "root": {
             ...(!isClickable
                 ? {}
@@ -196,39 +232,6 @@ const { Section } = (() => {
                 ],
         },
     }));
-
-    function Section(props: Props) {
-        const {
-            partialPath,
-            isLast,
-            onClick,
-            isFocused,
-            isClickable,
-            separatorChar,
-        } = props;
-
-        const text = useMemo(
-            () =>
-                `${partialPath.slice(-1)[0]}${
-                    isLast ? "" : ` ${separatorChar}`
-                }`,
-            [partialPath, isLast],
-        );
-
-        const { classes } = useStyles({ isClickable, isFocused, isLast, text });
-
-        return (
-            <Text
-                typo="body 1"
-                className={classes.root}
-                componentProps={{
-                    "onClick": isClickable ? onClick : undefined,
-                }}
-            >
-                {text}
-            </Text>
-        );
-    }
 
     return { Section };
 })();

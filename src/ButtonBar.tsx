@@ -26,15 +26,6 @@ export function createButtonBar<IconId extends string = never>(params: {
 
     const { ButtonBarButton } = createButtonBarButton({ Icon });
 
-    const useStyles = makeStyles()(theme => ({
-        "root": {
-            "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            "boxShadow": theme.shadows[1],
-            "borderRadius": 8,
-            "overflow": "hidden",
-        },
-    }));
-
     const ButtonBar = memo(
         <ButtonId extends string>(props: ButtonBarProps<ButtonId, IconId>) => {
             const { className, buttons, onClick } = props;
@@ -61,6 +52,15 @@ export function createButtonBar<IconId extends string = never>(params: {
             );
         },
     );
+
+    const useStyles = makeStyles({ "label": { ButtonBar } })(theme => ({
+        "root": {
+            "backgroundColor": theme.colors.useCases.surfaces.surface1,
+            "boxShadow": theme.shadows[1],
+            "borderRadius": 8,
+            "overflow": "hidden",
+        },
+    }));
 
     return { ButtonBar };
 }

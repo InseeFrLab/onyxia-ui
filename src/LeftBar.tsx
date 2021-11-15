@@ -10,6 +10,7 @@ import { objectKeys } from "tsafe/objectKeys";
 import { createIcon } from "./Icon";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useDomRect } from "powerhooks/useDomRect";
+import { symToStr } from "tsafe/symToStr";
 
 export type Item<IconId extends string = string> = {
     iconId: IconId;
@@ -43,44 +44,6 @@ export function createLeftBar<IconId extends string>(params?: {
             throw new Error("never");
         }),
     };
-
-    const useStyles = makeStyles<{
-        rootWidth: number;
-        rootHeight: number;
-        paddingTopBottomFactor: number;
-        areTransitionEnabled: boolean;
-    }>()(
-        (
-            theme,
-            {
-                rootWidth,
-                rootHeight,
-                paddingTopBottomFactor,
-                areTransitionEnabled,
-            },
-        ) => ({
-            "root": {
-                "borderRadius": 16,
-                "boxShadow": theme.shadows[3],
-                "overflow": "auto",
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            },
-            "nav": {
-                "width": rootWidth,
-                "height": rootHeight,
-                ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
-                "transition": areTransitionEnabled ? "width 250ms" : undefined,
-                "position": "relative",
-                "overflow": "hidden",
-            },
-            "wrapper": {
-                "position": "absolute",
-            },
-            "button": {
-                "marginTop": theme.spacing(2),
-            },
-        }),
-    );
 
     const { useIsCollapsed } = createUseGlobalState("isCollapsed", false, {
         "persistance": persistIsPanelOpen ? "localStorage" : false,
@@ -170,6 +133,44 @@ export function createLeftBar<IconId extends string>(params?: {
         },
     );
 
+    const useStyles = makeStyles<{
+        rootWidth: number;
+        rootHeight: number;
+        paddingTopBottomFactor: number;
+        areTransitionEnabled: boolean;
+    }>({ "label": { LeftBar } })(
+        (
+            theme,
+            {
+                rootWidth,
+                rootHeight,
+                paddingTopBottomFactor,
+                areTransitionEnabled,
+            },
+        ) => ({
+            "root": {
+                "borderRadius": 16,
+                "boxShadow": theme.shadows[3],
+                "overflow": "auto",
+                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+            },
+            "nav": {
+                "width": rootWidth,
+                "height": rootHeight,
+                ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
+                "transition": areTransitionEnabled ? "width 250ms" : undefined,
+                "position": "relative",
+                "overflow": "hidden",
+            },
+            "wrapper": {
+                "position": "absolute",
+            },
+            "button": {
+                "marginTop": theme.spacing(2),
+            },
+        }),
+    );
+
     const { CustomButton } = (() => {
         type Props = {
             className?: string;
@@ -178,13 +179,95 @@ export function createLeftBar<IconId extends string>(params?: {
             isCurrent: boolean | undefined;
         } & Item<IconId | "chevronLeft">;
 
+        const { Icon: InternalIcon } = createIcon({
+            "chevronLeft": ChevronLeftIcon,
+        });
+
+        const CustomButton = memo((props: Props) => {
+            const {
+                className,
+                isCollapsed,
+                collapsedWidth,
+                isCurrent,
+                iconId,
+                label,
+                link,
+                hasDividerBelow = false,
+                availability = "available",
+            } = props;
+
+            const { theme } = useTheme();
+
+            const {
+                ref,
+                domRect: { width },
+            } = useDomRect();
+
+            const { classes, cx } = useStyles({
+                "collapsedWidth":
+                    collapsedWidth ?? 2 * theme.iconSizesInPxByName[iconSize],
+                isCollapsed,
+                isCurrent,
+                width,
+                "isDisabled": availability === "greyed",
+            });
+
+            if (availability === "not visible") {
+                return null;
+            }
+
+            return (
+                <>
+                    <a
+                        ref={ref}
+                        className={cx(classes.root, className)}
+                        {...link}
+                    >
+                        <div className={classes.iconWrapper}>
+                            <div className={classes.iconHoverBox} />
+                            {(() => {
+                                const className = classes.icon;
+
+                                return iconId === "chevronLeft" ? (
+                                    <InternalIcon
+                                        iconId="chevronLeft"
+                                        className={className}
+                                        size={iconSize}
+                                    />
+                                ) : (
+                                    <Icon
+                                        iconId={iconId}
+                                        className={className}
+                                        size={iconSize}
+                                    />
+                                );
+                            })()}
+                        </div>
+                        <div className={classes.typoWrapper}>
+                            <Text typo="label 1" className={classes.typo}>
+                                {label}
+                            </Text>
+                        </div>
+                    </a>
+                    {hasDividerBelow && (
+                        <Divider
+                            className={classes.divider}
+                            variant="fullWidth"
+                        />
+                    )}
+                </>
+            );
+        });
+
         const useStyles = makeStyles<{
             collapsedWidth: number;
             isCollapsed: boolean;
             isCurrent: boolean | undefined;
             width: number;
             isDisabled: boolean;
-        }>()(
+        }>({
+            "label": `${symToStr({ LeftBar })}${symToStr({ CustomButton })}`,
+        })(
             (
                 theme,
                 { collapsedWidth, isCollapsed, isCurrent, width, isDisabled },
@@ -287,86 +370,6 @@ export function createLeftBar<IconId extends string>(params?: {
                 };
             },
         );
-
-        const { Icon: InternalIcon } = createIcon({
-            "chevronLeft": ChevronLeftIcon,
-        });
-
-        const CustomButton = memo((props: Props) => {
-            const {
-                className,
-                isCollapsed,
-                collapsedWidth,
-                isCurrent,
-                iconId,
-                label,
-                link,
-                hasDividerBelow = false,
-                availability = "available",
-            } = props;
-
-            const { theme } = useTheme();
-
-            const {
-                ref,
-                domRect: { width },
-            } = useDomRect();
-
-            const { classes, cx } = useStyles({
-                "collapsedWidth":
-                    collapsedWidth ?? 2 * theme.iconSizesInPxByName[iconSize],
-                isCollapsed,
-                isCurrent,
-                width,
-                "isDisabled": availability === "greyed",
-            });
-
-            if (availability === "not visible") {
-                return null;
-            }
-
-            return (
-                <>
-                    <a
-                        ref={ref}
-                        className={cx(classes.root, className)}
-                        {...link}
-                    >
-                        <div className={classes.iconWrapper}>
-                            <div className={classes.iconHoverBox} />
-                            {(() => {
-                                const className = classes.icon;
-
-                                return iconId === "chevronLeft" ? (
-                                    <InternalIcon
-                                        iconId="chevronLeft"
-                                        className={className}
-                                        size={iconSize}
-                                    />
-                                ) : (
-                                    <Icon
-                                        iconId={iconId}
-                                        className={className}
-                                        size={iconSize}
-                                    />
-                                );
-                            })()}
-                        </div>
-                        <div className={classes.typoWrapper}>
-                            <Text typo="label 1" className={classes.typo}>
-                                {label}
-                            </Text>
-                        </div>
-                    </a>
-                    {hasDividerBelow && (
-                        <Divider
-                            className={classes.divider}
-                            variant="fullWidth"
-                        />
-                    )}
-                </>
-            );
-        });
 
         return { CustomButton };
     })();
