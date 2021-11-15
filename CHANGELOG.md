@@ -1,3 +1,8 @@
+## **0.22.0** (2021-11-15)  
+  
+- Fix previous build  
+- Use labeling for better debugging experience    
+  
 ## **0.21.0** (2021-11-13)  
   
 - remove 'custom' from theme    
