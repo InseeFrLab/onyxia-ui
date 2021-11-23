@@ -10,7 +10,7 @@ import { Meta, Story, Canvas } from '@storybook/addon-docs';
 import { StoryProvider, Text, Button} from "../../theme";
 import { css } from "tss-react/@emotion/css";
 
-<Meta title="Documentation/Components/Button" component={Button} />
+<Meta title="documentation/Components/Button" component={Button} />
 
 # Buttons
 
@@ -18,9 +18,9 @@ This is a demo of `<Button/>` component.
 The button is an element of interaction with the interface allowing the user to perform an action.
 
 - [Structure](#structure)
-- [Primary buttons](#primary-buttons)
-- [Secondary buttons](#secondary-buttons)
-- [ternary buttons](#ternary-buttons)
+- [Primary button](#primary-button)
+- [Secondary button](#secondary-button)
+- [Ternary button](#ternary-button)
 - [Disabled status](#disabled-status)
 - [Buttons with icon](#buttons-with-icon)
 
@@ -32,7 +32,7 @@ The button is made up of the following elements:
 
 - a icon, can be modified - optional.
 
-## Primary buttons
+## Primary button
 
 The primary button is used for main actions such as submitting a form or redirecting to content that you want to prioritize in the user journey.
 
@@ -56,7 +56,7 @@ To be efficient and prioritize the actions offered to the user, limit the use of
 and never use two primary buttons side by side. You can align a primary button with a secondary or tertiary button.
 
 
-## Secondary buttons
+## Secondary button
 
 The secondary button is used when the action has lower priority than the primary action, 
 such as canceling, rewinding or resetting values ​​on a form.
@@ -77,7 +77,7 @@ such as canceling, rewinding or resetting values ​​on a form.
 <Button href="#" variant="secondary">Button text</Button>
 ```
 
-## Ternary buttons
+## Ternary button
 
 The ternary button is a third level of action, more rare, 
 is used for external links or resetting values ​​on a form.
@@ -120,7 +120,7 @@ to the user that he must take an upstream action.
 <Button href="#" disabled="true" >Button text</Button>
 ```
 
-## Buttons with icon
+## Button with icon
 
 It is possible to add an icon to your button allowing a better understanding of the action. 
 To do this, all you have to do is use the icon's CSS class ([See the icons documentation](...))
@@ -132,7 +132,7 @@ Two variations are possible:
 ⚠️ Single icon, to use a single icon [see the icon button documentation](...)
 
 <Canvas>
-	<Story name="Buttons with right icon">
+	<Story name="Button with right icon">
 		{[false, true].map(dark=>
 			<Fragment key={dark}>
 				<StoryProvider dark={dark}>
@@ -148,7 +148,7 @@ Two variations are possible:
 ```
 
 <Canvas>
-	<Story name="Buttons with left icon">
+	<Story name="Button with left icon">
 		{[false, true].map(dark=>
 			<Fragment key={dark}>
 				<StoryProvider dark={dark}>
