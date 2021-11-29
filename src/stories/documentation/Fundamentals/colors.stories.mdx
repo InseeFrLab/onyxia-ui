@@ -12,20 +12,132 @@ import { css } from "tss-react/@emotion/css";
 
 # Colors
 
+The color system is based on a customizable palette, to which a wide variety of themes can be applied, 
+and functional use cases to which the different colors of the palette are attached. Color use cases are designed 
+to make something harmonious, ensure accessible text, and distinguish user interface elements and surfaces from one another.
+Application of the color palette brings a unified and recognizable consistency to a vast array of digital products and interfaces. 
+This consistency is grounded by a set of well-defined rules on how to work with the component library in the context of dark and light themes.
+
+- [Palette](#structure)
+- [Usecases](#sizes)
+- [Themes](#sizes)
+- [Rules of use](#rules-of-use)
+
+## Color palette 
+
+The color palette system is based on 3 main colors: Focus, Dark and Light. 
+This system allows a simplification of the use of a dark theme and the variations 
+of the system with several themes for a better personification.
+
+### Focus color
+
+The Focus color serves as the primary action color for all experiences of an interface. 
+It is often used to mark the identity of the interface in components, but it is mainly used 
+to attract the attention of the user, on clickable elements or active states for example.
+
+### Dark and light: the Neutral colors
+
+Neutral colors are basic colors used in typography, backgrounds, outlines and separators in most components. 
+They are used in particular in non-clickable elements and to represent inactive states. 
+Both colors have tonal variations for display nuances and so improve the prioritization of information in the interface. 
+Playing with a dark and light color makes it possible to display a light mode with dark elements on light surfaces 
+and easily switch to a dark mode which inverts the colors and so displays light elements on dark surfaces.
+
+### Signal colors
+
+The signal colors are used solely for notifications, warnings, and status messages if a color differentiation is required.
+
+## Color usecases 
+## Theming 
+
+### Onyxia brand colors
+
+Orange, Blue, and White: these are the Onyxia brand colors. 
+The order is immaterial because there is no hierarchy here. 
+What matters is that the colors support the message you want to convey and that the overall layout is not too colorful.
+
 <Canvas>
-    <Story name="error">
+    <Story name="Onyxia brand colors">
         <div className={css({
             "display": "grid",
-            "gridTemplateColumns": "repeat(4, 1fr)",
-            "gridAutoRows": 100,
-            "gridGap": 5
-        })}>
-        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
-        <h4 className={css({ })}>Coucou</h4>
-        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
-        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
-        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
-        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
+            "gridTemplateColumns": "repeat(3, 1fr)",
+            "gridAutoRows": 20,
+            "alignItems": "center",
+            "gridGap": 40
+        })}> 
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.focus.main })}/>
+        <h4 className={css({ })}>Exeburant Orange (Focus)</h4>
+        <p className={css({ })}>#FF562C</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.main })}/>
+        <h4 className={css({ })}>Midnight Blue (Dark)</h4>
+        <p className={css({ })}>#2C323F</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.main })}/>
+        <h4 className={css({ })}>White snow (Light)</h4>
+        <p className={css({ })}>#F1F0EB</p>
         </div>
     </Story>
 </Canvas>
+
+#### Colors palette
+
+For functional applications, the color palette can be extended to include shade ranging from light to dark.
+
+<Canvas>
+    <Story name="Orange Focus color">
+        <div className={css({
+            "display": "grid",
+            "gridTemplateColumns": "repeat(3, 1fr)",
+            "gridAutoRows": 20,
+            "alignItems": "center",
+            "gridGap": 40
+        })}> 
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.focus.main })}/>
+        <h4 className={css({ })}>Orange (Focus) - Main</h4>
+        <p className={css({ })}>#FF562C</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.focus.light })}/>
+        <h4 className={css({ })}>Orange (Focus) - Light</h4>
+        <p className={css({ })}>#FFAD99</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.focus.light2 })}/>
+        <h4 className={css({ })}>Orange (Focus) - Light 2</h4>
+        <p className={css({ })}>#FF562C</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.main })}/>
+        <h4 className={css({ })}>Blue (Dark) - Main</h4>
+        <p className={css({ })}>#2C323F</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.light })}/>
+        <h4 className={css({ })}>Blue (Dark) - Light</h4>
+        <p className={css({ })}>#373E4F</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.greyVariant1 })}/>
+        <h4 className={css({ })}>Blue (Dark) - Tones Variant 1</h4>
+        <p className={css({ })}>#242C39</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.greyVariant2 })}/>
+        <h4 className={css({ })}>Blue (Dark) - Tones Variant 2</h4>
+        <p className={css({ })}>#5A6270</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.greyVariant3 })}/>
+        <h4 className={css({ })}>Blue (Dark) - Tones Variant 3</h4>
+        <p className={css({ })}>#8A9099</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.greyVariant4 })}/>
+        <h4 className={css({ })}>Blue (Dark) - Tones Variant 4</h4>
+        <p className={css({ })}>#B8BABF</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.main })}/>
+        <h4 className={css({ })}>White (Light) - Main</h4>
+        <p className={css({ })}>#F1F0EB</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.light })}/>
+        <h4 className={css({ })}>White (Light) - Light</h4>
+        <p className={css({ })}>#FDFDFC</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.greyVariant1 })}/>
+        <h4 className={css({ })}>White (Light) - Tones Variant 1</h4>
+        <p className={css({ })}>#E6E6E6</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.greyVariant2 })}/>
+        <h4 className={css({ })}>White (Light) - Tones Variant 2</h4>
+        <p className={css({ })}>#C9C9C9</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.greyVariant3 })}/>
+        <h4 className={css({ })}>White (Light) - Tones Variant 3</h4>
+        <p className={css({ })}>#9E9E9E</p>
+        <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.light.greyVariant4 })}/>
+        <h4 className={css({ })}>White (Light) - Tones Variant 4</h4>
+        <p className={css({ })}>#747474</p>
+        </div>
+    </Story>
+</Canvas>
+
+## Rules of use 
