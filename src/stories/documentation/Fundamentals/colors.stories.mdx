@@ -5,10 +5,27 @@
 import { Fragment } from "react";
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
 
-import { StoryProvider, Text, Checkbox} from "../../theme";
+import { StoryProvider, useTheme, Text, Checkbox} from "../../theme";
 import { css } from "tss-react/@emotion/css";
 
 <Meta title="Documentation/Fundamentals/Colors" component={Checkbox} />
 
-
 # Colors
+
+<Canvas>
+    <Story name="error">
+        <div className={css({
+            "display": "grid",
+            "gridTemplateColumns": "repeat(4, 1fr)",
+            "gridAutoRows": 100,
+            "gridGap": 5
+        })}>
+        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
+        <h4 className={css({ })}>Coucou</h4>
+        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
+        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
+        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
+        <div className={css({ "height": 60, "backgroundColor": useTheme().colors.palette.blueInfo.main })}/>
+        </div>
+    </Story>
+</Canvas>

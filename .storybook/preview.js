@@ -61,12 +61,7 @@ export const parameters = {
     }
   },
   "options": {
-    "storySort": (a, b) => {
-
-
-      return getHardCodedWeight(b[1].kind)-getHardCodedWeight(a[1].kind);
-
-    }
+    "storySort": (a, b) => getHardCodedWeight(b[1].kind)-getHardCodedWeight(a[1].kind)
   },
 }
 
