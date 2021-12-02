@@ -138,7 +138,7 @@ export function createLeftBar<IconId extends string>(params?: {
         rootHeight: number;
         paddingTopBottomFactor: number;
         areTransitionEnabled: boolean;
-    }>({ "label": { LeftBar } })(
+    }>({ "name": { LeftBar } })(
         (
             theme,
             {
@@ -259,22 +259,67 @@ export function createLeftBar<IconId extends string>(params?: {
             );
         });
 
-        const useStyles = makeStyles<{
-            collapsedWidth: number;
-            isCollapsed: boolean;
-            isCurrent: boolean | undefined;
-            width: number;
-            isDisabled: boolean;
-        }>({
-            "label": `${symToStr({ LeftBar })}${symToStr({ CustomButton })}`,
+        const useStyles = makeStyles<
+            {
+                collapsedWidth: number;
+                isCollapsed: boolean;
+                isCurrent: boolean | undefined;
+                width: number;
+                isDisabled: boolean;
+            },
+            "iconHoverBox" | "typoWrapper"
+        >({
+            "name": `${symToStr({ LeftBar })}${symToStr({ CustomButton })}`,
         })(
             (
                 theme,
                 { collapsedWidth, isCollapsed, isCurrent, width, isDisabled },
-                createRef,
-            ) => {
-                const iconHoverBox = {
-                    "ref": createRef(),
+                classes,
+            ) => ({
+                "root": {
+                    ...(isDisabled ? { "pointerEvents": "none" } : {}),
+                    "color": theme.colors.useCases.typography.textPrimary,
+                    "textDecoration": "none",
+                    "display": "flex",
+                    "cursor": "pointer",
+                    [`&:hover .${classes.iconHoverBox}`]: {
+                        "backgroundColor":
+                            theme.colors.useCases.surfaces.background,
+                    },
+                    [`&:hover .${classes.typoWrapper}`]: {
+                        "backgroundColor": !isCollapsed
+                            ? theme.colors.useCases.surfaces.background
+                            : undefined,
+                    },
+                    [[".MuiSvgIcon-root", "h6"]
+                        .map(name => `&${isCurrent ? "" : ":active"} ${name}`)
+                        .join(", ")]: {
+                        "color": theme.colors.useCases.typography.textFocus,
+                    },
+                },
+                "iconWrapper": {
+                    "width": collapsedWidth,
+                    "textAlign": "center",
+                    "position": "relative",
+                    "color": isDisabled
+                        ? theme.colors.useCases.typography.textDisabled
+                        : undefined,
+                },
+
+                "icon": {
+                    "position": "relative",
+                    "zIndex": 2,
+                    ...theme.spacing.topBottom("margin", 2),
+                    ...(isCurrent !== undefined
+                        ? {}
+                        : {
+                              "transform": isCollapsed
+                                  ? "rotate(-180deg)"
+                                  : "rotate(0)",
+                          }),
+                    "transition": `transform 250ms`,
+                },
+                "iconHoverBox": {
                     "display": "inline-block",
                     "position": "absolute",
                     "height": "100%",
@@ -290,85 +335,34 @@ export function createLeftBar<IconId extends string>(params?: {
                     "borderRadius": `10px ${
                         isCollapsed ? "10px 10px" : "0 0"
                     } 10px`,
-                } as const;
+                },
 
-                const typoWrapper = {
-                    "ref": createRef(),
+                "typoWrapper": {
                     "paddingRight": theme.spacing(2),
                     "flex": 1,
                     "borderRadius": "0 10px 10px 0",
                     "display": "flex",
                     "alignItems": "center",
                     "marginRight": theme.spacing(5),
-                } as const;
+                },
 
-                return {
-                    "root": {
-                        ...(isDisabled ? { "pointerEvents": "none" } : {}),
-                        "color": theme.colors.useCases.typography.textPrimary,
-                        "textDecoration": "none",
-                        "display": "flex",
-                        "cursor": "pointer",
-                        [`&:hover .${iconHoverBox.ref}`]: {
-                            "backgroundColor":
-                                theme.colors.useCases.surfaces.background,
-                        },
-                        [`&:hover .${typoWrapper.ref}`]: {
-                            "backgroundColor": !isCollapsed
-                                ? theme.colors.useCases.surfaces.background
-                                : undefined,
-                        },
-                        [[".MuiSvgIcon-root", "h6"]
-                            .map(
-                                name =>
-                                    `&${isCurrent ? "" : ":active"} ${name}`,
-                            )
-                            .join(", ")]: {
-                            "color": theme.colors.useCases.typography.textFocus,
-                        },
-                    },
-                    "iconWrapper": {
-                        "width": collapsedWidth,
-                        "textAlign": "center",
-                        "position": "relative",
-                        "color": isDisabled
-                            ? theme.colors.useCases.typography.textDisabled
-                            : undefined,
-                    },
-
-                    "icon": {
-                        "position": "relative",
-                        "zIndex": 2,
-                        ...theme.spacing.topBottom("margin", 2),
-                        ...(isCurrent !== undefined
-                            ? {}
-                            : {
-                                  "transform": isCollapsed
-                                      ? "rotate(-180deg)"
-                                      : "rotate(0)",
-                              }),
-                        "transition": `transform 250ms`,
-                    },
-                    iconHoverBox,
-                    typoWrapper,
-                    "typo": {
-                        "color": isDisabled
-                            ? theme.colors.useCases.typography.textDisabled
-                            : undefined,
-                        "whiteSpace": "nowrap",
-                    },
-                    "divider": {
-                        "marginTop": theme.spacing(2),
-                        "borderColor":
-                            theme.colors.useCases.typography.textTertiary,
-                        "width":
-                            (isCollapsed ? collapsedWidth : width) -
-                            2 * theme.spacing(2),
-                        "marginLeft": theme.spacing(2),
-                        "transition": "width 250ms",
-                    },
-                };
-            },
+                "typo": {
+                    "color": isDisabled
+                        ? theme.colors.useCases.typography.textDisabled
+                        : undefined,
+                    "whiteSpace": "nowrap",
+                },
+                "divider": {
+                    "marginTop": theme.spacing(2),
+                    "borderColor":
+                        theme.colors.useCases.typography.textTertiary,
+                    "width":
+                        (isCollapsed ? collapsedWidth : width) -
+                        2 * theme.spacing(2),
+                    "marginLeft": theme.spacing(2),
+                    "transition": "width 250ms",
+                },
+            }),
         );
 
         return { CustomButton };

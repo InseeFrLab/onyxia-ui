@@ -53,7 +53,7 @@ export function createButtonBar<IconId extends string = never>(params: {
         },
     );
 
-    const useStyles = makeStyles({ "label": { ButtonBar } })(theme => ({
+    const useStyles = makeStyles({ "name": { ButtonBar } })(theme => ({
         "root": {
             "backgroundColor": theme.colors.useCases.surfaces.surface1,
             "boxShadow": theme.shadows[1],

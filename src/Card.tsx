@@ -25,7 +25,7 @@ export const Card = memo(
     }),
 );
 
-const useStyles = makeStyles({ "label": { Card } })(theme => ({
+const useStyles = makeStyles({ "name": { Card } })(theme => ({
     "root": {
         "borderRadius": 8,
         "boxShadow": theme.shadows[1],

@@ -156,7 +156,7 @@ export function createLanguageSelect<Language extends string>(params: {
     const useStyles = makeStyles<{
         buttonWidth: number;
         variant: LanguageSelectProps["variant"];
-    }>({ "label": { LanguageSelect } })((theme, { buttonWidth, variant }) => ({
+    }>({ "name": { LanguageSelect } })((theme, { buttonWidth, variant }) => ({
         "button": {
             "padding": (() => {
                 switch (variant) {

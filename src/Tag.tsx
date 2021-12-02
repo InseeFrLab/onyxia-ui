@@ -23,7 +23,7 @@ export const Tag = memo((props: TagProps) => {
 });
 
 const useStyles = makeStyles({
-    "label": { Tag },
+    "name": { Tag },
 })(theme => ({
     "root": {
         "backgroundColor":

@@ -70,7 +70,7 @@ export const DirectoryHeader = memo((props: Props) => {
     );
 });
 
-const useStyles = makeStyles({ "label": { DirectoryHeader } })(theme => ({
+const useStyles = makeStyles({ "name": { DirectoryHeader } })(theme => ({
     "root": {
         "display": "flex",
         "alignItems": "center",

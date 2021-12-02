@@ -231,7 +231,7 @@ export function createPageHeader<IconId extends string>(params?: {
         helperHeight: number;
         isTitleCollapsed: boolean;
         isHelpCollapsed: boolean;
-    }>({ "label": { PageHeader } })(
+    }>({ "name": { PageHeader } })(
         (theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
             "root": {
                 "backgroundColor": "inherit",

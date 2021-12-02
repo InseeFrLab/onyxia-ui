@@ -23,7 +23,7 @@ export const CircularProgress = memo((props: CircularProgressProps) => {
 });
 
 const useStyles = makeStyles<Pick<Required<CircularProgressProps>, "color">>({
-    "label": { CircularProgress },
+    "name": { CircularProgress },
 })((theme, { color }) => ({
     "root": {
         "color":

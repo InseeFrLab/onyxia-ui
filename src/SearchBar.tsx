@@ -151,7 +151,7 @@ export const SearchBar = memo((props: SearchBarProps) => {
 });
 
 const useStyles = makeStyles<{ isActive: boolean }>({
-    "label": { SearchBar },
+    "name": { SearchBar },
 })((theme, { isActive }) => ({
     "root": {
         "borderRadius": 8,

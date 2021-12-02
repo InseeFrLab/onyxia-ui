@@ -139,7 +139,7 @@ export function createIconButton<IconId extends string = never>(params?: {
     );
 
     const useStyles = makeStyles<{ disabled: boolean }>({
-        "label": { IconButton },
+        "name": { IconButton },
     })((theme, { disabled }) => ({
         "root": {
             "padding": theme.spacing(2),

@@ -175,7 +175,7 @@ export function createButton<IconId extends string = never>(params?: {
     const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-    }>({ "label": { Button } })((theme, { variant, disabled }) => {
+    }>({ "name": { Button } })((theme, { variant, disabled }) => {
         const textColor =
             theme.colors.useCases.typography[
                 disabled

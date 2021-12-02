@@ -41,7 +41,7 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
     );
 });
 
-const useStyles = makeStyles({ "label": { DarkModeIcon } })(theme => ({
+const useStyles = makeStyles({ "name": { DarkModeIcon } })(theme => ({
     "root": {
         "transition": "transform 500ms",
         "transform": `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,

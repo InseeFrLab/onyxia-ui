@@ -59,7 +59,7 @@ export function createButtonBarButton<IconId extends string = never>(params: {
         );
     });
 
-    const useStyles = makeStyles({ "label": { ButtonBarButton } })(theme => ({
+    const useStyles = makeStyles({ "name": { ButtonBarButton } })(theme => ({
         "root": {
             "backgroundColor": "transparent",
             "borderRadius": "unset",

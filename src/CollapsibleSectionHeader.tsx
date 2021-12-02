@@ -60,7 +60,7 @@ export const CollapsibleSectionHeader = memo(
 );
 
 const useStyles = makeStyles<{ isCollapsed: boolean }>({
-    "label": { CollapsibleSectionHeader },
+    "name": { CollapsibleSectionHeader },
 })((...[theme, { isCollapsed }]) => ({
     "root": {
         "display": "flex",

@@ -33,7 +33,7 @@ export const Tooltip = memo((props: TooltipProps) => {
     );
 });
 
-const useStyles = makeStyles({ "label": { Tooltip } })(theme => ({
+const useStyles = makeStyles({ "name": { Tooltip } })(theme => ({
     "root": {
         "color": theme.colors.palette.light.light,
     },

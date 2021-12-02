@@ -414,7 +414,7 @@ const useStyles = makeStyles<{
     offset: number;
     tabWidth: number;
 }>({
-    "label": { Tabs },
+    "name": { Tabs },
 })(
     (
         theme,

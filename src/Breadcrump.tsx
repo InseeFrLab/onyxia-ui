@@ -191,7 +191,7 @@ const { Section } = (() => {
     const useStyles = makeStyles<
         Pick<Props, "isClickable" | "isFocused" | "isLast"> & { text: string }
     >({
-        "label": `${symToStr({ Breadcrump })}${symToStr({ Section })}`,
+        "name": `${symToStr({ Breadcrump })}${symToStr({ Section })}`,
     })((theme, { isClickable, isFocused, isLast, text }) => ({
         "root": {
             ...(!isClickable

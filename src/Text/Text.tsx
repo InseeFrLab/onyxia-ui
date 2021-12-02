@@ -66,7 +66,7 @@ export function createText<
     const useStyles = makeStyles<{
         variantName: TextProps["typo"];
         color: NonNullable<TextProps["color"]>;
-    }>({ "label": "Text" })((theme, { variantName, color }) => ({
+    }>({ "name": "Text" })((theme, { variantName, color }) => ({
         "root": {
             ...theme.typography.variants[variantName].style,
             "color":

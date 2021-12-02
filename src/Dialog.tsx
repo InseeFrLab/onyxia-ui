@@ -110,7 +110,7 @@ export const Dialog = memo((props: DialogProps) => {
     );
 });
 
-const useStyles = makeStyles({ "label": { Dialog } })(theme => ({
+const useStyles = makeStyles({ "name": { Dialog } })(theme => ({
     "root": {
         "padding": theme.spacing(4),
     },

@@ -420,7 +420,7 @@ const useStyles = makeStyles<{
     hasError: boolean;
     rootHeight: number;
 }>({
-    "label": { TextField },
+    "name": { TextField },
 })((theme, { hasError, rootHeight }) => ({
     "root": {
         "& .MuiFormHelperText-root": {

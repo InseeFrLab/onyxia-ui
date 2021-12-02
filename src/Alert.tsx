@@ -60,7 +60,7 @@ export const Alert = memo((props: AlertProps) => {
 });
 
 const useStyles = makeStyles<Pick<AlertProps, "severity">>({
-    "label": { Alert },
+    "name": { Alert },
 })((theme, { severity }) => ({
     "root": {
         "alignItems": "center",
