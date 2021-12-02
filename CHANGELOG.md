@@ -1,3 +1,8 @@
+## **0.23.0** (2021-12-02)  
+  
+- Temporary make tss-react a dependency  
+- Allow to open new tab    
+  
 ### **0.22.2** (2021-12-02)  
   
 - Update tss-react    
