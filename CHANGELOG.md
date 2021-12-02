@@ -1,3 +1,8 @@
+### **0.22.1** (2021-12-02)  
+  
+- Update tss-react to v3  
+- Update preview.js    
+  
 ## **0.22.0** (2021-11-15)  
   
 - Fix previous build  
