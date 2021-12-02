@@ -22,6 +22,7 @@ export type Item<IconId extends string = string> = {
     link: {
         href: string;
         onClick?: (event: { preventDefault: () => void }) => void;
+        target?: "_blank";
     };
 };
 
