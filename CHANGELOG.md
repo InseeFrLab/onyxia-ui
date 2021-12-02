@@ -1,3 +1,7 @@
+### **0.22.2** (2021-12-02)  
+  
+- Update tss-react    
+  
 ### **0.22.1** (2021-12-02)  
   
 - Update tss-react to v3  
