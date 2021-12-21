@@ -37,6 +37,7 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
             onClick={onClick}
             size={size}
             iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
+            aria-label="Dark mode switch"
         />
     );
 });
