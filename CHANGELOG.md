@@ -1,3 +1,7 @@
+### **0.23.2** (2021-12-21)  
+  
+- DarkModeSwitch add aria-label for accecibility    
+  
 ### **0.23.1** (2021-12-07)  
   
 - Update tss-react    
