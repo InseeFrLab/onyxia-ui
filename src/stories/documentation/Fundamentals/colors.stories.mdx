@@ -46,8 +46,23 @@ and easily switch to a dark mode which inverts the colors and so displays light 
 ### Signal colors
 
 The signal colors are used solely for notifications, warnings, and status messages if a color differentiation is required.
+There are 4 types of signal allowing information of different kinds to be given.
 
 ## Color usecases 
+
+The Design System offers components suitable for two color modes:
+
+- The clear theme: to be accessible on a light background.
+
+- The dark theme: to be accessible on a dark background.
+
+The use of the dark theme is particularly recommended to reduce power consumption and reduce eye strain.
+
+> **Warning :** It is not possible to mix the colors of the light theme and those of the dark theme.
+
+The color correspondences between these two themes have been defined according to the uses on the different 
+components. They are automatically applied when you install the dark theme on your site.
+
 ## Theming 
 
 ### Onyxia brand colors
@@ -67,7 +82,7 @@ What matters is that the colors support the message you want to convey and that 
         })}> 
         <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.focus.main })}/>
         <h4 className={css({ })}>Exeburant Orange (Focus)</h4>
-        <p className={css({ })}>#FF562C</p>
+        <p className={css({})}>#FF562C</p>
         <div className={css({ "height": 40, "marginRight":20, "backgroundColor": useTheme().colors.palette.dark.main })}/>
         <h4 className={css({ })}>Midnight Blue (Dark)</h4>
         <p className={css({ })}>#2C323F</p>

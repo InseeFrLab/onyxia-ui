@@ -35,6 +35,8 @@ with an indication of what content will be revealed when the tab is selected.
 
 ## Sizes
 
+Tabs come in two sizes, large and small. By default, tabs will be large unless the size prop is provided.
+
 ### Large
 
 <Canvas>
@@ -67,6 +69,12 @@ with an indication of what content will be revealed when the tab is selected.
 ## Options
 
 ### Scrolling
+
+If there are more tabs provided than can fit within the viewport, tabs will scroll. 
+The user may scroll using a native control like a horizontal scroll wheel, or by using the scroll buttons.
+
+Visibility of the scroll buttons can be controlled by the `areArrowsVisible` prop. 
+By default, scroll buttons will appear automatically if needed. Options are...
 
 <Canvas>
     <Story name="Scrolling">
