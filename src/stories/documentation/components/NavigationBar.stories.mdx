@@ -1,4 +1,4 @@
-<!--- Texfields.stories.mdx 
+<!--- NavigationBar.stories.mdx 
 --->
 
 import { Fragment } from "react";
@@ -6,33 +6,33 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { StoryProvider, Text, Texfield} from "../../theme";
 import { css } from "tss-react/@emotion/css";
 
-<Meta title="documentation/Components/Texfield" component={Texfield} />
+<Meta title="documentation/Components/NavigationBar" component={ButtonBar} />
 
-# Texfield
+# Navigation Bar
 
-This is a documentation of `<Textfield/>` component.
-Text fields are used when the user is required to input short form content, 
-including text, numbers, e-mail addresses, or passwords. 
+This is a documentation of `<NavigationBar/>` component.
+A navigation bar is a group of related links, or "navigation items", 
+that indicate the action that will be taken or the content that will be revealed 
+when the item is clicked. Navigation bars are commonly used for several purposes. 
+
+First, to direct users to specific content on the current page or to an external page. 
+Second, and similar to tabs, as a control allowing the user to switch between content, 
+showing selected content and hiding other content, often using animated transitions 
+to hide and reveal content. And then to finish also to carry out actions or operations 
+on the content of the page.
 
 - [Structure](#structure)
 - [States](#states)
-- [Options](#options)
 - [Rules of use](#rules-of-use)
 - [Properties](#properties)
 
 ## Structure
 
-The input field is made up of the following elements:
+It consists of the following elements:
 
-- one field - required.
+- A navigation bar
 
-- a label, linked to the field - mandatory.
-
-- an additional description (helptext) - optional.
-
-- one or two icons, which can be modified - optional.
-
-- an error message - required if a change of state is to be notified to the user.
+- Menu items (Direct links or drop-down menu)
 
 ## States
 
@@ -43,7 +43,9 @@ The input field is made up of the following elements:
         {[false, true].map(dark=>
             <Fragment key={dark}>
                 <StoryProvider dark={dark}>
-                      
+                    <ButtonBarButton>
+                       hello
+                        </ButtonBarButton>  
                 </StoryProvider>
             </Fragment>
         )}
