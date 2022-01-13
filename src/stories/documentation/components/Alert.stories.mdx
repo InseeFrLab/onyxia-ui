@@ -1,0 +1,134 @@
+
+
+<!--- Alerts.stories.mdx --->
+
+import { Fragment } from "react";
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { StoryProvider, Text} from "../../theme";
+import { Alert } from "../../../Alert";
+import { css } from "tss-react/@emotion/css";
+
+<Meta title="Documentation/Components/Alert" component={Alert} />
+
+# Alert 
+
+This is a documentation of `<Alert/>` component.
+Alerts are used to draw the user's attention to information.
+
+- [Structure](#structure)
+- [Types of alert](#types-of-alert)
+- [Rules of use](#rules-of-use)
+- [Properties](#properties)
+
+## Structure
+
+The alert is made up of the following elements:
+
+- a title - mandatory.
+
+- a pictogram and a color - mandatory.
+
+- a description text - optional.
+
+- a closing cross - optional.
+
+Alerts are displayed contextually in a page / form, during user interactions with validation messages 
+(example: success or error following submission of a form) or during application / system side events 
+(example : information, alert, update messages, etc.).
+
+## Types of alert
+
+There are 4 types of alert allowing information of different kinds to be given:
+
+- [Error alert](#error-alert)
+- [Success alert](#success-alert)
+- [Information alert](#information-alert)
+- [Warning alert](#warning-alert)
+
+### Error alert
+Used when there are several errors in a form, or fatal errors for the user to report.
+
+<Canvas>
+    <Story name="Error  Alert">
+        {[false, true].map(dark=>
+            <Fragment key={dark}>
+                 <div className={css({ "margin": 20})} />
+                <StoryProvider dark={dark}>
+                        <Alert severity="error"><Text typo="body 1">This is an error</Text></Alert>
+                </StoryProvider>
+            </Fragment>
+        )}
+    </Story>
+</Canvas>
+
+```tsx
+<Alert severity="error"><Text typo="body 1">This is an error</Text></Alert>
+```
+
+### Success alert
+Used to indicate to the user that an action or task has been completed successfully.
+
+<Canvas>
+    <Story name="Success Alert">
+        {[false, true].map(dark=>
+            <Fragment key={dark}>
+                 <div className={css({ "margin": 20})} />
+                <StoryProvider dark={dark}>
+                        <Alert severity="success"><Text typo="body 1">This is an success</Text></Alert>
+                </StoryProvider>
+            </Fragment>
+        )}
+    </Story>
+</Canvas>
+
+```tsx
+<Alert severity="success"><Text typo="body 1">This is an success</Text></Alert>
+```
+
+### Information alert
+Use to highlight important information
+
+<Canvas>
+    <Story name="Info Alert">
+        <StoryProvider dark={false}>
+            <Alert severity="info"><Text typo="body 1">This is an info</Text></Alert>
+        </StoryProvider>
+        <div className={css({ "margin": 20})} />
+        <StoryProvider dark={true}>
+            <Alert severity="info"><Text typo="body 1">This is an info</Text></Alert>
+        </StoryProvider>
+    </Story>
+</Canvas>
+
+```tsx
+<Alert severity="info"><Text typo="body 1">This is an info</Text></Alert>
+```
+
+### Warning alert
+Use to highlight important information
+
+<Canvas>
+    <Story name="Warning Alert">
+        <StoryProvider dark={false}>
+            <Alert severity="warning"><Text typo="body 1">This is a warning</Text></Alert>
+        </StoryProvider>
+        <div className={css({ "margin": 20})} />
+        <StoryProvider dark={true}>
+            <Alert severity="warning"><Text typo="body 1">This is a warning</Text></Alert>
+        </StoryProvider>
+    </Story>
+</Canvas>
+
+```tsx
+<Alert severity="warning"><Text typo="body 1">This is an info</Text></Alert>
+```
+
+## Rules of use
+
+* The title of the alert should be clear and concise.
+* The alert description text should clearly detail the information / problem to the user.
+* The tone should be courteous, not to blame the user, but to accompany him.
+
+## Properties
+
+<ArgsTable of={Alert} />
