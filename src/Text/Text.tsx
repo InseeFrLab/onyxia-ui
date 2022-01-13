@@ -1,10 +1,10 @@
-import { createElement, useMemo, forwardRef, memo } from "react";
-import { useStyles } from "../lib/ThemeProvider";
+import { createElement, forwardRef, memo } from "react";
 import type { Theme } from "../lib/ThemeProvider";
 import { TypographyDesc } from "../lib/typography";
 import type { PaletteBase, ColorUseCasesBase } from "../lib/color";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
+import { createMakeStyles } from "tss-react/compat";
 
 export function createText<
     TypographyVariantNameCustom extends string = never,
@@ -12,11 +12,12 @@ export function createText<
     useTheme(): Theme<
         PaletteBase,
         ColorUseCasesBase,
-        TypographyVariantNameCustom,
-        Record<string, unknown>
+        TypographyVariantNameCustom
     >;
 }) {
     const { useTheme } = params;
+
+    const { makeStyles } = createMakeStyles({ useTheme });
 
     type TextProps = {
         className?: string | null;
@@ -30,7 +31,7 @@ export function createText<
     const Text = memo(
         forwardRef<any, TextProps>((props, ref) => {
             const {
-                className: classNameFromProps,
+                className,
                 children,
                 typo: variantName,
                 color = "primary",
@@ -46,41 +47,13 @@ export function createText<
 
             const theme = useTheme();
 
-            const { css, cx } = useStyles();
-
-            const className = useMemo(
-                () =>
-                    cx(
-                        css({
-                            ...theme.typography.variants[variantName].style,
-                            "color":
-                                theme.colors.useCases.typography[
-                                    (() => {
-                                        switch (color) {
-                                            case "primary":
-                                                return "textPrimary";
-                                            case "secondary":
-                                                return "textSecondary";
-                                            case "disabled":
-                                                return "textDisabled";
-                                            case "focus":
-                                                return "textFocus";
-                                        }
-                                    })()
-                                ],
-                            "padding": 0,
-                            "margin": 0,
-                        }),
-                        classNameFromProps,
-                    ),
-                [theme, variantName, classNameFromProps],
-            );
+            const { classes, cx } = useStyles({ variantName, color });
 
             return createElement(
                 htmlComponent ??
                     theme.typography.variants[variantName].htmlComponent,
                 {
-                    className,
+                    "className": cx(classes.root, className),
                     ref,
                     ...componentProps,
                     ...rest,
@@ -89,6 +62,32 @@ export function createText<
             );
         }),
     );
+
+    const useStyles = makeStyles<{
+        variantName: TextProps["typo"];
+        color: NonNullable<TextProps["color"]>;
+    }>({ "name": "Text" })((theme, { variantName, color }) => ({
+        "root": {
+            ...theme.typography.variants[variantName].style,
+            "color":
+                theme.colors.useCases.typography[
+                    (() => {
+                        switch (color) {
+                            case "primary":
+                                return "textPrimary";
+                            case "secondary":
+                                return "textSecondary";
+                            case "disabled":
+                                return "textDisabled";
+                            case "focus":
+                                return "textFocus";
+                        }
+                    })()
+                ],
+            "padding": 0,
+            "margin": 0,
+        },
+    }));
 
     return { Text };
 }

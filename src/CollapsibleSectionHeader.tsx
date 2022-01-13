@@ -21,36 +21,6 @@ const { IconButton } = createIconButton(
     createIcon({ "chevronLeft": ChevronLeftIcon }),
 );
 
-const useStyles = makeStyles<{ isCollapsed: boolean }>()(
-    (...[theme, { isCollapsed }]) => ({
-        "root": {
-            "display": "flex",
-            "alignItems": "center",
-        },
-        "chevron": {
-            "paddingLeft": 0,
-            ...(!isCollapsed
-                ? {}
-                : {
-                      "width": 0,
-                      "paddingLeft": 0,
-                      "paddingRight": 0,
-                      "visibility": "hidden",
-                  }),
-        },
-        "link": {
-            "cursor": "pointer",
-            //Ugly solution to vertically align with text
-            "paddingTop":
-                0.183 *
-                pxToNumber(
-                    theme.typography.variants["section heading"].style
-                        .lineHeight,
-                ),
-        },
-    }),
-);
-
 export const CollapsibleSectionHeader = memo(
     (props: CollapsibleSectionHeaderProps) => {
         const {
@@ -88,3 +58,32 @@ export const CollapsibleSectionHeader = memo(
         );
     },
 );
+
+const useStyles = makeStyles<{ isCollapsed: boolean }>({
+    "name": { CollapsibleSectionHeader },
+})((...[theme, { isCollapsed }]) => ({
+    "root": {
+        "display": "flex",
+        "alignItems": "center",
+    },
+    "chevron": {
+        "paddingLeft": 0,
+        ...(!isCollapsed
+            ? {}
+            : {
+                  "width": 0,
+                  "paddingLeft": 0,
+                  "paddingRight": 0,
+                  "visibility": "hidden",
+              }),
+    },
+    "link": {
+        "cursor": "pointer",
+        //Ugly solution to vertically align with text
+        "paddingTop":
+            0.183 *
+            pxToNumber(
+                theme.typography.variants["section heading"].style.lineHeight,
+            ),
+    },
+}));

@@ -8,17 +8,6 @@ export type CircularProgressProps = {
     color?: "primary" | "textPrimary";
 };
 
-const useStyles = makeStyles<Pick<Required<CircularProgressProps>, "color">>()(
-    (theme, { color }) => ({
-        "root": {
-            "color":
-                color !== "textPrimary"
-                    ? undefined
-                    : theme.colors.useCases.typography.textPrimary,
-        },
-    }),
-);
-
 export const CircularProgress = memo((props: CircularProgressProps) => {
     const { className, size = 40, color = "primary" } = props;
 
@@ -32,3 +21,14 @@ export const CircularProgress = memo((props: CircularProgressProps) => {
         />
     );
 });
+
+const useStyles = makeStyles<Pick<Required<CircularProgressProps>, "color">>({
+    "name": { CircularProgress },
+})((theme, { color }) => ({
+    "root": {
+        "color":
+            color !== "textPrimary"
+                ? undefined
+                : theme.colors.useCases.typography.textPrimary,
+    },
+}));

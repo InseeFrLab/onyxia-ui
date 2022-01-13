@@ -20,36 +20,6 @@ export type DialogProps = {
     doNotShowNextTimeText?: string;
 };
 
-const useStyles = makeStyles()(theme => ({
-    "root": {
-        "padding": theme.spacing(4),
-    },
-    "buttonWrapper": {
-        "display": "flex",
-        "marginTop": theme.spacing(4),
-        "& .MuiButton-root": {
-            "marginLeft": theme.spacing(2),
-        },
-        "alignItems": "center",
-    },
-    "checkBoxWrapper": {
-        "flex": 1,
-    },
-    "paper": {
-        "backgroundColor": theme.colors.useCases.surfaces.surface1,
-        "boxShadow": theme.shadows[7],
-        "borderRadius": 5,
-        "maxWidth": 573,
-    },
-    "subtitle": {
-        "marginTop": theme.spacing(3),
-    },
-    "body": {
-        "marginTop": theme.spacing(2),
-        "color": theme.colors.useCases.typography.textSecondary,
-    },
-}));
-
 const labelledby = "alert-dialog-title";
 const describedby = "alert-dialog-description";
 
@@ -139,3 +109,33 @@ export const Dialog = memo((props: DialogProps) => {
         </MuiDialog>
     );
 });
+
+const useStyles = makeStyles({ "name": { Dialog } })(theme => ({
+    "root": {
+        "padding": theme.spacing(4),
+    },
+    "buttonWrapper": {
+        "display": "flex",
+        "marginTop": theme.spacing(4),
+        "& .MuiButton-root": {
+            "marginLeft": theme.spacing(2),
+        },
+        "alignItems": "center",
+    },
+    "checkBoxWrapper": {
+        "flex": 1,
+    },
+    "paper": {
+        "backgroundColor": theme.colors.useCases.surfaces.surface1,
+        "boxShadow": theme.shadows[7],
+        "borderRadius": 5,
+        "maxWidth": 573,
+    },
+    "subtitle": {
+        "marginTop": theme.spacing(3),
+    },
+    "body": {
+        "marginTop": theme.spacing(2),
+        "color": theme.colors.useCases.typography.textSecondary,
+    },
+}));

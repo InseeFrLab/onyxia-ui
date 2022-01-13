@@ -55,27 +55,6 @@ export function createIconButton<IconId extends string = never>(params?: {
         "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>),
     };
 
-    const useStyles = makeStyles<{ disabled: boolean }>()(
-        (theme, { disabled }) => ({
-            "root": {
-                "padding": theme.spacing(2),
-                "&:hover": {
-                    "backgroundColor": "unset",
-                    "& svg": {
-                        "color":
-                            theme.colors.useCases.buttons.actionHoverPrimary,
-                    },
-                },
-            },
-            "icon": {
-                "color":
-                    theme.colors.useCases.typography[
-                        disabled ? "textDisabled" : "textPrimary"
-                    ],
-            },
-        }),
-    );
-
     const IconButton = memo(
         forwardRef<HTMLButtonElement, IconButtonProps<IconId>>((props, ref) => {
             const {
@@ -158,6 +137,26 @@ export function createIconButton<IconId extends string = never>(params?: {
             );
         }),
     );
+
+    const useStyles = makeStyles<{ disabled: boolean }>({
+        "name": { IconButton },
+    })((theme, { disabled }) => ({
+        "root": {
+            "padding": theme.spacing(2),
+            "&:hover": {
+                "backgroundColor": "unset",
+                "& svg": {
+                    "color": theme.colors.useCases.buttons.actionHoverPrimary,
+                },
+            },
+        },
+        "icon": {
+            "color":
+                theme.colors.useCases.typography[
+                    disabled ? "textDisabled" : "textPrimary"
+                ],
+        },
+    }));
 
     return { IconButton };
 }

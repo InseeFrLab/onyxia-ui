@@ -10,12 +10,6 @@ export type TooltipProps = {
     enterDelay?: number;
 };
 
-const useStyles = makeStyles()(theme => ({
-    "root": {
-        "color": theme.colors.palette.light.light,
-    },
-}));
-
 export const Tooltip = memo((props: TooltipProps) => {
     const { title, children, enterDelay } = props;
 
@@ -38,3 +32,9 @@ export const Tooltip = memo((props: TooltipProps) => {
         </MuiTooltip>
     );
 });
+
+const useStyles = makeStyles({ "name": { Tooltip } })(theme => ({
+    "root": {
+        "color": theme.colors.palette.light.light,
+    },
+}));

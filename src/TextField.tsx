@@ -4,8 +4,6 @@ import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import MuiTextField from "@mui/material/TextField";
-import type { PickOptionals } from "tsafe";
-import { noUndefined } from "./tools/noUndefined";
 import { getBrowser } from "./tools/getBrowser";
 import InputAdornment from "@mui/material/InputAdornment";
 import { createIconButton } from "./IconButton";
@@ -22,37 +20,44 @@ import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
 
 export type TextFieldProps = {
-    className?: string | null;
-    id?: string | null;
-    name?: string | null;
+    className?: string;
+    id?: string;
+    name?: string;
+    /** Default text */
     type?: "text" | "password" | "email";
     /** Will overwrite value when updated */
     defaultValue?: string;
-    inputProps_ref?: RefObject<HTMLInputElement> | null;
-    "inputProps_aria-label"?: string | null;
-    inputProps_tabIndex?: number | null;
+    inputProps_ref?: RefObject<HTMLInputElement>;
+    "inputProps_aria-label"?: string;
+    inputProps_tabIndex?: number;
     inputProps_spellCheck?: boolean;
     inputProps_autoFocus?: boolean;
+    /**
+     * If true, it sets the helper text in red.
+     * Will be set automatically if getIsValidValue is provided
+     * */
+    "inputProps_aria-invalid"?: boolean;
     InputProps_endAdornment?: ReactNode;
+    /** Only use when getIsValidValue isn't used */
     disabled?: boolean;
     multiline?: boolean;
     /** Return false to e.preventDefault() and e.stopPropagation() */
-    onEscapeKeyDown?(params: {
+    onEscapeKeyDown?: (params: {
         preventDefaultAndStopPropagation(): void;
-    }): void;
-    onEnterKeyDown?(params: { preventDefaultAndStopPropagation(): void }): void;
-    onBlur?(): void;
+    }) => void;
+    onEnterKeyDown?: (params: {
+        preventDefaultAndStopPropagation(): void;
+    }) => void;
+    onBlur?: () => void;
 
     /** To prevent onSubmit to be invoked (when data is being updated for example ) default true*/
     isSubmitAllowed?: boolean;
-    evtAction?: NonPostableEvt<
-        "TRIGGER SUBMIT" | "RESTORE DEFAULT VALUE"
-    > | null;
+    evtAction?: NonPostableEvt<"TRIGGER SUBMIT" | "RESTORE DEFAULT VALUE">;
     /** Submit invoked on evtAction.post("TRIGGER SUBMIT") only if value being typed is valid */
-    onSubmit?(value: string): void;
-    getIsValidValue?(
+    onSubmit?: (value: string) => void;
+    getIsValidValue?: (
         value: string,
-    ):
+    ) =>
         | { isValidValue: true }
         | { isValidValue: false; message: string | ReactNode };
     /**
@@ -60,16 +65,17 @@ export type TextFieldProps = {
      * called again if getIsValidValue have been updated and
      * the validity of the current value changes.
      */
-    onValueBeingTypedChange?(
+    onValueBeingTypedChange?: (
         params: { value: string } & ReturnType<
             TextFieldProps["getIsValidValue"]
         >,
-    ): void;
+    ) => void;
     transformValueBeingTyped?: (value: string) => string;
     label?: React.ReactNode;
     helperText?: string | ReactNode;
     questionMarkHelperText?: string | NonNullable<ReactNode>;
     doOnlyValidateInputAfterFistFocusLost?: boolean;
+    /** Default false */
     isCircularProgressShown?: boolean;
     selectAllTextOnFocus?: boolean;
     autoComplete?:
@@ -137,120 +143,12 @@ const { Icon } = createIcon({
 
 const { IconButton } = createIconButton({ Icon });
 
-export const textFieldDefaultProps: PickOptionals<TextFieldProps> = {
-    "label": null,
-    "helperText": "",
-    "questionMarkHelperText": "",
-    "doOnlyValidateInputAfterFistFocusLost": true,
-    "defaultValue": "",
-    "className": null,
-    "id": null,
-    "name": null,
-    "autoComplete": "off",
-    "type": "text",
-    "disabled": false,
-    "multiline": false,
-    "onEscapeKeyDown": () => {
-        /*Do nothing*/
-    },
-    "onEnterKeyDown": () => {
-        /*Do nothing*/
-    },
-    "onBlur": () => {
-        /*Do nothing*/
-    },
-    "isSubmitAllowed": true,
-    "onSubmit": () => {
-        /*Do nothing*/
-    },
-    "getIsValidValue": () => ({ "isValidValue": true }),
-    "evtAction": null,
-    "onValueBeingTypedChange": () => {
-        /*Do nothing*/
-    },
-    "transformValueBeingTyped": value => value,
-    "isCircularProgressShown": false,
-    "selectAllTextOnFocus": false,
-
-    "inputProps_ref": null,
-    "inputProps_aria-label": null,
-    "inputProps_tabIndex": null,
-    "inputProps_spellCheck": true,
-    "inputProps_autoFocus": false,
-    "InputProps_endAdornment": null,
-};
-
-const useStyles = makeStyles<{
-    error: boolean;
-    rootHeight: number;
-}>()((theme, { error, rootHeight }) => ({
-    "root": {
-        "& .MuiFormHelperText-root": {
-            "position": "absolute",
-            "top": rootHeight,
-            "visibility": rootHeight === 0 ? "hidden" : undefined,
-        },
-        "& .MuiFormLabel-root": {
-            "color": error
-                ? theme.colors.useCases.alertSeverity.error.main
-                : theme.colors.useCases.typography.textSecondary,
-        },
-        "&:focus": {
-            "outline": "unset",
-        },
-        "& input:-webkit-autofill": {
-            ...(() => {
-                switch (getBrowser()) {
-                    case "chrome":
-                    case "safari":
-                        return {
-                            "WebkitTextFillColor":
-                                theme.colors.useCases.typography[
-                                    theme.isDarkModeEnabled
-                                        ? "textPrimary"
-                                        : "textSecondary"
-                                ],
-                            "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
-                        };
-                    default:
-                        return {};
-                }
-            })(),
-        },
-        "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-            "borderBottomWidth": 1,
-        },
-        "& .MuiInput-underline:after": {
-            "borderBottomWidth": 1,
-        },
-    },
-    "helperText": {
-        "color": error
-            ? theme.colors.useCases.alertSeverity.error.main
-            : theme.colors.useCases.typography.textDisabled,
-        "whiteSpace": "nowrap",
-    },
-    "questionMark": {
-        "fontSize": "inherit",
-        ...(() => {
-            const factor = 1.5;
-
-            return {
-                "width": `${factor}em`,
-                "height": `${factor}em`,
-            };
-        })(),
-    },
-}));
-
 export const TextField = memo((props: TextFieldProps) => {
-    const completedProps = { ...textFieldDefaultProps, ...noUndefined(props) };
-
     const {
         transformValueBeingTyped,
-        defaultValue,
+        defaultValue = "",
         getIsValidValue,
-        doOnlyValidateInputAfterFistFocusLost,
+        doOnlyValidateInputAfterFistFocusLost = true,
         onValueBeingTypedChange,
         onBlur,
         evtAction,
@@ -258,39 +156,23 @@ export const TextField = memo((props: TextFieldProps) => {
         onEscapeKeyDown,
         onEnterKeyDown,
         className,
-        type,
-        isCircularProgressShown,
+        type = "text",
+        isCircularProgressShown = false,
         helperText,
-        id,
+        id: htmlId,
         name,
         selectAllTextOnFocus,
-        isSubmitAllowed,
+        isSubmitAllowed = true,
         inputProps_ref,
         "inputProps_aria-label": inputProps_ariaLabel,
         inputProps_tabIndex,
         inputProps_spellCheck,
         inputProps_autoFocus,
+        "inputProps_aria-invalid": inputProps_ariaInvalid,
         InputProps_endAdornment,
         questionMarkHelperText,
         ...completedPropsRest
-    } = completedProps;
-
-    const inputProps = useMemo(
-        () => ({
-            "ref": inputProps_ref ?? undefined,
-            "aria-label": inputProps_ariaLabel ?? undefined,
-            "tabIndex": inputProps_tabIndex ?? undefined,
-            "spellCheck": inputProps_spellCheck,
-            "autoFocus": inputProps_autoFocus,
-        }),
-        [
-            inputProps_ref,
-            inputProps_ariaLabel,
-            inputProps_tabIndex,
-            inputProps_spellCheck,
-            inputProps_autoFocus,
-        ],
-    );
+    } = props;
 
     const { value, transformAndSetValue } = (function useClosure() {
         const [value, setValue] = useState(defaultValue);
@@ -303,7 +185,7 @@ export const TextField = memo((props: TextFieldProps) => {
                 enableValidation();
             }
 
-            setValue(transformValueBeingTyped(value));
+            setValue(transformValueBeingTyped?.(value) ?? value);
         });
 
         return { value, transformAndSetValue };
@@ -315,12 +197,12 @@ export const TextField = memo((props: TextFieldProps) => {
     );
 
     const getIsValidValueResult = useMemo(
-        () => getIsValidValue(value),
-        [value, getIsValidValue],
+        () => getIsValidValue?.(value) ?? { "isValidValue": true as const },
+        [value, getIsValidValue ?? Object],
     );
 
     useEffect(() => {
-        onValueBeingTypedChange({ value, ...getIsValidValueResult });
+        onValueBeingTypedChange?.({ value, ...getIsValidValueResult });
     }, [
         value,
         getIsValidValueResult.isValidValue,
@@ -345,9 +227,10 @@ export const TextField = memo((props: TextFieldProps) => {
                         if (
                             !getIsValidValueResult.isValidValue ||
                             !isSubmitAllowed
-                        )
+                        ) {
                             return;
-                        onSubmit(value);
+                        }
+                        onSubmit?.(value);
                         return;
                 }
             }),
@@ -355,16 +238,16 @@ export const TextField = memo((props: TextFieldProps) => {
             defaultValue,
             value,
             getIsValidValueResult,
-            onSubmit,
-            evtAction,
+            onSubmit ?? Object,
+            evtAction ?? Object,
             transformAndSetValue,
             isSubmitAllowed,
         ],
     );
 
-    const error = isValidationEnabled
-        ? !getIsValidValueResult.isValidValue
-        : false;
+    const hasError =
+        inputProps_ariaInvalid ??
+        (isValidationEnabled ? !getIsValidValueResult.isValidValue : false);
 
     const {
         domRect: { height: rootHeight },
@@ -372,7 +255,7 @@ export const TextField = memo((props: TextFieldProps) => {
     } = useDomRect();
 
     const { classes, cx } = useStyles({
-        error,
+        hasError,
         rootHeight,
     });
 
@@ -408,10 +291,10 @@ export const TextField = memo((props: TextFieldProps) => {
 
             switch (key) {
                 case "Escape":
-                    onEscapeKeyDown({ preventDefaultAndStopPropagation });
+                    onEscapeKeyDown?.({ preventDefaultAndStopPropagation });
                     break;
                 case "Enter":
-                    onEnterKeyDown({ preventDefaultAndStopPropagation });
+                    onEnterKeyDown?.({ preventDefaultAndStopPropagation });
                     break;
             }
         },
@@ -443,6 +326,32 @@ export const TextField = memo((props: TextFieldProps) => {
         ],
     );
 
+    const inputProps = useMemo(
+        () => ({
+            "ref": inputProps_ref,
+            "aria-label": inputProps_ariaLabel,
+            "tabIndex": inputProps_tabIndex,
+            "spellCheck": inputProps_spellCheck,
+            "autoFocus": inputProps_autoFocus,
+            ...(inputProps_ariaInvalid !== undefined
+                ? {
+                      "aria-invalid": inputProps_ariaInvalid,
+                  }
+                : hasError
+                ? { "aria-invalid": true }
+                : {}),
+        }),
+        [
+            inputProps_ref ?? Object,
+            inputProps_ariaLabel ?? Object,
+            inputProps_tabIndex ?? Object,
+            inputProps_spellCheck ?? Object,
+            inputProps_autoFocus ?? Object,
+            inputProps_ariaInvalid ?? Object,
+            hasError,
+        ],
+    );
+
     return (
         <MuiTextField
             ref={ref}
@@ -456,7 +365,7 @@ export const TextField = memo((props: TextFieldProps) => {
             }
             className={cx(classes.root, className)}
             value={value}
-            error={error}
+            error={hasError}
             helperText={
                 <Text
                     className={classes.helperText}
@@ -467,7 +376,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         ? getIsValidValueResult.message || helperText
                         : helperText}
                     &nbsp;
-                    {questionMarkHelperText !== "" && (
+                    {questionMarkHelperText !== undefined && (
                         <Tooltip title={questionMarkHelperText}>
                             <Icon
                                 iconId="help"
@@ -480,7 +389,7 @@ export const TextField = memo((props: TextFieldProps) => {
             InputProps={InputProps}
             onBlur={useConstCallback(() => {
                 if (!isValidationEnabled) enableValidation();
-                onBlur();
+                onBlur?.();
             })}
             onChange={useConstCallback(
                 ({
@@ -499,10 +408,75 @@ export const TextField = memo((props: TextFieldProps) => {
                     target.setSelectionRange(0, target.value.length);
                 },
             )}
-            id={id ?? undefined}
-            name={name ?? undefined}
+            id={htmlId}
+            name={name}
             inputProps={inputProps}
             {...completedPropsRest}
         />
     );
 });
+
+const useStyles = makeStyles<{
+    hasError: boolean;
+    rootHeight: number;
+}>({
+    "name": { TextField },
+})((theme, { hasError, rootHeight }) => ({
+    "root": {
+        "& .MuiFormHelperText-root": {
+            "position": "absolute",
+            "top": rootHeight,
+            "visibility": rootHeight === 0 ? "hidden" : undefined,
+        },
+        "& .MuiFormLabel-root": {
+            "color": hasError
+                ? theme.colors.useCases.alertSeverity.error.main
+                : theme.colors.useCases.typography.textSecondary,
+        },
+        "&:focus": {
+            "outline": "unset",
+        },
+        "& input:-webkit-autofill": {
+            ...(() => {
+                switch (getBrowser()) {
+                    case "chrome":
+                    case "safari":
+                        return {
+                            "WebkitTextFillColor":
+                                theme.colors.useCases.typography[
+                                    theme.isDarkModeEnabled
+                                        ? "textPrimary"
+                                        : "textSecondary"
+                                ],
+                            "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
+                        };
+                    default:
+                        return {};
+                }
+            })(),
+        },
+        "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+            "borderBottomWidth": 1,
+        },
+        "& .MuiInput-underline:after": {
+            "borderBottomWidth": 1,
+        },
+    },
+    "helperText": {
+        "color": hasError
+            ? theme.colors.useCases.alertSeverity.error.main
+            : theme.colors.useCases.typography.textDisabled,
+        "whiteSpace": "nowrap",
+    },
+    "questionMark": {
+        "fontSize": "inherit",
+        ...(() => {
+            const factor = 1.5;
+
+            return {
+                "width": `${factor}em`,
+                "height": `${factor}em`,
+            };
+        })(),
+    },
+}));

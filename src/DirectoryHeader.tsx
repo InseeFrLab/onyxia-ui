@@ -43,7 +43,34 @@ const { IconButton } = createIconButton(
     }),
 );
 
-const useStyles = makeStyles()(theme => ({
+export const DirectoryHeader = memo((props: Props) => {
+    const { className, image, title, subtitle, onGoBack } = props;
+
+    const { classes, cx } = useStyles();
+
+    return (
+        <div className={cx(classes.root, className)}>
+            <div>
+                <IconButton
+                    size="large"
+                    iconId="chevronLeft"
+                    onClick={onGoBack}
+                />
+            </div>
+            <div className={classes.imageWrapper}>{image}</div>
+            <div>
+                <Text typo="object heading">{title}</Text>
+                {subtitle !== undefined && (
+                    <Text typo="caption" className={classes.subtitle}>
+                        {subtitle}
+                    </Text>
+                )}
+            </div>
+        </div>
+    );
+});
+
+const useStyles = makeStyles({ "name": { DirectoryHeader } })(theme => ({
     "root": {
         "display": "flex",
         "alignItems": "center",
@@ -78,30 +105,3 @@ const useStyles = makeStyles()(theme => ({
         "textTransform": "capitalize",
     },
 }));
-
-export const DirectoryHeader = memo((props: Props) => {
-    const { className, image, title, subtitle, onGoBack } = props;
-
-    const { classes, cx } = useStyles();
-
-    return (
-        <div className={cx(classes.root, className)}>
-            <div>
-                <IconButton
-                    size="large"
-                    iconId="chevronLeft"
-                    onClick={onGoBack}
-                />
-            </div>
-            <div className={classes.imageWrapper}>{image}</div>
-            <div>
-                <Text typo="object heading">{title}</Text>
-                {subtitle !== undefined && (
-                    <Text typo="caption" className={classes.subtitle}>
-                        {subtitle}
-                    </Text>
-                )}
-            </div>
-        </div>
-    );
-});

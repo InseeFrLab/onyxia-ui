@@ -66,10 +66,116 @@ export function createButton<IconId extends string = never>(params?: {
         "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => <></>),
     };
 
+    const Button = memo(
+        forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
+            const {
+                className,
+                variant = "primary",
+                disabled = false,
+                children,
+                startIcon,
+                endIcon,
+                autoFocus = false,
+                tabIndex,
+                name,
+                htmlId,
+                "aria-label": ariaLabel,
+                //For the forwarding, rest should be empty (typewise)
+                ...rest
+            } = props;
+
+            const { classes, cx } = useStyles({
+                variant,
+                disabled,
+            });
+
+            const IconWd = useGuaranteedMemo(
+                () => (props: { iconId: IconId }) =>
+                    (
+                        <Icon
+                            iconId={props.iconId}
+                            className={classes.icon}
+                            size="default"
+                        />
+                    ),
+                [disabled, classes.icon],
+            );
+
+            return (
+                <MuiButton
+                    ref={ref}
+                    className={cx(classes.root, className)}
+                    //There is an error in @mui/material types, this should be correct.
+                    disabled={disabled}
+                    startIcon={
+                        startIcon === undefined ? undefined : (
+                            <IconWd iconId={startIcon} />
+                        )
+                    }
+                    endIcon={
+                        endIcon === undefined ? undefined : (
+                            <IconWd iconId={endIcon} />
+                        )
+                    }
+                    autoFocus={autoFocus}
+                    tabIndex={tabIndex}
+                    name={name}
+                    id={htmlId}
+                    aria-label={ariaLabel}
+                    {...(() => {
+                        if ("onClick" in rest) {
+                            const { onClick, href, ...restRest } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            assert<Equals<typeof restRest, {}>>();
+
+                            return { onClick, href, ...restRest };
+                        }
+
+                        if ("href" in rest) {
+                            const {
+                                href,
+                                doOpenNewTabIfHref = true,
+                                ...restRest
+                            } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            assert<Equals<typeof restRest, {}>>();
+
+                            return {
+                                href,
+                                "target": doOpenNewTabIfHref
+                                    ? "_blank"
+                                    : undefined,
+                                ...restRest,
+                            };
+                        }
+
+                        if ("type" in rest) {
+                            const { type, ...restRest } = rest;
+
+                            //For the forwarding, rest should be empty (typewise),
+                            assert<Equals<typeof restRest, {}>>();
+
+                            return {
+                                type,
+                                ...restRest,
+                            };
+                        }
+                    })()}
+                >
+                    {typeof children === "string"
+                        ? capitalize(children)
+                        : children}
+                </MuiButton>
+            );
+        }),
+    );
+
     const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-    }>()((theme, { variant, disabled }) => {
+    }>({ "name": { Button } })((theme, { variant, disabled }) => {
         const textColor =
             theme.colors.useCases.typography[
                 disabled
@@ -194,112 +300,6 @@ export function createButton<IconId extends string = never>(params?: {
             },
         };
     });
-
-    const Button = memo(
-        forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
-            const {
-                className,
-                variant = "primary",
-                disabled = false,
-                children,
-                startIcon,
-                endIcon,
-                autoFocus = false,
-                tabIndex,
-                name,
-                htmlId,
-                "aria-label": ariaLabel,
-                //For the forwarding, rest should be empty (typewise)
-                ...rest
-            } = props;
-
-            const { classes, cx } = useStyles({
-                variant,
-                disabled,
-            });
-
-            const IconWd = useGuaranteedMemo(
-                () => (props: { iconId: IconId }) =>
-                    (
-                        <Icon
-                            iconId={props.iconId}
-                            className={classes.icon}
-                            size="default"
-                        />
-                    ),
-                [disabled, classes.icon],
-            );
-
-            return (
-                <MuiButton
-                    ref={ref}
-                    className={cx(classes.root, className)}
-                    //There is an error in @mui/material types, this should be correct.
-                    disabled={disabled}
-                    startIcon={
-                        startIcon === undefined ? undefined : (
-                            <IconWd iconId={startIcon} />
-                        )
-                    }
-                    endIcon={
-                        endIcon === undefined ? undefined : (
-                            <IconWd iconId={endIcon} />
-                        )
-                    }
-                    autoFocus={autoFocus}
-                    tabIndex={tabIndex}
-                    name={name}
-                    id={htmlId}
-                    aria-label={ariaLabel}
-                    {...(() => {
-                        if ("onClick" in rest) {
-                            const { onClick, href, ...restRest } = rest;
-
-                            //For the forwarding, rest should be empty (typewise),
-                            assert<Equals<typeof restRest, {}>>();
-
-                            return { onClick, href, ...restRest };
-                        }
-
-                        if ("href" in rest) {
-                            const {
-                                href,
-                                doOpenNewTabIfHref = true,
-                                ...restRest
-                            } = rest;
-
-                            //For the forwarding, rest should be empty (typewise),
-                            assert<Equals<typeof restRest, {}>>();
-
-                            return {
-                                href,
-                                "target": doOpenNewTabIfHref
-                                    ? "_blank"
-                                    : undefined,
-                                ...restRest,
-                            };
-                        }
-
-                        if ("type" in rest) {
-                            const { type, ...restRest } = rest;
-
-                            //For the forwarding, rest should be empty (typewise),
-                            assert<Equals<typeof restRest, {}>>();
-
-                            return {
-                                type,
-                                ...restRest,
-                            };
-                        }
-                    })()}
-                >
-                    {typeof children === "string"
-                        ? capitalize(children)
-                        : children}
-                </MuiButton>
-            );
-        }),
-    );
 
     return { Button };
 }

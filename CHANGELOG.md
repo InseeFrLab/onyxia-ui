@@ -1,3 +1,51 @@
+### **0.23.3** (2021-12-27)  
+  
+  
+  
+### **0.23.2** (2021-12-21)  
+  
+- DarkModeSwitch add aria-label for accecibility    
+  
+### **0.23.1** (2021-12-07)  
+  
+- Update tss-react    
+  
+## **0.23.0** (2021-12-02)  
+  
+- Temporary make tss-react a dependency  
+- Allow to open new tab    
+  
+### **0.22.2** (2021-12-02)  
+  
+- Update tss-react    
+  
+### **0.22.1** (2021-12-02)  
+  
+- Update tss-react to v3  
+- Update preview.js    
+  
+## **0.22.0** (2021-11-15)  
+  
+- Fix previous build  
+- Use labeling for better debugging experience    
+  
+## **0.21.0** (2021-11-13)  
+  
+- remove 'custom' from theme    
+  
+### **0.18.6** (2021-11-06)  
+  
+- TextField: fix    
+  
+### **0.18.5** (2021-11-05)  
+  
+- TextField: Enable to put the helper text red on demand  
+- TextField: Refactor    
+  
+### **0.18.4** (2021-11-04)  
+  
+- Change default typo in label    
+  
 ### **0.18.3** (2021-11-02)  
   
 - Allow helperText and questionMarkHelperText to be JSX  

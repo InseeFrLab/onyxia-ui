@@ -33,61 +33,6 @@ export declare namespace TabProps {
     };
 }
 
-const useStyles = makeStyles<{
-    tabsWrapperWidth: number;
-    leftArrowWidth: number;
-    leftArrowHeight: number;
-    offset: number;
-    tabWidth: number;
-}>()(
-    (
-        theme,
-        { tabsWrapperWidth, leftArrowWidth, leftArrowHeight, offset, tabWidth },
-    ) => {
-        const arrows = {
-            "top": 0,
-            "zIndex": 1,
-            "position": "absolute",
-        } as const;
-
-        return {
-            "root": {
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-                "visibility": tabWidth === 0 ? "hidden" : "visible",
-            },
-            "top": {
-                "overflow": "hidden",
-                "position": "relative",
-            },
-            "leftArrow": {
-                ...arrows,
-                "left": 0,
-            },
-            "rightArrow": {
-                ...arrows,
-                "right": 0,
-            },
-            "tabsWrapper": {
-                "transition": "left 250ms",
-                "transitionTimingFunction": "ease",
-                "position": "relative",
-                "left": offset * tabWidth,
-                "transform": `translateX(${leftArrowWidth}px)`,
-                "zIndex": 0,
-                "width": tabsWrapperWidth,
-                "display": "flex",
-            },
-            "tab": {
-                "flex": 1,
-                "height": leftArrowHeight || undefined,
-            },
-            "content": {
-                "padding": theme.spacing(4),
-            },
-        };
-    },
-);
-
 export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     const {
         className,
@@ -461,3 +406,60 @@ const { CustomButton } = (() => {
 
     return { CustomButton };
 })();
+
+const useStyles = makeStyles<{
+    tabsWrapperWidth: number;
+    leftArrowWidth: number;
+    leftArrowHeight: number;
+    offset: number;
+    tabWidth: number;
+}>({
+    "name": { Tabs },
+})(
+    (
+        theme,
+        { tabsWrapperWidth, leftArrowWidth, leftArrowHeight, offset, tabWidth },
+    ) => {
+        const arrows = {
+            "top": 0,
+            "zIndex": 1,
+            "position": "absolute",
+        } as const;
+
+        return {
+            "root": {
+                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                "visibility": tabWidth === 0 ? "hidden" : "visible",
+            },
+            "top": {
+                "overflow": "hidden",
+                "position": "relative",
+            },
+            "leftArrow": {
+                ...arrows,
+                "left": 0,
+            },
+            "rightArrow": {
+                ...arrows,
+                "right": 0,
+            },
+            "tabsWrapper": {
+                "transition": "left 250ms",
+                "transitionTimingFunction": "ease",
+                "position": "relative",
+                "left": offset * tabWidth,
+                "transform": `translateX(${leftArrowWidth}px)`,
+                "zIndex": 0,
+                "width": tabsWrapperWidth,
+                "display": "flex",
+            },
+            "tab": {
+                "flex": 1,
+                "height": leftArrowHeight || undefined,
+            },
+            "content": {
+                "padding": theme.spacing(4),
+            },
+        };
+    },
+);

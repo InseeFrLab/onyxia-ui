@@ -8,14 +8,6 @@ import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
 import { makeStyles } from "./lib/ThemeProvider";
 
-const useStyles = makeStyles()(theme => ({
-    "root": {
-        "transition": "transform 500ms",
-        "transform": `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,
-        "transitionTimingFunction": "cubic-bezier(.34,1.27,1,1)",
-    },
-}));
-
 const { Icon } = createIcon({
     "darkModeIcon": DarkModeIcon,
     "lightModeIcon": LightModeIcon,
@@ -45,6 +37,15 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
             onClick={onClick}
             size={size}
             iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
+            aria-label="Dark mode switch"
         />
     );
 });
+
+const useStyles = makeStyles({ "name": { DarkModeIcon } })(theme => ({
+    "root": {
+        "transition": "transform 500ms",
+        "transform": `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,
+        "transitionTimingFunction": "cubic-bezier(.34,1.27,1,1)",
+    },
+}));

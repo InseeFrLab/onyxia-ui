@@ -1,16 +1,22 @@
-import { TextField, textFieldDefaultProps } from "../TextField";
+import { TextField } from "../TextField";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { TextField },
+    "argTypes": {
+        "inputProps_aria-invalid": {
+            "control": {
+                "type": "boolean",
+            },
+        },
+    },
 });
 
 export default meta;
 
 export const Vue1 = getStory({
-    ...textFieldDefaultProps,
     "defaultValue": "",
     "inputProps_aria-label": "the aria label",
     "label": "This is the label",
@@ -37,7 +43,6 @@ export const Vue1 = getStory({
 });
 
 export const VuePassword = getStory({
-    ...textFieldDefaultProps,
     "defaultValue": "",
     "inputProps_aria-label": "password",
     "label": "Password",
@@ -65,7 +70,6 @@ export const VuePassword = getStory({
 });
 
 export const VueWithHint = getStory({
-    ...textFieldDefaultProps,
     "helperText": "This is an helper text",
     "defaultValue": "",
     "inputProps_aria-label": "input with hint",
@@ -94,7 +98,6 @@ export const VueWithHint = getStory({
 });
 
 export const VueWithHintAndQuestionMark = getStory({
-    ...textFieldDefaultProps,
     "helperText": "This is an helper text",
     "questionMarkHelperText": "This is an extra helper text",
     "defaultValue": "",

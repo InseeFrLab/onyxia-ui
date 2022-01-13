@@ -41,7 +41,25 @@ export function createButtonBarButton<IconId extends string = never>(params: {
 
     const { Button } = createButton({ Icon });
 
-    const useStyles = makeStyles()(theme => ({
+    const ButtonBarButton = memo((props: ButtonBarButtonProps<IconId>) => {
+        const { className, startIcon, disabled, children, ...rest } = props;
+
+        const { classes, cx } = useStyles();
+
+        return (
+            <Button
+                className={cx(classes.root, className)}
+                variant="secondary"
+                startIcon={startIcon}
+                disabled={disabled}
+                {...rest}
+            >
+                {children}
+            </Button>
+        );
+    });
+
+    const useStyles = makeStyles({ "name": { ButtonBarButton } })(theme => ({
         "root": {
             "backgroundColor": "transparent",
             "borderRadius": "unset",
@@ -70,24 +88,6 @@ export function createButtonBarButton<IconId extends string = never>(params: {
             },
         },
     }));
-
-    const ButtonBarButton = memo((props: ButtonBarButtonProps<IconId>) => {
-        const { className, startIcon, disabled, children, ...rest } = props;
-
-        const { classes, cx } = useStyles();
-
-        return (
-            <Button
-                className={cx(classes.root, className)}
-                variant="secondary"
-                startIcon={startIcon}
-                disabled={disabled}
-                {...rest}
-            >
-                {children}
-            </Button>
-        );
-    });
 
     return { ButtonBarButton };
 }
