@@ -1,3 +1,12 @@
+## **0.24.0** (2022-01-30)  
+  
+- Enable TextField to render as text area  
+- Merge pull request #10 from InseeFrLab/docUI_Marc
+
+Doc UI marc  
+- Add navigatioBar component page  
+- Last update (Color, Alert & Tabs)    
+  
 ### **0.23.3** (2021-12-27)  
   
   
