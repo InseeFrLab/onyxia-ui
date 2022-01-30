@@ -78,6 +78,8 @@ export type TextFieldProps = {
     /** Default false */
     isCircularProgressShown?: boolean;
     selectAllTextOnFocus?: boolean;
+    /** Default false */
+    doRenderAsTextArea?: boolean;
     autoComplete?:
         | "on"
         | "off"
@@ -171,6 +173,7 @@ export const TextField = memo((props: TextFieldProps) => {
         "inputProps_aria-invalid": inputProps_ariaInvalid,
         InputProps_endAdornment,
         questionMarkHelperText,
+        doRenderAsTextArea = false,
         ...completedPropsRest
     } = props;
 
@@ -354,6 +357,7 @@ export const TextField = memo((props: TextFieldProps) => {
 
     return (
         <MuiTextField
+            multiline={doRenderAsTextArea}
             ref={ref}
             variant="standard"
             type={

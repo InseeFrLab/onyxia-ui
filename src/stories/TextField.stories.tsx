@@ -125,3 +125,30 @@ export const VueWithHintAndQuestionMark = getStory({
         "onValueBeingTypedChange",
     ]),
 });
+
+export const VueTextArea = getStory({
+    "multiline": true,
+    "defaultValue": "First line\nSecond line",
+    "inputProps_aria-label": "the aria label",
+    "label": "This is the label",
+    "getIsValidValue": value => {
+        console.log("getIsValidValue invoked: ", value);
+
+        if (value.includes(" ")) {
+            return { "isValidValue": false, "message": "Can't include spaces" };
+        }
+
+        return { "isValidValue": true };
+    },
+    "transformValueBeingTyped": value => {
+        console.log("transformValueBeingTyped invoked: ", value);
+        return value;
+    },
+    ...logCallbacks([
+        "onEscapeKeyDown",
+        "onEnterKeyDown",
+        "onBlur",
+        "onSubmit",
+        "onValueBeingTypedChange",
+    ]),
+});
