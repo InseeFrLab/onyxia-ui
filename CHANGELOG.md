@@ -1,3 +1,7 @@
+## **0.25.0** (2022-02-04)  
+  
+- Fix Button so we can have both onClick href and new tab    
+  
 ## **0.24.0** (2022-01-30)  
   
 - Enable TextField to render as text area  
