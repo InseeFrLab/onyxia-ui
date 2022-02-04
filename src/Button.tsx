@@ -14,8 +14,7 @@ import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
 
 export type ButtonProps<IconId extends string = never> =
-    | ButtonProps.Clickable<IconId>
-    | ButtonProps.Link<IconId>
+    | ButtonProps.Regular<IconId>
     | ButtonProps.Submit<IconId>;
 
 export namespace ButtonProps {
@@ -43,14 +42,10 @@ export namespace ButtonProps {
         "aria-label"?: string;
     };
 
-    export type Clickable<IconId extends string = never> = Common<IconId> & {
-        onClick(): void;
+    export type Regular<IconId extends string = never> = Common<IconId> & {
+        onClick?: () => void;
         href?: string;
-    };
-
-    export type Link<IconId extends string = never> = Common<IconId> & {
-        href: string;
-        /** Defaults to true */
+        /** Default to true if href */
         doOpenNewTabIfHref?: boolean;
     };
 
@@ -123,34 +118,6 @@ export function createButton<IconId extends string = never>(params?: {
                     id={htmlId}
                     aria-label={ariaLabel}
                     {...(() => {
-                        if ("onClick" in rest) {
-                            const { onClick, href, ...restRest } = rest;
-
-                            //For the forwarding, rest should be empty (typewise),
-                            assert<Equals<typeof restRest, {}>>();
-
-                            return { onClick, href, ...restRest };
-                        }
-
-                        if ("href" in rest) {
-                            const {
-                                href,
-                                doOpenNewTabIfHref = true,
-                                ...restRest
-                            } = rest;
-
-                            //For the forwarding, rest should be empty (typewise),
-                            assert<Equals<typeof restRest, {}>>();
-
-                            return {
-                                href,
-                                "target": doOpenNewTabIfHref
-                                    ? "_blank"
-                                    : undefined,
-                                ...restRest,
-                            };
-                        }
-
                         if ("type" in rest) {
                             const { type, ...restRest } = rest;
 
@@ -162,6 +129,20 @@ export function createButton<IconId extends string = never>(params?: {
                                 ...restRest,
                             };
                         }
+
+                        const {
+                            onClick,
+                            href,
+                            doOpenNewTabIfHref = href !== undefined,
+                            ...restRest
+                        } = rest;
+
+                        return {
+                            onClick,
+                            href,
+                            "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                            ...restRest,
+                        };
                     })()}
                 >
                     {typeof children === "string"

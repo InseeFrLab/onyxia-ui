@@ -5,8 +5,7 @@ import type { IconProps } from "./Icon";
 import { createButton } from "./Button";
 
 export type ButtonBarButtonProps<IconId extends string = never> =
-    | ButtonBarButtonProps.Clickable<IconId>
-    | ButtonBarButtonProps.Link<IconId>
+    | ButtonBarButtonProps.Regular<IconId>
     | ButtonBarButtonProps.Submit<IconId>;
 
 export namespace ButtonBarButtonProps {
@@ -18,14 +17,10 @@ export namespace ButtonBarButtonProps {
         children: NonNullable<ReactNode>;
     };
 
-    export type Clickable<IconId extends string = never> = Common<IconId> & {
-        onClick(): void;
+    export type Regular<IconId extends string = never> = Common<IconId> & {
+        onClick?: () => void;
         href?: string;
-    };
-
-    export type Link<IconId extends string = never> = Common<IconId> & {
-        href: string;
-        /** Defaults to true */
+        /** Defaults to true if href is defined */
         doOpenNewTabIfHref?: boolean;
     };
 
