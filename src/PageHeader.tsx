@@ -24,7 +24,7 @@ export type PageHeaderProps<IconId extends string> = {
     className?: string;
     titleCollapseParams?: CollapseParams;
     helpCollapseParams?: CollapseParams;
-    classes?: ReturnType<typeof useStyles>["classes"];
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
 
 const { usePageHeaderClosedHelpers } = createUseGlobalState(
