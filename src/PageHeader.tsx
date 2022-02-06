@@ -13,7 +13,7 @@ import CloseSharp from "@mui/icons-material/CloseSharp";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import { CollapsibleWrapper } from "./tools/CollapsibleWrapper";
 import type { CollapseParams } from "./tools/CollapsibleWrapper";
-import { useMergedClasses } from "tss-react";
+import { useMergedClasses } from "tss-react/compat";
 
 export type PageHeaderProps<IconId extends string> = {
     mainIcon?: IconId;
