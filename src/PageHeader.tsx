@@ -13,6 +13,7 @@ import CloseSharp from "@mui/icons-material/CloseSharp";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import { CollapsibleWrapper } from "./tools/CollapsibleWrapper";
 import type { CollapseParams } from "./tools/CollapsibleWrapper";
+import { useMergedClasses } from "tss-react";
 
 export type PageHeaderProps<IconId extends string> = {
     mainIcon?: IconId;
@@ -23,6 +24,7 @@ export type PageHeaderProps<IconId extends string> = {
     className?: string;
     titleCollapseParams?: CollapseParams;
     helpCollapseParams?: CollapseParams;
+    classes?: ReturnType<typeof useStyles>["classes"];
 };
 
 const { usePageHeaderClosedHelpers } = createUseGlobalState(
@@ -170,11 +172,13 @@ export function createPageHeader<IconId extends string>(params?: {
             };
         })();
 
-        const { classes, cx } = useStyles({
+        let { classes, cx } = useStyles({
             helperHeight,
             isTitleCollapsed,
             "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
         });
+
+        classes = useMergedClasses(classes, props.classes);
 
         return (
             <div className={cx(classes.root, className)}>
@@ -227,49 +231,47 @@ export function createPageHeader<IconId extends string>(params?: {
         );
     });
 
-    const useStyles = makeStyles<{
-        helperHeight: number;
-        isTitleCollapsed: boolean;
-        isHelpCollapsed: boolean;
-    }>({ "name": { PageHeader } })(
-        (theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
-            "root": {
-                "backgroundColor": "inherit",
-                "marginBottom":
-                    !isTitleCollapsed || !isHelpCollapsed
-                        ? theme.spacing(3)
-                        : 0,
-            },
-            "title": {
-                "display": "flex",
-                "alignItems": "center",
-            },
-            "titleIcon": {
-                "marginRight": theme.spacing(3),
-            },
-            "help": {
-                "display": "flex",
-                "backgroundColor": theme.colors.useCases.surfaces.surface2,
-                "alignItems": "start",
-                "padding": theme.spacing(3),
-                "borderRadius": helperHeight * 0.15,
-            },
-            "helpMiddle": {
-                "flex": 1,
-            },
-            "helpIcon": {
-                "marginRight": theme.spacing(3),
-                "color": theme.colors.useCases.typography.textFocus,
-            },
-            "closeButton": {
-                "padding": 0,
-                "marginLeft": theme.spacing(3),
-            },
-            "helpCollapsibleWrapper": {
-                "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
-            },
-        }),
-    );
-
     return { PageHeader };
 }
+
+const useStyles = makeStyles<{
+    helperHeight: number;
+    isTitleCollapsed: boolean;
+    isHelpCollapsed: boolean;
+}>({ "name": "PageHeader" })(
+    (theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
+        "root": {
+            "backgroundColor": "inherit",
+            "marginBottom":
+                !isTitleCollapsed || !isHelpCollapsed ? theme.spacing(3) : 0,
+        },
+        "title": {
+            "display": "flex",
+            "alignItems": "center",
+        },
+        "titleIcon": {
+            "marginRight": theme.spacing(3),
+        },
+        "help": {
+            "display": "flex",
+            "backgroundColor": theme.colors.useCases.surfaces.surface2,
+            "alignItems": "start",
+            "padding": theme.spacing(3),
+            "borderRadius": helperHeight * 0.15,
+        },
+        "helpMiddle": {
+            "flex": 1,
+        },
+        "helpIcon": {
+            "marginRight": theme.spacing(3),
+            "color": theme.colors.useCases.typography.textFocus,
+        },
+        "closeButton": {
+            "padding": 0,
+            "marginLeft": theme.spacing(3),
+        },
+        "helpCollapsibleWrapper": {
+            "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
+        },
+    }),
+);
