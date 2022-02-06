@@ -1,3 +1,7 @@
+### **0.26.1** (2022-02-06)  
+  
+- Fix previous build (not all classes are mandatory)    
+  
 ## **0.26.0** (2022-02-06)  
   
 - Implement classes forwarding in PageHeader  
