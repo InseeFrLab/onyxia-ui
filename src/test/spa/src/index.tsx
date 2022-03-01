@@ -25,8 +25,10 @@ const getViewPortConfig: ThemeProviderProps["getViewPortConfig"] =
 render(
 
     <ThemeProvider
-        getViewPortConfig={getViewPortConfig}
+        //getViewPortConfig={getViewPortConfig}
+    /*
         splashScreen={splashScreen}
+        */
     >
         <MyComponent />
     </ThemeProvider>,
