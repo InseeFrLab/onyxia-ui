@@ -1,3 +1,10 @@
+### **0.26.2** (2022-03-01)  
+  
+- Enabling to forward ref to LeftBar  
+- Update README.md  
+- Update onyxia-init.sh  
+- Create onyxia-init.sh    
+  
 ### **0.26.1** (2022-02-06)  
   
 - Fix previous build (not all classes are mandatory)    
