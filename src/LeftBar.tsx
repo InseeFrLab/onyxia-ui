@@ -1,4 +1,4 @@
-import { useMemo, useState, memo } from "react";
+import { useMemo, useState, forwardRef, memo } from "react";
 import type { FC } from "react";
 import { makeStyles, useStyles as useTheme } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
@@ -11,6 +11,8 @@ import { createIcon } from "./Icon";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useDomRect } from "powerhooks/useDomRect";
 import { symToStr } from "tsafe/symToStr";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 
 export type Item<IconId extends string = string> = {
     iconId: IconId;
@@ -53,7 +55,7 @@ export function createLeftBar<IconId extends string>(params?: {
     const iconSize = "large";
 
     const LeftBar = memo(
-        <ItemId extends string>(props: LeftBarProps<IconId, ItemId>) => {
+        forwardRef<any, LeftBarProps<IconId, string>>((props, ref) => {
             const { theme } = useTheme();
 
             const {
@@ -62,7 +64,15 @@ export function createLeftBar<IconId extends string>(params?: {
                 currentItemId,
                 items,
                 reduceText = "reduce",
+                children,
+                ...rest
             } = props;
+
+            assert(!children);
+
+            //For the forwarding, rest should be empty (typewise),
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            assert<Equals<typeof rest, {}>>();
 
             const { isCollapsed, setIsCollapsed } = useIsCollapsed();
 
@@ -80,7 +90,7 @@ export function createLeftBar<IconId extends string>(params?: {
             );
 
             const {
-                ref,
+                ref: wrapperRef,
                 domRect: { width: wrapperWidth, height: wrapperHeight },
             } = useDomRect();
 
@@ -103,9 +113,9 @@ export function createLeftBar<IconId extends string>(params?: {
             });
 
             return (
-                <div className={cx(classes.root, className)}>
+                <div ref={ref} className={cx(classes.root, className)}>
                     <nav className={classes.nav}>
-                        <div ref={ref} className={classes.wrapper}>
+                        <div ref={wrapperRef} className={classes.wrapper}>
                             <CustomButton
                                 key={"toggleIsCollapsed"}
                                 isCollapsed={isCollapsed}
@@ -123,7 +133,6 @@ export function createLeftBar<IconId extends string>(params?: {
                                     isCollapsed={isCollapsed}
                                     collapsedWidth={collapsedWidth}
                                     isCurrent={itemId === currentItemId}
-                                    isButtonForTogglingIsCollapsed={false}
                                     {...items[itemId]}
                                 />
                             ))}
@@ -131,7 +140,7 @@ export function createLeftBar<IconId extends string>(params?: {
                     </nav>
                 </div>
             );
-        },
+        }),
     );
 
     const useStyles = makeStyles<{
