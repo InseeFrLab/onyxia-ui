@@ -113,7 +113,11 @@ export function createLeftBar<IconId extends string>(params?: {
             });
 
             return (
-                <div ref={ref} className={cx(classes.root, className)}>
+                <div
+                    ref={ref}
+                    {...rest}
+                    className={cx(classes.root, className)}
+                >
                     <nav className={classes.nav}>
                         <div ref={wrapperRef} className={classes.wrapper}>
                             <CustomButton

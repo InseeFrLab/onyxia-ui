@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { forwardRef, memo } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
 
 export type CardProps = {
     className?: string;
@@ -10,12 +12,23 @@ export type CardProps = {
 
 export const Card = memo(
     forwardRef<any, CardProps>((props, ref) => {
-        const { className, aboveDivider, children } = props;
+        const {
+            className,
+            aboveDivider,
+            children,
+
+            //For the forwarding, rest should be empty (typewise)
+            ...rest
+        } = props;
+
+        //For the forwarding, rest should be empty (typewise),
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        assert<Equals<typeof rest, {}>>();
 
         const { classes, cx } = useStyles();
 
         return (
-            <div ref={ref} className={cx(classes.root, className)}>
+            <div ref={ref} className={cx(classes.root, className)} {...rest}>
                 {aboveDivider !== undefined && (
                     <div className={classes.aboveDivider}>{aboveDivider}</div>
                 )}
