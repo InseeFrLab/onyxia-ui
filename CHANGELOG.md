@@ -1,3 +1,7 @@
+## **0.27.0** (2022-03-03)  
+  
+- Enable providing ref to search bar    
+  
 ### **0.26.3** (2022-03-03)  
   
 - Fix forwardRef in Card and LeftBar  
