@@ -53,7 +53,7 @@
     "peerDependencies": {
         "@mui/material": "^5.0.3",
         "@types/react": "^16.0.0 || ^17.0.0",
-        "powerhooks": "^0.9.4",
+        "powerhooks": "^0.12.0",
         "react": "^16.8.0 || ^17.0.0",
         "tss-react": "^3.4.1"
     },
@@ -91,7 +91,7 @@
         "husky": "^4.3.8",
         "lint-staged": "^11.0.0",
         "next": "11.0.1",
-        "powerhooks": "^0.11.2",
+        "powerhooks": "^0.12.0",
         "prettier": "^2.3.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",

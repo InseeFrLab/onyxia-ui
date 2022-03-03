@@ -1,4 +1,4 @@
-import { useRef, useState, memo } from "react";
+import { useRef, useState, forwardRef, memo } from "react";
 import type { ChangeEventHandler } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -9,6 +9,9 @@ import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
+import { useMergeRefs } from "powerhooks/useMergeRefs";
 
 const { Icon } = createIcon({
     "search": SearchIcon,
@@ -27,128 +30,144 @@ export type SearchBarProps = {
     placeholder?: string;
 };
 
-export const SearchBar = memo((props: SearchBarProps) => {
-    const {
-        className,
-        onSearchChange,
-        onKeyPress,
-        search,
-        placeholder = "Search",
-        evtAction,
-    } = props;
+export const SearchBar = memo(
+    forwardRef<any, SearchBarProps>((props, forwardedRef) => {
+        const {
+            className,
+            onSearchChange,
+            onKeyPress,
+            search,
+            placeholder = "Search",
+            evtAction,
+            children,
+            ...rest
+        } = props;
 
-    const [isActive, setIsActive] = useState(search !== "");
+        assert(!children);
 
-    const { classes, cx } = useStyles({ isActive });
+        //For the forwarding, rest should be empty (typewise),
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        assert<Equals<typeof rest, {}>>();
 
-    const onClearButtonClick = useConstCallback(() => {
-        onSearchChange("");
-        inputRef.current?.focus();
-    });
-    const onRootClick = useConstCallback(() => setIsActive(true));
-    const onIconClick = useConstCallback(() => {
-        const { current: inputEl } = inputRef;
-        if (inputEl === null) return;
-        inputEl.focus();
-        inputEl.setSelectionRange(0, search.length);
-    });
-    const onInputChange = useConstCallback<
-        ChangeEventHandler<HTMLInputElement>
-    >(event => {
-        const { value } = event.target;
-        onSearchChange(value);
-    });
+        const [isActive, setIsActive] = useState(search !== "");
 
-    const inputRef = useRef<HTMLInputElement>(null);
+        const { classes, cx } = useStyles({ isActive });
 
-    const onInputKeyDown = useConstCallback((event: { key: string }) => {
-        const key = (() => {
-            switch (event.key) {
-                case "Escape":
-                case "Enter":
-                    return event.key;
-                default:
-                    return "irrelevant";
-            }
-        })();
+        const onClearButtonClick = useConstCallback(() => {
+            onSearchChange("");
+            inputRef.current?.focus();
+        });
+        const onRootClick = useConstCallback(() => setIsActive(true));
+        const onIconClick = useConstCallback(() => {
+            const { current: inputEl } = inputRef;
+            if (inputEl === null) return;
+            inputEl.focus();
+            inputEl.setSelectionRange(0, search.length);
+        });
+        const onInputChange = useConstCallback<
+            ChangeEventHandler<HTMLInputElement>
+        >(event => {
+            const { value } = event.target;
+            onSearchChange(value);
+        });
 
-        if (key === "irrelevant") {
-            return;
-        }
+        const inputRef = useRef<HTMLInputElement>(null);
 
-        onKeyPress?.(key);
-
-        switch (key) {
-            case "Enter":
-                if (search === "") {
-                    setIsActive(false);
+        const onInputKeyDown = useConstCallback((event: { key: string }) => {
+            const key = (() => {
+                switch (event.key) {
+                    case "Escape":
+                    case "Enter":
+                        return event.key;
+                    default:
+                        return "irrelevant";
                 }
-                break;
-            case "Escape":
-                onSearchChange("");
+            })();
+
+            if (key === "irrelevant") {
+                return;
+            }
+
+            onKeyPress?.(key);
+
+            switch (key) {
+                case "Enter":
+                    if (search === "") {
+                        setIsActive(false);
+                    }
+                    break;
+                case "Escape":
+                    onSearchChange("");
+                    setIsActive(false);
+                    break;
+            }
+
+            inputRef.current?.blur();
+        });
+
+        const { ref: rootRefClickAway } = useClickAway({
+            "onClickAway": () => {
+                if (search !== "") return;
                 setIsActive(false);
-                break;
-        }
+            },
+        });
 
-        inputRef.current?.blur();
-    });
+        const rootRef = useMergeRefs([rootRefClickAway, forwardedRef]);
 
-    const { rootRef } = useClickAway(() => {
-        if (search !== "") return;
-        setIsActive(false);
-    });
+        useEvt(
+            ctx =>
+                evtAction?.attach(
+                    action => action === "CLEAR SEARCH",
+                    ctx,
+                    () => onInputKeyDown({ "key": "Escape" }),
+                ),
+            [evtAction ?? Object],
+        );
 
-    useEvt(
-        ctx =>
-            evtAction?.attach(
-                action => action === "CLEAR SEARCH",
-                ctx,
-                () => onInputKeyDown({ "key": "Escape" }),
-            ),
-        [evtAction ?? Object],
-    );
-
-    return (
-        <div
-            ref={rootRef}
-            className={cx(classes.root, className)}
-            onClick={onRootClick}
-        >
-            <div>
-                <Icon
-                    iconId="search"
-                    onClick={onIconClick}
-                    className={classes.icon}
-                />
-                {isActive ? (
-                    <>
-                        <input
-                            ref={inputRef}
-                            autoFocus={true}
-                            className={classes.input}
-                            type="text"
-                            value={search}
-                            onChange={onInputChange}
-                            onKeyDown={onInputKeyDown}
-                            spellCheck={false}
-                            placeholder={placeholder}
-                        />
-                        {
-                            <IconButton
-                                iconId="cancel"
-                                size="small"
-                                disabled={search === ""}
-                                onClick={onClearButtonClick}
+        return (
+            <div
+                ref={rootRef}
+                className={cx(classes.root, className)}
+                onClick={onRootClick}
+            >
+                <div>
+                    <Icon
+                        iconId="search"
+                        onClick={onIconClick}
+                        className={classes.icon}
+                    />
+                    {isActive ? (
+                        <>
+                            <input
+                                ref={inputRef}
+                                autoFocus={true}
+                                className={classes.input}
+                                type="text"
+                                value={search}
+                                onChange={onInputChange}
+                                onKeyDown={onInputKeyDown}
+                                spellCheck={false}
+                                placeholder={placeholder}
                             />
-                        }
-                    </>
-                ) : (
-                    <span className={classes.searchLabel}>{placeholder}</span>
-                )}
+                            {
+                                <IconButton
+                                    iconId="cancel"
+                                    size="small"
+                                    disabled={search === ""}
+                                    onClick={onClearButtonClick}
+                                />
+                            }
+                        </>
+                    ) : (
+                        <span className={classes.searchLabel}>
+                            {placeholder}
+                        </span>
+                    )}
+                </div>
             </div>
-        </div>
-    );
-});
+        );
+    }),
+);
 
 const useStyles = makeStyles<{ isActive: boolean }>({
     "name": { SearchBar },

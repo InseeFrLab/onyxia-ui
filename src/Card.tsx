@@ -16,7 +16,6 @@ export const Card = memo(
             className,
             aboveDivider,
             children,
-
             //For the forwarding, rest should be empty (typewise)
             ...rest
         } = props;
