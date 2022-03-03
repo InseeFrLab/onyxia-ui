@@ -1,3 +1,10 @@
+### **0.26.3** (2022-03-03)  
+  
+- Fix forwardRef in Card and LeftBar  
+- Update onyxia-init.sh  
+- Update onyxia-init.sh  
+- Update onyxia-init.sh    
+  
 ### **0.26.2** (2022-03-01)  
   
 - Enabling to forward ref to LeftBar  
