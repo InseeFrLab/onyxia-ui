@@ -265,6 +265,10 @@ export function createButton<IconId extends string = never>(params?: {
                     "&.MuiButton-text": {
                         "color": textColor,
                     },
+                    //NOTE: If position relative it goes over everything
+                    //and we only need position relative for the click effect
+                    //so we enables it only on hover.
+                    "position": "unset",
                     "&:hover": {
                         "backgroundColor": hoverBackgroundColor,
                         "& .MuiSvgIcon-root": {
@@ -273,6 +277,7 @@ export function createButton<IconId extends string = never>(params?: {
                         "&.MuiButton-text": {
                             "color": hoverTextColor,
                         },
+                        "position": "relative",
                     },
                 };
             })(),
