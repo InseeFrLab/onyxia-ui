@@ -279,7 +279,7 @@ export function createButton<IconId extends string = never>(params?: {
                         },
                         "position": "relative",
                     },
-                };
+                } as const;
             })(),
             "icon": {
                 "color": textColor,
