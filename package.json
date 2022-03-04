@@ -21,6 +21,9 @@
         "start_spa": "yarn yarn_link && cd src/test/spa && yarn start",
         "start_ssr": "yarn yarn_link && cd src/test/ssr && yarn dev"
     },
+    "resolutions": {
+        "csstype": "3.0.10"
+    },
     "lint-staged": {
         "*.{ts,tsx}": [
             "eslint --fix"
