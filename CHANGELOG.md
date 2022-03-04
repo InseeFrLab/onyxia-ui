@@ -1,3 +1,7 @@
+### **0.27.1** (2022-03-04)  
+  
+- Update dependency, pin ccstypes    
+  
 ## **0.27.0** (2022-03-03)  
   
 - Enable providing ref to search bar    
