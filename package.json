@@ -57,8 +57,7 @@
         "@mui/material": "^5.0.3",
         "@types/react": "^16.0.0 || ^17.0.0",
         "powerhooks": "^0.13.0",
-        "react": "^16.8.0 || ^17.0.0",
-        "tss-react": "^3.4.1"
+        "react": "^16.8.0 || ^17.0.0"
     },
     "dependencies": {
         "@mui/icons-material": "^5.0.3",
@@ -67,7 +66,8 @@
         "material-design-icons": "^3.0.1",
         "memoizee": "^0.4.15",
         "minimal-polyfills": "^2.2.1",
-        "tsafe": "^0.8.1"
+        "tsafe": "^0.8.1",
+        "tss-react": "^3.5.1"
     },
     "devDependencies": {
         "@emotion/react": "^11.4.1",
@@ -100,7 +100,6 @@
         "react-dom": "^17.0.2",
         "react-scripts": "4.0.3",
         "ts-node": "^10.3.0",
-        "tss-react": "^3.4.1",
         "typescript": "4.2.2"
     }
 }
