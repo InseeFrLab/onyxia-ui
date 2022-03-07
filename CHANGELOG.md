@@ -1,3 +1,7 @@
+## **0.30.0** (2022-03-07)  
+  
+- Remove powerhooks as a peer dependency    
+  
 ### **0.29.1** (2022-03-07)  
   
 - update tss-react    
