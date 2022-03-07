@@ -79,7 +79,7 @@ UI built with this toolkit.
 # Quick start
 
 ```bash
-yarn add onyxia-ui @mui/material @emotion/react @emotion/styled powerhooks
+yarn add onyxia-ui @mui/material @emotion/react @emotion/styled
 
 # If you plan on using icons from: https://mui.com/components/material-icons/
 yarn add @mui/icons-material
