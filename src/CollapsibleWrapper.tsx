@@ -1,10 +1,11 @@
 import { useEffect, useState, memo } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
-import { useCssAndCx } from "tss-react/compat";
 import { Evt } from "evt";
 import { useElementEvt } from "evt/hooks";
 import { getScrollableParent } from "powerhooks/getScrollableParent";
+import { makeStyles } from "./lib/ThemeProvider";
+import { useMergedClasses } from "tss-react/compat";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -13,6 +14,7 @@ export namespace CollapseParams {
     export type Common = {
         /** Default 250ms */
         transitionDuration?: number;
+        classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     };
 
     export type Controlled = Common & {
@@ -39,8 +41,6 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         ref: childrenWrapperRef,
         domRect: { height: childrenWrapperHeight },
     } = useDomRect();
-
-    const { css, cx } = useCssAndCx();
 
     const [isCollapsedIfDependsOfScroll, setIsCollapsedIfDependsOfScroll] =
         useState(false);
@@ -83,35 +83,50 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         rest.behavior !== "collapses on scroll"
             ? [null, null]
             : [rest.scrollTopThreshold, childrenWrapperHeight],
-        //[rest.behavior !== "collapses on scroll" ? null : rest.scrollTopThreshold],
     );
 
-    const isCollapsed = (() => {
-        switch (rest.behavior) {
-            case "collapses on scroll":
-                return isCollapsedIfDependsOfScroll;
-            case "controlled":
-                return rest.isCollapsed;
-        }
-    })();
+    let { classes, cx } = useStyles({
+        "isCollapsed": (() => {
+            switch (rest.behavior) {
+                case "collapses on scroll":
+                    return isCollapsedIfDependsOfScroll;
+                case "controlled":
+                    return rest.isCollapsed;
+            }
+        })(),
+        childrenWrapperHeight,
+        transitionDuration,
+    });
+
+    classes = useMergedClasses(classes, props.classes);
 
     return (
-        <div
-            className={cx(
-                css({
-                    "height": isCollapsed
-                        ? 0
-                        : childrenWrapperHeight || undefined,
-                    "opacity": isCollapsed ? 0 : 1,
-                    "transition": ["height", "padding", "margin", "opacity"]
-                        .map(prop => `${prop} ${transitionDuration}ms`)
-                        .join(", "),
-                    "overflow": "hidden",
-                }),
-                className,
-            )}
-        >
-            <div ref={childrenWrapperRef}>{children}</div>
+        <div className={cx(classes.root, className)}>
+            <div className={classes.inner} ref={childrenWrapperRef}>
+                {children}
+                <div className={classes.bottomDivForSpacing} />
+            </div>
         </div>
     );
 });
+
+const useStyles = makeStyles<{
+    isCollapsed: boolean;
+    childrenWrapperHeight: number;
+    transitionDuration: number;
+}>({ "name": { CollapsibleWrapper } })(
+    (_theme, { childrenWrapperHeight, isCollapsed, transitionDuration }) => ({
+        "root": {
+            "height": isCollapsed ? 0 : childrenWrapperHeight || undefined,
+            "opacity": isCollapsed ? 0 : 1,
+            "transition": ["height", "padding", "margin", "opacity"]
+                .map(prop => `${prop} ${transitionDuration}ms`)
+                .join(", "),
+            "overflow": "hidden",
+        },
+        "inner": {},
+        "bottomDivForSpacing": {
+            //height: 30
+        },
+    }),
+);
