@@ -1,3 +1,7 @@
+## **0.29.0** (2022-03-06)  
+  
+- Remove tss-react from peerDependencies    
+  
 ## **0.28.0** (2022-03-04)  
   
 - Update CollapsibleWrapper and PageHeader to work with sticky  
