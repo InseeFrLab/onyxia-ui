@@ -1,3 +1,7 @@
+### **0.30.1** (2022-03-07)  
+  
+- Update PageHeader and CollapsibleWrapper    
+  
 ## **0.30.0** (2022-03-07)  
   
 - Remove powerhooks as a peer dependency    
