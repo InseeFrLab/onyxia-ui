@@ -12,6 +12,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { useMergeRefs } from "powerhooks/useMergeRefs";
+import { useMergedClasses } from "tss-react/compat";
 
 const { Icon } = createIcon({
     "search": SearchIcon,
@@ -23,11 +24,12 @@ const { IconButton } = createIconButton({ Icon });
 export type SearchBarProps = {
     className?: string;
     search: string;
-    onSearchChange(search: string): void;
-    onKeyPress?(key: "Enter" | "Escape"): void;
+    onSearchChange: (search: string) => void;
+    onKeyPress?: (key: "Enter" | "Escape") => void;
     evtAction?: NonPostableEvt<"CLEAR SEARCH">;
     /** Default "Search" */
     placeholder?: string;
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
 
 export const SearchBar = memo(
@@ -40,6 +42,7 @@ export const SearchBar = memo(
             placeholder = "Search",
             evtAction,
             children,
+            classes: props_classes,
             ...rest
         } = props;
 
@@ -51,13 +54,14 @@ export const SearchBar = memo(
 
         const [isActive, setIsActive] = useState(search !== "");
 
-        const { classes, cx } = useStyles({ isActive });
-
-        const onClearButtonClick = useConstCallback(() => {
-            onSearchChange("");
-            inputRef.current?.focus();
+        const onClearButtonClick = useConstCallback(() =>
+            onInputKeyDown({ "key": "Escape" }),
+        );
+        const onRootClick = useConstCallback(() => {
+            if (!isActive) {
+                setIsActive(true);
+            }
         });
-        const onRootClick = useConstCallback(() => setIsActive(true));
         const onIconClick = useConstCallback(() => {
             const { current: inputEl } = inputRef;
             if (inputEl === null) return;
@@ -123,6 +127,10 @@ export const SearchBar = memo(
                 ),
             [evtAction ?? Object],
         );
+
+        let { classes, cx } = useStyles({ isActive });
+
+        classes = useMergedClasses(classes, props_classes);
 
         return (
             <div
