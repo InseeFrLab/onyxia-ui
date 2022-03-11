@@ -1,3 +1,7 @@
+### **0.30.3** (2022-03-11)  
+  
+- Fix button active state    
+  
 ### **0.30.2** (2022-03-08)  
   
 - Click on search bar cancel button put the search bar in default state    
