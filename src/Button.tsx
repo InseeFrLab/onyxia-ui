@@ -13,8 +13,6 @@ import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
 
-console.log("yesss!");
-
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Regular<IconId>
     | ButtonProps.Submit<IconId>;

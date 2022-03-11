@@ -6,8 +6,10 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 export type CheckboxProps = MuiCheckboxProps;
 
 export const Checkbox = memo((props: CheckboxProps) => {
+    const { defaultChecked: props_defaultChecked, ...rest } = props;
+
     const defaultChecked =
-        props.checked === undefined ? false : props.defaultChecked ?? false;
+        rest.checked === undefined ? false : props_defaultChecked ?? false;
 
     const [isChecked, setIsChecked] = useState(defaultChecked);
 
@@ -17,16 +19,16 @@ export const Checkbox = memo((props: CheckboxProps) => {
         (event, checked) => {
             setIsChecked(checked);
 
-            props.onChange?.(event, checked);
+            rest.onChange?.(event, checked);
         },
     );
 
     return (
         <MuiCheckbox
-            {...props}
-            {...(props.checked !== undefined
+            {...rest}
+            {...(rest.checked !== undefined
                 ? {
-                      "value": props.checked ? "on" : "off",
+                      "value": rest.checked ? "on" : "off",
                   }
                 : {
                       "checked": isChecked,
