@@ -277,6 +277,8 @@ export function createButton<IconId extends string = never>(params?: {
                         "&.MuiButton-text": {
                             "color": hoverTextColor,
                         },
+                    },
+                    "&:active": {
                         "position": "relative",
                     },
                 } as const;
