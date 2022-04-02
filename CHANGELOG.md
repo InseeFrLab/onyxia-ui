@@ -1,3 +1,8 @@
+## **0.31.0** (2022-04-02)  
+  
+- Fix build  
+- Text support fixed size (for stable render when value changes)    
+  
 ### **0.30.4** (2022-03-11)  
   
 - Fix checkbox  
