@@ -26,6 +26,10 @@ export function createText<
         children: NonNullable<React.ReactNode>;
         htmlComponent?: TypographyDesc.HtmlComponent;
         componentProps?: JSX.IntrinsicElements[TypographyDesc.HtmlComponent];
+
+        fixedSize_enabled: boolean;
+        fixedSize_content?: string;
+        fixedSize_fontWeight?: number;
     };
 
     const Text = memo(
@@ -33,10 +37,13 @@ export function createText<
             const {
                 className,
                 children,
-                typo: variantName,
+                typo,
                 color = "primary",
                 htmlComponent,
                 componentProps = {},
+                fixedSize_enabled,
+                fixedSize_content,
+                fixedSize_fontWeight,
                 //For the forwarding, rest should be empty (typewise)
                 ...rest
             } = props;
@@ -47,11 +54,20 @@ export function createText<
 
             const theme = useTheme();
 
-            const { classes, cx } = useStyles({ variantName, color });
+            const { classes, cx } = useStyles({
+                typo,
+                color,
+                fixedSize_enabled,
+                fixedSize_content,
+                fixedSize_fontWeight,
+                "children":
+                    typeof children === "string"
+                        ? (children as string)
+                        : undefined,
+            });
 
             return createElement(
-                htmlComponent ??
-                    theme.typography.variants[variantName].htmlComponent,
+                htmlComponent ?? theme.typography.variants[typo].htmlComponent,
                 {
                     "className": cx(classes.root, className),
                     ref,
@@ -63,31 +79,74 @@ export function createText<
         }),
     );
 
-    const useStyles = makeStyles<{
-        variantName: TextProps["typo"];
-        color: NonNullable<TextProps["color"]>;
-    }>({ "name": "Text" })((theme, { variantName, color }) => ({
-        "root": {
-            ...theme.typography.variants[variantName].style,
-            "color":
-                theme.colors.useCases.typography[
-                    (() => {
-                        switch (color) {
-                            case "primary":
-                                return "textPrimary";
-                            case "secondary":
-                                return "textSecondary";
-                            case "disabled":
-                                return "textDisabled";
-                            case "focus":
-                                return "textFocus";
-                        }
-                    })()
-                ],
-            "padding": 0,
-            "margin": 0,
-        },
-    }));
+    const useStyles = makeStyles<
+        {
+            color: NonNullable<TextProps["color"]>;
+            children: string | undefined;
+        } & Pick<
+            TextProps,
+            | "typo"
+            | "fixedSize_enabled"
+            | "fixedSize_content"
+            | "fixedSize_fontWeight"
+        >
+    >({ "name": "Text" })(
+        (
+            theme,
+            {
+                typo,
+                color,
+                fixedSize_enabled,
+                fixedSize_fontWeight,
+                fixedSize_content,
+                children,
+            },
+        ) => ({
+            "root": {
+                ...theme.typography.variants[typo].style,
+                "color":
+                    theme.colors.useCases.typography[
+                        (() => {
+                            switch (color) {
+                                case "primary":
+                                    return "textPrimary";
+                                case "secondary":
+                                    return "textSecondary";
+                                case "disabled":
+                                    return "textDisabled";
+                                case "focus":
+                                    return "textFocus";
+                            }
+                        })()
+                    ],
+                "padding": 0,
+                "margin": 0,
+                ...(!fixedSize_enabled
+                    ? {}
+                    : {
+                          "display": "inline-flex",
+                          "flexDirection": "column",
+                          "alignItems": "center",
+                          "justifyContent": "space-between",
+                          "&::after": {
+                              "content": fixedSize_content
+                                  ? `"${fixedSize_content}"`
+                                  : (assert(children !== undefined),
+                                    `"${children}_"`),
+                              "height": 0,
+                              "visibility": "hidden",
+                              "overflow": "hidden",
+                              "userSelect": "none",
+                              "pointerEvents": "none",
+                              "fontWeight": fixedSize_fontWeight,
+                              "@media speech": {
+                                  "display": "none",
+                              },
+                          },
+                      }),
+            },
+        }),
+    );
 
     return { Text };
 }

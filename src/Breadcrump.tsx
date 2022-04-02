@@ -173,7 +173,7 @@ const { Section } = (() => {
             [partialPath, isLast],
         );
 
-        const { classes } = useStyles({ isClickable, isFocused, isLast, text });
+        const { classes } = useStyles({ isClickable, isFocused, isLast });
 
         return (
             <Text
@@ -182,6 +182,8 @@ const { Section } = (() => {
                 componentProps={{
                     "onClick": isClickable ? onClick : undefined,
                 }}
+                fixedSize_enabled={true}
+                fixedSize_fontWeight={hoverFontWeight}
             >
                 {text}
             </Text>
@@ -189,10 +191,10 @@ const { Section } = (() => {
     }
 
     const useStyles = makeStyles<
-        Pick<Props, "isClickable" | "isFocused" | "isLast"> & { text: string }
+        Pick<Props, "isClickable" | "isFocused" | "isLast">
     >({
         "name": `${symToStr({ Breadcrump })}${symToStr({ Section })}`,
-    })((theme, { isClickable, isFocused, isLast, text }) => ({
+    })((theme, { isClickable, isFocused, isLast }) => ({
         "root": {
             ...(!isClickable
                 ? {}
@@ -206,22 +208,6 @@ const { Section } = (() => {
                           "color": theme.colors.useCases.typography.textFocus,
                       },
                   }),
-            "display": "inline-flex",
-            "flexDirection": "column",
-            "alignItems": "center",
-            "justifyContent": "space-between",
-            "&::after": {
-                "content": `"${text}_"`,
-                "height": 0,
-                "visibility": "hidden",
-                "overflow": "hidden",
-                "userSelect": "none",
-                "pointerEvents": "none",
-                "fontWeight": hoverFontWeight,
-                "@media speech": {
-                    "display": "none",
-                },
-            },
             "color":
                 theme.colors.useCases.typography[
                     isFocused
