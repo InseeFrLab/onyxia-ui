@@ -27,7 +27,7 @@ export function createText<
         htmlComponent?: TypographyDesc.HtmlComponent;
         componentProps?: JSX.IntrinsicElements[TypographyDesc.HtmlComponent];
 
-        fixedSize_enabled: boolean;
+        fixedSize_enabled?: boolean;
         fixedSize_content?: string;
         fixedSize_fontWeight?: number;
     };
@@ -41,7 +41,7 @@ export function createText<
                 color = "primary",
                 htmlComponent,
                 componentProps = {},
-                fixedSize_enabled,
+                fixedSize_enabled = false,
                 fixedSize_content,
                 fixedSize_fontWeight,
                 //For the forwarding, rest should be empty (typewise)
