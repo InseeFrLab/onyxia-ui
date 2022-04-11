@@ -1,3 +1,7 @@
+### **0.31.3** (2022-04-11)  
+  
+- Fix Spashscren bug with minimum duration    
+  
 ### **0.31.2** (2022-04-11)  
   
 - Remove powerhooks from dev dependencies    
