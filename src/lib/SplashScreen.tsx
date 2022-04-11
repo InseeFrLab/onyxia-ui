@@ -18,6 +18,7 @@ import { Evt } from "evt";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import type { ReactComponent } from "../tools/ReactComponent";
+import * as runExclusive from "run-exclusive";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -54,22 +55,32 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
             return { getDoUseDelay };
         })();
 
-        async function globalHideSplashScreen() {
-            evtDisplayState.state.count = Math.max(
-                evtDisplayState.state.count - 1,
-                0,
-            );
-
+        const next = runExclusive.build(async () => {
             if (getDoUseDelay()) {
                 await new Promise(resolve =>
                     setTimeout(resolve, minimumDisplayDuration),
                 );
             }
 
+            console.log("tick");
+
             evtDisplayState.state = {
                 ...evtDisplayState.state,
                 "prevTime": Date.now(),
             };
+        });
+
+        async function globalHideSplashScreen() {
+            evtDisplayState.state.count = Math.max(
+                evtDisplayState.state.count - 1,
+                0,
+            );
+
+            if (runExclusive.isRunning(next)) {
+                return;
+            }
+
+            next();
         }
 
         return { globalHideSplashScreen };

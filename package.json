@@ -68,7 +68,8 @@
         "minimal-polyfills": "^2.2.1",
         "tsafe": "^0.8.1",
         "tss-react": "^3.5.2",
-        "powerhooks": "^0.16.1"
+        "powerhooks": "^0.16.1",
+        "run-exclusive": "^2.2.14"
     },
     "devDependencies": {
         "@emotion/react": "^11.4.1",
