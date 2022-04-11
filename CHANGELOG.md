@@ -1,3 +1,8 @@
+### **0.31.1** (2022-04-11)  
+  
+- Update powerhooks  
+- Update powerhooks and repercute change on CollapsibleWrapper    
+  
 ## **0.31.0** (2022-04-02)  
   
 - Fix build  
