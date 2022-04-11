@@ -1,3 +1,7 @@
+### **0.31.2** (2022-04-11)  
+  
+- Remove powerhooks from dev dependencies    
+  
 ### **0.31.1** (2022-04-11)  
   
 - Update powerhooks  
