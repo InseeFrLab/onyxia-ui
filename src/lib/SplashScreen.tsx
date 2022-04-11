@@ -62,8 +62,6 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
                 );
             }
 
-            console.log("tick");
-
             evtDisplayState.state = {
                 ...evtDisplayState.state,
                 "prevTime": Date.now(),
