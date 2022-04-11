@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from "react";
+import { useState, memo } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
 import { Evt } from "evt";
@@ -25,7 +25,6 @@ export namespace CollapseParams {
     export type CollapsesOnScroll = Common & {
         behavior: "collapses on scroll";
         scrollTopThreshold: number;
-        onIsCollapsedValueChange?: (isCollapsed: boolean) => void;
     };
 }
 
@@ -45,36 +44,33 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
     const [isCollapsedIfDependsOfScroll, setIsCollapsedIfDependsOfScroll] =
         useState(false);
 
-    useEffect(() => {
-        if (rest.behavior !== "collapses on scroll") {
-            return;
-        }
-
-        rest.onIsCollapsedValueChange?.(isCollapsedIfDependsOfScroll);
-    }, [isCollapsedIfDependsOfScroll]);
-
     useElementEvt<HTMLDivElement>(
         ({ ctx, element: childrenWrapperElement, registerSideEffect }) => {
             if (rest.behavior !== "collapses on scroll") {
                 return;
             }
 
+            if (childrenWrapperHeight === 0) {
+                return;
+            }
+
             const { scrollTopThreshold } = rest;
 
-            const scrollElement = getScrollableParent(childrenWrapperElement);
+            const scrollElement = getScrollableParent({
+                "element": childrenWrapperElement,
+                "doReturnElementIfScrollable": false,
+            });
 
             Evt.from(ctx, scrollElement, "scroll")
-                .pipe(event => [(event as any).target.scrollTop as number])
-                .toStateful(scrollElement.scrollTop)
+                .toStateful()
+                .pipe(() => [scrollElement.scrollTop])
                 .attach(scrollTop =>
                     registerSideEffect(() =>
-                        setIsCollapsedIfDependsOfScroll(
-                            //scrollTop > scrollTopThreshold,
-                            isCollapsedIfDependsOfScroll =>
-                                isCollapsedIfDependsOfScroll
-                                    ? scrollTop + childrenWrapperHeight * 1.3 >
-                                      scrollTopThreshold
-                                    : scrollTop > scrollTopThreshold,
+                        setIsCollapsedIfDependsOfScroll(isCollapsed =>
+                            isCollapsed
+                                ? scrollTop + childrenWrapperHeight * 1.3 >
+                                  scrollTopThreshold
+                                : scrollTop > scrollTopThreshold,
                         ),
                     ),
                 );
