@@ -11899,10 +11899,10 @@ postcss@^8.1.0:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-powerhooks@^0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.15.0.tgz#533bf0a4e70ef15f9e2975b46fcb86e1219825fe"
-  integrity sha512-jzqDoSIh2p3jZ7L5UXtcnqXonpm5OhRKCRr15kkHYsIWgSEjxypUYIoph9sGa99/7Nga7MbAE+eirSKzWAn+Og==
+powerhooks@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.16.0.tgz#d9180c97b3f09aae4ab93cca3a2b29f01996d9d7"
+  integrity sha512-cge7cKPChP+Ue36N4MGKwxZqkIQHJKorV/lQiady3bu2IU7I/OSZ9cF1q8VHSxNaCeFHHvSwFlOqzqrFL0Rvpw==
   dependencies:
     evt "2.0.0-beta.39"
     memoizee "^0.4.15"
