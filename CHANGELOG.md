@@ -1,3 +1,8 @@
+### **0.32.1** (2022-04-18)  
+  
+- update powerhooks  
+- Prevent body from being scrollable when splashscreen is visible    
+  
 ## **0.32.0** (2022-04-18)  
   
 - Remove test SPA app  
