@@ -1,3 +1,7 @@
+### **0.31.4** (2022-04-11)  
+  
+- Remove missing log    
+  
 ### **0.31.3** (2022-04-11)  
   
 - Fix Spashscren bug with minimum duration    
