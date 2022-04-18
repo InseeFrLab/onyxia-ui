@@ -37,7 +37,32 @@
         /* eslint-enable object-shorthand */
       })
     );
-  };</script><style>#root[hidden],
+  };</script><script>//https://github.com/storybookjs/storybook/issues/6998#issuecomment-521914913
+	let change = (function (oldCons) {
+		function shouldIgnore(text) {
+			let all = text.join(' ')
+			return (
+				all.includes('":first-child" is potentially unsafe') ||
+				all.includes('Please update the following components: Draggable')
+			)
+		}
+		window.console.log = (...text) => {
+			if (shouldIgnore) return
+			return oldCons.log(...text)
+		}
+		window.console.info = (...text) => {
+			if (shouldIgnore) return
+			return oldCons.info(...text)
+		}
+		window.console.warn = (...text) => {
+			if (shouldIgnore) return
+			return oldCons.warn(...text)
+		}
+		window.console.error = (...text) => {
+			if (shouldIgnore) return
+			return oldCons.error(...text)
+		}
+	})(window.console)</script><style>#root[hidden],
       #docs-root[hidden] {
         display: none !important;
       }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['CONFIG_TYPE'] = "PRODUCTION";
