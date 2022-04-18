@@ -1,3 +1,13 @@
+## **0.32.0** (2022-04-18)  
+  
+- Remove test SPA app  
+- Make the test app runnable on windows  
+- Update tss-react  
+- Enable react 18  
+- Make the spashscreen way mor simple, by default there is no wrapper div with vh100  
+- Mute warnings in storybook  
+- remove setup for dev on datalab    
+  
 ### **0.31.4** (2022-04-11)  
   
 - Remove missing log    
