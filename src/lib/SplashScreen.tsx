@@ -19,6 +19,7 @@ import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import type { ReactComponent } from "../tools/ReactComponent";
 import * as runExclusive from "run-exclusive";
 import { OnyxiaLogoSvg } from "../assets/svg/OnyxiaLogo";
+import { useConst } from "powerhooks/useConst";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -248,6 +249,18 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         const { isSplashScreenShown, isTransparencyEnabled } =
             useSplashScreenStatus();
 
+        {
+            const defaultOverflow = useConst(
+                () => document.body.style.overflow,
+            );
+
+            useEffect(() => {
+                document.body.style.overflow = isSplashScreenShown
+                    ? "hidden"
+                    : defaultOverflow;
+            }, [isSplashScreenShown]);
+        }
+
         const [isFadingOut, setIsFadingOut] = useState(false);
         const [isVisible, setIsVisible] = useState(true);
 
@@ -299,11 +312,12 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
     }>({ "name": { SplashScreen } })(
         (theme, { isVisible, isFadingOut, isTransparencyEnabled }) => ({
             "overlay": {
-                "width": "100vw",
+                "width": "100%",
                 "height": "100vh",
-                "position": "absolute",
+                "position": "fixed",
+                "top": 0,
+                "left": 0,
                 "zIndex": 10,
-
                 "backgroundColor": (() => {
                     const color = new Color(
                         theme.colors.useCases.surfaces.background,
