@@ -73,7 +73,7 @@
         "minimal-polyfills": "^2.2.1",
         "tsafe": "^0.8.1",
         "tss-react": "^3.6.2",
-        "powerhooks": "^0.16.2",
+        "powerhooks": "^0.16.3",
         "run-exclusive": "^2.2.14"
     },
     "devDependencies": {
