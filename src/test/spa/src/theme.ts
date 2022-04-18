@@ -10,6 +10,8 @@ import { createButton } from "onyxia-ui/Button";
 import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
 import { createMakeStyles } from "tss-react/compat";
+import { createOnyxiaSplashScreenLogo } from "onyxia-ui/lib/SplashScreen";
+import type { ThemeProviderProps } from "onyxia-ui";
 import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
 
@@ -90,3 +92,11 @@ export const { Text } = createText({ useTheme });
 export const { makeStyles } = createMakeStyles({ 
     useTheme
 });
+
+const { OnyxiaSplashScreenLogo } = createOnyxiaSplashScreenLogo({ useTheme });
+
+
+export const splashScreen: ThemeProviderProps["splashScreen"] = {
+    "Logo": OnyxiaSplashScreenLogo,
+    "fadeOutDuration": 500
+};

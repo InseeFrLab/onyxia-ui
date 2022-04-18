@@ -9,7 +9,7 @@
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
     "scripts": {
-        "build": "tsc && cp -r src/assets dist/",
+        "build": "tsc && yarn copy-files",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
@@ -19,7 +19,8 @@
         "start": "yarn link_test_projects_dependencies && cd src/test && yarn start",
         "yarn_link": "ts-node src/bin/yarn_link.ts",
         "start_spa": "yarn yarn_link && cd src/test/spa && yarn start",
-        "start_ssr": "yarn yarn_link && cd src/test/ssr && yarn dev"
+        "start_ssr": "yarn yarn_link && cd src/test/ssr && yarn dev",
+        "copy-files": "copyfiles -u 1 src/assets/**/*.svg src/assets/**/*.css src/assets/**/*.woff2 dist/"
     },
     "resolutions": {
         "csstype": "3.0.10"

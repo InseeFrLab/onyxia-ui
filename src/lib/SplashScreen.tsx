@@ -7,7 +7,6 @@ import {
     memo,
 } from "react";
 import type { ReactNode } from "react";
-import { useDomRect } from "powerhooks/useDomRect";
 import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
@@ -19,6 +18,7 @@ import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import type { ReactComponent } from "../tools/ReactComponent";
 import * as runExclusive from "run-exclusive";
+import { OnyxiaLogoSvg } from "../assets/svg/OnyxiaLogo";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -219,9 +219,7 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 export { useSplashScreen };
 
 export type SplashScreenProps = {
-    Logo: ReactComponent<{ className: string }>;
-    /** Default to focus main */
-    fillColor?: string;
+    Logo: ReactComponent;
     /** Default 700ms */
     fadeOutDuration?: number;
     /** Default 1000 (1 second)*/
@@ -234,56 +232,128 @@ const context = createContext<boolean>(false);
 export function createSplashScreen(params: { useTheme(): Theme }) {
     const { useTheme } = params;
 
-    const { makeStyles, useStyles } = createMakeStyles({ useTheme });
+    const { makeStyles } = createMakeStyles({ useTheme });
 
-    const { SplashScreen } = (() => {
-        const { Overlay } = (() => {
-            type Props = Pick<
-                Required<SplashScreenProps>,
-                "Logo" | "fillColor"
-            > & { className?: string };
+    function SplashScreen(props: SplashScreenProps) {
+        const { children, Logo } = props;
 
-            const useStyles = makeStyles<{
-                isVisible: boolean;
-                isFadingOut: boolean;
-                isTransparencyEnabled: boolean;
-                fillColor: string;
-            }>()(
-                (
-                    theme,
-                    {
-                        isVisible,
-                        isFadingOut,
-                        isTransparencyEnabled,
-                        fillColor,
-                    },
-                ) => ({
-                    "root": {
-                        "backgroundColor": (() => {
-                            const color = new Color(
-                                theme.colors.useCases.surfaces.background,
-                            ).rgb();
+        if (props?.fadeOutDuration !== undefined) {
+            fadeOutDuration = props.fadeOutDuration;
+        }
 
-                            return color
-                                .alpha(
-                                    isTransparencyEnabled
-                                        ? 0.6
-                                        : (color as any).valpha,
-                                )
-                                .string();
-                        })(),
-                        "backdropFilter": isTransparencyEnabled
-                            ? "blur(10px)"
-                            : undefined,
-                        "display": "flex",
-                        "alignItems": "center",
-                        "justifyContent": "center",
-                        "visibility": isVisible ? "visible" : "hidden",
-                        "opacity": isFadingOut ? 0 : 1,
-                        "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
-                        "& g": {
-                            "opacity": 0,
-                            "animation": `${keyframes`
+        if (props?.minimumDisplayDuration !== undefined) {
+            minimumDisplayDuration = props.minimumDisplayDuration;
+        }
+
+        const { isSplashScreenShown, isTransparencyEnabled } =
+            useSplashScreenStatus();
+
+        const [isFadingOut, setIsFadingOut] = useState(false);
+        const [isVisible, setIsVisible] = useState(true);
+
+        const { classes } = useStyles({
+            isVisible,
+            isFadingOut,
+            isTransparencyEnabled,
+        });
+
+        useEffect(() => {
+            let timer = setTimeout(() => {
+                /* No action */
+            }, 0);
+
+            (async () => {
+                if (isSplashScreenShown) {
+                    setIsFadingOut(false);
+                    setIsVisible(true);
+                } else {
+                    setIsFadingOut(true);
+
+                    await new Promise(
+                        resolve =>
+                            (timer = setTimeout(resolve, fadeOutDuration)),
+                    );
+
+                    setIsFadingOut(false);
+                    setIsVisible(false);
+                }
+            })();
+
+            return () => clearTimeout(timer);
+        }, [isSplashScreenShown]);
+
+        return (
+            <context.Provider value={true}>
+                <div className={classes.overlay}>
+                    <Logo />
+                </div>
+                {children}
+            </context.Provider>
+        );
+    }
+
+    const useStyles = makeStyles<{
+        isVisible: boolean;
+        isFadingOut: boolean;
+        isTransparencyEnabled: boolean;
+    }>({ "name": { SplashScreen } })(
+        (theme, { isVisible, isFadingOut, isTransparencyEnabled }) => ({
+            "overlay": {
+                "width": "100vw",
+                "height": "100vh",
+                "position": "absolute",
+                "zIndex": 10,
+
+                "backgroundColor": (() => {
+                    const color = new Color(
+                        theme.colors.useCases.surfaces.background,
+                    ).rgb();
+
+                    return color
+                        .alpha(
+                            isTransparencyEnabled ? 0.6 : (color as any).valpha,
+                        )
+                        .string();
+                })(),
+                "backdropFilter": isTransparencyEnabled
+                    ? "blur(10px)"
+                    : undefined,
+                "display": "flex",
+                "alignItems": "center",
+                "justifyContent": "center",
+                "visibility": isVisible ? "visible" : "hidden",
+                "opacity": isFadingOut ? 0 : 1,
+                "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
+            },
+        }),
+    );
+
+    return { SplashScreen };
+}
+
+/**
+ * You have to create your own version of this component
+ * you are expected to size it in percentage.
+ */
+export function createOnyxiaSplashScreenLogo(params: { useTheme(): Theme }) {
+    const { useTheme } = params;
+
+    const { makeStyles } = createMakeStyles({ useTheme });
+
+    const OnyxiaSplashScreenLogo = memo(() => {
+        const { classes } = useStyles();
+
+        return <OnyxiaLogoSvg className={classes.root} />;
+    });
+
+    const useStyles = makeStyles({ "name": { OnyxiaSplashScreenLogo } })(
+        theme => ({
+            "root": {
+                "height": "20%",
+                "fill": theme.colors.useCases.typography.textFocus,
+                "& g": {
+                    "opacity": 0,
+                    "animation": `${keyframes`
                             60%, 100% {
                                 opacity: 0;
                             }
@@ -294,123 +364,19 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
                                 opacity: 1;
                             }
                             `} 3.5s infinite ease-in-out`,
-                            "&:nth-of-type(1)": {
-                                "animationDelay": ".4s",
-                            },
-                            "&:nth-of-type(2)": {
-                                "animationDelay": ".8s",
-                            },
-                            "&:nth-of-type(3)": {
-                                "animationDelay": "1.2s",
-                            },
-                        },
+                    "&:nth-of-type(1)": {
+                        "animationDelay": ".4s",
                     },
-                    "svg": {
-                        "fill": fillColor,
-                        "height": "20%",
+                    "&:nth-of-type(2)": {
+                        "animationDelay": ".8s",
                     },
-                }),
-            );
+                    "&:nth-of-type(3)": {
+                        "animationDelay": "1.2s",
+                    },
+                },
+            },
+        }),
+    );
 
-            const Overlay = memo((props: Props) => {
-                const { className, Logo, fillColor } = props;
-
-                const { isSplashScreenShown, isTransparencyEnabled } =
-                    useSplashScreenStatus();
-
-                const [isFadingOut, setIsFadingOut] = useState(false);
-                const [isVisible, setIsVisible] = useState(true);
-
-                const { classes, cx } = useStyles({
-                    isVisible,
-                    isFadingOut,
-                    isTransparencyEnabled,
-                    fillColor,
-                });
-
-                useEffect(() => {
-                    let timer = setTimeout(() => {
-                        /* No action */
-                    }, 0);
-
-                    (async () => {
-                        if (isSplashScreenShown) {
-                            setIsFadingOut(false);
-                            setIsVisible(true);
-                        } else {
-                            setIsFadingOut(true);
-
-                            await new Promise(
-                                resolve =>
-                                    (timer = setTimeout(
-                                        resolve,
-                                        fadeOutDuration,
-                                    )),
-                            );
-
-                            setIsFadingOut(false);
-                            setIsVisible(false);
-                        }
-                    })();
-
-                    return () => clearTimeout(timer);
-                }, [isSplashScreenShown]);
-
-                return (
-                    <div className={cx(classes.root, className)}>
-                        <Logo className={classes.svg} />
-                    </div>
-                );
-            });
-
-            return { Overlay };
-        })();
-
-        function SplashScreen(props: SplashScreenProps) {
-            const theme = useTheme();
-
-            const {
-                children,
-                Logo,
-                fillColor = theme.colors.useCases.typography.textFocus,
-            } = props;
-
-            if (props?.fadeOutDuration !== undefined) {
-                fadeOutDuration = props.fadeOutDuration;
-            }
-
-            if (props?.minimumDisplayDuration !== undefined) {
-                minimumDisplayDuration = props.minimumDisplayDuration;
-            }
-
-            const {
-                ref,
-                domRect: { width, height },
-            } = useDomRect();
-
-            const { css } = useStyles();
-
-            return (
-                <div ref={ref} className={css({ "height": "100%" })}>
-                    <context.Provider value={true}>
-                        <Overlay
-                            className={css({
-                                "width": width,
-                                "position": "absolute",
-                                "height": height,
-                                "zIndex": 10,
-                            })}
-                            Logo={Logo}
-                            fillColor={fillColor}
-                        />
-                        {width !== 0 && children}
-                    </context.Provider>
-                </div>
-            );
-        }
-
-        return { SplashScreen };
-    })();
-
-    return { SplashScreen };
+    return { OnyxiaSplashScreenLogo };
 }

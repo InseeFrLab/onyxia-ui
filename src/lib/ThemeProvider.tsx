@@ -1,5 +1,5 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useCallback, useMemo } from "react";
+import { useContext, createContext, useMemo } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -42,7 +42,6 @@ import {
     ViewPortOutOfRangeError,
 } from "powerhooks/ViewPortAdapter";
 import type { ViewPortAdapterProps } from "powerhooks/ViewPortAdapter";
-import { assert } from "tsafe/assert";
 import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
@@ -323,123 +322,69 @@ export function createThemeProvider<
         "prepend": true,
     });
 
-    const { ThemeProvider } = (() => {
-        function ThemeProviderInner(
-            props: Omit<ThemeProviderProps, "getViewPortConfig">,
-        ) {
-            const { splashScreen, children } = props;
+    function ThemeProvider(props: ThemeProviderProps) {
+        const { splashScreen, getViewPortConfig } = props;
 
-            const theme = useTheme();
+        const theme = useTheme();
 
-            const isStoryProvider =
-                useContext(isDarkModeEnabledOverrideContext) !== undefined;
+        const isStoryProvider =
+            useContext(isDarkModeEnabledOverrideContext) !== undefined;
 
-            const CssBaselineOrScopedCssBaseline = useMemo(
-                (): ReactComponent<{ children: ReactNode }> =>
-                    isStoryProvider
-                        ? ({ children }) => (
-                              <ScopedCssBaseline>{children}</ScopedCssBaseline>
-                          )
-                        : ({ children }) => (
-                              <>
-                                  <CssBaseline />
-                                  {children}
-                              </>
-                          ),
-                [isStoryProvider],
-            );
+        const CssBaselineOrScopedCssBaseline = useMemo(
+            (): ReactComponent<{ children: ReactNode }> =>
+                isStoryProvider
+                    ? ({ children }) => (
+                          <ScopedCssBaseline>{children}</ScopedCssBaseline>
+                      )
+                    : ({ children }) => (
+                          <>
+                              <CssBaseline />
+                              {children}
+                          </>
+                      ),
+            [isStoryProvider],
+        );
 
-            return (
-                <themeBaseContext.Provider value={theme}>
-                    <CacheProvider value={muiCache}>
-                        <MuiThemeProvider theme={theme.muiTheme}>
-                            <CssBaselineOrScopedCssBaseline>
-                                {splashScreen === undefined ? (
-                                    children
-                                ) : (
-                                    <SplashScreen {...splashScreen}>
-                                        {children}
-                                    </SplashScreen>
-                                )}
-                            </CssBaselineOrScopedCssBaseline>
-                        </MuiThemeProvider>
-                    </CacheProvider>
-                </themeBaseContext.Provider>
-            );
-        }
-
-        function ThemeProvider(
-            props: ThemeProviderProps & { doUseVh100?: boolean },
-        ) {
-            const {
-                splashScreen,
-                getViewPortConfig,
-                doUseVh100 = true,
-            } = props;
-
-            const getConfig = useCallback<ViewPortAdapterProps["getConfig"]>(
-                params => {
-                    assert(getViewPortConfig !== undefined);
-
-                    let config: ReturnType<typeof getViewPortConfig>;
-
-                    try {
-                        config = getViewPortConfig(params);
-                    } catch (error) {
-                        if (!(error instanceof ViewPortOutOfRangeError)) {
-                            throw error;
-                        }
-
-                        const { fallbackNode } = error;
-
-                        throw new ViewPortOutOfRangeError(
-                            (
-                                <ThemeProviderInner>
-                                    {fallbackNode}
-                                </ThemeProviderInner>
-                            ),
-                        );
-                    }
-
-                    return config;
-                },
-                [getViewPortConfig],
-            );
-
-            const children = (
-                <ThemeProviderInner splashScreen={splashScreen}>
-                    {props.children}
-                </ThemeProviderInner>
-            );
-
-            return getViewPortConfig === undefined ? (
-                !doUseVh100 ? (
-                    children
-                ) : (
-                    <div style={{ "height": "100vh" }}>{children}</div>
-                )
+        const children =
+            getViewPortConfig === undefined ? (
+                props.children
             ) : (
-                <ViewPortAdapter getConfig={getConfig}>
-                    {children}
+                <ViewPortAdapter getConfig={getViewPortConfig}>
+                    {props.children}
                 </ViewPortAdapter>
             );
-        }
 
-        return { ThemeProvider };
-    })();
+        return (
+            <themeBaseContext.Provider value={theme}>
+                <CacheProvider value={muiCache}>
+                    <MuiThemeProvider theme={theme.muiTheme}>
+                        <CssBaselineOrScopedCssBaseline>
+                            {splashScreen === undefined ? (
+                                children
+                            ) : (
+                                <SplashScreen {...splashScreen}>
+                                    {children}
+                                </SplashScreen>
+                            )}
+                        </CssBaselineOrScopedCssBaseline>
+                    </MuiThemeProvider>
+                </CacheProvider>
+            </themeBaseContext.Provider>
+        );
+    }
 
     function StoryProvider(props: { dark?: boolean; children: ReactNode }) {
         const { dark = false, children } = props;
 
         return (
             <isDarkModeEnabledOverrideContext.Provider value={dark}>
-                <ThemeProvider doUseVh100={false}>{children}</ThemeProvider>
+                <ThemeProvider>{children}</ThemeProvider>
             </isDarkModeEnabledOverrideContext.Provider>
         );
     }
 
     return {
-        "ThemeProvider": id<ReactComponent<ThemeProviderProps>>(ThemeProvider),
+        ThemeProvider,
         useTheme,
         StoryProvider,
     };
