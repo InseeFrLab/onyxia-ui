@@ -7971,7 +7971,7 @@ onetime@^5.1.0:
     mimic-fn "^2.1.0"
 
 "onyxia-ui@file:../../../dist":
-  version "0.31.4"
+  version "0.32.1"
   dependencies:
     "@mui/icons-material" "^5.0.3"
     color "3.1.3"
@@ -7979,10 +7979,10 @@ onetime@^5.1.0:
     material-design-icons "^3.0.1"
     memoizee "^0.4.15"
     minimal-polyfills "^2.2.1"
-    powerhooks "^0.16.1"
+    powerhooks "^0.16.3"
     run-exclusive "^2.2.14"
     tsafe "^0.8.1"
-    tss-react "^3.5.2"
+    tss-react "^3.6.2"
 
 open@^7.0.2:
   version "7.4.2"
@@ -9035,10 +9035,10 @@ postcss@^8.1.0:
     picocolors "^0.2.1"
     source-map-js "^0.6.2"
 
-powerhooks@^0.16.1:
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.16.2.tgz#d66ef35c980a9ada5fed7db4c739e6be5ad31b65"
-  integrity sha512-UmbSgLEBwWXOh1TKXNS3+zMi+ggNrk2+guafvxovhsIKFYjecqqRQ1W9GZ6ZoF3Pha+EOQHVlcXA+zdJGpVxwQ==
+powerhooks@^0.16.3:
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.16.3.tgz#52965bcebf04f8f50c1ea99682572e2c9712a360"
+  integrity sha512-NOAtu51bqrGPIL24mrSLQr/hzcjy11nILRNE7LAWkCQbRZI+PZX6ZmuADzy+joVtcIe91VlZdgAuXGDFuQiCqA==
   dependencies:
     evt "2.0.0-beta.39"
     memoizee "^0.4.15"
@@ -10902,7 +10902,7 @@ tss-react@3.0.0-beta.1:
     "@emotion/serialize" "*"
     "@emotion/utils" "*"
 
-tss-react@^3.5.2:
+tss-react@^3.6.2:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-3.6.2.tgz#5e995d8b82ca730ba04a21203ae68f1c5372a85e"
   integrity sha512-+ecQIqCNFVlVJVk3NiCWZY2+5DhVKMVUVxIbEwv9nYsTRQA/KxyKCU8g+KMj5ByqFv9LW76+TUYzbWck/IHkfA==

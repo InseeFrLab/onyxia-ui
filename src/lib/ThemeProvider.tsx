@@ -1,5 +1,5 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useMemo } from "react";
+import { useContext, createContext, useEffect, useMemo } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -326,6 +326,18 @@ export function createThemeProvider<
         const { splashScreen, getViewPortConfig } = props;
 
         const theme = useTheme();
+
+        {
+            const backgroundColor = theme.colors.useCases.surfaces.background;
+
+            useEffect(() => {
+                document.querySelector("meta[name=theme-color]")?.remove();
+                document.head.insertAdjacentHTML(
+                    "beforeend",
+                    `<meta name="theme-color" content="${backgroundColor}">`,
+                );
+            }, [backgroundColor]);
+        }
 
         const isStoryProvider =
             useContext(isDarkModeEnabledOverrideContext) !== undefined;
