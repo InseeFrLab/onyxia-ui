@@ -1,3 +1,8 @@
+### **0.32.2** (2022-04-24)  
+  
+- Change meta theme color when toogle dark mode  
+- Fix yarn_link    
+  
 ### **0.32.1** (2022-04-18)  
   
 - update powerhooks  
