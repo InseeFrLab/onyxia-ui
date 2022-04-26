@@ -1,3 +1,7 @@
+### **0.32.3** (2022-04-26)  
+  
+- fix ViewPortAdapter    
+  
 ### **0.32.2** (2022-04-24)  
   
 - Change meta theme color when toogle dark mode  
