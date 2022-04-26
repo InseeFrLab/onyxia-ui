@@ -20,6 +20,7 @@ import type { ReactComponent } from "../tools/ReactComponent";
 import * as runExclusive from "run-exclusive";
 import { OnyxiaLogoSvg } from "../assets/svg/OnyxiaLogo";
 import { useConst } from "powerhooks/useConst";
+import { useViewPortState } from "powerhooks/ViewPortAdapter";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -264,10 +265,19 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         const [isFadingOut, setIsFadingOut] = useState(false);
         const [isVisible, setIsVisible] = useState(true);
 
+        const { isViewPortAdapterEnabled } = (function useClosure() {
+            const { viewPortState } = useViewPortState();
+
+            const isViewPortAdapterEnabled = viewPortState !== undefined;
+
+            return { isViewPortAdapterEnabled };
+        })();
+
         const { classes } = useStyles({
             isVisible,
             isFadingOut,
             isTransparencyEnabled,
+            isViewPortAdapterEnabled,
         });
 
         useEffect(() => {
@@ -297,7 +307,7 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
 
         return (
             <context.Provider value={true}>
-                <div className={classes.overlay}>
+                <div className={classes.root}>
                     <Logo />
                 </div>
                 {children}
@@ -309,11 +319,20 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         isVisible: boolean;
         isFadingOut: boolean;
         isTransparencyEnabled: boolean;
+        isViewPortAdapterEnabled: boolean;
     }>({ "name": { SplashScreen } })(
-        (theme, { isVisible, isFadingOut, isTransparencyEnabled }) => ({
-            "overlay": {
+        (
+            theme,
+            {
+                isVisible,
+                isFadingOut,
+                isTransparencyEnabled,
+                isViewPortAdapterEnabled,
+            },
+        ) => ({
+            "root": {
                 "width": "100%",
-                "height": "100vh",
+                "height": isViewPortAdapterEnabled ? "100%" : "100vh",
                 "position": "fixed",
                 "top": 0,
                 "left": 0,

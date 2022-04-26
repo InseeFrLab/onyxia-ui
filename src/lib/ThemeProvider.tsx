@@ -1,5 +1,5 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useEffect, useMemo } from "react";
+import { useContext, createContext, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -47,6 +47,7 @@ import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { capitalize } from "tsafe/capitalize";
 import createCache from "@emotion/cache";
+import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
@@ -322,68 +323,86 @@ export function createThemeProvider<
         "prepend": true,
     });
 
-    function ThemeProvider(props: ThemeProviderProps) {
-        const { splashScreen, getViewPortConfig } = props;
+    const { ThemeProvider } = (() => {
+        function ThemeProviderWithinViewPortAdapter(props: {
+            splashScreen: ThemeProviderProps["splashScreen"];
+            children: ReactNode;
+        }) {
+            const { splashScreen, children } = props;
 
-        const theme = useTheme();
+            const theme = useTheme();
 
-        {
-            const backgroundColor = theme.colors.useCases.surfaces.background;
+            {
+                const backgroundColor =
+                    theme.colors.useCases.surfaces.background;
 
-            useEffect(() => {
-                document.querySelector("meta[name=theme-color]")?.remove();
-                document.head.insertAdjacentHTML(
-                    "beforeend",
-                    `<meta name="theme-color" content="${backgroundColor}">`,
-                );
-            }, [backgroundColor]);
-        }
+                useEffect(() => {
+                    document.querySelector("meta[name=theme-color]")?.remove();
+                    document.head.insertAdjacentHTML(
+                        "beforeend",
+                        `<meta name="theme-color" content="${backgroundColor}">`,
+                    );
+                }, [backgroundColor]);
+            }
 
-        const isStoryProvider =
-            useContext(isDarkModeEnabledOverrideContext) !== undefined;
+            const isStoryProvider =
+                useContext(isDarkModeEnabledOverrideContext) !== undefined;
 
-        const CssBaselineOrScopedCssBaseline = useMemo(
-            (): ReactComponent<{ children: ReactNode }> =>
-                isStoryProvider
-                    ? ({ children }) => (
-                          <ScopedCssBaseline>{children}</ScopedCssBaseline>
-                      )
-                    : ({ children }) => (
-                          <>
-                              <CssBaseline />
-                              {children}
-                          </>
-                      ),
-            [isStoryProvider],
-        );
-
-        const children =
-            getViewPortConfig === undefined ? (
-                props.children
-            ) : (
-                <ViewPortAdapter getConfig={getViewPortConfig}>
-                    {props.children}
-                </ViewPortAdapter>
+            // prettier-ignore
+            const CssBaselineOrScopedCssBaseline = useGuaranteedMemo(
+                (): ReactComponent<{ children: ReactNode }> =>
+                    isStoryProvider
+                        ? ({ children }) => (<ScopedCssBaseline>{children}</ScopedCssBaseline>)
+                        : ({ children }) => (<><CssBaseline />{children}</>),
+                [isStoryProvider],
             );
 
-        return (
-            <themeBaseContext.Provider value={theme}>
-                <CacheProvider value={muiCache}>
-                    <MuiThemeProvider theme={theme.muiTheme}>
-                        <CssBaselineOrScopedCssBaseline>
-                            {splashScreen === undefined ? (
-                                children
-                            ) : (
-                                <SplashScreen {...splashScreen}>
-                                    {children}
-                                </SplashScreen>
-                            )}
-                        </CssBaselineOrScopedCssBaseline>
-                    </MuiThemeProvider>
-                </CacheProvider>
-            </themeBaseContext.Provider>
-        );
-    }
+            // prettier-ignore
+            const SplashScreenOrId = useGuaranteedMemo(
+                (): ReactComponent<{ children: ReactNode }> =>
+                    splashScreen === undefined ?
+                        (({ children }) => <>{children}</>) :
+                        (({ children }) => <SplashScreen {...splashScreen}>{children}</SplashScreen>),
+                [splashScreen],
+            );
+
+            return (
+                <themeBaseContext.Provider value={theme}>
+                    <CacheProvider value={muiCache}>
+                        <MuiThemeProvider theme={theme.muiTheme}>
+                            <CssBaselineOrScopedCssBaseline>
+                                <SplashScreenOrId>{children}</SplashScreenOrId>
+                            </CssBaselineOrScopedCssBaseline>
+                        </MuiThemeProvider>
+                    </CacheProvider>
+                </themeBaseContext.Provider>
+            );
+        }
+
+        function ThemeProvider(props: ThemeProviderProps) {
+            const { getViewPortConfig, children, splashScreen } = props;
+
+            // prettier-ignore
+            const ViewPortAdapterOrId = useGuaranteedMemo(
+                (): ReactComponent<{ children: ReactNode; }> => getViewPortConfig === undefined ?
+                    (({ children }) => <>{children}</>) :
+                    (({ children }) => <ViewPortAdapter getConfig={getViewPortConfig}>{children}</ViewPortAdapter>),
+                [getViewPortConfig]
+            );
+
+            return (
+                <ViewPortAdapterOrId>
+                    <ThemeProviderWithinViewPortAdapter
+                        splashScreen={splashScreen}
+                    >
+                        {children}
+                    </ThemeProviderWithinViewPortAdapter>
+                </ViewPortAdapterOrId>
+            );
+        }
+
+        return { ThemeProvider };
+    })();
 
     function StoryProvider(props: { dark?: boolean; children: ReactNode }) {
         const { dark = false, children } = props;
