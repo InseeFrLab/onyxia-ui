@@ -1,3 +1,7 @@
+## **0.33.0** (2022-05-05)  
+  
+- Enable overriding classes on DirectoryHeader    
+  
 ### **0.32.4** (2022-05-05)  
   
 - Icon button don't go above everything    
