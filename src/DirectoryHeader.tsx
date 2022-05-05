@@ -35,6 +35,7 @@ export type Props = {
     title: NonNullable<ReactNode>;
     subtitle?: NonNullable<ReactNode>;
     onGoBack(): void;
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
 
 const { IconButton } = createIconButton(
@@ -46,7 +47,7 @@ const { IconButton } = createIconButton(
 export const DirectoryHeader = memo((props: Props) => {
     const { className, image, title, subtitle, onGoBack } = props;
 
-    const { classes, cx } = useStyles();
+    const { classes, cx } = useStyles(undefined, { props });
 
     return (
         <div className={cx(classes.root, className)}>
