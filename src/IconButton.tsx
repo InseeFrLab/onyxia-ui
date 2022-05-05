@@ -149,6 +149,44 @@ export function createIconButton<IconId extends string = never>(params?: {
                     "color": theme.colors.useCases.buttons.actionHoverPrimary,
                 },
             },
+
+            //NOTE: If the position of the button is relative (the default)
+            //it goes hover everything not positioned, we have to mess with z-index and
+            //we don't want that.
+            //The relative positioning is needed for the touch ripple effect.
+            //If we dont have position relative the effect is not restricted to the
+            //button: https://user-images.githubusercontent.com/6702424/157982515-c97dfa81-b09a-4323-beb9-d1e92e7ebe4d.mov
+            //The solution is set 'position: relative' only when the ripple effect is supposed to be visible.
+            //This explain the following awful rules.
+            //The expected result is: https://user-images.githubusercontent.com/6702424/157984062-27e544c3-f86f-47b8-b141-c5f61b8a2880.mov
+            "position": "unset",
+            "& .MuiTouchRipple-root": {
+                "display": "none",
+            },
+            "&:active": {
+                "position": "relative",
+                "& .MuiTouchRipple-root": {
+                    "display": "unset",
+                },
+            },
+            "&:focus": {
+                "position": "relative",
+                "& .MuiTouchRipple-root": {
+                    "display": "unset",
+                },
+                "&:hover": {
+                    "position": "unset",
+                    "& .MuiTouchRipple-root": {
+                        "display": "none",
+                    },
+                    "&:active": {
+                        "position": "relative",
+                        "& .MuiTouchRipple-root": {
+                            "display": "unset",
+                        },
+                    },
+                },
+            },
         },
         "icon": {
             "color":
