@@ -1,3 +1,7 @@
+### **0.32.4** (2022-05-05)  
+  
+- Icon button don't go above everything    
+  
 ### **0.32.3** (2022-04-26)  
   
 - fix ViewPortAdapter    
