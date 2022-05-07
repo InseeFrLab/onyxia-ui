@@ -3,6 +3,7 @@ module.exports = {
     "parser": "@typescript-eslint/parser",
     "plugins": [
         "@typescript-eslint",
+        "tss-unused-classes"
     ],
     "extends": [
         "eslint:recommended",
@@ -15,7 +16,8 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/ban-types": "off",
-        "prefer-const": "off"
+        "prefer-const": "off",
+        'tss-unused-classes/unused-classes': "warn"
     },
     "overrides": [
         {
