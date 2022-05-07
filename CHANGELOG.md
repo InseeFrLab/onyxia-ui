@@ -1,3 +1,8 @@
+## **0.34.0** (2022-05-07)  
+  
+- TexField features option to indent on tab  
+- Setup plugin detect unused classes    
+  
 ## **0.33.0** (2022-05-05)  
   
 - Enable overriding classes on DirectoryHeader    
