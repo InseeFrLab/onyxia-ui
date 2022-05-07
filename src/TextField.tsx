@@ -18,6 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
+import { assert } from "tsafe/assert";
 
 export type TextFieldProps = {
     className?: string;
@@ -32,6 +33,7 @@ export type TextFieldProps = {
     inputProps_tabIndex?: number;
     inputProps_spellCheck?: boolean;
     inputProps_autoFocus?: boolean;
+    doIndentOnTab?: boolean;
     /**
      * If true, it sets the helper text in red.
      * Will be set automatically if getIsValidValue is provided
@@ -174,6 +176,7 @@ export const TextField = memo((props: TextFieldProps) => {
         InputProps_endAdornment,
         questionMarkHelperText,
         doRenderAsTextArea = false,
+        doIndentOnTab = false,
         ...completedPropsRest
     } = props;
 
@@ -275,9 +278,12 @@ export const TextField = memo((props: TextFieldProps) => {
         ) => {
             const key = (() => {
                 switch (event.key) {
+                    case "Tab":
+                        return doIndentOnTab ? event.key : "irrelevant";
                     case "Escape":
                     case "Enter":
                         return event.key;
+
                     default:
                         return "irrelevant";
                 }
@@ -295,11 +301,16 @@ export const TextField = memo((props: TextFieldProps) => {
             switch (key) {
                 case "Escape":
                     onEscapeKeyDown?.({ preventDefaultAndStopPropagation });
-                    break;
+                    return;
                 case "Enter":
                     onEnterKeyDown?.({ preventDefaultAndStopPropagation });
-                    break;
+                    return;
+                case "Tab":
+                    document.execCommand("insertText", false, "\t");
+                    return;
             }
+
+            assert(false, "never");
         },
     );
 
