@@ -306,7 +306,7 @@ export const TextField = memo((props: TextFieldProps) => {
                     onEnterKeyDown?.({ preventDefaultAndStopPropagation });
                     return;
                 case "Tab":
-                    document.execCommand("insertText", false, "\t");
+                    document.execCommand("insertText", false, "    ");
                     preventDefaultAndStopPropagation();
                     return;
             }
