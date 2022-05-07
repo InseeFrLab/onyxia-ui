@@ -1,3 +1,7 @@
+### **0.34.1** (2022-05-07)  
+  
+- Fix TextField    
+  
 ## **0.34.0** (2022-05-07)  
   
 - TexField features option to indent on tab  
