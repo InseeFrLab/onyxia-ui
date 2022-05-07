@@ -307,6 +307,7 @@ export const TextField = memo((props: TextFieldProps) => {
                     return;
                 case "Tab":
                     document.execCommand("insertText", false, "\t");
+                    preventDefaultAndStopPropagation();
                     return;
             }
 
