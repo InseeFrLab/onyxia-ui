@@ -213,6 +213,13 @@ export function createThemeProvider<
                             "breakpoints": {
                                 "values": { "xs": 0, ...breakpointsValues },
                             },
+                            "components": {
+                                "MuiLink": {
+                                    "defaultProps": {
+                                        "underline": "hover",
+                                    },
+                                },
+                            },
                         });
 
                         return {
