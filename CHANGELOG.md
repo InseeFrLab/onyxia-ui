@@ -1,3 +1,7 @@
+## **0.35.0** (2022-05-11)  
+  
+- Enable leftbar to be retracted by default    
+  
 ### **0.34.2** (2022-05-07)  
   
 - Insest four spaces instead of tab    
