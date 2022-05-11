@@ -1,3 +1,7 @@
+### **0.35.1** (2022-05-11)  
+  
+- Change MUI Links for having unerline only on hover    
+  
 ## **0.35.0** (2022-05-11)  
   
 - Enable leftbar to be retracted by default    
