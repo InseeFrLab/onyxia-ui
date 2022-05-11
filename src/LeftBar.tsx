@@ -41,16 +41,25 @@ export type LeftBarProps<IconId extends string, ItemId extends string> = {
 export function createLeftBar<IconId extends string>(params?: {
     Icon: (props: IconProps<IconId>) => ReturnType<FC>;
     persistIsPanelOpen: boolean;
+    defaultIsPanelOpen: boolean;
 }) {
-    const { Icon, persistIsPanelOpen = false } = params ?? {
+    const {
+        Icon,
+        persistIsPanelOpen = false,
+        defaultIsPanelOpen = true,
+    } = params ?? {
         "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => {
             throw new Error("never");
         }),
     };
 
-    const { useIsCollapsed } = createUseGlobalState("isCollapsed", false, {
-        "persistance": persistIsPanelOpen ? "localStorage" : false,
-    });
+    const { useIsCollapsed } = createUseGlobalState(
+        "isCollapsed",
+        !defaultIsPanelOpen,
+        {
+            "persistance": persistIsPanelOpen ? "localStorage" : false,
+        },
+    );
 
     const iconSize = "large";
 
