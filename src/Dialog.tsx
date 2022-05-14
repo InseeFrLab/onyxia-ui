@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useState, memo } from "react";
+import { useState, useRef, memo } from "react";
 import MuiDialog from "@mui/material/Dialog";
 import { makeStyles } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
@@ -49,64 +49,76 @@ export const Dialog = memo((props: DialogProps) => {
         onDoShowNextTimeValueChange(!isCheckedNewValue);
     });
 
-    return (
-        <MuiDialog
-            open={isOpen}
-            onClose={onClose}
-            aria-labelledby={labelledby}
-            aria-describedby={describedby}
-            PaperComponent={({ children }) => (
-                <div className={classes.paper}>{children}</div>
-            )}
-        >
-            <div className={classes.root}>
-                {title !== undefined && (
-                    <Text
-                        typo="object heading"
-                        componentProps={{ "id": labelledby }}
-                    >
-                        {title}
-                    </Text>
-                )}
-                {subtitle !== undefined && (
-                    <Text
-                        className={classes.subtitle}
-                        componentProps={{ "id": describedby }}
-                        typo="body 1"
-                    >
-                        {subtitle}
-                    </Text>
-                )}
-                {body !== undefined && (
-                    <Text
-                        className={classes.body}
-                        htmlComponent="div"
-                        typo="body 2"
-                    >
-                        {body}
-                    </Text>
-                )}
+    const mountPointRef = useRef<HTMLDivElement>(null);
 
-                <div className={classes.buttonWrapper}>
-                    <div className={classes.checkBoxWrapper}>
-                        {onDoShowNextTimeValueChange !== undefined && (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={isChecked}
-                                        onChange={onChange}
-                                        name="checkedB"
-                                        color="primary"
-                                    />
-                                }
-                                label={doNotShowNextTimeText}
-                            />
-                        )}
+    const getContainer = useConstCallback(() => {
+        const element = mountPointRef.current;
+        assert(element !== null);
+        return element;
+    });
+
+    return (
+        <>
+            <div ref={mountPointRef} about="Dialog container" />
+            <MuiDialog
+                container={getContainer}
+                open={isOpen}
+                onClose={onClose}
+                aria-labelledby={labelledby}
+                aria-describedby={describedby}
+                PaperComponent={({ children }) => (
+                    <div className={classes.paper}>{children}</div>
+                )}
+            >
+                <div className={classes.root}>
+                    {title !== undefined && (
+                        <Text
+                            typo="object heading"
+                            componentProps={{ "id": labelledby }}
+                        >
+                            {title}
+                        </Text>
+                    )}
+                    {subtitle !== undefined && (
+                        <Text
+                            className={classes.subtitle}
+                            componentProps={{ "id": describedby }}
+                            typo="body 1"
+                        >
+                            {subtitle}
+                        </Text>
+                    )}
+                    {body !== undefined && (
+                        <Text
+                            className={classes.body}
+                            htmlComponent="div"
+                            typo="body 2"
+                        >
+                            {body}
+                        </Text>
+                    )}
+
+                    <div className={classes.buttonWrapper}>
+                        <div className={classes.checkBoxWrapper}>
+                            {onDoShowNextTimeValueChange !== undefined && (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={isChecked}
+                                            onChange={onChange}
+                                            name="checkedB"
+                                            color="primary"
+                                        />
+                                    }
+                                    label={doNotShowNextTimeText}
+                                />
+                            )}
+                        </div>
+                        {buttons}
                     </div>
-                    {buttons}
                 </div>
-            </div>
-        </MuiDialog>
+            </MuiDialog>
+        </>
     );
 });
 
