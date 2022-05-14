@@ -1,3 +1,7 @@
+### **0.35.2** (2022-05-14)  
+  
+- Make dialog work with ViewPortAdapter    
+  
 ### **0.35.1** (2022-05-11)  
   
 - Change MUI Links for having unerline only on hover    
