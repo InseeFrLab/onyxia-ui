@@ -7,6 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
+import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
 
 export type DialogProps = {
     title?: NonNullable<ReactNode>;
@@ -14,10 +15,11 @@ export type DialogProps = {
     body?: NonNullable<ReactNode>;
     buttons: ReactNode;
     isOpen: boolean;
-    onClose(): void;
-
-    onDoShowNextTimeValueChange?(doShowNextTime: boolean): void;
+    onClose: () => void;
+    onDoShowNextTimeValueChange?: (doShowNextTime: boolean) => void;
     doNotShowNextTimeText?: string;
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
+    muiDialogClasses: MuiDialogClasses;
 };
 
 const labelledby = "alert-dialog-title";
@@ -33,9 +35,10 @@ export const Dialog = memo((props: DialogProps) => {
         onDoShowNextTimeValueChange,
         onClose,
         doNotShowNextTimeText = "Don't show next time",
+        muiDialogClasses,
     } = props;
 
-    const { classes } = useStyles();
+    const { classes } = useStyles(undefined, { props });
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -61,6 +64,7 @@ export const Dialog = memo((props: DialogProps) => {
         <>
             <div ref={mountPointRef} about="Dialog container" />
             <MuiDialog
+                classes={muiDialogClasses}
                 container={getContainer}
                 open={isOpen}
                 onClose={onClose}
