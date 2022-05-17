@@ -1,3 +1,7 @@
+### **0.36.1** (2022-05-17)  
+  
+- Fix previous release    
+  
 ## **0.36.0** (2022-05-17)  
   
 - Make Dialog more customizable (with classes)    
