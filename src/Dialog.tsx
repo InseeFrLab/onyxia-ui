@@ -19,7 +19,7 @@ export type DialogProps = {
     onDoShowNextTimeValueChange?: (doShowNextTime: boolean) => void;
     doNotShowNextTimeText?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
-    muiDialogClasses: Partial<MuiDialogClasses>;
+    muiDialogClasses?: Partial<MuiDialogClasses>;
 };
 
 const labelledby = "alert-dialog-title";
