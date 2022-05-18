@@ -8,10 +8,16 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
 import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
+import { breakpointsValues } from "./lib/breakpoints";
 
+/** To make the dialog fit content: "maxWidth": "unset" */
 export type DialogProps = {
+    className?: string;
+    /** NOTE: If string, <Text typo="object heading" /> */
     title?: NonNullable<ReactNode>;
+    /** NOTE: If string, <Text typo="body 1" /> */
     subtitle?: NonNullable<ReactNode>;
+    /** NOTE: If string, <Text typo="body 2" /> */
     body?: NonNullable<ReactNode>;
     buttons: ReactNode;
     isOpen: boolean;
@@ -21,8 +27,6 @@ export type DialogProps = {
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     /** https://mui.com/material-ui/api/dialog/ */
     muiDialogClasses?: Partial<MuiDialogClasses>;
-    fullWidth?: boolean; //Default false
-    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl";
 };
 
 const labelledby = "alert-dialog-title";
@@ -30,6 +34,7 @@ const describedby = "alert-dialog-description";
 
 export const Dialog = memo((props: DialogProps) => {
     const {
+        className,
         title,
         subtitle,
         body,
@@ -39,11 +44,9 @@ export const Dialog = memo((props: DialogProps) => {
         onClose,
         doNotShowNextTimeText = "Don't show next time",
         muiDialogClasses,
-        fullWidth,
-        maxWidth,
     } = props;
 
-    const { classes } = useStyles(undefined, { props });
+    const { cx, classes } = useStyles(undefined, { props });
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -76,21 +79,26 @@ export const Dialog = memo((props: DialogProps) => {
                 aria-labelledby={labelledby}
                 aria-describedby={describedby}
                 PaperComponent={({ children }) => (
-                    <div className={classes.paper}>{children}</div>
+                    <div className={cx(classes.root, className)}>
+                        {children}
+                    </div>
                 )}
-                fullWidth={fullWidth}
-                maxWidth={maxWidth}
             >
-                <div className={classes.root}>
-                    {title !== undefined && (
+                {title !== undefined &&
+                    (typeof title !== "string" ? (
+                        title
+                    ) : (
                         <Text
                             typo="object heading"
                             componentProps={{ "id": labelledby }}
                         >
-                            {title}
+                            {title} !!!
                         </Text>
-                    )}
-                    {subtitle !== undefined && (
+                    ))}
+                {subtitle !== undefined &&
+                    (typeof subtitle !== "string" ? (
+                        subtitle
+                    ) : (
                         <Text
                             className={classes.subtitle}
                             componentProps={{ "id": describedby }}
@@ -98,8 +106,11 @@ export const Dialog = memo((props: DialogProps) => {
                         >
                             {subtitle}
                         </Text>
-                    )}
-                    {body !== undefined && (
+                    ))}
+                {body !== undefined &&
+                    (typeof body !== "string" ? (
+                        body
+                    ) : (
                         <Text
                             className={classes.body}
                             htmlComponent="div"
@@ -107,26 +118,25 @@ export const Dialog = memo((props: DialogProps) => {
                         >
                             {body}
                         </Text>
-                    )}
+                    ))}
 
-                    <div className={classes.buttonWrapper}>
-                        <div className={classes.checkBoxWrapper}>
-                            {onDoShowNextTimeValueChange !== undefined && (
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={isChecked}
-                                            onChange={onChange}
-                                            name="checkedB"
-                                            color="primary"
-                                        />
-                                    }
-                                    label={doNotShowNextTimeText}
-                                />
-                            )}
-                        </div>
-                        {buttons}
+                <div className={classes.buttonWrapper}>
+                    <div className={classes.checkBoxWrapper}>
+                        {onDoShowNextTimeValueChange !== undefined && (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={isChecked}
+                                        onChange={onChange}
+                                        name="checkedB"
+                                        color="primary"
+                                    />
+                                }
+                                label={doNotShowNextTimeText}
+                            />
+                        )}
                     </div>
+                    {buttons}
                 </div>
             </MuiDialog>
         </>
@@ -135,7 +145,11 @@ export const Dialog = memo((props: DialogProps) => {
 
 const useStyles = makeStyles({ "name": { Dialog } })(theme => ({
     "root": {
+        "backgroundColor": theme.colors.useCases.surfaces.surface1,
+        "borderRadius": 5,
         "padding": theme.spacing(4),
+        ...theme.spacing.rightLeft("margin", 4),
+        "maxWidth": breakpointsValues["sm"],
     },
     "buttonWrapper": {
         "display": "flex",
@@ -147,12 +161,6 @@ const useStyles = makeStyles({ "name": { Dialog } })(theme => ({
     },
     "checkBoxWrapper": {
         "flex": 1,
-    },
-    "paper": {
-        "backgroundColor": theme.colors.useCases.surfaces.surface1,
-        "boxShadow": theme.shadows[7],
-        "borderRadius": 5,
-        "maxWidth": 573,
     },
     "subtitle": {
         "marginTop": theme.spacing(3),
