@@ -20,6 +20,8 @@ export type DialogProps = {
     doNotShowNextTimeText?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     muiDialogClasses?: Partial<MuiDialogClasses>;
+    fullWidth: boolean;
+    maxWidth: "xs" | "sm" | "md" | "lg" | "xl";
 };
 
 const labelledby = "alert-dialog-title";
@@ -36,6 +38,8 @@ export const Dialog = memo((props: DialogProps) => {
         onClose,
         doNotShowNextTimeText = "Don't show next time",
         muiDialogClasses,
+        fullWidth,
+        maxWidth,
     } = props;
 
     const { classes } = useStyles(undefined, { props });
@@ -73,6 +77,8 @@ export const Dialog = memo((props: DialogProps) => {
                 PaperComponent={({ children }) => (
                     <div className={classes.paper}>{children}</div>
                 )}
+                fullWidth={fullWidth}
+                maxWidth={maxWidth}
             >
                 <div className={classes.root}>
                     {title !== undefined && (
