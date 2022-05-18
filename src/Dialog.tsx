@@ -19,9 +19,10 @@ export type DialogProps = {
     onDoShowNextTimeValueChange?: (doShowNextTime: boolean) => void;
     doNotShowNextTimeText?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
+    /** https://mui.com/material-ui/api/dialog/ */
     muiDialogClasses?: Partial<MuiDialogClasses>;
-    fullWidth: boolean;
-    maxWidth: "xs" | "sm" | "md" | "lg" | "xl";
+    fullWidth?: boolean; //Default false
+    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl";
 };
 
 const labelledby = "alert-dialog-title";
