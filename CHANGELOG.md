@@ -1,3 +1,7 @@
+## **0.37.0** (2022-05-18)  
+  
+- Add option for changing size of dialog    
+  
 ### **0.36.2** (2022-05-17)  
   
   
