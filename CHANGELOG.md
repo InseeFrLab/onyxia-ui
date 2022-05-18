@@ -1,3 +1,7 @@
+### **0.37.1** (2022-05-18)  
+  
+- Make fullWidth and maxWith optional    
+  
 ## **0.37.0** (2022-05-18)  
   
 - Add option for changing size of dialog    
