@@ -1,3 +1,7 @@
+### **0.38.1** (2022-05-19)  
+  
+- Remove remaining git pull!    
+  
 ## **0.38.0** (2022-05-18)  
   
 - Fix dialog customability    
