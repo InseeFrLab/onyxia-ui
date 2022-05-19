@@ -92,7 +92,7 @@ export const Dialog = memo((props: DialogProps) => {
                             typo="object heading"
                             componentProps={{ "id": labelledby }}
                         >
-                            {title} !!!
+                            {title}
                         </Text>
                     ))}
                 {subtitle !== undefined &&

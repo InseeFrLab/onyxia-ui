@@ -5,20 +5,14 @@ import { createIconButton } from "./IconButton";
 import MuiAlert from "@mui/material/Alert";
 import { Text } from "./Text/TextBase";
 import { makeStyles } from "./lib/ThemeProvider";
-import type { PickOptionals } from "tsafe";
-import { noUndefined } from "./tools/noUndefined";
 import CloseSharp from "@mui/icons-material/CloseSharp";
 
 export type AlertProps = {
-    className?: string | null;
+    className?: string;
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     severity: "warning" | "info" | "error" | "success";
-    children: NonNullable<ReactNode>;
     doDisplayCross?: boolean;
-};
-
-export const alertDefaultProps: PickOptionals<AlertProps> = {
-    "className": null,
-    "doDisplayCross": false,
+    children: NonNullable<ReactNode>;
 };
 
 const { IconButton } = createIconButton(
@@ -28,18 +22,24 @@ const { IconButton } = createIconButton(
 );
 
 export const Alert = memo((props: AlertProps) => {
-    const completedProps = { ...alertDefaultProps, ...noUndefined(props) };
+    const { severity, children, className, doDisplayCross = false } = props;
 
-    const { severity, children, className, doDisplayCross } = completedProps;
+    const { classes, cx } = useStyles({ severity }, { props });
 
     const [isClosed, close] = useReducer(() => true, false);
 
-    const { classes, cx } = useStyles(completedProps);
+    if (isClosed) {
+        return null;
+    }
 
-    return isClosed ? null : (
+    return (
         <MuiAlert
             className={cx(classes.root, className)}
             severity={severity}
+            classes={{
+                "action": classes.action,
+                "icon": classes.icon,
+            }}
             action={
                 doDisplayCross ? (
                     <IconButton
@@ -59,7 +59,7 @@ export const Alert = memo((props: AlertProps) => {
     );
 });
 
-const useStyles = makeStyles<Pick<AlertProps, "severity">>({
+const useStyles = makeStyles<{ severity: AlertProps["severity"] }>({
     "name": { Alert },
 })((theme, { severity }) => ({
     "root": {
@@ -67,12 +67,12 @@ const useStyles = makeStyles<Pick<AlertProps, "severity">>({
         "color": theme.colors.useCases.typography.textPrimary,
         "backgroundColor":
             theme.colors.useCases.alertSeverity[severity].background,
-        "& .MuiAlert-icon": {
-            "color": theme.colors.useCases.alertSeverity[severity].main,
-        },
-        "& .MuiAlert-action": {
-            "alignItems": "center",
-            "padding": 0,
-        },
+    },
+    "icon": {
+        "color": theme.colors.useCases.alertSeverity[severity].main,
+    },
+    "action": {
+        "alignItems": "center",
+        "padding": 0,
     },
 }));
