@@ -16,7 +16,7 @@ const { meta, getStory } = getStoryFactory({
 
 export default meta;
 
-export const Vue1 = getStory({
+export const VueDefault = getStory({
     "defaultValue": "",
     "inputProps_aria-label": "the aria label",
     "label": "This is the label",
@@ -144,6 +144,33 @@ export const VueTextArea = getStory({
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
+    ...logCallbacks([
+        "onEscapeKeyDown",
+        "onEnterKeyDown",
+        "onBlur",
+        "onSubmit",
+        "onValueBeingTypedChange",
+    ]),
+});
+
+export const VueWithSuggestions = getStory({
+    "defaultValue": "",
+    "inputProps_aria-label": "the aria label",
+    "label": "This is the label",
+    "getIsValidValue": value => {
+        console.log("getIsValidValue invoked: ", value);
+
+        if (value.includes(" ")) {
+            return { "isValidValue": false, "message": "Can't include spaces" };
+        }
+
+        return { "isValidValue": true };
+    },
+    "transformValueBeingTyped": value => {
+        console.log("transformValueBeingTyped invoked: ", value);
+        return value;
+    },
+    "options": ["first", "second", "third"],
     ...logCallbacks([
         "onEscapeKeyDown",
         "onEnterKeyDown",

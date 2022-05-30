@@ -19,6 +19,8 @@ import Visibility from "@mui/icons-material/Visibility";
 import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
 import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
+import Autocomplete from "@mui/material/Autocomplete";
 
 export type TextFieldProps = {
     className?: string;
@@ -82,6 +84,8 @@ export type TextFieldProps = {
     selectAllTextOnFocus?: boolean;
     /** Default false */
     doRenderAsTextArea?: boolean;
+    /** NOTE: If length 0 it's assumed loading */
+    options?: string[];
     autoComplete?:
         | "on"
         | "off"
@@ -177,6 +181,7 @@ export const TextField = memo((props: TextFieldProps) => {
         questionMarkHelperText,
         doRenderAsTextArea = false,
         doIndentOnTab = false,
+        options,
         ...completedPropsRest
     } = props;
 
@@ -311,7 +316,7 @@ export const TextField = memo((props: TextFieldProps) => {
                     return;
             }
 
-            assert(false, "never");
+            assert<Equals<typeof key, never>>();
         },
     );
 
@@ -367,8 +372,83 @@ export const TextField = memo((props: TextFieldProps) => {
         ],
     );
 
+    const onMuiTextfieldBlur = useConstCallback(() => {
+        if (!isValidationEnabled) enableValidation();
+        onBlur?.();
+    });
+    const onFocus = useConstCallback(
+        ({
+            target,
+        }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+            if (!selectAllTextOnFocus) return;
+            target.setSelectionRange(0, target.value.length);
+        },
+    );
+
+    const onInputChange = useConstCallback((_: any, value: string) =>
+        transformAndSetValue(value),
+    );
+    const onChange = useConstCallback(
+        ({
+            target,
+        }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+            transformAndSetValue(target.value),
+    );
+
+    const helperTextNode = (
+        <Text
+            className={classes.helperText}
+            typo="caption"
+            htmlComponent="span"
+        >
+            {isValidationEnabled && !getIsValidValueResult.isValidValue
+                ? getIsValidValueResult.message || helperText
+                : helperText}
+            &nbsp;
+            {questionMarkHelperText !== undefined && (
+                <Tooltip title={questionMarkHelperText}>
+                    <Icon iconId="help" className={classes.questionMark} />
+                </Tooltip>
+            )}
+        </Text>
+    );
+
+    if (options !== undefined) {
+        assert(type === "text");
+
+        return (
+            <Autocomplete
+                freeSolo
+                className={cx(classes.muiAutocomplete, className)}
+                inputValue={value}
+                onInputChange={onInputChange}
+                options={options}
+                id={htmlId}
+                renderInput={params => (
+                    <MuiTextField
+                        {...params}
+                        className={classes.muiTextField}
+                        multiline={doRenderAsTextArea}
+                        ref={ref}
+                        variant="standard"
+                        error={hasError}
+                        helperText={helperTextNode}
+                        InputProps={{ ...params.InputProps, ...InputProps }}
+                        onBlur={onMuiTextfieldBlur}
+                        onKeyDown={onKeyDown}
+                        onFocus={onFocus}
+                        name={name}
+                        inputProps={{ ...inputProps, ...params.inputProps }}
+                        {...completedPropsRest}
+                    />
+                )}
+            />
+        );
+    }
+
     return (
         <MuiTextField
+            className={cx(classes.muiTextField, className)}
             multiline={doRenderAsTextArea}
             ref={ref}
             variant="standard"
@@ -379,51 +459,14 @@ export const TextField = memo((props: TextFieldProps) => {
                     ? "text"
                     : "password"
             }
-            className={cx(classes.root, className)}
             value={value}
             error={hasError}
-            helperText={
-                <Text
-                    className={classes.helperText}
-                    typo="caption"
-                    htmlComponent="span"
-                >
-                    {isValidationEnabled && !getIsValidValueResult.isValidValue
-                        ? getIsValidValueResult.message || helperText
-                        : helperText}
-                    &nbsp;
-                    {questionMarkHelperText !== undefined && (
-                        <Tooltip title={questionMarkHelperText}>
-                            <Icon
-                                iconId="help"
-                                className={classes.questionMark}
-                            />
-                        </Tooltip>
-                    )}
-                </Text>
-            }
+            helperText={helperTextNode}
             InputProps={InputProps}
-            onBlur={useConstCallback(() => {
-                if (!isValidationEnabled) enableValidation();
-                onBlur?.();
-            })}
-            onChange={useConstCallback(
-                ({
-                    target,
-                }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-                    transformAndSetValue(target.value),
-            )}
+            onBlur={onMuiTextfieldBlur}
+            onChange={onChange}
             onKeyDown={onKeyDown}
-            onFocus={useConstCallback(
-                ({
-                    target,
-                }: React.ChangeEvent<
-                    HTMLInputElement | HTMLTextAreaElement
-                >) => {
-                    if (!selectAllTextOnFocus) return;
-                    target.setSelectionRange(0, target.value.length);
-                },
-            )}
+            onFocus={onFocus}
             id={htmlId}
             name={name}
             inputProps={inputProps}
@@ -438,7 +481,10 @@ const useStyles = makeStyles<{
 }>({
     "name": { TextField },
 })((theme, { hasError, rootHeight }) => ({
-    "root": {
+    "muiAutocomplete": {
+        "minWidth": 145,
+    },
+    "muiTextField": {
         "& .MuiFormHelperText-root": {
             "position": "absolute",
             "top": rootHeight,
