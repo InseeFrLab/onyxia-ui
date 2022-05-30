@@ -1,3 +1,7 @@
+## **0.39.0** (2022-05-30)  
+  
+- Support suggestion with text field    
+  
 ### **0.38.1** (2022-05-19)  
   
 - Remove remaining git pull!    
