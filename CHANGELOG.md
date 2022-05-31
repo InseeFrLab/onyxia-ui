@@ -1,3 +1,9 @@
+### **0.39.1** (2022-05-31)  
+  
+- bump version  
+- Attempt solution for button bar bugs  
+- Update package.json    
+  
 ## **0.39.0** (2022-05-30)  
   
 - Support suggestion with text field    
