@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
-import { forwardRef, memo } from "react";
+import { forwardRef, memo, useState } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
@@ -12,6 +12,8 @@ import type { Equals } from "tsafe/Equals";
 import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
+import { useCallbackFactory } from "powerhooks/useCallbackFactory";
+import * as runExclusive from "run-exclusive";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Regular<IconId>
@@ -79,9 +81,27 @@ export function createButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
+            const [isMouseIn, setIsMouseIn] = useState(false);
+
+            const handleMousePositionFactory = useCallbackFactory(
+                runExclusive.build(async ([position]: ["in" | "out"]) => {
+                    switch (position) {
+                        case "in":
+                            setIsMouseIn(true);
+                            return;
+                        case "out":
+                            await new Promise<void>(resolve =>
+                                setTimeout(resolve, 400),
+                            );
+                            setIsMouseIn(false);
+                    }
+                }),
+            );
+
             const { classes, cx } = useStyles({
                 variant,
                 disabled,
+                isMouseIn,
             });
 
             const IconWd = useGuaranteedMemo(
@@ -98,6 +118,8 @@ export function createButton<IconId extends string = never>(params?: {
 
             return (
                 <MuiButton
+                    onMouseEnter={handleMousePositionFactory("in")}
+                    onMouseLeave={handleMousePositionFactory("out")}
                     ref={ref}
                     className={cx(classes.root, className)}
                     //There is an error in @mui/material types, this should be correct.
@@ -156,7 +178,8 @@ export function createButton<IconId extends string = never>(params?: {
     const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-    }>({ "name": { Button } })((theme, { variant, disabled }) => {
+        isMouseIn: boolean;
+    }>({ "name": { Button } })((theme, { variant, disabled, isMouseIn }) => {
         const textColor =
             theme.colors.useCases.typography[
                 disabled
@@ -265,16 +288,6 @@ export function createButton<IconId extends string = never>(params?: {
                     "&.MuiButton-text": {
                         "color": textColor,
                     },
-                    "&:hover": {
-                        "backgroundColor": hoverBackgroundColor,
-                        "& .MuiSvgIcon-root": {
-                            "color": hoverTextColor,
-                        },
-                        "&.MuiButton-text": {
-                            "color": hoverTextColor,
-                        },
-                    },
-
                     //NOTE: If the position of the button is relative (the default)
                     //it goes hover everything not positioned, we have to mess with z-index and
                     //we don't want that.
@@ -284,32 +297,32 @@ export function createButton<IconId extends string = never>(params?: {
                     //The solution is set 'position: relative' only when the ripple effect is supposed to be visible.
                     //This explain the following awful rules.
                     //The expected result is: https://user-images.githubusercontent.com/6702424/157984062-27e544c3-f86f-47b8-b141-c5f61b8a2880.mov
-                    "position": "unset",
+
+                    //NOTE WILLIAM: In this example I set the position
+                    //to relative when the mouse is inside the element.
+                    //Before it was set when the element was active witch
+                    //meant that the touch ripple effect would be suddenly
+                    //interrupted when the mouse button goes up, witch
+                    //was not very satisfying aesthetic wise.
+                    //May it also be noted that I have used a parameter instead of
+                    //:hover, because if we trigger the touch ripple effect and move the
+                    //mouse outside the element before the effect has had time to
+                    //finish, it produces the same unsatisfying interruption effect.
+                    //So I set the parameter using an async function wrapped in
+                    //a run exclusive, that delays the setting of the position slightly
+                    //when the mouse moves outside the element.
+
+                    "position": isMouseIn ? "relative" : "unset",
                     "& .MuiTouchRipple-root": {
-                        "display": "none",
+                        "display": isMouseIn ? "unset" : "none",
                     },
-                    "&:active": {
-                        "position": "relative",
-                        "& .MuiTouchRipple-root": {
-                            "display": "unset",
+                    "&:hover": {
+                        "backgroundColor": hoverBackgroundColor,
+                        "& .MuiSvgIcon-root": {
+                            "color": hoverTextColor,
                         },
-                    },
-                    "&:focus": {
-                        "position": "relative",
-                        "& .MuiTouchRipple-root": {
-                            "display": "unset",
-                        },
-                        "&:hover": {
-                            "position": "unset",
-                            "& .MuiTouchRipple-root": {
-                                "display": "none",
-                            },
-                            "&:active": {
-                                "position": "relative",
-                                "& .MuiTouchRipple-root": {
-                                    "display": "unset",
-                                },
-                            },
+                        "&.MuiButton-text": {
+                            "color": hoverTextColor,
                         },
                     },
                 } as const;
