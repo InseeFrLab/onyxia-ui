@@ -59,9 +59,6 @@ export function createButtonBarButton<IconId extends string = never>(params: {
             "backgroundColor": "transparent",
             "borderRadius": "unset",
             "borderColor": "transparent",
-            "& .MuiTouchRipple-root": {
-                "display": "none",
-            },
             "transition": "none",
             "& > *": {
                 "transition": "none",
