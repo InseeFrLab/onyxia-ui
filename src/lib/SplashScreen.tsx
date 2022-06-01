@@ -35,13 +35,11 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 
     const { globalHideSplashScreen } = (() => {
         const { getDoUseDelay } = (() => {
-            const { evtLastDelayedTime } = createUseGlobalState(
-                "lastDelayedTime",
-                0,
-                {
-                    "persistance": "localStorage",
-                },
-            );
+            const { evtLastDelayedTime } = createUseGlobalState({
+                "name": "lastDelayedTime",
+                "initialState": 0,
+                "doPersistAcrossReloads": true,
+            });
 
             function getDoUseDelay() {
                 const doUseDelay =

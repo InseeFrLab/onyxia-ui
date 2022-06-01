@@ -1,11 +1,12 @@
-import { useEffect, useRef, memo } from "react";
+import { useEffect, useReducer, useRef, memo } from "react";
 import type { RefObject } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
 import { useCssAndCx } from "tss-react/compat";
 import { Evt } from "evt";
-import { useElementEvt } from "evt/hooks";
+import { useEvt } from "evt/hooks";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
+import { useStateRef } from "powerhooks/useStateRef";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -66,44 +67,55 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         );
     }, [isCollapsedIfDependsOfScrollRef.current]);
 
-    const dummyRef = useRef<HTMLDivElement>();
+    const dummyRef = useStateRef<HTMLDivElement>(null);
 
-    useElementEvt<HTMLDivElement>(
-        ({ ctx, element, registerSideEffect }) => {
-            if (rest.behavior !== "collapses on scroll") {
-                return;
-            }
+    {
+        const ref =
+            rest.behavior !== "collapses on scroll"
+                ? dummyRef
+                : rest.scrollableElementRef;
 
-            const { scrollTopThreshold } = rest;
+        const [, forceUpdate] = useReducer(counter => counter + 1, 0);
 
-            Evt.from(ctx, element, "scroll")
-                .pipe(event => [(event as any).target.scrollTop as number])
-                .toStateful(element.scrollTop)
-                .attach(scrollTop => {
-                    isCollapsedIfDependsOfScrollRef.current =
-                        isCollapsedIfDependsOfScrollRef.current
-                            ? scrollTop + childrenWrapperHeight * 1.3 >
-                              scrollTopThreshold
-                            : scrollTop > scrollTopThreshold;
+        useEvt(
+            ctx => {
+                const element = ref.current;
 
-                    // eslint-disable-next-line @typescript-eslint/no-empty-function
-                    registerSideEffect(() => {}); //This triggers update
-                });
-        },
-        rest.behavior !== "collapses on scroll"
-            ? dummyRef
-            : rest.scrollableElementRef,
-        [
-            rest.behavior,
-            ...(rest.behavior !== "collapses on scroll"
-                ? [Object, Object, Object]
-                : [
-                      rest.scrollTopThreshold,
-                      rest.scrollableElementRef,
-                      childrenWrapperHeight,
-                  ]),
-        ],
-    );
+                if (!element) {
+                    return;
+                }
+
+                if (rest.behavior !== "collapses on scroll") {
+                    return;
+                }
+
+                const { scrollTopThreshold } = rest;
+
+                Evt.from(ctx, element, "scroll")
+                    .pipe(event => [(event as any).target.scrollTop as number])
+                    .toStateful(element.scrollTop)
+                    .attach(scrollTop => {
+                        isCollapsedIfDependsOfScrollRef.current =
+                            isCollapsedIfDependsOfScrollRef.current
+                                ? scrollTop + childrenWrapperHeight * 1.3 >
+                                  scrollTopThreshold
+                                : scrollTop > scrollTopThreshold;
+
+                        forceUpdate();
+                    });
+            },
+            [
+                rest.behavior,
+                ...(rest.behavior !== "collapses on scroll"
+                    ? [null, null, null]
+                    : [
+                          rest.scrollTopThreshold,
+                          rest.scrollableElementRef,
+                          childrenWrapperHeight,
+                      ]),
+            ],
+        );
+    }
 
     const isCollapsed = (() => {
         switch (rest.behavior) {

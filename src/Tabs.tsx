@@ -9,7 +9,8 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import { useDomRect } from "powerhooks";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { useElementEvt } from "evt/hooks";
+import { useEvt } from "evt/hooks";
+import { useStateRef } from "powerhooks/useStateRef";
 import { Evt } from "evt";
 
 const { Icon } = createIcon({
@@ -104,8 +105,16 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     const isLeftArrowDisabled = firstTabIndex === 0;
     const isRightArrowDisabled = tabs.length - firstTabIndex === maxTabCount;
 
-    const { ref: tabWrapperRef } = useElementEvt<HTMLDivElement>(
-        ({ ctx, element }) => {
+    const tabWrapperRef = useStateRef<HTMLDivElement>(null);
+
+    useEvt(
+        ctx => {
+            const element = tabWrapperRef.current;
+
+            if (element === null) {
+                return;
+            }
+
             if (tabs.length <= maxTabCount) {
                 return;
             }
@@ -131,7 +140,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                 onArrowClickFactory(direction)();
             });
         },
-        [firstTabIndex, offset],
+        [tabWrapperRef.current, firstTabIndex, offset],
     );
 
     return (

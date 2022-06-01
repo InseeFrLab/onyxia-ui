@@ -53,13 +53,11 @@ export function createLeftBar<IconId extends string>(params?: {
         }),
     };
 
-    const { useIsCollapsed } = createUseGlobalState(
-        "isCollapsed",
-        !defaultIsPanelOpen,
-        {
-            "persistance": persistIsPanelOpen ? "localStorage" : false,
-        },
-    );
+    const { useIsCollapsed } = createUseGlobalState({
+        "name": "isCollapsed",
+        "initialState": !defaultIsPanelOpen,
+        "doPersistAcrossReloads": persistIsPanelOpen,
+    });
 
     const iconSize = "large";
 

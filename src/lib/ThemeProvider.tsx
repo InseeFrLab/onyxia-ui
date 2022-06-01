@@ -15,12 +15,7 @@ import type {
     ColorUseCasesBase,
     CreateColorUseCase,
 } from "./color";
-import {
-    defaultPalette,
-    createDefaultColorUseCases,
-    useIsDarkModeEnabled,
-    evtIsDarkModeEnabled,
-} from "./color";
+import { defaultPalette, createDefaultColorUseCases } from "./color";
 import type { ComputedTypography, GetTypographyDesc } from "./typography";
 import {
     defaultGetTypographyDesc,
@@ -48,6 +43,10 @@ import { breakpointsValues } from "./breakpoints";
 import { capitalize } from "tsafe/capitalize";
 import createCache from "@emotion/cache";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
+import {
+    useIsDarkModeEnabled,
+    evtIsDarkModeEnabled,
+} from "./useIsDarkModeEnabled";
 
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
