@@ -66,13 +66,13 @@
     "dependencies": {
         "@mui/icons-material": "^5.8.2",
         "color": "3.1.3",
-        "evt": "2.0.0-beta.43",
+        "evt": "2.0.0-beta.44",
         "material-design-icons": "^3.0.1",
         "memoizee": "^0.4.15",
         "minimal-polyfills": "^2.2.1",
         "tsafe": "^0.10.0",
         "tss-react": "^3.7.0",
-        "powerhooks": "^0.17.1",
+        "powerhooks": "^0.17.2",
         "run-exclusive": "^2.2.14"
     },
     "devDependencies": {
