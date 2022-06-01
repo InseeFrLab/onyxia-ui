@@ -2,7 +2,7 @@ import { useState, memo } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
 import { Evt } from "evt";
-import { useElementEvt } from "evt/hooks";
+import { useEvt } from "evt/hooks";
 import { getScrollableParent } from "powerhooks/getScrollableParent";
 import { makeStyles } from "./lib/ThemeProvider";
 import { useMergedClasses } from "tss-react/compat";
@@ -44,8 +44,14 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
     const [isCollapsedIfDependsOfScroll, setIsCollapsedIfDependsOfScroll] =
         useState(false);
 
-    useElementEvt<HTMLDivElement>(
-        ({ ctx, element: childrenWrapperElement, registerSideEffect }) => {
+    useEvt(
+        ctx => {
+            const childrenWrapperElement = childrenWrapperRef.current;
+
+            if (!childrenWrapperElement) {
+                return;
+            }
+
             if (rest.behavior !== "collapses on scroll") {
                 return;
             }
@@ -65,20 +71,20 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
                 .toStateful()
                 .pipe(() => [scrollElement.scrollTop])
                 .attach(scrollTop =>
-                    registerSideEffect(() =>
-                        setIsCollapsedIfDependsOfScroll(isCollapsed =>
-                            isCollapsed
-                                ? scrollTop + childrenWrapperHeight * 1.3 >
-                                  scrollTopThreshold
-                                : scrollTop > scrollTopThreshold,
-                        ),
+                    setIsCollapsedIfDependsOfScroll(isCollapsed =>
+                        isCollapsed
+                            ? scrollTop + childrenWrapperHeight * 1.3 >
+                              scrollTopThreshold
+                            : scrollTop > scrollTopThreshold,
                     ),
                 );
         },
-        childrenWrapperRef,
-        rest.behavior !== "collapses on scroll"
-            ? [null, null]
-            : [rest.scrollTopThreshold, childrenWrapperHeight],
+        [
+            childrenWrapperRef.current,
+            ...(rest.behavior !== "collapses on scroll"
+                ? [null, null]
+                : [rest.scrollTopThreshold, childrenWrapperHeight]),
+        ],
     );
 
     let { classes, cx } = useStyles({

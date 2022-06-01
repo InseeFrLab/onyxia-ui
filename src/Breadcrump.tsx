@@ -53,17 +53,15 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
         [evtPropsPath],
     );
 
-    const evtDisplayFeedback = useEvt(
-        ctx =>
-            evtAction?.pipe(ctx, data =>
-                data.action !== "DISPLAY COPY FEEDBACK" ? null : [data],
-            ),
-        [evtAction ?? Object],
-    );
-
     useEvt(
-        ctx =>
-            evtDisplayFeedback?.attach(ctx, ({ basename }) => {
+        ctx => {
+            const evtDisplayFeedback = evtAction?.pipe(data =>
+                data.action === "DISPLAY COPY FEEDBACK"
+                    ? [data.basename]
+                    : null,
+            );
+
+            evtDisplayFeedback?.attach(ctx, basename => {
                 setIsFocused(true);
                 setPath([
                     ...evtPropsPath.state,
@@ -92,8 +90,9 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
                 ctx.evtDoneOrAborted.attachOnce(scopedCtx, () =>
                     scopedCtx.done(),
                 );
-            }),
-        [evtDisplayFeedback, evtPropsPath],
+            });
+        },
+        [evtAction, evtPropsPath],
     );
 
     const onClickFactory = useCallbackFactory<[string[], boolean], []>(

@@ -27,11 +27,11 @@ export type PageHeaderProps<IconId extends string> = {
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
 
-const { usePageHeaderClosedHelpers } = createUseGlobalState(
-    "pageHeaderClosedHelpers",
-    id<string[]>([]),
-    { "persistance": false },
-);
+const { usePageHeaderClosedHelpers } = createUseGlobalState({
+    "name": "pageHeaderClosedHelpers",
+    "initialState": id<string[]>([]),
+    "doPersistAcrossReloads": false,
+});
 
 const { Icon: LocalIcon } = createIcon({
     "close": CloseSharp,
