@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useState, useRef, memo } from "react";
+import { useState, memo } from "react";
 import MuiDialog from "@mui/material/Dialog";
 import { makeStyles } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
@@ -9,6 +9,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
 import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
 import { breakpointsValues } from "./lib/breakpoints";
+import { useStateRef } from "powerhooks/useStateRef";
 
 /** To make the dialog fit content: "maxWidth": "unset" */
 export type DialogProps = {
@@ -60,85 +61,81 @@ export const Dialog = memo((props: DialogProps) => {
         onDoShowNextTimeValueChange(!isCheckedNewValue);
     });
 
-    const mountPointRef = useRef<HTMLDivElement>(null);
-
-    const getContainer = useConstCallback(() => {
-        const element = mountPointRef.current;
-        assert(element !== null);
-        return element;
-    });
+    const mountPointRef = useStateRef<HTMLDivElement>(null);
 
     return (
         <>
             <div ref={mountPointRef} about="Dialog container" />
-            <MuiDialog
-                classes={muiDialogClasses}
-                container={getContainer}
-                open={isOpen}
-                onClose={onClose}
-                aria-labelledby={labelledby}
-                aria-describedby={describedby}
-                PaperComponent={({ children }) => (
-                    <div className={cx(classes.root, className)}>
-                        {children}
-                    </div>
-                )}
-            >
-                {title !== undefined &&
-                    (typeof title !== "string" ? (
-                        title
-                    ) : (
-                        <Text
-                            typo="object heading"
-                            componentProps={{ "id": labelledby }}
-                        >
-                            {title}
-                        </Text>
-                    ))}
-                {subtitle !== undefined &&
-                    (typeof subtitle !== "string" ? (
-                        subtitle
-                    ) : (
-                        <Text
-                            className={classes.subtitle}
-                            componentProps={{ "id": describedby }}
-                            typo="body 1"
-                        >
-                            {subtitle}
-                        </Text>
-                    ))}
-                {body !== undefined &&
-                    (typeof body !== "string" ? (
-                        body
-                    ) : (
-                        <Text
-                            className={classes.body}
-                            htmlComponent="div"
-                            typo="body 2"
-                        >
-                            {body}
-                        </Text>
-                    ))}
+            {mountPointRef.current !== null && (
+                <MuiDialog
+                    classes={muiDialogClasses}
+                    container={mountPointRef.current}
+                    open={isOpen}
+                    onClose={onClose}
+                    aria-labelledby={labelledby}
+                    aria-describedby={describedby}
+                    PaperComponent={({ children }) => (
+                        <div className={cx(classes.root, className)}>
+                            {children}
+                        </div>
+                    )}
+                >
+                    {title !== undefined &&
+                        (typeof title !== "string" ? (
+                            title
+                        ) : (
+                            <Text
+                                typo="object heading"
+                                componentProps={{ "id": labelledby }}
+                            >
+                                {title}
+                            </Text>
+                        ))}
+                    {subtitle !== undefined &&
+                        (typeof subtitle !== "string" ? (
+                            subtitle
+                        ) : (
+                            <Text
+                                className={classes.subtitle}
+                                componentProps={{ "id": describedby }}
+                                typo="body 1"
+                            >
+                                {subtitle}
+                            </Text>
+                        ))}
+                    {body !== undefined &&
+                        (typeof body !== "string" ? (
+                            body
+                        ) : (
+                            <Text
+                                className={classes.body}
+                                htmlComponent="div"
+                                typo="body 2"
+                            >
+                                {body}
+                            </Text>
+                        ))}
 
-                <div className={classes.buttonWrapper}>
-                    <div className={classes.checkBoxWrapper}>
-                        {onDoShowNextTimeValueChange !== undefined && (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={isChecked}
-                                        onChange={onChange}
-                                        name="checkedB"
-                                        color="primary"
-                                    />
-                                }
-                                label={doNotShowNextTimeText}
-                            />
-                        )}
+                    <div className={classes.buttonWrapper}>
+                        <div className={classes.checkBoxWrapper}>
+                            {onDoShowNextTimeValueChange !== undefined && (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={isChecked}
+                                            onChange={onChange}
+                                            name="checkedB"
+                                            color="primary"
+                                        />
+                                    }
+                                    label={doNotShowNextTimeText}
+                                />
+                            )}
+                        </div>
+                        {buttons}
                     </div>
-                    {buttons}
-                </div>
-            </MuiDialog>
+                </MuiDialog>
+            )}
         </>
     );
 });
