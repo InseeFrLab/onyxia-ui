@@ -155,6 +155,36 @@ export const VueTextArea = getStory({
 
 export const VueWithSuggestions = getStory({
     "defaultValue": "",
+    "freeSolo": true,
+    "inputProps_aria-label": "the aria label",
+    "label": "This is the label",
+    "getIsValidValue": value => {
+        console.log("getIsValidValue invoked: ", value);
+
+        if (value.includes(" ")) {
+            return { "isValidValue": false, "message": "Can't include spaces" };
+        }
+
+        return { "isValidValue": true };
+    },
+    "transformValueBeingTyped": value => {
+        console.log("transformValueBeingTyped invoked: ", value);
+        return value;
+    },
+    "options": ["first", "second", "third"],
+    ...logCallbacks([
+        "onEscapeKeyDown",
+        "onEnterKeyDown",
+        "onBlur",
+        "onSubmit",
+        "onValueBeingTypedChange",
+    ]),
+});
+
+export const VueWithTags = getStory({
+    "defaultValue": "",
+    "freeSolo": true,
+    "multiple": true,
     "inputProps_aria-label": "the aria label",
     "label": "This is the label",
     "getIsValidValue": value => {
