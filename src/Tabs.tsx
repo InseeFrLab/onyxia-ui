@@ -19,6 +19,7 @@ const { Icon } = createIcon({
 
 export type TabProps<TabId extends string = string> = {
     className?: string;
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     tabs: TabProps.Tab<TabId>[];
     activeTabId: TabId;
     size?: "big" | "small";
@@ -37,6 +38,7 @@ export declare namespace TabProps {
 export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     const {
         className,
+        classes,
         tabs,
         activeTabId,
         onRequestChangeActiveTab,
@@ -69,13 +71,16 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         [tabWidth, tabs.length],
     );
 
-    const { classes, cx, css } = useStyles({
-        tabsWrapperWidth,
-        leftArrowWidth,
-        leftArrowHeight,
-        offset,
-        tabWidth,
-    });
+    const { classes, cx, css } = useStyles(
+        {
+            tabsWrapperWidth,
+            leftArrowWidth,
+            leftArrowHeight,
+            offset,
+            tabWidth,
+        },
+        { props },
+    );
 
     const areArrowsVisible = tabs.length > maxTabCount;
 
