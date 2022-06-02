@@ -86,6 +86,11 @@ export type TextFieldProps = {
     doRenderAsTextArea?: boolean;
     /** NOTE: If length 0 it's assumed loading */
     options?: string[];
+
+    //NOTE: freeSolo and multiple only takes effects if options is provided.
+    freeSolo?: boolean;
+    multiple?: boolean;
+
     autoComplete?:
         | "on"
         | "off"
@@ -182,6 +187,8 @@ export const TextField = memo((props: TextFieldProps) => {
         doRenderAsTextArea = false,
         doIndentOnTab = false,
         options,
+        freeSolo = false,
+        multiple = false,
         ...completedPropsRest
     } = props;
 
@@ -418,7 +425,8 @@ export const TextField = memo((props: TextFieldProps) => {
 
         return (
             <Autocomplete
-                freeSolo
+                freeSolo={freeSolo}
+                multiple={multiple}
                 className={cx(classes.muiAutocomplete, className)}
                 inputValue={value}
                 onInputChange={onInputChange}
