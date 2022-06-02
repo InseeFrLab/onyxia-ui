@@ -1,3 +1,8 @@
+## **0.41.0** (2022-06-02)  
+  
+- Bump version (changlog ignore)  
+- Tabs component accepts classes props    
+  
 ## **0.40.0** (2022-06-02)  
   
 - Add support for tags in TextField    
