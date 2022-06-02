@@ -38,7 +38,6 @@ export declare namespace TabProps {
 export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
     const {
         className,
-        classes,
         tabs,
         activeTabId,
         onRequestChangeActiveTab,
