@@ -1,3 +1,14 @@
+### **0.41.1** (2022-06-03)  
+  
+- bump version  
+- Bump version (changlog ignore)  
+- Tabs component accepts classes props  
+- Add support for tags in TextField  
+- Fix dialog error in log  
+- Compat React 18  
+- bump version  
+- Attempt solution for button bar bugs    
+  
 ## **0.41.0** (2022-06-02)  
   
 - Bump version (changlog ignore)  
