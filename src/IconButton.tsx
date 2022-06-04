@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import { useState } from "react";
+import { useCallbackFactory } from "powerhooks/useCallbackFactory";
+import * as runExclusive from "run-exclusive";
 import type { FC } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import { forwardRef, memo } from "react";
@@ -74,10 +77,29 @@ export function createIconButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
-            const { classes, cx } = useStyles({ disabled });
+            const [isMouseIn, setIsMouseIn] = useState(false);
+
+            const handleMousePositionFactory = useCallbackFactory(
+                runExclusive.build(async ([position]: ["in" | "out"]) => {
+                    switch (position) {
+                        case "in":
+                            setIsMouseIn(true);
+                            return;
+                        case "out":
+                            await new Promise<void>(resolve =>
+                                setTimeout(resolve, 400),
+                            );
+                            setIsMouseIn(false);
+                    }
+                }),
+            );
+
+            const { classes, cx } = useStyles({ disabled, isMouseIn });
 
             return (
                 <MuiIconButton
+                    onMouseEnter={handleMousePositionFactory("in")}
+                    onMouseLeave={handleMousePositionFactory("out")}
                     ref={ref}
                     className={cx(classes.root, className)}
                     disabled={disabled}
@@ -138,9 +160,9 @@ export function createIconButton<IconId extends string = never>(params?: {
         }),
     );
 
-    const useStyles = makeStyles<{ disabled: boolean }>({
+    const useStyles = makeStyles<{ disabled: boolean; isMouseIn: boolean }>({
         "name": { IconButton },
-    })((theme, { disabled }) => ({
+    })((theme, { disabled, isMouseIn }) => ({
         "root": {
             "padding": theme.spacing(2),
             "&:hover": {
@@ -159,33 +181,9 @@ export function createIconButton<IconId extends string = never>(params?: {
             //The solution is set 'position: relative' only when the ripple effect is supposed to be visible.
             //This explain the following awful rules.
             //The expected result is: https://user-images.githubusercontent.com/6702424/157984062-27e544c3-f86f-47b8-b141-c5f61b8a2880.mov
-            "position": "unset",
+            "position": isMouseIn ? "relative" : "unset",
             "& .MuiTouchRipple-root": {
-                "display": "none",
-            },
-            "&:active": {
-                "position": "relative",
-                "& .MuiTouchRipple-root": {
-                    "display": "unset",
-                },
-            },
-            "&:focus": {
-                "position": "relative",
-                "& .MuiTouchRipple-root": {
-                    "display": "unset",
-                },
-                "&:hover": {
-                    "position": "unset",
-                    "& .MuiTouchRipple-root": {
-                        "display": "none",
-                    },
-                    "&:active": {
-                        "position": "relative",
-                        "& .MuiTouchRipple-root": {
-                            "display": "unset",
-                        },
-                    },
-                },
+                "display": isMouseIn ? "unset" : "none",
             },
         },
         "icon": {
