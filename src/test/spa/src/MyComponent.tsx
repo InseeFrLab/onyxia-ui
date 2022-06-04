@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { makeStyles, Icon, Text, Button } from "./theme";
+import { makeStyles, Icon, IconButton, Text, Button } from "./theme";
 //Cherry pick the custom components you wish to import.
 import { Alert } from "onyxia-ui/Alert";
 
@@ -82,6 +82,8 @@ export function MyComponent() {
 
                 }}
             >Show splash screen a few seconds</Button>
+            <br/>
+            <IconButton iconId="edit" href="http://example.com" />
         </div>
     );
 }
