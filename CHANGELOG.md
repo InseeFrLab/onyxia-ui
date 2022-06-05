@@ -1,3 +1,7 @@
+### **0.41.2** (2022-06-05)  
+  
+- Exibit bug with touch ripple    
+  
 ### **0.41.1** (2022-06-03)  
   
 - bump version  
