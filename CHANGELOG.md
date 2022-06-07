@@ -1,3 +1,7 @@
+### **0.41.3** (2022-06-07)  
+  
+- Migrate to React18    
+  
 ### **0.41.2** (2022-06-05)  
   
 - Exibit bug with touch ripple    
