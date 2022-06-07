@@ -53,10 +53,10 @@
     "keywords": [],
     "homepage": "https://ui.onyxia.dev",
     "peerDependencies": {
+        "@emotion/react": "^11.9.0",
         "@mui/material": "^5.8.2",
         "@types/react": "^16.0.0 || ^17.0.0 || ^18.0.0",
-        "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-        "@emotion/react": "^11.9.0"
+        "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
     },
     "peerDependenciesMeta": {
         "@types/react": {
@@ -70,41 +70,43 @@
         "material-design-icons": "^3.0.1",
         "memoizee": "^0.4.15",
         "minimal-polyfills": "^2.2.1",
-        "tsafe": "^0.10.0",
-        "tss-react": "^3.7.0",
         "powerhooks": "^0.19.0",
-        "run-exclusive": "^2.2.14"
+        "run-exclusive": "^2.2.14",
+        "tsafe": "^0.10.0",
+        "tss-react": "^3.7.0"
     },
     "devDependencies": {
         "@emotion/react": "^11.9.0",
         "@emotion/styled": "^11.8.1",
         "@mui/material": "^5.8.2",
-        "@storybook/addon-actions": "^6.3.7",
-        "@storybook/addon-essentials": "^6.3.7",
-        "@storybook/addon-links": "^6.3.7",
-        "@storybook/addons": "^6.3.7",
-        "@storybook/node-logger": "^6.3.7",
+        "@storybook/addon-actions": "^6.5.7",
+        "@storybook/addon-essentials": "^6.5.7",
+        "@storybook/addon-links": "^6.5.7",
+        "@storybook/addons": "^6.5.7",
+        "@storybook/node-logger": "^6.5.7",
         "@storybook/preset-create-react-app": "^3.2.0",
-        "@storybook/react": "^6.3.7",
-        "@storybook/theming": "^6.3.7",
+        "@storybook/react": "^6.5.7",
+        "@storybook/theming": "^6.5.7",
         "@types/color": "^3.0.1",
         "@types/memoizee": "^0.4.5",
         "@types/node": "^17.0.24",
-        "@types/react": "^17.0.0",
-        "@types/react-dom": "^17.0.0",
         "@typescript-eslint/eslint-plugin": "^4.24.0",
         "@typescript-eslint/parser": "^4.24.0",
         "copyfiles": "^2.4.1",
         "eslint": "^7.26.0",
+        "@types/eslint": "^8.4.2",
         "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-storybook": "^0.5.12",
+        "eslint-plugin-tss-unused-classes": "^0.0.3",
         "husky": "^4.3.8",
         "lint-staged": "^11.0.0",
         "prettier": "^2.3.0",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
+        "@types/react": "18.0.12",
+        "@types/react-dom": "18.0.5",
+        "react": "18.1.0",
+        "react-dom": "18.1.0",
         "react-scripts": "4.0.3",
         "ts-node": "^10.3.0",
-        "typescript": "4.2.2",
-        "eslint-plugin-tss-unused-classes": "^0.0.3"
+        "typescript": "4.2.2"
     }
 }

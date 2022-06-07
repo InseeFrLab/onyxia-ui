@@ -71,11 +71,8 @@ export function createLeftBar<IconId extends string>(params?: {
                 currentItemId,
                 items,
                 reduceText = "reduce",
-                children,
                 ...rest
             } = props;
-
-            assert(!children);
 
             //For the forwarding, rest should be empty (typewise),
             // eslint-disable-next-line @typescript-eslint/ban-types

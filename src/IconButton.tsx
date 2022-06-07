@@ -66,8 +66,6 @@ export function createIconButton<IconId extends string = never>(params?: {
                 iconId,
                 size,
                 disabled = false,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                children,
                 autoFocus = false,
                 tabIndex,
                 name,

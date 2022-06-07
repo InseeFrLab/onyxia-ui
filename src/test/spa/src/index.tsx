@@ -1,9 +1,10 @@
-import { render } from "react-dom";
 import { ThemeProvider } from "./theme";
 import { MyComponent } from "./MyComponent";
 import { Text, splashScreen } from "./theme";
 import { getIsPortraitOrientation, ViewPortOutOfRangeError } from "onyxia-ui";
 import type { ThemeProviderProps } from "onyxia-ui";
+import { createRoot } from "react-dom/client";
+
 
 
 const getViewPortConfig: ThemeProviderProps["getViewPortConfig"] =
@@ -17,12 +18,12 @@ const getViewPortConfig: ThemeProviderProps["getViewPortConfig"] =
         };
     };
 
-render(
+
+createRoot(document.getElementById("root")!).render(
     <ThemeProvider
         getViewPortConfig={getViewPortConfig}
         splashScreen={splashScreen}
     >
         <MyComponent />
     </ThemeProvider>,
-    document.getElementById("root"),
 );

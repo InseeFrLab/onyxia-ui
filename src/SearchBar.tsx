@@ -41,12 +41,9 @@ export const SearchBar = memo(
             search,
             placeholder = "Search",
             evtAction,
-            children,
             classes: props_classes,
             ...rest
         } = props;
-
-        assert(!children);
 
         //For the forwarding, rest should be empty (typewise),
         // eslint-disable-next-line @typescript-eslint/ban-types

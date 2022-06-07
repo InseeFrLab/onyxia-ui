@@ -63,12 +63,9 @@ export function createPageHeader<IconId extends string>(params?: {
                 titleCollapseParams: props_titleCollapseParams,
                 helpCollapseParams: props_helpCollapseParams,
                 classes: props_classes,
-                children,
                 //For the forwarding, rest should be empty (typewise)
                 ...rest
             } = props;
-
-            assert(!children);
 
             //For the forwarding, rest should be empty (typewise),
             // eslint-disable-next-line @typescript-eslint/ban-types

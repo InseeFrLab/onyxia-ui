@@ -192,6 +192,8 @@ export const TextField = memo((props: TextFieldProps) => {
         ...completedPropsRest
     } = props;
 
+    console.log("!!!!!!!!!!!!!!!!!!!");
+
     const { value, transformAndSetValue } = (function useClosure() {
         const [value, setValue] = useState(defaultValue);
 
