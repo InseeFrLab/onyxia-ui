@@ -1,3 +1,7 @@
+### **0.41.4** (2022-06-07)  
+  
+- Rollback to React17 (for test) because of Styorybook    
+  
 ### **0.41.2** (2022-06-05)  
   
 - Exibit bug with touch ripple    
