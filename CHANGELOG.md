@@ -1,3 +1,8 @@
+### **0.41.5** (2022-06-10)  
+  
+- Add github picker  
+- Remove tag support from textField    
+  
 ### **0.41.4** (2022-06-07)  
   
 - Rollback to React17 (for test) because of Styorybook    
