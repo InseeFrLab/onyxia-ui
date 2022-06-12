@@ -3,12 +3,10 @@ import {
     updateSearchBarUrl,
     retrieveParamFromUrl,
 } from "powerhooks/tools/urlSearchParams";
-import type { StatefulEvt } from "powerhooks";
+import type { StatefulEvt } from "evt";
+import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
 
-const {
-    useIsDarkModeEnabled,
-    evtIsDarkModeEnabled: evtIsDarkModeEnabled_needsAnnotation,
-} = createUseGlobalState({
+const { useIsDarkModeEnabled, $isDarkModeEnabled } = createUseGlobalState({
     "name": "isDarkModeEnabled",
     "initialState":
         window.matchMedia &&
@@ -19,7 +17,9 @@ const {
 export { useIsDarkModeEnabled };
 
 export const evtIsDarkModeEnabled: StatefulEvt<boolean> =
-    evtIsDarkModeEnabled_needsAnnotation;
+    statefulObservableToStatefulEvt({
+        "statefulObservable": $isDarkModeEnabled,
+    });
 
 (() => {
     const result = retrieveParamFromUrl({

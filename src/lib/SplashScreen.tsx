@@ -21,6 +21,7 @@ import * as runExclusive from "run-exclusive";
 import { OnyxiaLogoSvg } from "../assets/svg/OnyxiaLogo";
 import { useConst } from "powerhooks/useConst";
 import { useViewPortState } from "powerhooks/ViewPortAdapter";
+import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -35,10 +36,14 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 
     const { globalHideSplashScreen } = (() => {
         const { getDoUseDelay } = (() => {
-            const { evtLastDelayedTime } = createUseGlobalState({
+            const { $lastDelayedTime } = createUseGlobalState({
                 "name": "lastDelayedTime",
                 "initialState": 0,
                 "doPersistAcrossReloads": true,
+            });
+
+            const evtLastDelayedTime = statefulObservableToStatefulEvt<number>({
+                "statefulObservable": $lastDelayedTime,
             });
 
             function getDoUseDelay() {
