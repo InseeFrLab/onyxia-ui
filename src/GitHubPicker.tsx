@@ -198,7 +198,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                             />
                         </li>
                     )}
-                    options={tags
+                    options={[...tags]
                         .sort((a, b) => {
                             // Display the selected tags first.
                             const getWeight = (tag: string) => {
