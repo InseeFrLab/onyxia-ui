@@ -1,3 +1,9 @@
+### **0.41.6** (2022-06-12)  
+  
+- Export some types from Icon  
+- Update powerhooks  
+- Fix bug with GitHubPicker    
+  
 ### **0.41.5** (2022-06-10)  
   
 - Add github picker  
