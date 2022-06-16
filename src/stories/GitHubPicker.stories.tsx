@@ -108,9 +108,9 @@ function Component() {
 export const VueDefault = getStory({});
 
 const { i18n } = declareComponentKeys<
-    | "label"
-    | { K: "create tag"; P: { tag: string } }
-    | { K: "done"; R: JSX.Element }
+    | "github picker label"
+    | { K: "github picker create tag"; P: { tag: string } }
+    | { K: "github picker done"; R: JSX.Element }
     | "something else"
 >()({ Component });
 
@@ -122,17 +122,18 @@ const { useTranslation } = createI18nApi<typeof i18n>()(
     {
         "en": {
             "Component": {
-                "label": "Pick tag",
-                "create tag": ({ tag }) => `Create the "${tag}" tag`,
-                "done": <>Done</>,
+                "github picker label": "Pick tag",
+                "github picker create tag": ({ tag }) =>
+                    `Create the "${tag}" tag`,
+                "github picker done": <>Done</>,
                 "something else": "ok",
             },
         },
         "fr": {
             "Component": {
-                "label": undefined,
-                "create tag": undefined,
-                "done": undefined,
+                "github picker label": undefined,
+                "github picker create tag": undefined,
+                "github picker done": undefined,
                 "something else": undefined,
             },
         },

@@ -42,9 +42,9 @@ export type GitHubPickerProps = {
         anchorEl: HTMLElement;
     }>;
     t: {
-        (key: "label"): NonNullable<ReactNode>;
-        (key: "create tag", params: { tag: string }): ReactNode;
-        (key: "done"): ReactNode;
+        (key: "github picker label"): NonNullable<ReactNode>;
+        (key: "github picker create tag", params: { tag: string }): ReactNode;
+        (key: "github picker done"): ReactNode;
     };
 };
 
@@ -100,7 +100,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
         >
             <div ref={ref}>
                 <div className={classes.labelWrapper}>
-                    <Text typo="body 1">{t("label")}</Text>
+                    <Text typo="body 1">{t("github picker label")}</Text>
                 </div>
                 <Autocomplete
                     open
@@ -280,7 +280,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                         className={classes.doneButton}
                         onClick={onClose}
                     >
-                        {t("done")}
+                        {t("github picker done")}
                     </Button>
                 </div>
             </div>
@@ -412,7 +412,7 @@ const { NoOptionText } = (() => {
                 className={classes.root}
                 onClick={() => onClick(inputValue)}
             >
-                {t("create tag", { "tag": inputValue })}
+                {t("github picker create tag", { "tag": inputValue })}
             </MuiLink>
         );
     });
