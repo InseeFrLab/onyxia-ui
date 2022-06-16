@@ -1,3 +1,7 @@
+## **0.44.0** (2022-06-16)  
+  
+- Support classes params on Tag    
+  
 ## **0.43.0** (2022-06-16)  
   
 - More specific i18n keys for GitHubPicker    
