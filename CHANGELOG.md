@@ -1,3 +1,7 @@
+## **0.42.0** (2022-06-16)  
+  
+- Improve GitHub picker    
+  
 ### **0.41.6** (2022-06-12)  
   
 - Export some types from Icon  
