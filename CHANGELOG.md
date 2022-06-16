@@ -1,3 +1,7 @@
+## **0.43.0** (2022-06-16)  
+  
+- More specific i18n keys for GitHubPicker    
+  
 ## **0.42.0** (2022-06-16)  
   
 - Improve GitHub picker    
