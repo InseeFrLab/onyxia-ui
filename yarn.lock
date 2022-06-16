@@ -7948,6 +7948,14 @@ husky@^4.3.8:
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
 
+i18nifty@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/i18nifty/-/i18nifty-1.2.0.tgz#b7c9be6b2e6402c92db4c6f7def4391807745b90"
+  integrity sha512-6yHX3xjy5aq+rAOKnnDQcuLXHGifFxlU/ZHdWzJSwjwhMsB4qZwqVkjCcaaMgjR7woqFHe2WHmRTiLZ7LTDD8Q==
+  dependencies:
+    powerhooks "^0.20.0"
+    tsafe "^0.10.0"
+
 iconv-lite@0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -11559,7 +11567,7 @@ postcss@^8.1.0:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-powerhooks@^0.20.1:
+powerhooks@^0.20.0, powerhooks@^0.20.1:
   version "0.20.1"
   resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.1.tgz#54e3b391c6037bc39baa9bbf6e94dd8ebbe54126"
   integrity sha512-f8TmfKEUqpmcS4xsWPGeKuF3ybXR4eHjiOki1Ww/JFiCn1nLr3YkpGKvdF7+WkStv796WqSOi4kqeRN71mLt5g==

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import Popper from "@mui/material/Popper";
@@ -19,48 +20,57 @@ import { useRerenderOnStateChange } from "evt/hooks/useRerenderOnStateChange";
 import type { StatefulReadonlyEvt } from "evt";
 import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
+import { arrDiff } from "evt/tools/reducers/diff";
+import { createButton } from "./Button";
+
+const { Button } = createButton();
 
 export type GitHubPickerProps = {
     className?: string;
     getTagColor: (tag: string) => string;
+    tags: string[];
+    selectedTags: string[];
+    onSelectedTags: (
+        props: { tag: string } & (
+            | { isSelect: true; isNewTag: boolean }
+            | { isSelect: false }
+        ),
+    ) => void;
+    onClose?: () => void;
     evtAction: NonPostableEvt<{
         action: "open";
         anchorEl: HTMLElement;
-        tags: string[];
-        preSelectedTags: string[];
-        onSelectedTags: (selectedTags: string[]) => void;
     }>;
-    label?: NonNullable<ReactNode>;
-    t: (key: "create tag", params: { tag: string }) => ReactNode;
+    t: {
+        (key: "label"): NonNullable<ReactNode>;
+        (key: "create tag", params: { tag: string }): ReactNode;
+        (key: "done"): ReactNode;
+    };
 };
 
 export const GitHubPicker = memo((props: GitHubPickerProps) => {
-    const { className, getTagColor, evtAction, label, t } = props;
-
-    const [tags, setTags] = useState<string[]>([]);
-
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const {
+        className,
+        getTagColor,
+        evtAction,
+        t,
+        onClose: onClose_props,
+        tags,
+        selectedTags,
+        onSelectedTags,
+    } = props;
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(
         undefined,
     );
-
-    const [onSelectedTags, setOnSelectedTags] = useState<
-        (selectedTags: string[]) => void
-    >(() => () => {
-        /*never called*/
-    });
 
     useEvt(
         ctx => {
             evtAction.$attach(
                 data => (data.action === "open" ? [data] : null),
                 ctx,
-                ({ anchorEl, tags, preSelectedTags, onSelectedTags }) => {
+                ({ anchorEl }) => {
                     setAnchorEl(anchorEl);
-                    setTags(tags);
-                    setSelectedTags(preSelectedTags);
-                    setOnSelectedTags(() => onSelectedTags);
                 },
             );
         },
@@ -70,12 +80,11 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
     const { classes, cx, theme } = useStyles();
 
     const onClose = useConstCallback(() => {
-        onSelectedTags(selectedTags);
-
         if (anchorEl) {
             anchorEl.focus();
         }
         setAnchorEl(undefined);
+        onClose_props?.();
     });
 
     const { ref } = useClickAway({ "onClickAway": onClose });
@@ -90,11 +99,9 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
             placement="bottom-start"
         >
             <div ref={ref}>
-                {label !== undefined && (
-                    <div className={classes.labelWrapper}>
-                        <Text typo="body 1">{label}</Text>
-                    </div>
-                )}
+                <div className={classes.labelWrapper}>
+                    <Text typo="body 1">{t("label")}</Text>
+                </div>
                 <Autocomplete
                     open
                     multiple
@@ -117,7 +124,27 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                         ) {
                             return;
                         }
-                        setSelectedTags(newValue.map(({ tag }) => tag));
+
+                        const {
+                            added: [newTag],
+                            removed,
+                        } = arrDiff(
+                            selectedTags,
+                            newValue.map(({ tag }) => tag),
+                        );
+
+                        onSelectedTags(
+                            newTag !== undefined
+                                ? {
+                                      "tag": newTag,
+                                      "isNewTag": tags.indexOf(newTag) === -1,
+                                      "isSelect": true,
+                                  }
+                                : {
+                                      "tag": removed[0],
+                                      "isSelect": false,
+                                  },
+                        );
                     }}
                     disableCloseOnSelect
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -140,10 +167,13 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                     noOptionsText={
                         <NoOptionText
                             evtInputValue={evtInputValue}
-                            onClick={inputValue => {
-                                setTags([inputValue, ...tags]);
-                                setSelectedTags([inputValue, ...selectedTags]);
-                            }}
+                            onClick={inputValue =>
+                                onSelectedTags({
+                                    "tag": inputValue,
+                                    "isSelect": true,
+                                    "isNewTag": true,
+                                })
+                            }
                             t={t}
                         />
                     }
@@ -191,9 +221,15 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                             </Box>
                             <Box
                                 component={CloseIcon}
-                                sx={{ opacity: 0.6, width: 18, height: 18 }}
+                                sx={{
+                                    "opacity": 0.6,
+                                    "width": 18,
+                                    "height": 18,
+                                }}
                                 style={{
-                                    visibility: selected ? "visible" : "hidden",
+                                    "visibility": selected
+                                        ? "visible"
+                                        : "hidden",
                                 }}
                             />
                         </li>
@@ -238,6 +274,15 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                         />
                     )}
                 />
+                <div className={classes.doneButtonWrapper}>
+                    <Button
+                        variant="secondary"
+                        className={classes.doneButton}
+                        onClick={onClose}
+                    >
+                        {t("done")}
+                    </Button>
+                </div>
             </div>
         </Popper>
     );
@@ -333,6 +378,13 @@ const useStyles = makeStyles({ "name": "GitHubPicker" })(theme => ({
             },
         },
     },
+    "doneButtonWrapper": {
+        "display": "flex",
+        "justifyContent": "right",
+    },
+    "doneButton": {
+        "margin": theme.spacing(2),
+    },
 }));
 
 const { NoOptionText } = (() => {
@@ -349,15 +401,26 @@ const { NoOptionText } = (() => {
 
         const inputValue = evtInputValue.state;
 
+        const { classes } = useStyles();
+
         if (inputValue === "") {
             return null;
         }
 
         return (
-            <MuiLink onClick={() => onClick(inputValue)}>
+            <MuiLink
+                className={classes.root}
+                onClick={() => onClick(inputValue)}
+            >
                 {t("create tag", { "tag": inputValue })}
             </MuiLink>
         );
+    });
+
+    const useStyles = makeStyles({ "name": { NoOptionText } })({
+        "root": {
+            "cursor": "pointer",
+        },
     });
 
     return { NoOptionText };

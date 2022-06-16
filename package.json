@@ -53,10 +53,10 @@
     "keywords": [],
     "homepage": "https://ui.onyxia.dev",
     "peerDependencies": {
+        "@emotion/react": "^11.9.0",
         "@mui/material": "^5.8.2",
         "@types/react": "^16.0.0 || ^17.0.0 || ^18.0.0",
-        "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-        "@emotion/react": "^11.9.0"
+        "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
     },
     "peerDependenciesMeta": {
         "@types/react": {
@@ -70,10 +70,10 @@
         "material-design-icons": "^3.0.1",
         "memoizee": "^0.4.15",
         "minimal-polyfills": "^2.2.1",
-        "tsafe": "^0.10.0",
-        "tss-react": "^3.7.0",
         "powerhooks": "^0.20.1",
-        "run-exclusive": "^2.2.14"
+        "run-exclusive": "^2.2.14",
+        "tsafe": "^0.10.0",
+        "tss-react": "^3.7.0"
     },
     "devDependencies": {
         "@emotion/react": "^11.9.0",
@@ -97,14 +97,15 @@
         "copyfiles": "^2.4.1",
         "eslint": "^7.26.0",
         "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-tss-unused-classes": "^0.0.3",
         "husky": "^4.3.8",
+        "i18nifty": "^1.2.0",
         "lint-staged": "^11.0.0",
         "prettier": "^2.3.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-scripts": "4.0.3",
         "ts-node": "^10.3.0",
-        "typescript": "4.2.2",
-        "eslint-plugin-tss-unused-classes": "^0.0.3"
+        "typescript": "4.2.2"
     }
 }
