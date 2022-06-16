@@ -5,13 +5,14 @@ import { Text } from "./Text/TextBase";
 
 export type TagProps = {
     className?: string;
+    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     text: NonNullable<ReactNode>;
 };
 
 export const Tag = memo((props: TagProps) => {
     const { text, className } = props;
 
-    const { classes, cx } = useStyles();
+    const { classes, cx } = useStyles(undefined, { props });
 
     return (
         <div className={cx(classes.root, className)}>
