@@ -46,11 +46,11 @@ export type GitHubPickerProps = {
               action: "close";
           }
     >;
-    texts: {
-        "label": NonNullable<ReactNode>;
+    texts?: {
+        "label"?: NonNullable<ReactNode>;
         /**Undefined when we don't want to allow tags to be created*/
         "create tag"?: (params: { tag: string }) => ReactNode;
-        "done": ReactNode;
+        "done"?: ReactNode;
     };
 };
 
@@ -59,7 +59,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
         className,
         getTagColor,
         evtAction,
-        texts,
+        texts = {},
         onClose: onClose_props,
         tags,
         selectedTags,
@@ -110,9 +110,11 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
             placement="bottom-start"
         >
             <div ref={ref}>
-                <div className={classes.labelWrapper}>
-                    <Text typo="body 1">{texts["label"]}</Text>
-                </div>
+                {texts["label"] !== undefined && (
+                    <div className={classes.labelWrapper}>
+                        <Text typo="body 1">{texts["label"]}</Text>
+                    </div>
+                )}
                 <Autocomplete
                     open
                     multiple
@@ -285,15 +287,17 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                         />
                     )}
                 />
-                <div className={classes.doneButtonWrapper}>
-                    <Button
-                        variant="secondary"
-                        className={classes.doneButton}
-                        onClick={onClose}
-                    >
-                        {texts["done"]}
-                    </Button>
-                </div>
+                {texts["done"] !== undefined && (
+                    <div className={classes.doneButtonWrapper}>
+                        <Button
+                            variant="secondary"
+                            className={classes.doneButton}
+                            onClick={onClose}
+                        >
+                            {texts["done"]}
+                        </Button>
+                    </div>
+                )}
             </div>
         </Popper>
     );
@@ -402,7 +406,7 @@ const { NoOptionText } = (() => {
     type Props = {
         evtInputValue: StatefulReadonlyEvt<string>;
         onClick: (inputValue: string) => void;
-        texts: Pick<GitHubPickerProps["texts"], "create tag">;
+        texts: Pick<NonNullable<GitHubPickerProps["texts"]>, "create tag">;
     };
 
     const NoOptionText = memo((props: Props) => {
