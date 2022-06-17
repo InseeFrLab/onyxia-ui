@@ -1,3 +1,7 @@
+### **0.44.1** (2022-06-17)  
+  
+- Fix contrast problem with france palette    
+  
 ## **0.44.0** (2022-06-16)  
   
 - Support classes params on Tag    
