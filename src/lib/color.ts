@@ -230,7 +230,7 @@ export function createMuiPaletteOptions(params: {
         },
         "action": {
             "active": useCases.buttons.actionActive,
-            "hover": useCases.buttons.actionHoverPrimary,
+            "hover": palette.focus.light,
             "selected": useCases.buttons.actionSelected,
             "disabled": useCases.buttons.actionDisabled,
             "disabledBackground": useCases.buttons.actionDisabledBackground,
