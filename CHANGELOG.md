@@ -1,3 +1,7 @@
+## **0.45.0** (2022-06-17)  
+  
+- Make all text optional in github picker    
+  
 ### **0.44.2** (2022-06-17)  
   
 - Update github picker    
