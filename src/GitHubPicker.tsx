@@ -37,14 +37,20 @@ export type GitHubPickerProps = {
         ),
     ) => void;
     onClose?: () => void;
-    evtAction: NonPostableEvt<{
-        action: "open";
-        anchorEl: HTMLElement;
-    }>;
-    t: {
-        (key: "github picker label"): NonNullable<ReactNode>;
-        (key: "github picker create tag", params: { tag: string }): ReactNode;
-        (key: "github picker done"): ReactNode;
+    evtAction: NonPostableEvt<
+        | {
+              action: "open";
+              anchorEl: HTMLElement;
+          }
+        | {
+              action: "close";
+          }
+    >;
+    texts: {
+        "label": NonNullable<ReactNode>;
+        /**Undefined when we don't want to allow tags to be created*/
+        "create tag"?: (params: { tag: string }) => ReactNode;
+        "done": ReactNode;
     };
 };
 
@@ -53,7 +59,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
         className,
         getTagColor,
         evtAction,
-        t,
+        texts,
         onClose: onClose_props,
         tags,
         selectedTags,
@@ -72,6 +78,11 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                 ({ anchorEl }) => {
                     setAnchorEl(anchorEl);
                 },
+            );
+            evtAction.attach(
+                ({ action }) => action === "close",
+                ctx,
+                () => onClose(),
             );
         },
         [evtAction],
@@ -100,7 +111,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
         >
             <div ref={ref}>
                 <div className={classes.labelWrapper}>
-                    <Text typo="body 1">{t("github picker label")}</Text>
+                    <Text typo="body 1">{texts["label"]}</Text>
                 </div>
                 <Autocomplete
                     open
@@ -174,7 +185,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                     "isNewTag": true,
                                 })
                             }
-                            t={t}
+                            texts={texts}
                         />
                     }
                     renderOption={(props, option, { selected }) => (
@@ -280,7 +291,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                         className={classes.doneButton}
                         onClick={onClose}
                     >
-                        {t("github picker done")}
+                        {texts["done"]}
                     </Button>
                 </div>
             </div>
@@ -391,11 +402,11 @@ const { NoOptionText } = (() => {
     type Props = {
         evtInputValue: StatefulReadonlyEvt<string>;
         onClick: (inputValue: string) => void;
-        t: GitHubPickerProps["t"];
+        texts: Pick<GitHubPickerProps["texts"], "create tag">;
     };
 
     const NoOptionText = memo((props: Props) => {
-        const { evtInputValue, onClick, t } = props;
+        const { evtInputValue, onClick, texts } = props;
 
         useRerenderOnStateChange(evtInputValue);
 
@@ -407,12 +418,16 @@ const { NoOptionText } = (() => {
             return null;
         }
 
+        if (texts["create tag"] === undefined) {
+            return null;
+        }
+
         return (
             <MuiLink
                 className={classes.root}
                 onClick={() => onClick(inputValue)}
             >
-                {t("github picker create tag", { "tag": inputValue })}
+                {texts["create tag"]({ "tag": inputValue })}
             </MuiLink>
         );
     });

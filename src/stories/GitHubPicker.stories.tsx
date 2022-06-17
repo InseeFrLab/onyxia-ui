@@ -99,7 +99,12 @@ function Component() {
                 onSelectedTags={onSelectedTags}
                 evtAction={evtGitHubPickerAction}
                 getTagColor={getTagColor}
-                t={t}
+                texts={{
+                    "label": t("github picker label"),
+                    "create tag": ({ tag }) =>
+                        t("github picker create tag", { tag }),
+                    "done": t("github picker done"),
+                }}
             />
         </div>
     );
