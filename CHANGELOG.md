@@ -1,3 +1,7 @@
+### **0.45.1** (2022-06-23)  
+  
+- Make the tag picker compat with view port adapter    
+  
 ## **0.45.0** (2022-06-17)  
   
 - Make all text optional in github picker    
