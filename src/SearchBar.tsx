@@ -157,14 +157,12 @@ export const SearchBar = memo(
                                 spellCheck={false}
                                 placeholder={placeholder}
                             />
-                            {
-                                <IconButton
-                                    iconId="cancel"
-                                    size="small"
-                                    disabled={search === ""}
-                                    onClick={onClearButtonClick}
-                                />
-                            }
+                            <IconButton
+                                iconId="cancel"
+                                size="small"
+                                disabled={search === ""}
+                                onClick={onClearButtonClick}
+                            />
                         </>
                     ) : (
                         <span className={classes.searchLabel}>
