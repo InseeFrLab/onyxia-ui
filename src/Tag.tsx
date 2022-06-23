@@ -16,9 +16,13 @@ export const Tag = memo((props: TagProps) => {
 
     return (
         <div className={cx(classes.root, className)}>
-            <Text className={classes.text} typo="body 3">
-                {text}
-            </Text>
+            {typeof text === "string" ? (
+                <Text className={classes.text} typo="body 3">
+                    {text}
+                </Text>
+            ) : (
+                text
+            )}
         </div>
     );
 });
