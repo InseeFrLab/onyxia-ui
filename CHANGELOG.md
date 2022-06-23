@@ -1,3 +1,8 @@
+### **0.45.2** (2022-06-23)  
+  
+- Enable Tag to have a custom body  
+- Small refactor    
+  
 ### **0.45.1** (2022-06-23)  
   
 - Make the tag picker compat with view port adapter    
