@@ -22,6 +22,7 @@ import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
 import { arrDiff } from "evt/tools/reducers/diff";
 import { createButton } from "./Button";
+import { useStateRef } from "powerhooks/useStateRef";
 
 const { Button } = createButton();
 
@@ -102,204 +103,219 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
 
     const evtInputValue = useConst(() => Evt.create(""));
 
+    const mountPointRef = useStateRef<HTMLDivElement>(null);
+
     return (
-        <Popper
-            className={cx(classes.root, className)}
-            open={!!anchorEl}
-            anchorEl={anchorEl}
-            placement="bottom-start"
-        >
-            <div ref={ref}>
-                {texts["label"] !== undefined && (
-                    <div className={classes.labelWrapper}>
-                        <Text typo="body 1">{texts["label"]}</Text>
-                    </div>
-                )}
-                <Autocomplete
-                    open
-                    multiple
-                    isOptionEqualToValue={same}
-                    onClose={(_: any, reason: AutocompleteCloseReason) => {
-                        if (reason === "escape") {
-                            onClose();
-                        }
-                    }}
-                    value={selectedTags.map(tag => ({
-                        tag,
-                        "color": getTagColor(tag),
-                    }))}
-                    onChange={(event, newValue, reason) => {
-                        if (
-                            event.type === "keydown" &&
-                            (event as React.KeyboardEvent).key ===
-                                "Backspace" &&
-                            reason === "removeOption"
-                        ) {
-                            return;
-                        }
-
-                        const {
-                            added: [newTag],
-                            removed,
-                        } = arrDiff(
-                            selectedTags,
-                            newValue.map(({ tag }) => tag),
-                        );
-
-                        onSelectedTags(
-                            newTag !== undefined
-                                ? {
-                                      "tag": newTag,
-                                      "isNewTag": tags.indexOf(newTag) === -1,
-                                      "isSelect": true,
-                                  }
-                                : {
-                                      "tag": removed[0],
-                                      "isSelect": false,
-                                  },
-                        );
-                    }}
-                    disableCloseOnSelect
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    PopperComponent={({
-                        className,
-                        disablePortal,
-                        anchorEl,
-                        open,
-                        ...other
-                    }) => (
-                        <div
-                            className={cx(
-                                classes.autocompletePopperComponent,
-                                className,
-                            )}
-                            {...other}
-                        />
-                    )}
-                    renderTags={() => null}
-                    noOptionsText={
-                        <NoOptionText
-                            evtInputValue={evtInputValue}
-                            onClick={inputValue =>
-                                onSelectedTags({
-                                    "tag": inputValue,
-                                    "isSelect": true,
-                                    "isNewTag": true,
-                                })
-                            }
-                            texts={texts}
-                        />
-                    }
-                    renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                            <Box
-                                component={DoneIcon}
-                                sx={{
-                                    "width": 17,
-                                    "height": 17,
-                                    "mr": "5px",
-                                    "ml": "-2px",
-                                }}
-                                style={{
-                                    "visibility": selected
-                                        ? "visible"
-                                        : "hidden",
-                                }}
-                            />
-                            <Box
-                                component="span"
-                                sx={{
-                                    width: 14,
-                                    height: 14,
-                                    flexShrink: 0,
-                                    borderRadius: "3px",
-                                    mr: 1,
-                                    mt: "2px",
-                                }}
-                                style={{ backgroundColor: option.color }}
-                            />
-                            <Box
-                                sx={{
-                                    flexGrow: 1,
-                                    "& span": {
-                                        color:
-                                            theme.muiTheme.palette.mode ===
-                                            "light"
-                                                ? "#586069"
-                                                : "#8b949e",
-                                    },
-                                }}
-                            >
-                                {option.tag}
-                            </Box>
-                            <Box
-                                component={CloseIcon}
-                                sx={{
-                                    "opacity": 0.6,
-                                    "width": 18,
-                                    "height": 18,
-                                }}
-                                style={{
-                                    "visibility": selected
-                                        ? "visible"
-                                        : "hidden",
-                                }}
-                            />
-                        </li>
-                    )}
-                    options={[...tags]
-                        .sort((a, b) => {
-                            // Display the selected tags first.
-                            const getWeight = (tag: string) => {
-                                let i = selectedTags.indexOf(tag);
-
-                                return i === -1
-                                    ? selectedTags.length + tags.indexOf(tag)
-                                    : i;
-                            };
-
-                            return getWeight(a) - getWeight(b);
-                        })
-                        .map(tag => ({
-                            tag,
-                            "color": getTagColor(tag),
-                        }))}
-                    getOptionLabel={option => option.tag}
-                    renderInput={({
-                        inputProps: { onChange, ...inputProps },
-                        ...params
-                    }) => (
-                        <InputBase
-                            className={classes.input}
-                            ref={params.InputProps.ref}
-                            inputProps={{
-                                ...inputProps,
-                                "onChange": (...args) => {
-                                    evtInputValue.state = (
-                                        args[0] as React.ChangeEvent<HTMLInputElement>
-                                    ).target.value;
-
-                                    return (onChange as any)?.(...args);
-                                },
+        <>
+            <div ref={mountPointRef} about="GitHubPicker container" />
+            {mountPointRef.current !== null && (
+                <Popper
+                    className={cx(classes.root, className)}
+                    container={mountPointRef.current}
+                    open={!!anchorEl}
+                    anchorEl={anchorEl}
+                    placement="bottom-start"
+                >
+                    <div ref={ref}>
+                        {texts["label"] !== undefined && (
+                            <div className={classes.labelWrapper}>
+                                <Text typo="body 1">{texts["label"]}</Text>
+                            </div>
+                        )}
+                        <Autocomplete
+                            open
+                            multiple
+                            isOptionEqualToValue={same}
+                            onClose={(
+                                _: any,
+                                reason: AutocompleteCloseReason,
+                            ) => {
+                                if (reason === "escape") {
+                                    onClose();
+                                }
                             }}
-                            autoFocus
-                            placeholder="Filter labels"
+                            value={selectedTags.map(tag => ({
+                                tag,
+                                "color": getTagColor(tag),
+                            }))}
+                            onChange={(event, newValue, reason) => {
+                                if (
+                                    event.type === "keydown" &&
+                                    (event as React.KeyboardEvent).key ===
+                                        "Backspace" &&
+                                    reason === "removeOption"
+                                ) {
+                                    return;
+                                }
+
+                                const {
+                                    added: [newTag],
+                                    removed,
+                                } = arrDiff(
+                                    selectedTags,
+                                    newValue.map(({ tag }) => tag),
+                                );
+
+                                onSelectedTags(
+                                    newTag !== undefined
+                                        ? {
+                                              "tag": newTag,
+                                              "isNewTag":
+                                                  tags.indexOf(newTag) === -1,
+                                              "isSelect": true,
+                                          }
+                                        : {
+                                              "tag": removed[0],
+                                              "isSelect": false,
+                                          },
+                                );
+                            }}
+                            disableCloseOnSelect
+                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                            PopperComponent={({
+                                className,
+                                disablePortal,
+                                anchorEl,
+                                open,
+                                ...other
+                            }) => (
+                                <div
+                                    className={cx(
+                                        classes.autocompletePopperComponent,
+                                        className,
+                                    )}
+                                    {...other}
+                                />
+                            )}
+                            renderTags={() => null}
+                            noOptionsText={
+                                <NoOptionText
+                                    evtInputValue={evtInputValue}
+                                    onClick={inputValue =>
+                                        onSelectedTags({
+                                            "tag": inputValue,
+                                            "isSelect": true,
+                                            "isNewTag": true,
+                                        })
+                                    }
+                                    texts={texts}
+                                />
+                            }
+                            renderOption={(props, option, { selected }) => (
+                                <li {...props}>
+                                    <Box
+                                        component={DoneIcon}
+                                        sx={{
+                                            "width": 17,
+                                            "height": 17,
+                                            "mr": "5px",
+                                            "ml": "-2px",
+                                        }}
+                                        style={{
+                                            "visibility": selected
+                                                ? "visible"
+                                                : "hidden",
+                                        }}
+                                    />
+                                    <Box
+                                        component="span"
+                                        sx={{
+                                            width: 14,
+                                            height: 14,
+                                            flexShrink: 0,
+                                            borderRadius: "3px",
+                                            mr: 1,
+                                            mt: "2px",
+                                        }}
+                                        style={{
+                                            backgroundColor: option.color,
+                                        }}
+                                    />
+                                    <Box
+                                        sx={{
+                                            flexGrow: 1,
+                                            "& span": {
+                                                color:
+                                                    theme.muiTheme.palette
+                                                        .mode === "light"
+                                                        ? "#586069"
+                                                        : "#8b949e",
+                                            },
+                                        }}
+                                    >
+                                        {option.tag}
+                                    </Box>
+                                    <Box
+                                        component={CloseIcon}
+                                        sx={{
+                                            "opacity": 0.6,
+                                            "width": 18,
+                                            "height": 18,
+                                        }}
+                                        style={{
+                                            "visibility": selected
+                                                ? "visible"
+                                                : "hidden",
+                                        }}
+                                    />
+                                </li>
+                            )}
+                            options={[...tags]
+                                .sort((a, b) => {
+                                    // Display the selected tags first.
+                                    const getWeight = (tag: string) => {
+                                        let i = selectedTags.indexOf(tag);
+
+                                        return i === -1
+                                            ? selectedTags.length +
+                                                  tags.indexOf(tag)
+                                            : i;
+                                    };
+
+                                    return getWeight(a) - getWeight(b);
+                                })
+                                .map(tag => ({
+                                    tag,
+                                    "color": getTagColor(tag),
+                                }))}
+                            getOptionLabel={option => option.tag}
+                            renderInput={({
+                                inputProps: { onChange, ...inputProps },
+                                ...params
+                            }) => (
+                                <InputBase
+                                    className={classes.input}
+                                    ref={params.InputProps.ref}
+                                    inputProps={{
+                                        ...inputProps,
+                                        "onChange": (...args) => {
+                                            evtInputValue.state = (
+                                                args[0] as React.ChangeEvent<HTMLInputElement>
+                                            ).target.value;
+
+                                            return (onChange as any)?.(...args);
+                                        },
+                                    }}
+                                    autoFocus
+                                    placeholder="Filter labels"
+                                />
+                            )}
                         />
-                    )}
-                />
-                {texts["done"] !== undefined && (
-                    <div className={classes.doneButtonWrapper}>
-                        <Button
-                            variant="secondary"
-                            className={classes.doneButton}
-                            onClick={onClose}
-                        >
-                            {texts["done"]}
-                        </Button>
+                        {texts["done"] !== undefined && (
+                            <div className={classes.doneButtonWrapper}>
+                                <Button
+                                    variant="secondary"
+                                    className={classes.doneButton}
+                                    onClick={onClose}
+                                >
+                                    {texts["done"]}
+                                </Button>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-        </Popper>
+                </Popper>
+            )}
+        </>
     );
 });
 
