@@ -1,3 +1,7 @@
+### **0.45.3** (2022-06-25)  
+  
+- Update to React 18 and Storybook latest    
+  
 ### **0.45.2** (2022-06-23)  
   
 - Enable Tag to have a custom body  
