@@ -79,8 +79,6 @@ export function createIcon<IconId extends string>(componentByIconId: {
                 className,
                 size = "default",
                 onClick,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                children,
                 ...rest
             } = props;
 

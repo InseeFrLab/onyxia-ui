@@ -311,21 +311,15 @@ const { CustomButton } = (() => {
             } = props;
 
             const rest = (() => {
-                const {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    children,
-                    ...restTmp2
-                } = restTmp;
-
-                switch (restTmp2.type) {
+                switch (restTmp.type) {
                     case "arrow": {
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        const { type, direction, ...out } = restTmp2;
+                        const { type, direction, ...out } = restTmp;
                         return out;
                     }
                     case "tab": {
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        const { type, text, ...out } = restTmp2;
+                        const { type, text, ...out } = restTmp;
                         return out;
                     }
                 }

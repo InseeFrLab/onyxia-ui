@@ -23,6 +23,7 @@ import { useConst } from "powerhooks/useConst";
 import { arrDiff } from "evt/tools/reducers/diff";
 import { createButton } from "./Button";
 import { useStateRef } from "powerhooks/useStateRef";
+import { assert } from "tsafe/assert";
 
 const { Button } = createButton();
 
@@ -177,6 +178,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                 disablePortal,
                                 anchorEl,
                                 open,
+                                children,
                                 ...other
                             }) => (
                                 <div
@@ -185,7 +187,12 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                         className,
                                     )}
                                     {...other}
-                                />
+                                >
+                                    {
+                                        (assert(typeof children !== "function"),
+                                        children)
+                                    }
+                                </div>
                             )}
                             renderTags={() => null}
                             noOptionsText={
