@@ -7,15 +7,16 @@ export type TagProps = {
     className?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     text: NonNullable<ReactNode>;
+    onClick?: () => void;
 };
 
 export const Tag = memo((props: TagProps) => {
-    const { text, className } = props;
+    const { text, className, onClick } = props;
 
     const { classes, cx } = useStyles(undefined, { props });
 
     return (
-        <div className={cx(classes.root, className)}>
+        <div className={cx(classes.root, className)} onClick={onClick}>
             {typeof text === "string" ? (
                 <Text className={classes.text} typo="body 3">
                     {text}
