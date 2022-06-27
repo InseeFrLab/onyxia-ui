@@ -38,6 +38,7 @@ const useStyles = makeStyles({
         "padding": theme.spacing({ "topBottom": 1, "rightLeft": 2 }),
         "borderRadius": theme.spacing(3),
         "display": "inline-block",
+        "cursor": "pointer",
     },
     "text": {
         "color":
