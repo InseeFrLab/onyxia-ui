@@ -1,3 +1,8 @@
+### **0.45.4** (2022-06-27)  
+  
+- Fix ci  
+- Make tag clickable    
+  
 ### **0.45.3** (2022-06-25)  
   
 - Update to React 18 and Storybook latest    
