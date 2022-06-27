@@ -195,19 +195,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                 </div>
                             )}
                             renderTags={() => null}
-                            noOptionsText={
-                                <NoOptionText
-                                    evtInputValue={evtInputValue}
-                                    onClick={inputValue =>
-                                        onSelectedTags({
-                                            "tag": inputValue,
-                                            "isSelect": true,
-                                            "isNewTag": true,
-                                        })
-                                    }
-                                    texts={texts}
-                                />
-                            }
+                            noOptionsText={null}
                             renderOption={(props, option, { selected }) => (
                                 <li {...props}>
                                     <Box
@@ -310,6 +298,19 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                         />
                         {texts["done"] !== undefined && (
                             <div className={classes.doneButtonWrapper}>
+                                <NoOptionText
+                                    evtInputValue={evtInputValue}
+                                    tags={tags}
+                                    onClick={inputValue =>
+                                        onSelectedTags({
+                                            "tag": inputValue,
+                                            "isSelect": true,
+                                            "isNewTag": true,
+                                        })
+                                    }
+                                    texts={texts}
+                                />
+                                <div>&nbsp;</div>
                                 <Button
                                     variant="secondary"
                                     className={classes.doneButton}
@@ -418,7 +419,8 @@ const useStyles = makeStyles({ "name": "GitHubPicker" })(theme => ({
     },
     "doneButtonWrapper": {
         "display": "flex",
-        "justifyContent": "right",
+        "justifyContent": "space-between",
+        "alignItems": "center",
     },
     "doneButton": {
         "margin": theme.spacing(2),
@@ -428,12 +430,13 @@ const useStyles = makeStyles({ "name": "GitHubPicker" })(theme => ({
 const { NoOptionText } = (() => {
     type Props = {
         evtInputValue: StatefulReadonlyEvt<string>;
+        tags: string[];
         onClick: (inputValue: string) => void;
         texts: Pick<NonNullable<GitHubPickerProps["texts"]>, "create tag">;
     };
 
     const NoOptionText = memo((props: Props) => {
-        const { evtInputValue, onClick, texts } = props;
+        const { evtInputValue, tags, onClick, texts } = props;
 
         useRerenderOnStateChange(evtInputValue);
 
@@ -446,6 +449,10 @@ const { NoOptionText } = (() => {
         }
 
         if (texts["create tag"] === undefined) {
+            return null;
+        }
+
+        if (tags.indexOf(evtInputValue.state) !== -1) {
             return null;
         }
 
