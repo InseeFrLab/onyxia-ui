@@ -11,7 +11,7 @@
   font-style: normal;
   font-weight: normal; /*400*/
   font-display: swap;
-  src: url(../../static/media/worksans-regular-webfont.3d45de00.woff2) format("woff2");
+  src: url(../../3d45de00bf60e7b4d551.woff2) format("woff2");
 }
 
 @font-face {
@@ -19,7 +19,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(../../static/media/worksans-medium-webfont.3d45de00.woff2) format("woff2");
+  src: url(../../3d45de00bf60e7b4d551.woff2) format("woff2");
 }
 
 @font-face {
@@ -27,7 +27,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(../../static/media/worksans-semibold-webfont.3d45de00.woff2) format("woff2");
+  src: url(../../3d45de00bf60e7b4d551.woff2) format("woff2");
 }
 
 @font-face {
@@ -35,7 +35,7 @@
   font-style: normal;
   font-weight: bold; /*700*/
   font-display: swap;
-  src: url(../../static/media/worksans-bold-webfont.3d45de00.woff2) format("woff2");
+  src: url(../../3d45de00bf60e7b4d551.woff2) format("woff2");
 }
 /*
 <link rel="preload" href="%PUBLIC_URL%/fonts/Marianne/Marianne-Light_Italic.woff2" as="font" crossorigin="anonymous">
@@ -50,33 +50,33 @@
 
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Light.ec511194.woff2) format("woff2");
+  src: url(../../ec511194ada150bb125b.woff2) format("woff2");
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Light_Italic.3126003b.woff2) format("woff2");
+  src: url(../../3126003b30db67fbd722.woff2) format("woff2");
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Regular.8d566232.woff2) format("woff2");
+  src: url(../../8d56623251c91850c391.woff2) format("woff2");
   font-weight: normal; /*400*/
   font-style: normal;
 }
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Regular_Italic.cb6e9e65.woff2) format("woff2");
+  src: url(../../cb6e9e65d080821f6f34.woff2) format("woff2");
   font-weight: normal; /*400*/
   font-style: italic;
 }
 
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Medium.05b552bd.woff2) format("woff2");
+  src: url(../../05b552bd5e02d12ee2c4.woff2) format("woff2");
   font-weight: 500;
   font-display: swap;
   font-style: normal;
@@ -84,15 +84,15 @@
 
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Bold.587c38a9.woff2) format("woff2");
+  src: url(../../587c38a95505e01fc050.woff2) format("woff2");
   font-weight: bold /*700*/;
   font-style: normal;
 }
 @font-face {
   font-family: Marianne;
-  src: url(../../static/media/Marianne-Bold_Italic.192ebcfe.woff2) format("woff2");
+  src: url(../../192ebcfeb7a4077cce3d.woff2) format("woff2");
   font-weight: bold; /*700*/
   font-style: italic;
 }
 
-/*# sourceMappingURL=main.6894e6c5.chunk.css.map*/
+/*# sourceMappingURL=main.bb493217.css.map*/
