@@ -1,3 +1,7 @@
+### **0.45.6** (2022-06-27)  
+  
+- Enable create tag even when ther are matches    
+  
 ### **0.45.5** (2022-06-27)  
   
 - cursor pointer on tags    
