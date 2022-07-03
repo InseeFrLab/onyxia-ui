@@ -1,3 +1,7 @@
+### **0.45.8** (2022-07-03)  
+  
+- update powerhooks    
+  
 ### **0.45.7** (2022-07-03)  
   
 - Update powerhooks and EVT    
