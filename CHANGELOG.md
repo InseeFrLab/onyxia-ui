@@ -1,3 +1,7 @@
+### **0.45.7** (2022-07-03)  
+  
+- Update powerhooks and EVT    
+  
 ### **0.45.6** (2022-06-27)  
   
 - Enable create tag even when ther are matches    
