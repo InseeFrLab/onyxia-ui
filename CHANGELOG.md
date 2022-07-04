@@ -1,3 +1,7 @@
+### **0.45.9** (2022-07-04)  
+  
+- Sync the dark mode with story provider    
+  
 ### **0.45.8** (2022-07-03)  
   
 - update powerhooks    
