@@ -413,6 +413,10 @@ export function createThemeProvider<
     function StoryProvider(props: { dark?: boolean; children: ReactNode }) {
         const { dark = false, children } = props;
 
+        useEffect(() => {
+            evtIsDarkModeEnabled.state = dark;
+        }, [dark]);
+
         return (
             <isDarkModeEnabledOverrideContext.Provider value={dark}>
                 <ThemeProvider>{children}</ThemeProvider>
