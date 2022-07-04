@@ -1,37 +1,52 @@
-
-
 <!--- Checkbox.stories.mdx 
 --->
 
-import { Fragment } from "react";
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { StoryProvider, Text, Checkbox} from "../../theme";
-import { css } from "tss-react/@emotion/css";
+import { Fragment } from "react";
+import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
+import { StoryProvider, Text, Checkbox } from "../../theme";
+import { css } from "tss-react/@emotion/css";
+import { useDarkMode } from "storybook-dark-mode";
 
-<Meta title="documentation/Components/Checkbox" component={Checkbox} />
+<Meta
+    title="documentation/Components/Checkbox"
+    component={Checkbox}
+    decorators={[
+        Story => (
+            <StoryProvider dark={useDarkMode()}>
+                <Story />
+            </StoryProvider>
+        ),
+    ]}
+    parameters={{
+        viewMode: "docs",
+        previewTabs: {
+            canvas: { hidden: true },
+        },
+    }}
+/>
 
 # Checkbox
 
 This is a documentation of `<Checkbox/>` component.
 The checkbox allow the user to select one or more options from a list.
-They are used to make multiple selections (from 0 to N elements) or to allow a binary choice, 
+They are used to make multiple selections (from 0 to N elements) or to allow a binary choice,
 when the user can select or deselect a single option.
 
-- [Structure](#structure)
-- [States](#sizes)
-- [Options](#options)
-- [Properties](#properties)
+-   [Structure](#structure)
+-   [States](#sizes)
+-   [Options](#options)
+-   [Properties](#properties)
 
 ## Structure
 
 Checkbox is made up of the following elements:
 
-* a button / box - mandatory.
-* a label, associated with the button - mandatory.
-* an additional text for the buttons / labels - optional.
-* a title, describing the context of the button group - mandatory for groups of boxes.
-* an additional description for the legend - optional.
-* an error message - required if a change of state is to be notified to the user.
+-   a button / box - mandatory.
+-   a label, associated with the button - mandatory.
+-   an additional text for the buttons / labels - optional.
+-   a title, describing the context of the button group - mandatory for groups of boxes.
+-   an additional description for the legend - optional.
+-   an error message - required if a change of state is to be notified to the user.
 
 ## States
 
@@ -39,31 +54,25 @@ Checkbox is made up of the following elements:
 
 <Canvas>
     <Story name="Default">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-     
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
-
 
 ### Disabled
 
 <Canvas>
     <Story name="Disabled">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-     
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
-
 
 ### Error
 
@@ -71,16 +80,13 @@ Option to update
 
 <Canvas>
     <Story name="Error">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-     
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
-
 
 ## Options
 
@@ -92,13 +98,11 @@ Option to update
 
 <Canvas>
     <Story name="Help text">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-     
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 

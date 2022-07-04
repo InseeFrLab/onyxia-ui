@@ -1,24 +1,30 @@
-
 import { create } from "@storybook/theming";
 
-export default create({
+export const darkTheme = create({
+    "base": "dark",
+    "appBg": "#2c323f",
+    "appContentBg": "#2c323f",
+    "barBg": "#2c323f",
+    "colorSecondary": "#ff562c",
+    "textColor": "#f1f0eb",
+    "brandImage": "/onyxiaLogo.png",
+    "brandTitle": "Onyxia UI",
+    "brandUrl": "https://github.com/garronej/onyxia-ui",
+    "fontBase": '"Work Sans","Open Sans", sans-serif',
+    "fontCode": "monospace",
+});
 
-  "base": "light",
-  "brandTitle": 'Onyxia UI',
-  "brandUrl": "https://github.com/garronej/onyxia-ui",
-  "brandImage": "/onyxiaLogo.png",
-
-  // Toolbar default and active colors
-  //"barTextColor": 'pink',
-  //"barSelectedColor": 'black',
-
-  "colorPrimary": "#2C323F",
-  "colorSecondary": "#2C323F",
-  "inputBg": "pink",
-  "inputBorder": "pink",
-  "a": "pink",
-
-  "fontBase": '"Work Sans","Open Sans", sans-serif',
-  "fontCode": 'monospace',
-
+export const lightTheme = create({
+    "base": "light",
+    "appBg": "#f1f0eb",
+    "appContentBg": "#f1f0eb",
+    "barBg": "#f1f0eb",
+    "colorSecondary": "#ff562c",
+    "textColor": "#2c323f",
+    "textInverseColor": "#f1f0eb",
+    "brandImage": "/onyxiaLogo.png",
+    "brandTitle": "Onyxia UI",
+    "brandUrl": "https://github.com/garronej/onyxia-ui",
+    "fontBase": '"Work Sans","Open Sans", sans-serif',
+    "fontCode": "monospace",
 });

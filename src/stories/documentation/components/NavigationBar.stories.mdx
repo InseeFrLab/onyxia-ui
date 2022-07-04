@@ -1,39 +1,55 @@
 <!--- NavigationBar.stories.mdx 
 --->
 
-import { Fragment } from "react";
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { StoryProvider, Text, ButtonBar} from "../../theme";
-import { css } from "tss-react/@emotion/css";
+import { Fragment } from "react";
+import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
+import { StoryProvider, Text, ButtonBar } from "../../theme";
+import { css } from "tss-react/@emotion/css";
+import { useDarkMode } from "storybook-dark-mode";
 
-<Meta title="documentation/Components/NavigationBar" component={ButtonBar} />
-
+<Meta
+    title="documentation/Components/NavigationBar"
+    component={ButtonBar}
+    decorators={[
+        Story => (
+            <StoryProvider dark={useDarkMode()}>
+                <Story />
+            </StoryProvider>
+        ),
+    ]}
+    parameters={{
+        viewMode: "docs",
+        previewTabs: {
+            canvas: { hidden: true },
+        },
+    }}
+/>
 
 # Navigation Bar
 
 This is a documentation of `<NavigationBar/>` component.
-A navigation bar is a group of related links, or "navigation items", 
-that indicate the action that will be taken or the content that will be revealed 
-when the item is clicked. Navigation bars are commonly used for several purposes. 
+A navigation bar is a group of related links, or "navigation items",
+that indicate the action that will be taken or the content that will be revealed
+when the item is clicked. Navigation bars are commonly used for several purposes.
 
-First, to direct users to specific content on the current page or to an external page. 
-Second, and similar to tabs, as a control allowing the user to switch between content, 
-showing selected content and hiding other content, often using animated transitions 
-to hide and reveal content. And then to finish also to carry out actions or operations 
+First, to direct users to specific content on the current page or to an external page.
+Second, and similar to tabs, as a control allowing the user to switch between content,
+showing selected content and hiding other content, often using animated transitions
+to hide and reveal content. And then to finish also to carry out actions or operations
 on the content of the page.
 
-- [Structure](#structure)
-- [States](#states)
-- [Rules of use](#rules-of-use)
-- [Properties](#properties)
+-   [Structure](#structure)
+-   [States](#states)
+-   [Rules of use](#rules-of-use)
+-   [Properties](#properties)
 
 ## Structure
 
 It consists of the following elements:
 
-- A navigation bar
+-   A navigation bar
 
-- Menu items (Direct links or drop-down menu)
+-   Menu items (Direct links or drop-down menu)
 
 ## States
 
@@ -41,15 +57,13 @@ It consists of the following elements:
 
 <Canvas>
     <Story name="Default state">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
                 <StoryProvider dark={dark}>
-                    <ButtonBarButton>
-                       hello
-                        </ButtonBarButton>  
+                    <ButtonBarButton>hello</ButtonBarButton>
                 </StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -57,13 +71,11 @@ It consists of the following elements:
 
 <Canvas>
     <Story name="Active state">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -71,13 +83,11 @@ It consists of the following elements:
 
 <Canvas>
     <Story name="Error state">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -85,16 +95,13 @@ It consists of the following elements:
 
 <Canvas>
     <Story name="Disabled state">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
-
 
 ## Options
 
@@ -104,13 +111,11 @@ An optional help text can be added to provide additional guidance to the user on
 
 <Canvas>
     <Story name="Help text field">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -120,31 +125,26 @@ A long help text improve the guidance of help text for the user on how to intera
 
 <Canvas>
     <Story name="Long Help text field">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
-
 ### Selection field
 
-Selection field provide a choice of options from a list. The selected components 
+Selection field provide a choice of options from a list. The selected components
 are typically used in a form to allow users to make the desired selection from the list of options.
 
 <Canvas>
     <Story name="Selection field">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -154,27 +154,25 @@ If the information being entered by the user is sensitive, use the password opti
 
 <Canvas>
     <Story name="Password field">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
 ## Rules of use
 
-* Keep the same label for fields requesting the same information
-* A help text may accompany this wording to clarify in particular the nature of the expected content. 
-If a precise format is expected, it should be indicated as clearly as possible and given examples.
-* Information should not be hidden in a tooltip or infobox, if this content is essential to enter the field.
-* The eye spontaneously read from bottom to top, display the fields in a vertical list to facilitate reading and optimize ergonomics
-* Use a primary button to validate an input field or a form, the secondary button will be used to go back, reset the form or abandon the input.
-* The submission of a field must be followed by a message indicating the success or not of the desired action
-* Label the form as (optional) when the input is not required.
-* Avoid the use of placeholder as it can confuse the user. However, if you wish to use, it is necessary 
-to respect the proposed color in order to remain accessible, and its content must present information 
-not essential to understanding the field. In no case can it replace a label and it is only to be reserved 
-for secondary input aids.
+-   Keep the same label for fields requesting the same information
+-   A help text may accompany this wording to clarify in particular the nature of the expected content.
+    If a precise format is expected, it should be indicated as clearly as possible and given examples.
+-   Information should not be hidden in a tooltip or infobox, if this content is essential to enter the field.
+-   The eye spontaneously read from bottom to top, display the fields in a vertical list to facilitate reading and optimize ergonomics
+-   Use a primary button to validate an input field or a form, the secondary button will be used to go back, reset the form or abandon the input.
+-   The submission of a field must be followed by a message indicating the success or not of the desired action
+-   Label the form as (optional) when the input is not required.
+-   Avoid the use of placeholder as it can confuse the user. However, if you wish to use, it is necessary
+    to respect the proposed color in order to remain accessible, and its content must present information
+    not essential to understanding the field. In no case can it replace a label and it is only to be reserved
+    for secondary input aids.

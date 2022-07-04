@@ -1,34 +1,49 @@
-
-
 <!--- Tabs.stories.mdx 
 --->
 
-import { Fragment } from "react";
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { StoryProvider, Text} from "../../theme";
+import { Fragment } from "react";
+import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
+import { StoryProvider, Text } from "../../theme";
 import { Tabs } from "../../../Tabs";
-import { css } from "tss-react/@emotion/css";
+import { css } from "tss-react/@emotion/css";
+import { useDarkMode } from "storybook-dark-mode";
 
-<Meta title="documentation/Components/Tabs" component={Tabs} />
+<Meta
+    title="documentation/Components/Tabs"
+    component={Tabs}
+    decorators={[
+        Story => (
+            <StoryProvider dark={useDarkMode()}>
+                <Story />
+            </StoryProvider>
+        ),
+    ]}
+    parameters={{
+        viewMode: "docs",
+        previewTabs: {
+            canvas: { hidden: true },
+        },
+    }}
+/>
 
 # Tabs
 
 This is a documentation of `<Tabs/>` component.
-Tabs are used to organize and navigate between related content on the same page. 
-Tabs ensure that large amounts of content can be organized in a manner that is easier 
-to digest for the user. Tabs are arranged in bars of tabs called tab groups, with the tab 
+Tabs are used to organize and navigate between related content on the same page.
+Tabs ensure that large amounts of content can be organized in a manner that is easier
+to digest for the user. Tabs are arranged in bars of tabs called tab groups, with the tab
 label providing the user with an indication of what content will be revealed when the tab is selected.
 
-- [Structure](#structure)
-- [States](#sizes)
-- [Sizes](#sizes)
-- [Options](#options)
-- [Rules of use](#rules-of-use)
-- [Properties](#properties)
+-   [Structure](#structure)
+-   [States](#sizes)
+-   [Sizes](#sizes)
+-   [Options](#options)
+-   [Rules of use](#rules-of-use)
+-   [Properties](#properties)
 
 ## Structure
 
-Tabs are arranged in bars of tabs called tab groups, with the tab label providing the user 
+Tabs are arranged in bars of tabs called tab groups, with the tab label providing the user
 with an indication of what content will be revealed when the tab is selected.
 
 ## States
@@ -41,13 +56,11 @@ Tabs come in two sizes, large and small. By default, tabs will be large unless t
 
 <Canvas>
     <Story name="Tabs large">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -55,36 +68,31 @@ Tabs come in two sizes, large and small. By default, tabs will be large unless t
 
 <Canvas>
     <Story name="Tabs small">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
-
 
 ## Options
 
 ### Scrolling
 
-If there are more tabs provided than can fit within the viewport, tabs will scroll. 
+If there are more tabs provided than can fit within the viewport, tabs will scroll.
 The user may scroll using a native control like a horizontal scroll wheel, or by using the scroll buttons.
 
-Visibility of the scroll buttons can be controlled by the `areArrowsVisible` prop. 
+Visibility of the scroll buttons can be controlled by the `areArrowsVisible` prop.
 By default, scroll buttons will appear automatically if needed. Options are...
 
 <Canvas>
     <Story name="Scrolling">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
@@ -92,30 +100,27 @@ By default, scroll buttons will appear automatically if needed. Options are...
 
 <Canvas>
     <Story name="Selection Follows Focus">
-        {[false, true].map(dark=>
+        {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
-                      
-                </StoryProvider>
+                <StoryProvider dark={dark}></StoryProvider>
             </Fragment>
-        )}
+        ))}
     </Story>
 </Canvas>
 
 ## Rules of use
 
-* Sort tabs according to user needs, placing the most important first.
-* Tabs are relevant if the content can be usefully separated into clearly named sections.
-* Use the tab label to provide a clear and concise description of the content contained in that tab and to help differentiate between the different sections.
-* Do not use tabs if users need to read the content of all sections.
-* Do not use for too long content where tabs are difficult to find after reading.
-* Only one tab should be active at a given time.
-* Tabs should be positioned in a single, scrollable (if needed) row above the content it relates to.
-* Pay attention to the maximum number of tabs. consider further splitting the content or using a different navigation component.
-* Do not use tabs to create a sequence or progression of content that the user is expected to read in a given order.
-* Do not use tabs for comparing content (e.g. different model specifications).
-* Do not use tabs to navigate users to a different page.
-
+-   Sort tabs according to user needs, placing the most important first.
+-   Tabs are relevant if the content can be usefully separated into clearly named sections.
+-   Use the tab label to provide a clear and concise description of the content contained in that tab and to help differentiate between the different sections.
+-   Do not use tabs if users need to read the content of all sections.
+-   Do not use for too long content where tabs are difficult to find after reading.
+-   Only one tab should be active at a given time.
+-   Tabs should be positioned in a single, scrollable (if needed) row above the content it relates to.
+-   Pay attention to the maximum number of tabs. consider further splitting the content or using a different navigation component.
+-   Do not use tabs to create a sequence or progression of content that the user is expected to read in a given order.
+-   Do not use tabs for comparing content (e.g. different model specifications).
+-   Do not use tabs to navigate users to a different page.
 
 ## Properties
 
