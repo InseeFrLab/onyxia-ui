@@ -466,11 +466,12 @@ const { NoOptionText } = (() => {
         );
     });
 
-    const useStyles = makeStyles({ "name": { NoOptionText } })({
+    const useStyles = makeStyles({ "name": { NoOptionText } })(theme => ({
         "root": {
             "cursor": "pointer",
+            "paddingLeft": theme.spacing(3),
         },
-    });
+    }));
 
     return { NoOptionText };
 })();
