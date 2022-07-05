@@ -1,3 +1,12 @@
+### **0.45.10** (2022-07-05)  
+  
+- Fix GitHubPicker tag creation  
+- Update style on github picker  
+- Merge pull request #11 from ddecrulle/main
+
+add darkmode in docs  
+- add darkmode in docs    
+  
 ### **0.45.9** (2022-07-04)  
   
 - Sync the dark mode with story provider    
