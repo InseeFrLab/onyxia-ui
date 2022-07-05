@@ -157,6 +157,8 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                     newValue.map(({ tag }) => tag),
                                 );
 
+                                evtInputValue.state = "";
+
                                 onSelectedTags(
                                     newTag !== undefined
                                         ? {
@@ -275,25 +277,30 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                 }))}
                             getOptionLabel={option => option.tag}
                             renderInput={({
-                                inputProps: { onChange, ...inputProps },
+                                inputProps: { onChange, onBlur, ...inputProps },
                                 ...params
                             }) => (
-                                <InputBase
-                                    className={classes.input}
-                                    ref={params.InputProps.ref}
-                                    inputProps={{
-                                        ...inputProps,
-                                        "onChange": (...args) => {
-                                            evtInputValue.state = (
-                                                args[0] as React.ChangeEvent<HTMLInputElement>
-                                            ).target.value;
+                                console.log(inputProps),
+                                (
+                                    <InputBase
+                                        className={classes.input}
+                                        ref={params.InputProps.ref}
+                                        inputProps={{
+                                            ...inputProps,
+                                            "onChange": (...args) => {
+                                                evtInputValue.state = (
+                                                    args[0] as React.ChangeEvent<HTMLInputElement>
+                                                ).target.value;
 
-                                            return (onChange as any)?.(...args);
-                                        },
-                                    }}
-                                    autoFocus
-                                    placeholder="Filter labels"
-                                />
+                                                return (onChange as any)?.(
+                                                    ...args,
+                                                );
+                                            },
+                                        }}
+                                        autoFocus
+                                        placeholder="Filter labels"
+                                    />
+                                )
                             )}
                         />
                         {texts["done"] !== undefined && (
