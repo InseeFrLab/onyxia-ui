@@ -36,7 +36,7 @@ export namespace IconButtonProps {
     };
 
     export type Clickable<IconId extends string = never> = Common<IconId> & {
-        onClick(): void;
+        onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
         href?: string;
     };
 

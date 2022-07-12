@@ -1,8 +1,8 @@
-import { GitHubPicker } from "../GitHubPicker";
+import { Picker } from "../Picker";
+import type { PickerProps } from "../Picker";
 import { Button } from "./theme";
 import { useStateRef } from "powerhooks/useStateRef";
 import { useState } from "react";
-import type { GitHubPickerProps } from "../GitHubPicker";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { symToStr } from "tsafe/symToStr";
@@ -15,7 +15,7 @@ import { useTranslation } from "./i18n";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ GitHubPicker })]: Component },
+    "wrappedComponent": { [symToStr({ Picker })]: Component },
 });
 
 export default meta;
@@ -43,41 +43,58 @@ function getRandomColor(stringInput: string) {
 
 function Component() {
     const evtGitHubPickerAction = useConst(() =>
-        Evt.create<UnpackEvt<GitHubPickerProps["evtAction"]>>(),
+        Evt.create<UnpackEvt<PickerProps["evtAction"]>>(),
     );
 
-    const [tags, setTags] = useState([
+    const [options, setOptions] = useState(
+        ["oauth", "sso", "datascience", "office", "docker"].map(tag => ({
+            "id": tag,
+            "label": tag,
+        })),
+    );
+
+    const [selectedOptionIds, setSelectedOptionIds] = useState([
         "oauth",
-        "sso",
-        "datascience",
-        "office",
         "docker",
     ]);
 
-    const [selectedTags, setSelectedTags] = useState(["oauth", "docker"]);
-
     const buttonRef = useStateRef<HTMLButtonElement>(null);
 
-    const onSelectedTags = useConstCallback<
-        GitHubPickerProps["onSelectedTags"]
-    >(params => {
-        if (params.isSelect && params.isNewTag) {
-            setTags([params.tag, ...tags]);
-        }
+    const onSelectedOption = useConstCallback<PickerProps["onSelectedOption"]>(
+        params => {
+            if (params.isSelect && params.isNewOption) {
+                setSelectedOptionIds([
+                    params.optionLabel,
+                    ...selectedOptionIds,
+                ]);
+                setOptions([
+                    ...options,
+                    {
+                        "id": params.optionLabel,
+                        "label": params.optionLabel,
+                    },
+                ]);
+            }
 
-        setSelectedTags(
-            params.isSelect
-                ? [...selectedTags, params.tag]
-                : selectedTags.filter(tag => tag !== params.tag),
-        );
-    });
+            setSelectedOptionIds(
+                params.isSelect
+                    ? [
+                          ...selectedOptionIds,
+                          params.isNewOption
+                              ? params.optionLabel
+                              : params.optionId,
+                      ]
+                    : selectedOptionIds.filter(id => id !== params.optionId),
+            );
+        },
+    );
 
-    const { t } = useTranslation({ "Picker": null });
+    const { t } = useTranslation({ Picker });
 
     return (
         <div>
-            {selectedTags.map(tag => (
-                <span key={tag}>{tag}&nbsp;</span>
+            {selectedOptionIds.map(id => (
+                <span key={id}>{id}&nbsp;</span>
             ))}
             <br />
             <Button
@@ -93,16 +110,16 @@ function Component() {
             >
                 open
             </Button>
-            <GitHubPicker
-                tags={tags}
-                selectedTags={selectedTags}
-                onSelectedTags={onSelectedTags}
+            <Picker
+                options={options}
+                selectedOptionIds={selectedOptionIds}
+                onSelectedOption={onSelectedOption}
                 evtAction={evtGitHubPickerAction}
-                getTagColor={getTagColor}
+                getOptionColor={getTagColor}
                 texts={{
                     "label": t("github picker label"),
-                    "create tag": ({ tag }) =>
-                        t("github picker create tag", { tag }),
+                    "create option": ({ optionLabel }) =>
+                        t("github picker create tag", { "tag": optionLabel }),
                     "done": t("github picker done"),
                 }}
             />

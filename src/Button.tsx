@@ -45,7 +45,7 @@ export namespace ButtonProps {
     };
 
     export type Regular<IconId extends string = never> = Common<IconId> & {
-        onClick?: () => void;
+        onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
         href?: string;
         /** Default to true if href */
         doOpenNewTabIfHref?: boolean;
