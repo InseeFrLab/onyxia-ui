@@ -75,6 +75,16 @@ and limitations under the License.
 
 /**
  * @license React
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
  * react-jsx-runtime.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -114,7 +124,7 @@ and limitations under the License.
  * @license MIT
  */
 
-/** @license MUI v5.8.0
+/** @license MUI v5.8.7
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
