@@ -63,11 +63,11 @@
     "dependencies": {
         "@mui/icons-material": "^5.8.2",
         "color": "3.1.3",
-        "evt": "2.0.0-beta.45",
+        "evt": "^2.2.0",
         "material-design-icons": "^3.0.1",
         "memoizee": "^0.4.15",
         "minimal-polyfills": "^2.2.1",
-        "powerhooks": "^0.20.3",
+        "powerhooks": "^0.20.4",
         "run-exclusive": "^2.2.14",
         "tsafe": "^0.10.0",
         "tss-react": "^3.7.0"
