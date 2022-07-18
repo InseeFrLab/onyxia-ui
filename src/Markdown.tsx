@@ -4,11 +4,12 @@ import ReactMarkdown from "react-markdown";
 import Link from "@mui/material/Link";
 
 export type MarkdownProps = {
+    className?: string;
     children: string;
 };
 
 export const Markdown = memo((props: MarkdownProps) => {
-    const { children } = props;
+    const { className, children } = props;
 
     const renderers = useMemo(
         () => ({
@@ -21,5 +22,9 @@ export const Markdown = memo((props: MarkdownProps) => {
         [],
     );
 
-    return <ReactMarkdown renderers={renderers}>{children}</ReactMarkdown>;
+    return (
+        <ReactMarkdown className={className} renderers={renderers}>
+            {children}
+        </ReactMarkdown>
+    );
 });
