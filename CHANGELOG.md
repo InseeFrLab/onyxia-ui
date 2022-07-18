@@ -1,3 +1,7 @@
+### **0.46.2** (2022-07-18)  
+  
+- Add component for Markdown    
+  
 ### **0.46.1** (2022-07-17)  
   
 - Update evt and powerhooks    
