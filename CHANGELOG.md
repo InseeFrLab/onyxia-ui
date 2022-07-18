@@ -1,3 +1,7 @@
+### **0.46.3** (2022-07-18)  
+  
+- Add className on Markdown component    
+  
 ### **0.46.2** (2022-07-18)  
   
 - Add component for Markdown    
