@@ -23,8 +23,8 @@ import { arrDiff } from "evt/tools/reducers/diff";
 import { createButton } from "./Button";
 import { useStateRef } from "powerhooks/useStateRef";
 import { assert } from "tsafe/assert";
-import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
-import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
+import type { NonPostableEvtLike } from "evt";
+import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 
 const { Button } = createButton();
 

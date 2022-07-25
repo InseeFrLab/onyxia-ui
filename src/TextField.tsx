@@ -20,8 +20,8 @@ import { useDomRect } from "powerhooks/useDomRect";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import Autocomplete from "@mui/material/Autocomplete";
-import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
-import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
+import type { NonPostableEvtLike } from "evt";
+import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 
 export type TextFieldProps = {
     className?: string;

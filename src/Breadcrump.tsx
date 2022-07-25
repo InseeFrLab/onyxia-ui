@@ -6,8 +6,8 @@ import { Evt } from "evt";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { assert } from "tsafe/assert";
 import { symToStr } from "tsafe/symToStr";
-import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
-import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
+import type { NonPostableEvtLike } from "evt";
+import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 
 export type BreadcrumpProps = {
     className?: string;

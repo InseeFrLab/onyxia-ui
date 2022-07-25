@@ -12,8 +12,8 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { useMergeRefs } from "powerhooks/useMergeRefs";
 import { useMergedClasses } from "tss-react/compat";
-import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
-import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
+import type { NonPostableEvtLike } from "evt";
+import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 
 const { Icon } = createIcon({
     "search": SearchIcon,

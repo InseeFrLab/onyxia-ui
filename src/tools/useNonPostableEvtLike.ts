@@ -1,18 +1,11 @@
-import type { NonPostableEvtLike } from "./NonPostableEvtLike";
-import type { NonPostableEvt } from "evt";
-import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
+import type { NonPostableEvtLike, NonPostableEvt, UnpackEvt } from "evt";
 import { Evt } from "evt";
+import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import { useEvt } from "evt/hooks";
 
 export function useNonPostableEvtLike<
     E extends NonPostableEvtLike<unknown> | undefined,
->(
-    evtLike: E,
-): E extends undefined
-    ? undefined
-    : E extends NonPostableEvtLike<infer T>
-    ? NonPostableEvt<T>
-    : never {
+>(evtLike: E): NonPostableEvt<UnpackEvt<E>> {
     const evt = useGuaranteedMemo(() => Evt.create<any>(), [evtLike]);
 
     useEvt(
