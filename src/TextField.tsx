@@ -8,7 +8,6 @@ import { getBrowser } from "./tools/getBrowser";
 import InputAdornment from "@mui/material/InputAdornment";
 import { createIconButton } from "./IconButton";
 import { createIcon } from "./Icon";
-import type { NonPostableEvt } from "evt";
 import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
 import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
@@ -21,6 +20,8 @@ import { useDomRect } from "powerhooks/useDomRect";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import Autocomplete from "@mui/material/Autocomplete";
+import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
+import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
 
 export type TextFieldProps = {
     className?: string;
@@ -56,7 +57,7 @@ export type TextFieldProps = {
 
     /** To prevent onSubmit to be invoked (when data is being updated for example ) default true*/
     isSubmitAllowed?: boolean;
-    evtAction?: NonPostableEvt<"TRIGGER SUBMIT" | "RESTORE DEFAULT VALUE">;
+    evtAction?: NonPostableEvtLike<"TRIGGER SUBMIT" | "RESTORE DEFAULT VALUE">;
     /** Submit invoked on evtAction.post("TRIGGER SUBMIT") only if value being typed is valid */
     onSubmit?: (value: string) => void;
     getIsValidValue?: (
@@ -163,7 +164,7 @@ export const TextField = memo((props: TextFieldProps) => {
         doOnlyValidateInputAfterFistFocusLost = true,
         onValueBeingTypedChange,
         onBlur,
-        evtAction,
+        evtAction: evtActionLike,
         onSubmit,
         onEscapeKeyDown,
         onEnterKeyDown,
@@ -189,6 +190,8 @@ export const TextField = memo((props: TextFieldProps) => {
         freeSolo = false,
         ...completedPropsRest
     } = props;
+
+    const evtAction = useNonPostableEvtLike(evtActionLike);
 
     const { value, transformAndSetValue } = (function useClosure() {
         const [value, setValue] = useState(defaultValue);

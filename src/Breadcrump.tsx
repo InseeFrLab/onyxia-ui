@@ -1,12 +1,13 @@
 import { makeStyles } from "./lib/ThemeProvider";
 import { useMemo, useState, useEffect, memo } from "react";
 import { Text } from "./Text/TextBase";
-import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { Evt } from "evt";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { assert } from "tsafe/assert";
 import { symToStr } from "tsafe/symToStr";
+import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
+import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
 
 export type BreadcrumpProps = {
     className?: string;
@@ -16,7 +17,7 @@ export type BreadcrumpProps = {
     /** Default false */
     isNavigationDisabled?: boolean;
     onNavigate(params: { path: string[]; upCount: number }): void;
-    evtAction?: NonPostableEvt<{
+    evtAction?: NonPostableEvtLike<{
         action: "DISPLAY COPY FEEDBACK";
         basename?: string;
     }>;
@@ -30,9 +31,11 @@ export const Breadcrump = memo((props: BreadcrumpProps) => {
         isNavigationDisabled = false,
         onNavigate,
         className,
-        evtAction,
+        evtAction: evtActionLike,
         separatorChar = "/",
     } = props;
+
+    const evtAction = useNonPostableEvtLike(evtActionLike);
 
     const [path, setPath] = useState(props.path);
 

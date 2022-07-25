@@ -3,7 +3,6 @@ import type { ChangeEventHandler } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useClickAway } from "powerhooks/useClickAway";
-import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
@@ -13,6 +12,8 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { useMergeRefs } from "powerhooks/useMergeRefs";
 import { useMergedClasses } from "tss-react/compat";
+import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
+import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
 
 const { Icon } = createIcon({
     "search": SearchIcon,
@@ -26,7 +27,7 @@ export type SearchBarProps = {
     search: string;
     onSearchChange: (search: string) => void;
     onKeyPress?: (key: "Enter" | "Escape") => void;
-    evtAction?: NonPostableEvt<"CLEAR SEARCH">;
+    evtAction?: NonPostableEvtLike<"CLEAR SEARCH">;
     /** Default "Search" */
     placeholder?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
@@ -40,10 +41,12 @@ export const SearchBar = memo(
             onKeyPress,
             search,
             placeholder = "Search",
-            evtAction,
+            evtAction: evtActionLike,
             classes: props_classes,
             ...rest
         } = props;
+
+        const evtAction = useNonPostableEvtLike(evtActionLike);
 
         //For the forwarding, rest should be empty (typewise),
         // eslint-disable-next-line @typescript-eslint/ban-types

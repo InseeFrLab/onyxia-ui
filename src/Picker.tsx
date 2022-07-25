@@ -8,7 +8,6 @@ import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 import type { AutocompleteCloseReason } from "@mui/material/Autocomplete";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
-import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { makeStyles } from "./lib/ThemeProvider";
 import { useClickAway } from "powerhooks/useClickAway";
@@ -24,6 +23,8 @@ import { arrDiff } from "evt/tools/reducers/diff";
 import { createButton } from "./Button";
 import { useStateRef } from "powerhooks/useStateRef";
 import { assert } from "tsafe/assert";
+import type { NonPostableEvtLike } from "./tools/NonPostableEvtLike";
+import { useNonPostableEvtLike } from "./tools/NonPostableEvtLike/useNonPostableEvtLike";
 
 const { Button } = createButton();
 
@@ -45,7 +46,7 @@ export type PickerProps = {
             | { isSelect: false; optionId: string },
     ) => void;
     onClose?: () => void;
-    evtAction: NonPostableEvt<
+    evtAction: NonPostableEvtLike<
         | {
               action: "open";
               anchorEl: HTMLElement;
@@ -70,9 +71,11 @@ export const Picker = memo((props: PickerProps) => {
         selectedOptionIds,
         onSelectedOption,
         onClose: onClose_props,
-        evtAction,
+        evtAction: evtActionLike,
         texts = {},
     } = props;
+
+    const evtAction = useNonPostableEvtLike(evtActionLike);
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(
         undefined,
