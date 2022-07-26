@@ -4323,14 +4323,14 @@ evt@^2.2.0, evt@^2.2.1:
     run-exclusive "^2.2.15"
     tsafe "^0.10.0"
 
-evt@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/evt/-/evt-2.3.0.tgz#709456803f79a125371f709fb32c0989a948a9f8"
-  integrity sha512-Tkv4vM4BrIiW9p+YM7DiWNGcxrajtSaNMsJl6C43gbk/pY5xhN7RNQ9j3wyXNgKrkudNYMTO4dTE+v3JGdJqTQ==
+evt@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/evt/-/evt-2.3.1.tgz#988fc6fc255db8999240e918afe63ba6c325db99"
+  integrity sha512-+MU1aA0as6hOnGxzQOw9hV/xiKIB1vAY90S+WD6zMzvvhQHlY4aPHk2b8WpWsVs3XErDzlhGzCESVCAuH9kUiA==
   dependencies:
     minimal-polyfills "^2.2.1"
-    run-exclusive "^2.2.15"
-    tsafe "^0.10.0"
+    run-exclusive "^2.2.16"
+    tsafe "^0.10.1"
 
 execa@^5.0.0:
   version "5.1.1"
@@ -7275,6 +7275,16 @@ postcss@^8.3.5, postcss@^8.4.14, postcss@^8.4.4, postcss@^8.4.7:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+powerhooks@^0.20.10:
+  version "0.20.10"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.10.tgz#c30ba493ea324806100d9f5df889dea19f3a73ff"
+  integrity sha512-RiQVBgxLavWFVb3hKmzluykvgeVYgVyGtITlnIjVrtfql3jpCHzuVVTq/49oXp18BNEOKCQXzKfFeb42f1v4Pg==
+  dependencies:
+    evt "^2.3.1"
+    memoizee "^0.4.15"
+    resize-observer-polyfill "^1.5.1"
+    tsafe "^0.10.1"
+
 powerhooks@^0.20.4:
   version "0.20.7"
   resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.7.tgz#02e8816f93f00f692fc7d23b11ef4ca43b6709d9"
@@ -7284,16 +7294,6 @@ powerhooks@^0.20.4:
     memoizee "^0.4.15"
     resize-observer-polyfill "^1.5.1"
     tsafe "^0.10.0"
-
-powerhooks@^0.20.9:
-  version "0.20.9"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.9.tgz#a1364d813eebde55745f02d56a1fa0f51feff2a3"
-  integrity sha512-xAUfqjBEOqTYkDgBx1S1AP2I84U/ltnh4OOqUmZKuHatWOlVh8rnPt5GJZNQ6BACvkpldw5TzTtw+lAiQP7DRQ==
-  dependencies:
-    evt "^2.3.0"
-    memoizee "^0.4.15"
-    resize-observer-polyfill "^1.5.1"
-    tsafe "^0.10.1"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -7824,6 +7824,13 @@ run-exclusive@^2.2.15:
   version "2.2.15"
   resolved "https://registry.yarnpkg.com/run-exclusive/-/run-exclusive-2.2.15.tgz#8e311a741cb8def53ececf2e9d921e47abf15117"
   integrity sha512-MpQTHZspu8Qcl/WtJXGn7ClQitwk8m9iQwVPqFhhYSJQF/YcEu0Btn7h1UfPXHAgcDClZsHBzg0HVGYRt8Txaw==
+  dependencies:
+    minimal-polyfills "^2.2.1"
+
+run-exclusive@^2.2.16:
+  version "2.2.16"
+  resolved "https://registry.yarnpkg.com/run-exclusive/-/run-exclusive-2.2.16.tgz#8fa30a23037760af296c47872a5f6b38f25accf0"
+  integrity sha512-cdYv2LDvaBCRnrqXrwDFs1SgzGTx0EIsiEReTpsprEDR6hRUVlSyjoMYu+rez4S1gpz6YbOQxcmYFMXJQknVnQ==
   dependencies:
     minimal-polyfills "^2.2.1"
 
