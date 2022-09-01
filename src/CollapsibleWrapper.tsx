@@ -5,7 +5,6 @@ import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { getScrollableParent } from "powerhooks/getScrollableParent";
 import { makeStyles } from "./lib/ThemeProvider";
-import { useMergedClasses } from "tss-react/compat";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -87,20 +86,21 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         ],
     );
 
-    let { classes, cx } = useStyles({
-        "isCollapsed": (() => {
-            switch (rest.behavior) {
-                case "collapses on scroll":
-                    return isCollapsedIfDependsOfScroll;
-                case "controlled":
-                    return rest.isCollapsed;
-            }
-        })(),
-        childrenWrapperHeight,
-        transitionDuration,
-    });
-
-    classes = useMergedClasses(classes, props.classes);
+    const { classes, cx } = useStyles(
+        {
+            "isCollapsed": (() => {
+                switch (rest.behavior) {
+                    case "collapses on scroll":
+                        return isCollapsedIfDependsOfScroll;
+                    case "controlled":
+                        return rest.isCollapsed;
+                }
+            })(),
+            childrenWrapperHeight,
+            transitionDuration,
+        },
+        { props },
+    );
 
     return (
         <div className={cx(classes.root, className)}>

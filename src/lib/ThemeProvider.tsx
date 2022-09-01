@@ -41,7 +41,6 @@ import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { capitalize } from "tsafe/capitalize";
-import createCache from "@emotion/cache";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import {
     useIsDarkModeEnabled,
@@ -51,7 +50,6 @@ import {
 export { useDomRect } from "powerhooks/useDomRect";
 export { useWindowInnerSize, useBrowserFontSizeFactor };
 export { ViewPortOutOfRangeError };
-import { CacheProvider } from "@emotion/react";
 import type { ReactComponent } from "../tools/ReactComponent";
 
 export type Theme<
@@ -324,11 +322,6 @@ export function createThemeProvider<
 
     const { SplashScreen } = createSplashScreen({ useTheme });
 
-    const muiCache = createCache({
-        "key": "mui",
-        "prepend": true,
-    });
-
     const { ThemeProvider } = (() => {
         function ThemeProviderWithinViewPortAdapter(props: {
             splashScreen: ThemeProviderProps["splashScreen"];
@@ -374,13 +367,11 @@ export function createThemeProvider<
 
             return (
                 <themeBaseContext.Provider value={theme}>
-                    <CacheProvider value={muiCache}>
-                        <MuiThemeProvider theme={theme.muiTheme}>
-                            <CssBaselineOrScopedCssBaseline>
-                                <SplashScreenOrId>{children}</SplashScreenOrId>
-                            </CssBaselineOrScopedCssBaseline>
-                        </MuiThemeProvider>
-                    </CacheProvider>
+                    <MuiThemeProvider theme={theme.muiTheme}>
+                        <CssBaselineOrScopedCssBaseline>
+                            <SplashScreenOrId>{children}</SplashScreenOrId>
+                        </CssBaselineOrScopedCssBaseline>
+                    </MuiThemeProvider>
                 </themeBaseContext.Provider>
             );
         }

@@ -13,7 +13,6 @@ import CloseSharp from "@mui/icons-material/CloseSharp";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import { CollapsibleWrapper } from "./CollapsibleWrapper";
 import type { CollapseParams } from "./CollapsibleWrapper";
-import { useMergedClasses } from "tss-react/compat";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
@@ -62,6 +61,7 @@ export function createPageHeader<IconId extends string>(params?: {
                 className,
                 titleCollapseParams: props_titleCollapseParams,
                 helpCollapseParams: props_helpCollapseParams,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 classes: props_classes,
                 //For the forwarding, rest should be empty (typewise)
                 ...rest
@@ -92,14 +92,15 @@ export function createPageHeader<IconId extends string>(params?: {
                 return { isHelpClosed, closeHelp };
             })();
 
-            let { classes, cx } = useStyles({
-                helperHeight,
-            });
-
-            classes = useMergedClasses(classes, props_classes);
+            const { classes, cx } = useStyles(
+                {
+                    helperHeight,
+                },
+                { props },
+            );
 
             const { titleCollapseParams } = useMemo(() => {
-                let titleCollapseParams =
+                const titleCollapseParams =
                     props_titleCollapseParams ??
                     id<CollapseParams>({
                         "behavior": "controlled",

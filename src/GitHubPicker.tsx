@@ -264,7 +264,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                 .sort((a, b) => {
                                     // Display the selected tags first.
                                     const getWeight = (tag: string) => {
-                                        let i = selectedTags.indexOf(tag);
+                                        const i = selectedTags.indexOf(tag);
 
                                         return i === -1
                                             ? selectedTags.length +

@@ -11,7 +11,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { useMergeRefs } from "powerhooks/useMergeRefs";
-import { useMergedClasses } from "tss-react/compat";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 
@@ -42,6 +41,7 @@ export const SearchBar = memo(
             search,
             placeholder = "Search",
             evtAction: evtActionLike,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             classes: props_classes,
             ...rest
         } = props;
@@ -128,9 +128,7 @@ export const SearchBar = memo(
             [evtAction ?? Object],
         );
 
-        let { classes, cx } = useStyles({ isActive });
-
-        classes = useMergedClasses(classes, props_classes);
+        const { classes, cx } = useStyles({ isActive }, { props });
 
         return (
             <div

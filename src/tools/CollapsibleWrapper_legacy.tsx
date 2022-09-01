@@ -2,11 +2,24 @@ import { useEffect, useReducer, useRef, memo } from "react";
 import type { RefObject } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
-import { useCssAndCx } from "tss-react/compat";
 import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import { useStateRef } from "powerhooks/useStateRef";
+import { createMakeStyles } from "tss-react";
+
+const { useCssAndCx } = (() => {
+    const { useStyles } = createMakeStyles({
+        "useTheme": () => ({}),
+    });
+
+    function useCssAndCx() {
+        const { css, cx } = useStyles();
+        return { css, cx };
+    }
+
+    return { useCssAndCx };
+})();
 
 export type CollapseParams =
     | CollapseParams.Controlled

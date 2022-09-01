@@ -13,7 +13,6 @@ import CloseSharp from "@mui/icons-material/CloseSharp";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import { CollapsibleWrapper } from "./tools/CollapsibleWrapper_legacy";
 import type { CollapseParams } from "./tools/CollapsibleWrapper_legacy";
-import { useMergedClasses } from "tss-react/compat";
 
 export type PageHeaderProps<IconId extends string> = {
     mainIcon?: IconId;
@@ -172,13 +171,14 @@ export function createPageHeader<IconId extends string>(params?: {
             };
         })();
 
-        let { classes, cx } = useStyles({
-            helperHeight,
-            isTitleCollapsed,
-            "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
-        });
-
-        classes = useMergedClasses(classes, props.classes);
+        const { classes, cx } = useStyles(
+            {
+                helperHeight,
+                isTitleCollapsed,
+                "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
+            },
+            { props },
+        );
 
         return (
             <div className={cx(classes.root, className)}>

@@ -278,7 +278,7 @@ export const Picker = memo((props: PickerProps) => {
                                 .sort((a, b) => {
                                     // Display the selected tags first.
                                     const getWeight = (optionId: string) => {
-                                        let i =
+                                        const i =
                                             selectedOptionIds.indexOf(optionId);
 
                                         return i === -1
