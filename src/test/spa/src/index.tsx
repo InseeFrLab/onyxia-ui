@@ -1,4 +1,4 @@
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "./theme";
 import { MyComponent } from "./MyComponent";
 import { Text, splashScreen } from "./theme";
@@ -17,12 +17,11 @@ const getViewPortConfig: ThemeProviderProps["getViewPortConfig"] =
         };
     };
 
-render(
+createRoot(document.getElementById("root")!).render(
     <ThemeProvider
         getViewPortConfig={getViewPortConfig}
         splashScreen={splashScreen}
     >
         <MyComponent />
-    </ThemeProvider>,
-    document.getElementById("root"),
+    </ThemeProvider>
 );
