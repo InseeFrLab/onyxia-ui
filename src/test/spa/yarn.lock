@@ -8669,10 +8669,10 @@ tss-react@^3.7.0:
     "@emotion/serialize" "*"
     "@emotion/utils" "*"
 
-tss-react@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-4.1.1.tgz#207220417e4b2f8eb26d8280ab9cdeb385063069"
-  integrity sha512-K1U2s/GGw+XycUjJGztJsLUhwm8KJWz5afL5WZU3SwMeQsA+gbETM6bSxVk2/DXBdw9uYLL9jkSYPAXh0tfYBw==
+tss-react@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-4.1.2.tgz#f87f624a89f1008cbce4bc01e58488bb4c4ad5ed"
+  integrity sha512-py8wewReEjRAIRVPwbqRxtiGqFqoU6oCz6OaUrgSz4fRWVQeMIacieEZHTE4BQvSkKfWhd/QV4xCBSF+DqGb5Q==
   dependencies:
     "@emotion/cache" "*"
     "@emotion/serialize" "*"
