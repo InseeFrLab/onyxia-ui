@@ -45,7 +45,6 @@ export type TextFieldProps = {
     InputProps_endAdornment?: ReactNode;
     /** Only use when getIsValidValue isn't used */
     disabled?: boolean;
-    multiline?: boolean;
     /** Return false to e.preventDefault() and e.stopPropagation() */
     onEscapeKeyDown?: (params: {
         preventDefaultAndStopPropagation(): void;
@@ -85,6 +84,8 @@ export type TextFieldProps = {
     selectAllTextOnFocus?: boolean;
     /** Default false */
     doRenderAsTextArea?: boolean;
+    /** Only applies if doRenderAsTextArea is true */
+    rows?: number;
     /** NOTE: If length 0 it's assumed loading */
     options?: string[];
 
@@ -185,6 +186,7 @@ export const TextField = memo((props: TextFieldProps) => {
         InputProps_endAdornment,
         questionMarkHelperText,
         doRenderAsTextArea = false,
+        rows,
         doIndentOnTab = false,
         options,
         freeSolo = false,
@@ -458,6 +460,7 @@ export const TextField = memo((props: TextFieldProps) => {
         <MuiTextField
             className={cx(classes.muiTextField, className)}
             multiline={doRenderAsTextArea}
+            rows={!doRenderAsTextArea ? undefined : rows}
             ref={ref}
             variant="standard"
             type={
