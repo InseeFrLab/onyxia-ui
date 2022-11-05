@@ -14396,10 +14396,10 @@ tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
-tss-react@^4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-4.4.2.tgz#0c09d677dd5ba2a532291a4c926325776ba65728"
-  integrity sha512-typ6yVmBGz1GIHmWaN+bmwHaAfxZLImfiNTiGIfJCFgas3rEpdYSty2/JENXAFvzKFl53CHc/6Z/FM2EkE2ZTQ==
+tss-react@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-4.4.3.tgz#85233e6a8663c9cd13cba086deedfaa13d74e1f8"
+  integrity sha512-cqCKPZYDetHBdN2Sip45llWdiwbr6ttjvSj58id1gSCKNC8iggrN3dnWih6NVuvoS4j1iPwrWvi5VjtNA/8HPg==
   dependencies:
     "@emotion/cache" "*"
     "@emotion/serialize" "*"
