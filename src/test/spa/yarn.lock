@@ -7332,10 +7332,10 @@ postcss@^8.3.5, postcss@^8.4.14, postcss@^8.4.4, postcss@^8.4.7:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-powerhooks@^0.20.24:
-  version "0.20.24"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.24.tgz#d7c6e22b3b0463c5d967b3951dd7c43b06c89959"
-  integrity sha512-hyRfa5rFe5q1A0N8rbjAuM4HDWevpoy65LSAQmZIoBjAjhCUtVyxohUmeCGkDXKjamEf3fCHFxU/qg57iZozWg==
+powerhooks@^0.20.25:
+  version "0.20.25"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.25.tgz#d8e8f90c143fede086385d5fb9895a88f1f9b436"
+  integrity sha512-Hr6l2gLWlUnwzILxYTlkGOfVh76N5gFsMCVA0sFIrjGJ25MDnu0OUzq/FWiPSQOD8x0BTqg7LVubky4b5spfwQ==
   dependencies:
     evt "^2.4.10"
     memoizee "^0.4.15"
