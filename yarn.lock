@@ -12021,15 +12021,15 @@ postcss@^8.2.15, postcss@^8.3.5, postcss@^8.4.14, postcss@^8.4.4, postcss@^8.4.7
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-powerhooks@^0.20.30:
-  version "0.20.30"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.30.tgz#9aff8900abd434af9c543bcca66d0481704c6b23"
-  integrity sha512-eG5zj7r8I4FIxadFH8BoZu05EakBlMrLM0Fawrg7aTqCG6tkVkunCFUcG9rlhKIq0rEM14JYOQvIZlMG5LvPLg==
+powerhooks@^0.20.31:
+  version "0.20.31"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.20.31.tgz#8694f572d51980bd84cc5a84d20108b262620ca3"
+  integrity sha512-5BwOgQZdcmLs1/hj7y2mpmRFxj0QcpeDHaImTYNpdxP0gKfi7T9IWLSXZKY2gqRBOSF2/KvnsuvbN61yBId0xg==
   dependencies:
     evt "^2.4.11"
     memoizee "^0.4.15"
     resize-observer-polyfill "^1.5.1"
-    tsafe "^1.3.4"
+    tsafe "^1.4.0"
 
 powerhooks@^0.20.8:
   version "0.20.8"
@@ -14387,6 +14387,11 @@ tsafe@^1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.3.4.tgz#ba192fb428ef40f378d842849d85130bd8cf7488"
   integrity sha512-BAcks5XQhTFXEYKp/v/RnTwD4qbWSGOHrY/gcVE9oI77KphLyfA+LRZ8SYF/fyZxikK1T8SsNf/0wvYsM6UHCQ==
+
+tsafe@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.4.0.tgz#06eb4d25600e73a43dfb9391af5ba0b14100740d"
+  integrity sha512-Tu1qe0djo7eQ1Wcg/b8bezbrfW5yHrUHUEvHynFRo3oDyWd7FxnZOrGWQg+hfk1U1+vk9Z9u0J7JoaY17aBhdw==
 
 tsconfig-paths@^3.14.1:
   version "3.14.1"
