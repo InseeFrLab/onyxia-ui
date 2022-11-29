@@ -8,6 +8,7 @@ export {
     defaultPalette,
     francePalette,
     ultravioletPalette,
+    verdantPalette,
     createDefaultColorUseCases,
     changeColorOpacity,
     getIsDarkModeEnabledOsDefault,
