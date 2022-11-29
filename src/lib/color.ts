@@ -107,7 +107,7 @@ export const verdantPalette: typeof defaultPalette = {
     "focus": {
         "main": "#1F8D49",
         "light": "#4efb8d",
-        "light2": "#dffee6"
+        "light2": "#dffee6",
     },
     "light": {
         "main": "#F4F6FF",
@@ -115,9 +115,9 @@ export const verdantPalette: typeof defaultPalette = {
         "greyVariant1": "#E6E6E6",
         "greyVariant2": "#C9C9C9",
         "greyVariant3": "#9E9E9E",
-        "greyVariant4": "#747474"
+        "greyVariant4": "#747474",
     },
-}
+};
 
 export function createDefaultColorUseCases(
     params: Param0<CreateColorUseCase<PaletteBase, any>>,
