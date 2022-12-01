@@ -77,6 +77,31 @@ export const francePalette: typeof defaultPalette = {
     },
 };
 
+export const casdPalette: typeof defaultPalette = {
+    ...defaultPalette,
+    "focus": {
+        "main": "#000091",
+        "light": "#9A9AFF",
+        "light2": "#E5E5F4",
+    },
+    "dark": {
+        "main": "#2A2A2A",
+        "light": "#383838",
+        "greyVariant1": "#161616",
+        "greyVariant2": "#9C9C9C",
+        "greyVariant3": "#CECECE",
+        "greyVariant4": "#E5E5E5",
+    },
+    "light": {
+        "main": "#F7F5F4",
+        "light": "#FDFDFC",
+        "greyVariant1": "#E6E6E6",
+        "greyVariant2": "#C9C9C9",
+        "greyVariant3": "#9E9E9E",
+        "greyVariant4": "#747474",
+    },
+};
+
 export const ultravioletPalette: typeof defaultPalette = {
     ...defaultPalette,
     "focus": {
