@@ -147,72 +147,84 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         [tabWrapperRef.current, firstTabIndex, offset],
     );
 
-    return (
-        <div className={cx(classes.root, className)} ref={rootRef}>
-            <div className={classes.top}>
-                {areArrowsVisible && (
-                    <CustomButton
-                        ref={leftArrowRef}
-                        type="arrow"
-                        direction="left"
-                        size={size}
-                        isFirst={false}
-                        className={classes.leftArrow}
-                        isDisabled={isLeftArrowDisabled}
-                        isSelected={false}
-                        onClick={onArrowClickFactory("left")}
-                        isVisible={true}
-                    />
-                )}
-                <div ref={tabWrapperRef} className={classes.tabsWrapper}>
-                    {tabs
-                        .map(({ id, ...rest }) => ({
-                            id,
-                            "isSelected": id === activeTabId,
-                            ...rest,
-                        }))
-                        .map(({ id, title, isSelected }, i) => (
-                            <CustomButton
-                                type="tab"
-                                text={title}
-                                size={size}
-                                isDisabled={false}
-                                isFirst={i === 0}
-                                className={cx(
-                                    classes.tab,
-                                    css({
-                                        "zIndex": isSelected
-                                            ? maxTabCount + 1
-                                            : maxTabCount - i,
-                                    }),
-                                )}
-                                key={id}
-                                onClick={onTabClickFactory(id)}
-                                isSelected={isSelected}
-                                isVisible={
-                                    i >= firstTabIndex &&
-                                    i < firstTabIndex + maxTabCount
-                                }
-                            />
-                        ))}
-                </div>
-                {areArrowsVisible && (
-                    <CustomButton
-                        type="arrow"
-                        direction="right"
-                        size={size}
-                        isFirst={false}
-                        className={classes.rightArrow}
-                        isDisabled={isRightArrowDisabled}
-                        isSelected={false}
-                        onClick={onArrowClickFactory("right")}
-                        isVisible={true}
-                    />
-                )}
-            </div>
+    //NOTE: We create an invisible to be sure we get the correct arrow height.
+    const renderLeftArrow = (
+        leftArrowRef?: React.RefObject<any>,
+        className?: string,
+    ) => (
+        <CustomButton
+            ref={leftArrowRef}
+            type="arrow"
+            direction="left"
+            size={size}
+            isFirst={false}
+            className={cx(classes.leftArrow, className)}
+            isDisabled={isLeftArrowDisabled}
+            isSelected={false}
+            onClick={onArrowClickFactory("left")}
+            isVisible={true}
+        />
+    );
 
-            <div className={classes.content}>{children}</div>
-        </div>
+    return (
+        <>
+            <div className={cx(classes.root, className)} ref={rootRef}>
+                <div className={classes.top}>
+                    {areArrowsVisible && renderLeftArrow()}
+                    <div ref={tabWrapperRef} className={classes.tabsWrapper}>
+                        {tabs
+                            .map(({ id, ...rest }) => ({
+                                id,
+                                "isSelected": id === activeTabId,
+                                ...rest,
+                            }))
+                            .map(({ id, title, isSelected }, i) => (
+                                <CustomButton
+                                    type="tab"
+                                    text={title}
+                                    size={size}
+                                    isDisabled={false}
+                                    isFirst={i === 0}
+                                    className={cx(
+                                        classes.tab,
+                                        css({
+                                            "zIndex": isSelected
+                                                ? maxTabCount + 1
+                                                : maxTabCount - i,
+                                        }),
+                                    )}
+                                    key={id}
+                                    onClick={onTabClickFactory(id)}
+                                    isSelected={isSelected}
+                                    isVisible={
+                                        i >= firstTabIndex &&
+                                        i < firstTabIndex + maxTabCount
+                                    }
+                                />
+                            ))}
+                    </div>
+                    {areArrowsVisible && (
+                        <CustomButton
+                            type="arrow"
+                            direction="right"
+                            size={size}
+                            isFirst={false}
+                            className={classes.rightArrow}
+                            isDisabled={isRightArrowDisabled}
+                            isSelected={false}
+                            onClick={onArrowClickFactory("right")}
+                            isVisible={true}
+                        />
+                    )}
+                </div>
+
+                <div className={classes.content}>{children}</div>
+            </div>
+            {renderLeftArrow(
+                leftArrowRef,
+                css({ "position": "fixed", "visibility": "hidden" }),
+            )}
+        </>
     );
 }
 
