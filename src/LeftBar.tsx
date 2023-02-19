@@ -369,6 +369,7 @@ export function createLeftBar<IconId extends string>(params?: {
                         ? theme.colors.useCases.typography.textDisabled
                         : undefined,
                     "whiteSpace": "nowrap",
+                    "marginRight": theme.spacing(2),
                 },
                 "divider": {
                     "marginTop": theme.spacing(2),
