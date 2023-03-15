@@ -12031,15 +12031,15 @@ powerhooks@^0.20.8:
     resize-observer-polyfill "^1.5.1"
     tsafe "^0.10.0"
 
-powerhooks@^0.26.3:
-  version "0.26.3"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.26.3.tgz#0b8d17ef469bcbfdcb601fb803c3423a4a5a8e81"
-  integrity sha512-2lnec/Vb4CppC4oZG1+GZxcyBK/L3SXRiiMljl/Rc8COsk/7LqfpIx/m0kYzl8yyLGbBbOCZYSmrZq3NgY6Erg==
+powerhooks@^0.26.4:
+  version "0.26.4"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.26.4.tgz#0cd6ec4135ef36906821f7eec13f1755e66461fd"
+  integrity sha512-x4WTBIny2fo+r+GjmJLBFD+6CyDH0eJwkrY0Mzk2ZLQjdD5S47OKl1LAGayYdqiuTKOoa3NLhxrugdQBucLzfQ==
   dependencies:
     evt "^2.4.15"
     memoizee "^0.4.15"
     resize-observer-polyfill "^1.5.1"
-    tsafe "^1.4.3"
+    tsafe "^1.5.1"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -14387,6 +14387,11 @@ tsafe@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.4.3.tgz#a98ce83616f0d9c01e3c6167a2ead45ba455b2ae"
   integrity sha512-KjCdgjIqsbKW9oeJGSMVC23jhWm/VXJwkaZ7jffo/WaTioLGTHJqliHe9dECEVzIACNVNs/fwtKwU8wWK4jY4g==
+
+tsafe@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.5.1.tgz#b23b0e677a33efe6682ff5e50e8c1944eb331f0e"
+  integrity sha512-xLkNkdIzIXmfGiOYU+rGxeOcdEwlMHpfE6B9KnW51BFhvc+r+yMXe9+u5DgfrLXWSahUcqFRLZiA/oOmy+kcwg==
 
 tsconfig-paths@^3.14.1:
   version "3.14.1"
