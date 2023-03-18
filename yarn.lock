@@ -7253,6 +7253,15 @@ evt@^2.4.17:
     run-exclusive "^2.2.18"
     tsafe "^1.5.2"
 
+evt@^2.4.18:
+  version "2.4.18"
+  resolved "https://registry.yarnpkg.com/evt/-/evt-2.4.18.tgz#931012610dcd3bc7c0877d61018a704e9e5511db"
+  integrity sha512-kMYW3DPrUWvFsOUf3cN1NMdg0MEFYLMLqC7hPSasNs8TOZCOBsDgazr6nXda2iUur/2L6BtRu0oCl2++oGYZxA==
+  dependencies:
+    minimal-polyfills "^2.2.2"
+    run-exclusive "^2.2.18"
+    tsafe "^1.6.0"
+
 exec-sh@^0.3.2:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.6.tgz#ff264f9e325519a60cb5e273692943483cca63bc"
@@ -14388,6 +14397,11 @@ tsafe@^1.5.2:
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.5.2.tgz#c5bc8c3d663b41dcd6c05793a02d50f781bd03ef"
   integrity sha512-2DfRSqP2TnumYaIc/4LIb4SK0jyHnAwJgvr+EVrVwHGdsxuBjwh736uPrdYEvXQ9oqxV1P3gfspmAImbHp4N5A==
 
+tsafe@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.6.0.tgz#48a9bd0a4c43df43d289bdfc1d89f0d7fffbd612"
+  integrity sha512-wlUeRBnyN3EN2chXznpLm7vBEvJLEOziDU+MN6NRlD99AkwmXgtChNQhp+V97VyRa3Bp05IaL4Cocsc7JlyEUg==
+
 tsconfig-paths@^3.14.1:
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz#ba0734599e8ea36c862798e920bcf163277b137a"
@@ -14408,10 +14422,10 @@ tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
-tss-react@^4.7.7:
-  version "4.7.7"
-  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-4.7.7.tgz#d11a8a7f3760029905b98f24b19d870873527aea"
-  integrity sha512-gxZgYtWgRksMvzmvBhnh09psWFXT5BnGBem739UAopfx+z5pu5sL8RtydSYUS7zAD1EBy6Pfc54cDb/0Ey0y4g==
+tss-react@^4.8.2:
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/tss-react/-/tss-react-4.8.2.tgz#ea424965e8a6828ac02bc8c8f2a7a75bb87cf0ac"
+  integrity sha512-VT2tvbnfyG5oEMUsJjyp9KPa/A+lahCju+usy8of9SnvNOWFhkVKOMcvTn8KF10ncBF0T+O+XlkcCR4Eoqw1mw==
   dependencies:
     "@emotion/cache" "*"
     "@emotion/serialize" "*"
