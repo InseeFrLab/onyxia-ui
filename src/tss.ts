@@ -1,1 +1,1 @@
-export * as tss from "tss-react";
+export * from "tss-react";
