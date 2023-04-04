@@ -27,7 +27,7 @@ import { shadows } from "./shadows";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig, Spacing } from "./spacing";
-import { createMakeStyles } from "tss-react/compat";
+import { createMakeStyles } from "tss-react";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";

@@ -4,7 +4,7 @@ import { TypographyDesc } from "../lib/typography";
 import type { PaletteBase, ColorUseCasesBase } from "../lib/color";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { createMakeStyles } from "tss-react/compat";
+import { createMakeStyles } from "tss-react";
 
 export function createText<
     TypographyVariantNameCustom extends string = never,
