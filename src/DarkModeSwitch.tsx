@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { useIsDarkModeEnabled } from "./lib/index";
+import { useIsDarkModeEnabled } from "./lib";
 import DarkModeIcon from "@mui/icons-material/Brightness4";
 import LightModeIcon from "@mui/icons-material/Brightness7";
 import { createIcon } from "./Icon";
@@ -19,10 +19,11 @@ export type DarkModeSwitchProps = {
     className?: string;
     /** Default: default */
     size?: IconProps["size"];
+    ariaLabel?: string;
 };
 
 export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
-    const { className, size } = props;
+    const { className, size, ariaLabel } = props;
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
     const onClick = useConstCallback(() => {
@@ -37,7 +38,7 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
             onClick={onClick}
             size={size}
             iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
-            aria-label="Dark mode switch"
+            aria-label={ariaLabel ?? "Dark mode switch"}
         />
     );
 });
