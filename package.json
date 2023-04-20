@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "0.51.0",
+    "version": "0.51.1",
     "description": "A uli toolkit, like material-ui but with stronger typing and more opinionated",
     "repository": {
         "type": "git",
@@ -66,7 +66,7 @@
         "evt": "^2.4.18",
         "memoizee": "^0.4.15",
         "minimal-polyfills": "^2.2.2",
-        "powerhooks": "^0.26.7",
+        "powerhooks": "^0.26.8",
         "run-exclusive": "^2.2.18",
         "tsafe": "^1.6.0",
         "tss-react": "^4.8.2"
