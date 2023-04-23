@@ -11,8 +11,9 @@ export {
     verdantPalette,
     createDefaultColorUseCases,
     changeColorOpacity,
-    getIsDarkModeEnabledOsDefault,
 } from "./color";
+
+export { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
 
 export {
     useIsDarkModeEnabled,

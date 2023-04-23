@@ -280,10 +280,3 @@ export function createMuiPaletteOptions(params: {
         },
     } as const;
 }
-
-export function getIsDarkModeEnabledOsDefault() {
-    return (
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
-}
