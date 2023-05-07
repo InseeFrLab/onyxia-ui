@@ -19,8 +19,8 @@ export type Item<IconId extends string = string> = {
     label: string;
     /** Defaults to available */
     availability?: "available" | "greyed" | "not visible";
-    /** Default false */
-    hasDividerBelow?: boolean;
+    /** Default: undefined (no divider) */
+    belowDividerA11yLabel?: string;
     link: {
         href: string;
         onClick?: (event: { preventDefault: () => void }) => void;
@@ -131,7 +131,7 @@ export function createLeftBar<IconId extends string>(params?: {
                                 isCurrent={undefined}
                                 iconId="chevronLeft"
                                 label={reduceText}
-                                hasDividerBelow={undefined}
+                                belowDividerA11yLabel={undefined}
                                 link={toggleIsCollapsedLink}
                             />
                             {objectKeys(items).map(itemId => (
@@ -210,7 +210,7 @@ export function createLeftBar<IconId extends string>(params?: {
                 iconId,
                 label,
                 link,
-                hasDividerBelow = false,
+                belowDividerA11yLabel = undefined,
                 availability = "available",
             } = props;
 
@@ -267,10 +267,11 @@ export function createLeftBar<IconId extends string>(params?: {
                             </Text>
                         </div>
                     </a>
-                    {hasDividerBelow && (
+                    {belowDividerA11yLabel !== undefined && (
                         <Divider
                             className={classes.divider}
                             variant="fullWidth"
+                            about={belowDividerA11yLabel}
                         />
                     )}
                 </>
