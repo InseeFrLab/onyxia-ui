@@ -37,7 +37,7 @@ export type Item<IconId extends string = string> = {
 export type LeftBarProps<IconId extends string, ItemId extends string> = {
     className?: string;
     collapsedWidth?: number;
-    currentItemId?: ItemId;
+    currentItemId: ItemId | null;
     items: Record<ItemId, Item<IconId>>;
     /** Default reduce */
     reduceText?: string;
