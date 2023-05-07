@@ -5,6 +5,7 @@ import {
     memo,
     type FC,
     type ForwardedRef,
+    type ReactNode,
 } from "react";
 import { makeStyles, useStyles as useTheme } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
@@ -22,7 +23,7 @@ import type { Equals } from "tsafe";
 
 export type Item<IconId extends string = string> = {
     iconId: IconId;
-    label: string;
+    label: NonNullable<ReactNode>;
     /** Defaults to available */
     availability?: "available" | "greyed" | "not visible";
     /** Default: false (no divider). A string can be provided, is will be used as "about" for a11y  */
