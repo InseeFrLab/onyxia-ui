@@ -1,5 +1,11 @@
-import { useMemo, useState, forwardRef, memo } from "react";
-import type { FC } from "react";
+import {
+    useMemo,
+    useState,
+    forwardRef,
+    memo,
+    type FC,
+    type ForwardedRef,
+} from "react";
 import { makeStyles, useStyles as useTheme } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
@@ -19,8 +25,8 @@ export type Item<IconId extends string = string> = {
     label: string;
     /** Defaults to available */
     availability?: "available" | "greyed" | "not visible";
-    /** Default: undefined (no divider) */
-    belowDividerA11yLabel?: string;
+    /** Default: false (no divider). A string can be provided, is will be used as "about" for a11y  */
+    belowDivider?: string | boolean;
     link: {
         href: string;
         onClick?: (event: { preventDefault: () => void }) => void;
@@ -61,95 +67,96 @@ export function createLeftBar<IconId extends string>(params?: {
 
     const iconSize = "large";
 
-    const LeftBar = memo(
-        forwardRef<any, LeftBarProps<IconId, string>>((props, ref) => {
-            const { theme } = useTheme();
+    function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
+        props: LeftBarProps<IconId, ItemId>,
+        ref: React.LegacyRef<HTMLDivElement>,
+    ) {
+        const { theme } = useTheme();
 
-            const {
-                className,
-                collapsedWidth = 2 * theme.iconSizesInPxByName[iconSize],
-                currentItemId,
-                items,
-                reduceText = "reduce",
-                ...rest
-            } = props;
+        const {
+            className,
+            collapsedWidth = 2 * theme.iconSizesInPxByName[iconSize],
+            currentItemId,
+            items,
+            reduceText = "reduce",
+            ...rest
+        } = props;
 
-            //For the forwarding, rest should be empty (typewise),
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            assert<Equals<typeof rest, {}>>();
+        //For the forwarding, rest should be empty (typewise),
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        assert<Equals<typeof rest, {}>>();
 
-            const { isCollapsed, setIsCollapsed } = useIsCollapsed();
+        const { isCollapsed, setIsCollapsed } = useIsCollapsed();
 
-            const toggleIsCollapsedLink = useMemo(
-                () =>
-                    id<Item["link"]>({
-                        "href": "#",
-                        "onClick": event => {
-                            event.preventDefault();
-                            setAreTransitionEnabled(true);
-                            setIsCollapsed(isCollapsed => !isCollapsed);
-                        },
-                    }),
-                [],
-            );
+        const toggleIsCollapsedLink = useMemo(
+            () =>
+                id<Item["link"]>({
+                    "href": "#",
+                    "onClick": event => {
+                        event.preventDefault();
+                        setAreTransitionEnabled(true);
+                        setIsCollapsed(isCollapsed => !isCollapsed);
+                    },
+                }),
+            [],
+        );
 
-            const {
-                ref: wrapperRef,
-                domRect: { width: wrapperWidth, height: wrapperHeight },
-            } = useDomRect();
+        const {
+            ref: wrapperRef,
+            domRect: { width: wrapperWidth, height: wrapperHeight },
+        } = useDomRect();
 
-            //We don't want animations to trigger on first render.
-            const [areTransitionEnabled, setAreTransitionEnabled] =
-                useState(false);
+        //We don't want animations to trigger on first render.
+        const [areTransitionEnabled, setAreTransitionEnabled] = useState(false);
 
-            const { classes, cx } = useStyles({
-                "rootWidth": isCollapsed ? collapsedWidth : wrapperWidth,
-                ...(() => {
-                    const paddingTopBottomFactor = 3;
-                    return {
-                        paddingTopBottomFactor,
-                        "rootHeight":
-                            wrapperHeight +
-                            theme.spacing(paddingTopBottomFactor) * 2,
-                    };
-                })(),
-                areTransitionEnabled,
-            });
+        const { classes, cx } = useStyles({
+            "rootWidth": isCollapsed ? collapsedWidth : wrapperWidth,
+            ...(() => {
+                const paddingTopBottomFactor = 3;
+                return {
+                    paddingTopBottomFactor,
+                    "rootHeight":
+                        wrapperHeight +
+                        theme.spacing(paddingTopBottomFactor) * 2,
+                };
+            })(),
+            areTransitionEnabled,
+        });
 
-            return (
-                <div
-                    ref={ref}
-                    {...rest}
-                    className={cx(classes.root, className)}
-                >
-                    <nav className={classes.nav}>
-                        <div ref={wrapperRef} className={classes.wrapper}>
+        return (
+            <div ref={ref} {...rest} className={cx(classes.root, className)}>
+                <nav className={classes.nav}>
+                    <div ref={wrapperRef} className={classes.wrapper}>
+                        <CustomButton
+                            key={"toggleIsCollapsed"}
+                            isCollapsed={isCollapsed}
+                            collapsedWidth={collapsedWidth}
+                            isCurrent={undefined}
+                            iconId="chevronLeft"
+                            label={reduceText}
+                            link={toggleIsCollapsedLink}
+                        />
+                        {objectKeys(items).map(itemId => (
                             <CustomButton
-                                key={"toggleIsCollapsed"}
+                                className={classes.button}
+                                key={itemId}
                                 isCollapsed={isCollapsed}
                                 collapsedWidth={collapsedWidth}
-                                isCurrent={undefined}
-                                iconId="chevronLeft"
-                                label={reduceText}
-                                belowDividerA11yLabel={undefined}
-                                link={toggleIsCollapsedLink}
+                                isCurrent={itemId === currentItemId}
+                                {...items[itemId]}
                             />
-                            {objectKeys(items).map(itemId => (
-                                <CustomButton
-                                    className={classes.button}
-                                    key={itemId}
-                                    isCollapsed={isCollapsed}
-                                    collapsedWidth={collapsedWidth}
-                                    isCurrent={itemId === currentItemId}
-                                    {...items[itemId]}
-                                />
-                            ))}
-                        </div>
-                    </nav>
-                </div>
-            );
-        }),
-    );
+                        ))}
+                    </div>
+                </nav>
+            </div>
+        );
+    }
+
+    /* prettier-ignore */
+    const LeftBar = memo(forwardRef(NonMemoizedNonForwardedLeftBar)) as 
+        <ItemId extends string>(props: LeftBarProps<IconId, ItemId> & { ref?: ForwardedRef<HTMLDivElement>; }) => ReturnType<typeof NonMemoizedNonForwardedLeftBar>;
+
+    (LeftBar as any).displayName = symToStr({ LeftBar });
 
     const useStyles = makeStyles<{
         rootWidth: number;
@@ -210,7 +217,7 @@ export function createLeftBar<IconId extends string>(params?: {
                 iconId,
                 label,
                 link,
-                belowDividerA11yLabel = undefined,
+                belowDivider = false,
                 availability = "available",
             } = props;
 
@@ -267,11 +274,15 @@ export function createLeftBar<IconId extends string>(params?: {
                             </Text>
                         </div>
                     </a>
-                    {belowDividerA11yLabel !== undefined && (
+                    {belowDivider !== false && (
                         <Divider
                             className={classes.divider}
                             variant="fullWidth"
-                            about={belowDividerA11yLabel}
+                            about={
+                                typeof belowDivider !== "string"
+                                    ? undefined
+                                    : belowDivider
+                            }
                         />
                     )}
                 </>
