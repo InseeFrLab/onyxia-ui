@@ -316,7 +316,7 @@ export function createButton<IconId extends string = never>(params?: {
                     "& .MuiTouchRipple-root": {
                         "display": isMouseIn ? "unset" : "none",
                     },
-                    "&:hover": {
+                    "&:hover, &:focus": {
                         "backgroundColor": hoverBackgroundColor,
                         "& .MuiSvgIcon-root": {
                             "color": hoverTextColor,
