@@ -75,29 +75,10 @@ export function createIconButton<IconId extends string = never>(params?: {
                 ...rest
             } = props;
 
-            const [isMouseIn, setIsMouseIn] = useState(false);
-
-            const handleMousePositionFactory = useCallbackFactory(
-                runExclusive.build(async ([position]: ["in" | "out"]) => {
-                    switch (position) {
-                        case "in":
-                            setIsMouseIn(true);
-                            return;
-                        case "out":
-                            await new Promise<void>(resolve =>
-                                setTimeout(resolve, 400),
-                            );
-                            setIsMouseIn(false);
-                    }
-                }),
-            );
-
-            const { classes, cx } = useStyles({ disabled, isMouseIn });
+            const { classes, cx } = useStyles({ disabled });
 
             return (
                 <MuiIconButton
-                    onMouseEnter={handleMousePositionFactory("in")}
-                    onMouseLeave={handleMousePositionFactory("out")}
                     ref={ref}
                     className={cx(classes.root, className)}
                     disabled={disabled}
@@ -158,30 +139,16 @@ export function createIconButton<IconId extends string = never>(params?: {
         }),
     );
 
-    const useStyles = makeStyles<{ disabled: boolean; isMouseIn: boolean }>({
+    const useStyles = makeStyles<{ disabled: boolean }>({
         "name": { IconButton },
-    })((theme, { disabled, isMouseIn }) => ({
+    })((theme, { disabled }) => ({
         "root": {
             "padding": theme.spacing(2),
-            "&:hover, &:focus": {
+            "&:hover": {
                 "backgroundColor": "unset",
                 "& svg": {
                     "color": theme.colors.useCases.buttons.actionHoverPrimary,
                 },
-            },
-
-            //NOTE: If the position of the button is relative (the default)
-            //it goes hover everything not positioned, we have to mess with z-index and
-            //we don't want that.
-            //The relative positioning is needed for the touch ripple effect.
-            //If we dont have position relative the effect is not restricted to the
-            //button: https://user-images.githubusercontent.com/6702424/157982515-c97dfa81-b09a-4323-beb9-d1e92e7ebe4d.mov
-            //The solution is set 'position: relative' only when the ripple effect is supposed to be visible.
-            //This explain the following awful rules.
-            //The expected result is: https://user-images.githubusercontent.com/6702424/157984062-27e544c3-f86f-47b8-b141-c5f61b8a2880.mov
-            "position": isMouseIn ? "relative" : "unset",
-            "& .MuiTouchRipple-root": {
-                "display": isMouseIn ? "unset" : "none",
             },
         },
         "icon": {
