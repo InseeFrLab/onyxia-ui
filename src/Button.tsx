@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
-import { forwardRef, memo, useState } from "react";
+import { forwardRef, memo } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
@@ -12,8 +12,8 @@ import type { Equals } from "tsafe/Equals";
 import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
-import { useCallbackFactory } from "powerhooks/useCallbackFactory";
-import * as runExclusive from "run-exclusive";
+import { useMergeRefs } from "powerhooks/useMergeRefs";
+import { useDomRect } from "powerhooks/useDomRect";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Regular<IconId>
@@ -64,101 +64,114 @@ export function createButton<IconId extends string = never>(params?: {
     };
 
     const Button = memo(
-        forwardRef<HTMLButtonElement, ButtonProps<IconId>>((props, ref) => {
-            const {
-                className,
-                variant = "primary",
-                disabled = false,
-                children,
-                startIcon,
-                endIcon,
-                autoFocus = false,
-                tabIndex,
-                name,
-                htmlId,
-                "aria-label": ariaLabel,
-                //For the forwarding, rest should be empty (typewise)
-                ...rest
-            } = props;
+        forwardRef<HTMLButtonElement, ButtonProps<IconId>>(
+            (props, forwardedRef) => {
+                const {
+                    className,
+                    variant = "primary",
+                    disabled = false,
+                    children,
+                    startIcon,
+                    endIcon,
+                    autoFocus = false,
+                    tabIndex,
+                    name,
+                    htmlId,
+                    "aria-label": ariaLabel,
+                    //For the forwarding, rest should be empty (typewise)
+                    ...rest
+                } = props;
 
-            const { classes, cx } = useStyles({
-                variant,
-                disabled,
-            });
+                const {
+                    ref: internalRef,
+                    domRect: { width: rootWidth },
+                } = useDomRect();
 
-            const IconWd = useGuaranteedMemo(
-                () => (props: { iconId: IconId }) =>
-                    (
-                        <Icon
-                            iconId={props.iconId}
-                            className={classes.icon}
-                            size="default"
-                        />
-                    ),
-                [disabled, classes.icon],
-            );
+                const rootRef = useMergeRefs([forwardedRef, internalRef]);
 
-            return (
-                <MuiButton
-                    ref={ref}
-                    className={cx(classes.root, className)}
-                    //There is an error in @mui/material types, this should be correct.
-                    disabled={disabled}
-                    startIcon={
-                        startIcon === undefined ? undefined : (
-                            <IconWd iconId={startIcon} />
-                        )
-                    }
-                    endIcon={
-                        endIcon === undefined ? undefined : (
-                            <IconWd iconId={endIcon} />
-                        )
-                    }
-                    autoFocus={autoFocus}
-                    tabIndex={tabIndex}
-                    name={name}
-                    id={htmlId}
-                    aria-label={ariaLabel}
-                    {...(() => {
-                        if ("type" in rest) {
-                            const { type, ...restRest } = rest;
+                const { classes, cx } = useStyles({
+                    variant,
+                    disabled,
+                    rootWidth,
+                });
 
-                            //For the forwarding, rest should be empty (typewise),
-                            assert<Equals<typeof restRest, {}>>();
+                const IconWd = useGuaranteedMemo(
+                    () => (props: { iconId: IconId }) =>
+                        (
+                            <Icon
+                                iconId={props.iconId}
+                                className={classes.icon}
+                                size="default"
+                            />
+                        ),
+                    [disabled, classes.icon],
+                );
+
+                return (
+                    <MuiButton
+                        ref={rootRef}
+                        className={cx(classes.root, className)}
+                        //There is an error in @mui/material types, this should be correct.
+                        disabled={disabled}
+                        startIcon={
+                            startIcon === undefined ? undefined : (
+                                <IconWd iconId={startIcon} />
+                            )
+                        }
+                        endIcon={
+                            endIcon === undefined ? undefined : (
+                                <IconWd iconId={endIcon} />
+                            )
+                        }
+                        autoFocus={autoFocus}
+                        tabIndex={tabIndex}
+                        name={name}
+                        id={htmlId}
+                        aria-label={ariaLabel}
+                        {...(() => {
+                            if ("type" in rest) {
+                                const { type, ...restRest } = rest;
+
+                                //For the forwarding, rest should be empty (typewise),
+                                assert<Equals<typeof restRest, {}>>();
+
+                                return {
+                                    type,
+                                    ...restRest,
+                                };
+                            }
+
+                            const {
+                                onClick,
+                                href,
+                                doOpenNewTabIfHref = href !== undefined,
+                                ...restRest
+                            } = rest;
 
                             return {
-                                type,
+                                onClick,
+                                href,
+                                "target": doOpenNewTabIfHref
+                                    ? "_blank"
+                                    : undefined,
                                 ...restRest,
                             };
-                        }
-
-                        const {
-                            onClick,
-                            href,
-                            doOpenNewTabIfHref = href !== undefined,
-                            ...restRest
-                        } = rest;
-
-                        return {
-                            onClick,
-                            href,
-                            "target": doOpenNewTabIfHref ? "_blank" : undefined,
-                            ...restRest,
-                        };
-                    })()}
-                >
-                    {typeof children === "string"
-                        ? capitalize(children)
-                        : children}
-                </MuiButton>
-            );
-        }),
+                        })()}
+                    >
+                        {typeof children === "string"
+                            ? capitalize(children)
+                            : children}
+                    </MuiButton>
+                );
+            },
+        ),
     );
 
     const useStyles = makeStyles<{
         variant: NonNullable<ButtonProps["variant"]>;
         disabled: boolean;
-    }>({ "name": { Button } })((theme, { variant, disabled }) => {
+        rootWidth: number;
+    }>({ "name": { Button } })((theme, { variant, disabled, rootWidth }) => {
         const textColor =
             theme.colors.useCases.typography[
                 disabled
@@ -228,6 +241,10 @@ export function createButton<IconId extends string = never>(params?: {
                             .style.lineHeight,
                     );
 
+                const rippleSize = approxHeight * 2;
+
+                console.log({ rootWidth });
+
                 return {
                     "textTransform": "unset" as const,
                     "backgroundColor": disabled
@@ -275,6 +292,20 @@ export function createButton<IconId extends string = never>(params?: {
                         },
                         "&.MuiButton-text": {
                             "color": hoverTextColor,
+                        },
+                    },
+
+                    "& .MuiTouchRipple-root": {
+                        "overflow": "visible",
+                        "& > span": {
+                            "width": `${rippleSize}px !important`,
+                            "height": `${rippleSize}px !important`,
+                            "top": `${
+                                approxHeight / 2 - rippleSize / 2
+                            }px !important`,
+                            "left": `${
+                                rootWidth / 2 - rippleSize / 2
+                            }px !important`,
                         },
                     },
                 } as const;
