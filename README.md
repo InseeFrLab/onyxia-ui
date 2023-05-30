@@ -105,4 +105,4 @@ yarn start
 
 ## JEST config
 
-You have to configure JEST so that it transpiled your module using `"transformIgnorePatterns": [ "node_modules/(?!@onyxia-ui)" ]`.
+You have to configure JEST so that it transpiled your module using [`"transformIgnorePatterns": [ "node_modules/(?!@onyxia-ui)" ]`.](https://github.com/InseeFrLab/onyxia-ui/blob/d3b1e9c681ba9fb66b900f6a5dddba170eb2e909/src/test/spa/package.json#L21-L25).
