@@ -21,7 +21,7 @@ Default design system carefully crafted by [Marc Hufschmitt](http://marchufschmi
 
 This project is under active development. It's APIs are susceptible to change until v1.
 
-WARNING: `onyxia-ui` isn't currently working with SSR. (You can't use it with Next.js)
+WARNING: `onyxia-ui` is a SPA only toolkit, it's not compatible with SSR or SSG.
 
 # Motivation
 
@@ -102,3 +102,7 @@ yarn
 yarn build
 yarn start
 ```
+
+## JEST config
+
+You have to configure JEST so that it transpiled your module using `"transformIgnorePatterns": [ "node_modules/(?!@onyxia-ui)" ]`.

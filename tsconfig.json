@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "target": "es5",
+        "target": "ES6",
         "lib": ["es2015", "DOM", "esnext"],
         "esModuleInterop": true,
         "declaration": true,
@@ -14,7 +14,8 @@
         "strict": true,
         "downlevelIteration": true,
         "jsx": "react-jsx",
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true
     },
     "include": ["src"],
     "exclude": ["bin/", "src/stories", "src/test"]

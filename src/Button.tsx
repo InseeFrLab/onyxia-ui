@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
-import { forwardRef, memo, useState } from "react";
+import { forwardRef, memo } from "react";
 import { makeStyles } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
@@ -12,8 +12,6 @@ import type { Equals } from "tsafe/Equals";
 import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
-import { useCallbackFactory } from "powerhooks/useCallbackFactory";
-import * as runExclusive from "run-exclusive";
 
 export type ButtonProps<IconId extends string = never> =
     | ButtonProps.Regular<IconId>
