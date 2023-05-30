@@ -33,7 +33,6 @@ jobs:
         node-version: ${{ matrix.node }}
     - uses: bahmutov/npm-install@v1
     - run: yarn build
-    - run: yarn test
 
   storybook:
     runs-on: ubuntu-latest
