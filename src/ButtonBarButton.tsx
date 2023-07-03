@@ -63,7 +63,7 @@ export function createButtonBarButton<IconId extends string = never>(params: {
             "& > *": {
                 "transition": "none",
             },
-            "&:hover.MuiButton-text": {
+            "&:hover.MuiButton-text, &:focus.MuiButton-text": {
                 "color": theme.colors.useCases.typography.textPrimary,
                 "borderBottomColor": theme.colors.useCases.buttons.actionActive,
                 "boxSizing": "border-box",

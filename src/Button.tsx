@@ -9,7 +9,7 @@ import MuiButton from "@mui/material/Button";
 import { capitalize } from "tsafe/capitalize";
 import { assert } from "tsafe";
 import type { Equals } from "tsafe/Equals";
-import { breakpointsValues } from "./lib/breakpoints";
+import { breakpointsValues } from "./lib";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
 
@@ -98,6 +98,7 @@ export function createButton<IconId extends string = never>(params?: {
 
             return (
                 <MuiButton
+                    disableFocusRipple
                     ref={ref}
                     className={cx(classes.root, className)}
                     //There is an error in @mui/material types, this should be correct.
@@ -175,19 +176,21 @@ export function createButton<IconId extends string = never>(params?: {
         const hoverTextColor = (() => {
             switch (theme.isDarkModeEnabled) {
                 case true:
-                    return theme.colors.palette[
-                        (() => {
-                            switch (variant) {
-                                case "primary":
-                                    return "light";
-                                case "secondary":
-                                case "ternary":
-                                    return "dark";
-                            }
-                        })()
-                    ].main;
+                    switch (variant) {
+                        case "ternary":
+                            return theme.colors.useCases.surfaces.background;
+                        default:
+                            return theme.colors.palette.dark.main;
+                    }
                 case false:
-                    return theme.colors.palette.light.main;
+                    switch (variant) {
+                        case "primary":
+                            return theme.colors.palette.dark.main;
+                        case "secondary":
+                            return theme.colors.palette.light.main;
+                        case "ternary":
+                            return theme.colors.useCases.surfaces.background;
+                    }
             }
         })();
 
@@ -266,7 +269,7 @@ export function createButton<IconId extends string = never>(params?: {
                         "color": textColor,
                     },
 
-                    "&:hover": {
+                    "&:hover, &:focus": {
                         "backgroundColor": hoverBackgroundColor,
                         "& .MuiSvgIcon-root": {
                             "color": hoverTextColor,

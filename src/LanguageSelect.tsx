@@ -78,6 +78,7 @@ export function createLanguageSelect<Language extends string>(params: {
                     <MuiButton
                         className={cx(classes.button, className)}
                         ref={buttonRef}
+                        disableRipple
                         aria-owns={languageMenu ? menuId : undefined}
                         aria-haspopup="true"
                         aria-label={changeLanguageText ?? "change language"}
@@ -166,6 +167,9 @@ export function createLanguageSelect<Language extends string>(params: {
                         return 0;
                 }
             })(),
+            "&.Mui-focusVisible": {
+                "outline": "-webkit-focus-ring-color auto 1px",
+            },
         },
         "menu": {
             "& .Mui-selected": {

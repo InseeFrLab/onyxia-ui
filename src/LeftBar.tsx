@@ -313,11 +313,15 @@ export function createLeftBar<IconId extends string>(params?: {
                     "textDecoration": "none",
                     "display": "flex",
                     "cursor": "pointer",
-                    [`&:hover .${classes.iconHoverBox}`]: {
+                    [["hover", "focus"]
+                        .map(name => `&:${name} .${classes.iconHoverBox}`)
+                        .join(", ")]: {
                         "backgroundColor":
                             theme.colors.useCases.surfaces.background,
                     },
-                    [`&:hover .${classes.typoWrapper}`]: {
+                    [["hover", "focus"]
+                        .map(name => `&:${name} .${classes.typoWrapper}`)
+                        .join(", ")]: {
                         "backgroundColor": !isCollapsed
                             ? theme.colors.useCases.surfaces.background
                             : undefined,
