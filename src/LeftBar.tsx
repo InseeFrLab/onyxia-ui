@@ -319,12 +319,13 @@ export function createLeftBar<IconId extends string>(params?: {
                         "backgroundColor":
                             theme.colors.useCases.surfaces.background,
                     },
-                    [`&:hover .${classes.typoWrapper}, &:focus .${classes.typoWrapper}`]:
-                        {
-                            "backgroundColor": !isCollapsed
-                                ? theme.colors.useCases.surfaces.background
-                                : undefined,
-                        },
+                    [["hover", "focus"]
+                        .map(name => `&:${name} .${classes.typoWrapper}`)
+                        .join(", ")]: {
+                        "backgroundColor": !isCollapsed
+                            ? theme.colors.useCases.surfaces.background
+                            : undefined,
+                    },
                     [[".MuiSvgIcon-root", "h6"]
                         .map(name => `&${isCurrent ? "" : ":active"} ${name}`)
                         .join(", ")]: {
