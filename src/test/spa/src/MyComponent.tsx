@@ -10,7 +10,7 @@ import Switch from "@mui/material/Switch";
 import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
 
 //See: https://github.com/garronej/tss-react
-const useStyles= makeStyles()(theme => ({
+const useStyles = makeStyles()(theme => ({
     "root": {
         "backgroundColor": theme.colors.useCases.surfaces.background,
         /*
@@ -22,19 +22,16 @@ const useStyles= makeStyles()(theme => ({
 }));
 
 export function MyComponent() {
-
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
-
 
     {
         const { hideRootSplashScreen } = useSplashScreen();
 
         useEffect(() => {
-
             //Call this when your component is in a state ready to be shown
             hideRootSplashScreen();
 
-        // eslint-disable-next-line
+            // eslint-disable-next-line
         }, []);
     }
 
@@ -52,7 +49,7 @@ export function MyComponent() {
             } else {
                 hideSplashScreen();
             }
-        // eslint-disable-next-line
+            // eslint-disable-next-line
         }, [isLoading]);
     }
 
@@ -65,25 +62,28 @@ export function MyComponent() {
                 <Icon iconId="hello" />
                 Hello World
             </Text>
-            <Text typo="display heading">Display heading with Marianne font</Text>
+            <Text typo="display heading">
+                Display heading with Marianne font
+            </Text>
             <Text typo="body 1">Toggle dark mode</Text>
             <Switch
                 checked={isDarkModeEnabled}
                 onChange={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
             />
             <Button
-                onClick={async ()=> {
-
+                onClick={async () => {
                     setIsLoading(true);
 
                     await new Promise(resolve => setTimeout(resolve, 5000));
 
                     setIsLoading(false);
-
                 }}
-            >Show splash screen a few seconds</Button>
-            <br/>
+            >
+                Show splash screen a few seconds
+            </Button>
+            <br />
             <IconButton iconId="edit" href="http://example.com" />
+            <Button>Test</Button>
         </div>
     );
 }

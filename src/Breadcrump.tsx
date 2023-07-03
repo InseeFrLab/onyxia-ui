@@ -202,7 +202,7 @@ const { Section } = (() => {
                 ? {}
                 : {
                       "cursor": "pointer",
-                      "&:hover": {
+                      "&:hover, &:focus": {
                           "fontWeight": hoverFontWeight,
                           "color": theme.colors.useCases.typography.textPrimary,
                       },
