@@ -45,10 +45,14 @@ export const Alert = memo((props: AlertProps) => {
 
     const { classes, cx } = useStyles({ severity }, { props });
 
-    const [isClosed, uncontrolledClose] = useReducer(
-        () => true,
-        "isClosed" in rest ? rest.isClosed : false,
-    );
+    const { isClosed, uncontrolledClose } = (function useClosure() {
+        const [isClosed, uncontrolledClose] = useReducer(() => true, false);
+
+        return {
+            "isClosed": "isClosed" in rest ? rest.isClosed : isClosed,
+            uncontrolledClose,
+        };
+    })();
 
     if (isClosed) {
         return null;
@@ -63,7 +67,8 @@ export const Alert = memo((props: AlertProps) => {
                 "icon": classes.icon,
             }}
             action={
-                "doDisplayCross" in rest && rest.doDisplayCross ? (
+                "doDisplayCross" in rest &&
+                rest.doDisplayCross && (
                     <IconButton
                         iconId="closeSharp"
                         aria-label="close"
@@ -76,7 +81,7 @@ export const Alert = memo((props: AlertProps) => {
                                   }
                         }
                     />
-                ) : undefined
+                )
             }
         >
             {typeof children === "string" ? (
