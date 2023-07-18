@@ -336,7 +336,22 @@ export function createThemeProvider<
                     theme.colors.useCases.surfaces.background;
 
                 useEffect(() => {
-                    document.querySelector("meta[name=theme-color]")?.remove();
+                    document.documentElement.style.backgroundColor =
+                        backgroundColor;
+
+                    // eslint-disable-next-line no-constant-condition
+                    while (true) {
+                        const element = document.querySelector(
+                            "meta[name=theme-color]",
+                        );
+
+                        if (element === null) {
+                            break;
+                        }
+
+                        element.remove();
+                    }
+
                     document.head.insertAdjacentHTML(
                         "beforeend",
                         `<meta name="theme-color" content="${backgroundColor}">`,
