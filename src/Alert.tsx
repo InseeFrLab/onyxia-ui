@@ -7,13 +7,32 @@ import { Text } from "./Text/TextBase";
 import { makeStyles } from "./lib/ThemeProvider";
 import CloseSharp from "@mui/icons-material/CloseSharp";
 
-export type AlertProps = {
-    className?: string;
-    classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
-    severity: "warning" | "info" | "error" | "success";
-    doDisplayCross?: boolean;
-    children: NonNullable<ReactNode>;
-};
+export type AlertProps =
+    | AlertProps.NonClosable
+    | AlertProps.ClosableControlled
+    | AlertProps.ClosableUncontrolled;
+
+export namespace AlertProps {
+    export type Common = {
+        className?: string;
+        classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
+        severity: "warning" | "info" | "error" | "success";
+        children: NonNullable<ReactNode>;
+    };
+
+    export type NonClosable = Common;
+
+    export type ClosableUncontrolled = Common & {
+        doDisplayCross: true;
+        onClose?: () => void;
+    };
+
+    export type ClosableControlled = Common & {
+        doDisplayCross: true;
+        isClosed: boolean;
+        onClose: () => void;
+    };
+}
 
 const { IconButton } = createIconButton(
     createIcon({
@@ -22,11 +41,14 @@ const { IconButton } = createIconButton(
 );
 
 export const Alert = memo((props: AlertProps) => {
-    const { severity, children, className, doDisplayCross = false } = props;
+    const { severity, children, className, ...rest } = props;
 
     const { classes, cx } = useStyles({ severity }, { props });
 
-    const [isClosed, close] = useReducer(() => true, false);
+    const [isClosed, uncontrolledClose] = useReducer(
+        () => true,
+        "isClosed" in rest ? rest.isClosed : false,
+    );
 
     if (isClosed) {
         return null;
@@ -41,11 +63,18 @@ export const Alert = memo((props: AlertProps) => {
                 "icon": classes.icon,
             }}
             action={
-                doDisplayCross ? (
+                "doDisplayCross" in rest && rest.doDisplayCross ? (
                     <IconButton
                         iconId="closeSharp"
                         aria-label="close"
-                        onClick={close}
+                        onClick={
+                            "isClosed" in rest
+                                ? rest.onClose
+                                : () => {
+                                      rest.onClose?.();
+                                      uncontrolledClose();
+                                  }
+                        }
                     />
                 ) : undefined
             }
