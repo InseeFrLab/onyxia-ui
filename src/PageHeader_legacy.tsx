@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { useDomRect } from "powerhooks/useDomRect";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
@@ -171,14 +171,12 @@ export function createPageHeader<IconId extends string>(params?: {
             };
         })();
 
-        const { classes, cx } = useStyles(
-            {
-                helperHeight,
-                isTitleCollapsed,
-                "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
-            },
-            { props },
-        );
+        const { classes, cx } = useStyles({
+            helperHeight,
+            isTitleCollapsed,
+            "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
+            "classesOverrides": props.classes,
+        });
 
         return (
             <div className={cx(classes.root, className)}>
@@ -234,12 +232,14 @@ export function createPageHeader<IconId extends string>(params?: {
     return { PageHeader };
 }
 
-const useStyles = makeStyles<{
-    helperHeight: number;
-    isTitleCollapsed: boolean;
-    isHelpCollapsed: boolean;
-}>({ "name": "PageHeader" })(
-    (theme, { helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
+const useStyles = tss
+    .withName("PageHeader")
+    .withParams<{
+        helperHeight: number;
+        isTitleCollapsed: boolean;
+        isHelpCollapsed: boolean;
+    }>()
+    .create(({ theme, helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
         "root": {
             "backgroundColor": "inherit",
             "marginBottom":
@@ -273,5 +273,4 @@ const useStyles = makeStyles<{
         "helpCollapsibleWrapper": {
             "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
         },
-    }),
-);
+    }));

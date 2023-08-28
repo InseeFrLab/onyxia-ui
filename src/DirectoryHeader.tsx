@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
@@ -47,7 +47,9 @@ const { IconButton } = createIconButton(
 export const DirectoryHeader = memo((props: Props) => {
     const { className, image, title, subtitle, onGoBack } = props;
 
-    const { classes, cx } = useStyles(undefined, { props });
+    const { classes, cx } = useStyles({
+        "classesOverrides": props.classes,
+    });
 
     return (
         <div className={cx(classes.root, className)}>
@@ -71,7 +73,7 @@ export const DirectoryHeader = memo((props: Props) => {
     );
 });
 
-const useStyles = makeStyles({ "name": { DirectoryHeader } })(theme => ({
+const useStyles = tss.withName({ DirectoryHeader }).create(({ theme }) => ({
     "root": {
         "display": "flex",
         "alignItems": "center",

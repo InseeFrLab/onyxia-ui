@@ -1,4 +1,4 @@
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { useMemo, useState, useEffect, memo } from "react";
 import { Text } from "./Text/TextBase";
 import { useEvt } from "evt/hooks";
@@ -192,34 +192,35 @@ const { Section } = (() => {
         );
     }
 
-    const useStyles = makeStyles<
-        Pick<Props, "isClickable" | "isFocused" | "isLast">
-    >({
-        "name": `${symToStr({ Breadcrump })}${symToStr({ Section })}`,
-    })((theme, { isClickable, isFocused, isLast }) => ({
-        "root": {
-            ...(!isClickable
-                ? {}
-                : {
-                      "cursor": "pointer",
-                      "&:hover, &:focus": {
-                          "fontWeight": hoverFontWeight,
-                          "color": theme.colors.useCases.typography.textPrimary,
-                      },
-                      "&:active": {
-                          "color": theme.colors.useCases.typography.textFocus,
-                      },
-                  }),
-            "color":
-                theme.colors.useCases.typography[
-                    isFocused
-                        ? "textFocus"
-                        : isLast
-                        ? "textPrimary"
-                        : "textSecondary"
-                ],
-        },
-    }));
+    const useStyles = tss
+        .withName(`${symToStr({ Breadcrump })}${symToStr({ Section })}`)
+        .withParams<Pick<Props, "isClickable" | "isFocused" | "isLast">>()
+        .create(({ theme, isClickable, isFocused, isLast }) => ({
+            "root": {
+                ...(!isClickable
+                    ? {}
+                    : {
+                          "cursor": "pointer",
+                          "&:hover, &:focus": {
+                              "fontWeight": hoverFontWeight,
+                              "color":
+                                  theme.colors.useCases.typography.textPrimary,
+                          },
+                          "&:active": {
+                              "color":
+                                  theme.colors.useCases.typography.textFocus,
+                          },
+                      }),
+                "color":
+                    theme.colors.useCases.typography[
+                        isFocused
+                            ? "textFocus"
+                            : isLast
+                            ? "textPrimary"
+                            : "textSecondary"
+                    ],
+            },
+        }));
 
     return { Section };
 })();

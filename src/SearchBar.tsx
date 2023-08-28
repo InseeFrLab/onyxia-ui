@@ -1,6 +1,6 @@
 import { useRef, useState, forwardRef, memo } from "react";
 import type { ChangeEventHandler } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useClickAway } from "powerhooks/useClickAway";
 import { useEvt } from "evt/hooks";
@@ -128,7 +128,10 @@ export const SearchBar = memo(
             [evtAction ?? Object],
         );
 
-        const { classes, cx } = useStyles({ isActive }, { props });
+        const { classes, cx } = useStyles({
+            isActive,
+            "classesOverrides": props_classes,
+        });
 
         return (
             <div
@@ -173,49 +176,51 @@ export const SearchBar = memo(
     }),
 );
 
-const useStyles = makeStyles<{ isActive: boolean }>({
-    "name": { SearchBar },
-})((theme, { isActive }) => ({
-    "root": {
-        "borderRadius": 8,
-        "overflow": "hidden",
-        "boxShadow": theme.shadows[1],
-        "& > div": {
-            "display": "flex",
-            "alignItems": "center",
-            "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            "cursor": isActive ? undefined : "pointer",
+const useStyles = tss
+    .withName({ SearchBar })
+    .withParams<{ isActive: boolean }>()
+    .create(({ theme, isActive }) => ({
+        "root": {
+            "borderRadius": 8,
             "overflow": "hidden",
-            "border": "solid 2px transparent",
-            "&:hover": {
-                "borderBottomColor": theme.colors.useCases.buttons.actionActive,
+            "boxShadow": theme.shadows[1],
+            "& > div": {
+                "display": "flex",
+                "alignItems": "center",
+                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                "cursor": isActive ? undefined : "pointer",
+                "overflow": "hidden",
+                "border": "solid 2px transparent",
+                "&:hover": {
+                    "borderBottomColor":
+                        theme.colors.useCases.buttons.actionActive,
+                },
             },
         },
-    },
-    "input": {
-        "flex": 1,
-        "caretColor": theme.colors.useCases.typography.textFocus,
-        ...theme.typography.variants["body 1"].style,
-        "outline": "none",
-        "borderWidth": 0,
-        "border": "none",
-        "backgroundColor": "transparent",
-        "color": theme.colors.useCases.typography.textPrimary,
-        "&::placeholder": {
-            "color": theme.colors.useCases.typography.textDisabled,
-            "opacity": 1,
+        "input": {
+            "flex": 1,
+            "caretColor": theme.colors.useCases.typography.textFocus,
+            ...theme.typography.variants["body 1"].style,
+            "outline": "none",
+            "borderWidth": 0,
+            "border": "none",
+            "backgroundColor": "transparent",
+            "color": theme.colors.useCases.typography.textPrimary,
+            "&::placeholder": {
+                "color": theme.colors.useCases.typography.textDisabled,
+                "opacity": 1,
+            },
         },
-    },
-    "icon": {
-        "margin": `${theme.spacing(2) - 2}px ${theme.spacing(3) - 2}px`,
-        "color": isActive
-            ? theme.colors.useCases.typography.textFocus
-            : undefined,
-    },
-    "searchLabel": {
-        ...(theme.muiTheme.typography.button as any),
-        "display": "block",
-        "flex": 1,
-        "color": theme.colors.useCases.typography.textPrimary,
-    },
-}));
+        "icon": {
+            "margin": `${theme.spacing(2) - 2}px ${theme.spacing(3) - 2}px`,
+            "color": isActive
+                ? theme.colors.useCases.typography.textFocus
+                : undefined,
+        },
+        "searchLabel": {
+            ...(theme.muiTheme.typography.button as any),
+            "display": "block",
+            "flex": 1,
+            "color": theme.colors.useCases.typography.textPrimary,
+        },
+    }));

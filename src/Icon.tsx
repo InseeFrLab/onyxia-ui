@@ -2,7 +2,7 @@
 
 import { memo, forwardRef, ElementType } from "react";
 import type { ForwardedRef, MouseEventHandler } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import SvgIcon from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -57,8 +57,11 @@ function isMuiIcon(
 export function createIcon<IconId extends string>(componentByIconId: {
     readonly [iconId in IconId]: MuiIconLike | SvgComponentLike;
 }) {
-    const useStyles = makeStyles<{ size: IconSizeName }>()(
-        (theme, { size }) => ({
+    const useStyles = tss
+        .withParams<{
+            size: IconSizeName;
+        }>()
+        .create(({ theme, size }) => ({
             "root": {
                 "color": "inherit",
                 // https://stackoverflow.com/a/24626986/3731798
@@ -69,8 +72,7 @@ export function createIcon<IconId extends string>(componentByIconId: {
                 "width": "1em",
                 "height": "1em",
             },
-        }),
-    );
+        }));
 
     const Icon = memo(
         forwardRef<SVGSVGElement, IconProps<IconId>>((props, ref) => {

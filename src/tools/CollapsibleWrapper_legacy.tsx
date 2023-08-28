@@ -6,20 +6,7 @@ import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import { useStateRef } from "powerhooks/useStateRef";
-import { createMakeStyles } from "tss-react";
-
-const { useCssAndCx } = (() => {
-    const { useStyles } = createMakeStyles({
-        "useTheme": () => ({}),
-    });
-
-    function useCssAndCx() {
-        const { css, cx } = useStyles();
-        return { css, cx };
-    }
-
-    return { useCssAndCx };
-})();
+import { useStyles } from "tss-react";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -56,7 +43,7 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         domRect: { height: childrenWrapperHeight },
     } = useDomRect();
 
-    const { css, cx } = useCssAndCx();
+    const { css, cx } = useStyles();
 
     //We use a ref instead of a state because we want to be able to
     //synchronously reset the state when the div that scrolls have been changed

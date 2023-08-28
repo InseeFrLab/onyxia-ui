@@ -27,7 +27,7 @@ import { shadows } from "./shadows";
 import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig, Spacing } from "./spacing";
-import { createMakeAndWithStyles } from "tss-react";
+import { createTss } from "tss-react";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";
@@ -93,9 +93,14 @@ function useThemeBase() {
     return theme;
 }
 
-export const { makeStyles, useStyles } = createMakeAndWithStyles({
-    "useTheme": useThemeBase,
+export const { tss } = createTss({
+    "useContext": function useContext() {
+        const theme = useThemeBase();
+        return { theme };
+    },
 });
+
+export const useStyles = tss.create({});
 
 export type ThemeProviderProps = {
     children: ReactNode;
@@ -430,16 +435,20 @@ export function createThemeProvider<
         );
     }
 
-    const { makeStyles, useStyles, withStyles } = createMakeAndWithStyles({
-        useTheme,
+    const { tss } = createTss({
+        "useContext": function useContext() {
+            const theme = useTheme();
+            return { theme };
+        },
     });
+
+    const useStyles = tss.create({});
 
     return {
         ThemeProvider,
         useTheme,
         StoryProvider,
-        makeStyles,
+        tss,
         useStyles,
-        withStyles,
     };
 }

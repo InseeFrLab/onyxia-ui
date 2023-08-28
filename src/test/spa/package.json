@@ -7,7 +7,7 @@
         "@mui/icons-material": "^5.0.3",
         "@emotion/react": "^11.4.1",
         "@emotion/styled": "^11.3.0",
-        "tss-react": "^4.8.3",
+        "tss-react": "^4.9.0",
         "powerhooks": "^0.26.8",
         "onyxia-ui": "latest",
         "@types/node": "^12.0.0",

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { getScrollableParent } from "powerhooks/getScrollableParent";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -86,21 +86,19 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         ],
     );
 
-    const { classes, cx } = useStyles(
-        {
-            "isCollapsed": (() => {
-                switch (rest.behavior) {
-                    case "collapses on scroll":
-                        return isCollapsedIfDependsOfScroll;
-                    case "controlled":
-                        return rest.isCollapsed;
-                }
-            })(),
-            childrenWrapperHeight,
-            transitionDuration,
-        },
-        { props },
-    );
+    const { classes, cx } = useStyles({
+        "isCollapsed": (() => {
+            switch (rest.behavior) {
+                case "collapses on scroll":
+                    return isCollapsedIfDependsOfScroll;
+                case "controlled":
+                    return rest.isCollapsed;
+            }
+        })(),
+        childrenWrapperHeight,
+        transitionDuration,
+        "classesOverrides": props.classes,
+    });
 
     return (
         <div className={cx(classes.root, className)}>
@@ -112,12 +110,14 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
     );
 });
 
-const useStyles = makeStyles<{
-    isCollapsed: boolean;
-    childrenWrapperHeight: number;
-    transitionDuration: number;
-}>({ "name": { CollapsibleWrapper } })(
-    (_theme, { childrenWrapperHeight, isCollapsed, transitionDuration }) => ({
+const useStyles = tss
+    .withName({ CollapsibleWrapper })
+    .withParams<{
+        isCollapsed: boolean;
+        childrenWrapperHeight: number;
+        transitionDuration: number;
+    }>()
+    .create(({ childrenWrapperHeight, isCollapsed, transitionDuration }) => ({
         "root": {
             "height": isCollapsed ? 0 : childrenWrapperHeight || undefined,
             "opacity": isCollapsed ? 0 : 1,
@@ -130,5 +130,4 @@ const useStyles = makeStyles<{
         "bottomDivForSpacing": {
             //height: 30
         },
-    }),
-);
+    }));

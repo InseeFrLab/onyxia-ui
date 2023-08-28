@@ -4,7 +4,7 @@ import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import MuiAlert from "@mui/material/Alert";
 import { Text } from "./Text/TextBase";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import CloseSharp from "@mui/icons-material/CloseSharp";
 
 export type AlertProps =
@@ -43,7 +43,10 @@ const { IconButton } = createIconButton(
 export const Alert = memo((props: AlertProps) => {
     const { severity, children, className, ...rest } = props;
 
-    const { classes, cx } = useStyles({ severity }, { props });
+    const { classes, cx } = useStyles({
+        severity,
+        "classesOverrides": props.classes,
+    });
 
     const { isClosed, uncontrolledClose } = (function useClosure() {
         const [isClosed, uncontrolledClose] = useReducer(() => true, false);
@@ -93,20 +96,25 @@ export const Alert = memo((props: AlertProps) => {
     );
 });
 
-const useStyles = makeStyles<{ severity: AlertProps["severity"] }>({
-    "name": { Alert },
-})((theme, { severity }) => ({
-    "root": {
-        "alignItems": "center",
-        "color": theme.colors.useCases.typography.textPrimary,
-        "backgroundColor":
-            theme.colors.useCases.alertSeverity[severity].background,
-    },
-    "icon": {
-        "color": theme.colors.useCases.alertSeverity[severity].main,
-    },
-    "action": {
-        "alignItems": "center",
-        "padding": 0,
-    },
-}));
+const useStyles = tss
+    .withName({ Alert })
+    .withParams<{
+        severity: AlertProps["severity"];
+    }>()
+    .create(({ theme, severity }) => ({
+        "root": {
+            "alignItems": "center",
+            "color": theme.colors.useCases.typography.textPrimary,
+            "backgroundColor":
+                theme.colors.useCases.alertSeverity[severity].background,
+        },
+        "icon": {
+            "& svg": {
+                "color": theme.colors.useCases.alertSeverity[severity].main,
+            },
+        },
+        "action": {
+            "alignItems": "center",
+            "padding": 0,
+        },
+    }));

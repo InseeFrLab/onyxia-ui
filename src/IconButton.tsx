@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { forwardRef, memo } from "react";
 import MuiIconButton from "@mui/material/IconButton";
 import type { IconProps } from "./Icon";
@@ -136,25 +136,27 @@ export function createIconButton<IconId extends string = never>(params?: {
         }),
     );
 
-    const useStyles = makeStyles<{ disabled: boolean }>({
-        "name": { IconButton },
-    })((theme, { disabled }) => ({
-        "root": {
-            "padding": theme.spacing(2),
-            "&:hover, &:focus": {
-                "backgroundColor": "unset",
-                "& svg": {
-                    "color": theme.colors.useCases.buttons.actionHoverPrimary,
+    const useStyles = tss
+        .withName({ IconButton })
+        .withParams<{ disabled: boolean }>()
+        .create(({ theme, disabled }) => ({
+            "root": {
+                "padding": theme.spacing(2),
+                "&:hover, &:focus": {
+                    "backgroundColor": "unset",
+                    "& svg": {
+                        "color":
+                            theme.colors.useCases.buttons.actionHoverPrimary,
+                    },
                 },
             },
-        },
-        "icon": {
-            "color":
-                theme.colors.useCases.typography[
-                    disabled ? "textDisabled" : "textPrimary"
-                ],
-        },
-    }));
+            "icon": {
+                "color":
+                    theme.colors.useCases.typography[
+                        disabled ? "textDisabled" : "textPrimary"
+                    ],
+            },
+        }));
 
     return { IconButton };
 }

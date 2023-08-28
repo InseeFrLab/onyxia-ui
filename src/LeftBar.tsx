@@ -7,7 +7,7 @@ import {
     type ForwardedRef,
     type ReactNode,
 } from "react";
-import { makeStyles, useStyles as useTheme } from "./lib/ThemeProvider";
+import { tss, useStyles as useTheme } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import Divider from "@mui/material/Divider";
@@ -159,43 +159,49 @@ export function createLeftBar<IconId extends string>(params?: {
 
     (LeftBar as any).displayName = symToStr({ LeftBar });
 
-    const useStyles = makeStyles<{
-        rootWidth: number;
-        rootHeight: number;
-        paddingTopBottomFactor: number;
-        areTransitionEnabled: boolean;
-    }>({ "name": { LeftBar } })(
-        (
-            theme,
-            {
+    const useStyles = tss
+        .withParams<{
+            rootWidth: number;
+            rootHeight: number;
+            paddingTopBottomFactor: number;
+            areTransitionEnabled: boolean;
+        }>()
+        .withName({ LeftBar })
+        .create(
+            ({
+                theme,
                 rootWidth,
                 rootHeight,
                 paddingTopBottomFactor,
                 areTransitionEnabled,
-            },
-        ) => ({
-            "root": {
-                "borderRadius": 16,
-                "boxShadow": theme.shadows[3],
-                "overflow": "auto",
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            },
-            "nav": {
-                "width": rootWidth,
-                "height": rootHeight,
-                ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
-                "transition": areTransitionEnabled ? "width 250ms" : undefined,
-                "position": "relative",
-                "overflow": "hidden",
-            },
-            "wrapper": {
-                "position": "absolute",
-            },
-            "button": {
-                "marginTop": theme.spacing(2),
-            },
-        }),
-    );
+            }) => ({
+                "root": {
+                    "borderRadius": 16,
+                    "boxShadow": theme.shadows[3],
+                    "overflow": "auto",
+                    "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                },
+                "nav": {
+                    "width": rootWidth,
+                    "height": rootHeight,
+                    ...theme.spacing.topBottom(
+                        "padding",
+                        paddingTopBottomFactor,
+                    ),
+                    "transition": areTransitionEnabled
+                        ? "width 250ms"
+                        : undefined,
+                    "position": "relative",
+                    "overflow": "hidden",
+                },
+                "wrapper": {
+                    "position": "absolute",
+                },
+                "button": {
+                    "marginTop": theme.spacing(2),
+                },
+            }),
+        );
 
     const { CustomButton } = (() => {
         type Props = {
@@ -290,116 +296,122 @@ export function createLeftBar<IconId extends string>(params?: {
             );
         });
 
-        const useStyles = makeStyles<
-            {
+        const useStyles = tss
+            .withParams<{
                 collapsedWidth: number;
                 isCollapsed: boolean;
                 isCurrent: boolean | undefined;
                 width: number;
                 isDisabled: boolean;
-            },
-            "iconHoverBox" | "typoWrapper"
-        >({
-            "name": `${symToStr({ LeftBar })}${symToStr({ CustomButton })}`,
-        })(
-            (
-                theme,
-                { collapsedWidth, isCollapsed, isCurrent, width, isDisabled },
-                classes,
-            ) => ({
-                "root": {
-                    ...(isDisabled ? { "pointerEvents": "none" } : {}),
-                    "color": theme.colors.useCases.typography.textPrimary,
-                    "textDecoration": "none",
-                    "display": "flex",
-                    "cursor": "pointer",
-                    [["hover", "focus"]
-                        .map(name => `&:${name} .${classes.iconHoverBox}`)
-                        .join(", ")]: {
-                        "backgroundColor":
-                            theme.colors.useCases.surfaces.background,
+            }>()
+            .withNestedSelectors<"iconHoverBox" | "typoWrapper">()
+            .withName(`${symToStr({ LeftBar })}${symToStr({ CustomButton })}`)
+            .create(
+                ({
+                    theme,
+                    collapsedWidth,
+                    isCollapsed,
+                    isCurrent,
+                    width,
+                    isDisabled,
+                    classes,
+                }) => ({
+                    "root": {
+                        ...(isDisabled ? { "pointerEvents": "none" } : {}),
+                        "color": theme.colors.useCases.typography.textPrimary,
+                        "textDecoration": "none",
+                        "display": "flex",
+                        "cursor": "pointer",
+                        [["hover", "focus"]
+                            .map(name => `&:${name} .${classes.iconHoverBox}`)
+                            .join(", ")]: {
+                            "backgroundColor":
+                                theme.colors.useCases.surfaces.background,
+                        },
+                        [["hover", "focus"]
+                            .map(name => `&:${name} .${classes.typoWrapper}`)
+                            .join(", ")]: {
+                            "backgroundColor": !isCollapsed
+                                ? theme.colors.useCases.surfaces.background
+                                : undefined,
+                        },
+                        [[".MuiSvgIcon-root", "h6"]
+                            .map(
+                                name =>
+                                    `&${isCurrent ? "" : ":active"} ${name}`,
+                            )
+                            .join(", ")]: {
+                            "color": theme.colors.useCases.typography.textFocus,
+                        },
                     },
-                    [["hover", "focus"]
-                        .map(name => `&:${name} .${classes.typoWrapper}`)
-                        .join(", ")]: {
-                        "backgroundColor": !isCollapsed
-                            ? theme.colors.useCases.surfaces.background
+                    "iconWrapper": {
+                        "width": collapsedWidth,
+                        "textAlign": "center",
+                        "position": "relative",
+                        "color": isDisabled
+                            ? theme.colors.useCases.typography.textDisabled
                             : undefined,
                     },
-                    [[".MuiSvgIcon-root", "h6"]
-                        .map(name => `&${isCurrent ? "" : ":active"} ${name}`)
-                        .join(", ")]: {
-                        "color": theme.colors.useCases.typography.textFocus,
+
+                    "icon": {
+                        "position": "relative",
+                        "zIndex": 2,
+                        ...theme.spacing.topBottom("margin", 2),
+                        ...(isCurrent !== undefined
+                            ? {}
+                            : {
+                                  "transform": isCollapsed
+                                      ? "rotate(-180deg)"
+                                      : "rotate(0)",
+                              }),
+                        "transition": `transform 250ms`,
                     },
-                },
-                "iconWrapper": {
-                    "width": collapsedWidth,
-                    "textAlign": "center",
-                    "position": "relative",
-                    "color": isDisabled
-                        ? theme.colors.useCases.typography.textDisabled
-                        : undefined,
-                },
+                    "iconHoverBox": {
+                        "display": "inline-block",
+                        "position": "absolute",
+                        "height": "100%",
+                        ...(() => {
+                            const offset = collapsedWidth / 8;
 
-                "icon": {
-                    "position": "relative",
-                    "zIndex": 2,
-                    ...theme.spacing.topBottom("margin", 2),
-                    ...(isCurrent !== undefined
-                        ? {}
-                        : {
-                              "transform": isCollapsed
-                                  ? "rotate(-180deg)"
-                                  : "rotate(0)",
-                          }),
-                    "transition": `transform 250ms`,
-                },
-                "iconHoverBox": {
-                    "display": "inline-block",
-                    "position": "absolute",
-                    "height": "100%",
-                    ...(() => {
-                        const offset = collapsedWidth / 8;
+                            return {
+                                "left": offset,
+                                "right": isCollapsed ? offset : 0,
+                            };
+                        })(),
+                        "zIndex": 1,
+                        "borderRadius": `10px ${
+                            isCollapsed ? "10px 10px" : "0 0"
+                        } 10px`,
+                    },
 
-                        return {
-                            "left": offset,
-                            "right": isCollapsed ? offset : 0,
-                        };
-                    })(),
-                    "zIndex": 1,
-                    "borderRadius": `10px ${
-                        isCollapsed ? "10px 10px" : "0 0"
-                    } 10px`,
-                },
+                    "typoWrapper": {
+                        "paddingRight": theme.spacing(2),
+                        "flex": 1,
+                        "borderRadius": "0 10px 10px 0",
+                        "display": "flex",
+                        "alignItems": "center",
+                        "marginRight": theme.spacing(5),
+                    },
 
-                "typoWrapper": {
-                    "paddingRight": theme.spacing(2),
-                    "flex": 1,
-                    "borderRadius": "0 10px 10px 0",
-                    "display": "flex",
-                    "alignItems": "center",
-                    "marginRight": theme.spacing(5),
-                },
-
-                "typo": {
-                    "color": isDisabled
-                        ? theme.colors.useCases.typography.textDisabled
-                        : undefined,
-                    "whiteSpace": "nowrap",
-                    "marginRight": theme.spacing(2),
-                },
-                "divider": {
-                    "marginTop": theme.spacing(2),
-                    "borderColor":
-                        theme.colors.useCases.typography.textTertiary,
-                    "width":
-                        (isCollapsed ? collapsedWidth : width) -
-                        2 * theme.spacing(2),
-                    "marginLeft": theme.spacing(2),
-                    "transition": "width 250ms",
-                },
-            }),
-        );
+                    "typo": {
+                        "color": isDisabled
+                            ? theme.colors.useCases.typography.textDisabled
+                            : undefined,
+                        "whiteSpace": "nowrap",
+                        "marginRight": theme.spacing(2),
+                    },
+                    "divider": {
+                        "marginTop": theme.spacing(2),
+                        "borderColor":
+                            theme.colors.useCases.typography.textTertiary,
+                        "width":
+                            (isCollapsed ? collapsedWidth : width) -
+                            2 * theme.spacing(2),
+                        "marginLeft": theme.spacing(2),
+                        "transition": "width 250ms",
+                    },
+                }),
+            );
 
         return { CustomButton };
     })();

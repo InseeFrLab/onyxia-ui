@@ -9,7 +9,7 @@ import type { AutocompleteCloseReason } from "@mui/material/Autocomplete";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
 import { useEvt } from "evt/hooks";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { useClickAway } from "powerhooks/useClickAway";
 import { Text } from "./Text/TextBase";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -332,7 +332,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
     );
 });
 
-const useStyles = makeStyles({ "name": "GitHubPicker" })(theme => ({
+const useStyles = tss.withName({ GitHubPicker }).create(({ theme }) => ({
     "root": {
         "border": `1px solid ${
             theme.muiTheme.palette.mode === "light" ? "#e1e4e8" : "#30363d"
@@ -471,7 +471,7 @@ const { NoOptionText } = (() => {
         );
     });
 
-    const useStyles = makeStyles({ "name": { NoOptionText } })(theme => ({
+    const useStyles = tss.withName({ NoOptionText }).create(({ theme }) => ({
         "root": {
             "cursor": "pointer",
             "paddingLeft": theme.spacing(3),

@@ -6,7 +6,7 @@ import LightModeIcon from "@mui/icons-material/Brightness7";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 
 const { Icon } = createIcon({
     "darkModeIcon": DarkModeIcon,
@@ -43,7 +43,7 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
     );
 });
 
-const useStyles = makeStyles({ "name": { DarkModeIcon } })(theme => ({
+const useStyles = tss.withName({ DarkModeSwitch }).create(({ theme }) => ({
     "root": {
         "transition": "transform 500ms",
         "transform": `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,

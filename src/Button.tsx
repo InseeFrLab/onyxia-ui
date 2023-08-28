@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { FC } from "react";
 import { forwardRef, memo } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
@@ -154,137 +154,145 @@ export function createButton<IconId extends string = never>(params?: {
         }),
     );
 
-    const useStyles = makeStyles<{
-        variant: NonNullable<ButtonProps["variant"]>;
-        disabled: boolean;
-    }>({ "name": { Button } })((theme, { variant, disabled }) => {
-        const textColor =
-            theme.colors.useCases.typography[
-                disabled
-                    ? "textDisabled"
-                    : (() => {
-                          switch (variant) {
-                              case "primary":
-                                  return "textFocus";
-                              case "secondary":
-                              case "ternary":
-                                  return "textPrimary";
-                          }
-                      })()
-            ];
-
-        const hoverTextColor = (() => {
-            switch (theme.isDarkModeEnabled) {
-                case true:
-                    switch (variant) {
-                        case "ternary":
-                            return theme.colors.useCases.surfaces.background;
-                        default:
-                            return theme.colors.palette.dark.main;
-                    }
-                case false:
-                    switch (variant) {
-                        case "primary":
-                            return theme.colors.palette.dark.main;
-                        case "secondary":
-                            return theme.colors.palette.light.main;
-                        case "ternary":
-                            return theme.colors.useCases.surfaces.background;
-                    }
-            }
-        })();
-
-        return {
-            "root": (() => {
-                const hoverBackgroundColor =
-                    theme.colors.useCases.buttons[
-                        (() => {
-                            switch (variant) {
-                                case "primary":
-                                    return "actionHoverPrimary";
-                                case "secondary":
-                                case "ternary":
-                                    return "actionHoverSecondary";
-                            }
-                        })()
-                    ];
-
-                const paddingSpacingTopBottom = 2;
-
-                const borderWidth = (() => {
-                    switch (variant) {
-                        case "primary":
-                        case "secondary":
-                            return 2;
-                        case "ternary":
-                            return 0;
-                    }
-                })();
-
-                const approxHeight =
-                    2 * theme.spacing(paddingSpacingTopBottom) +
-                    2 * borderWidth +
-                    pxToNumber(
-                        theme.typography.variants[variantNameUsedForMuiButton]
-                            .style.lineHeight,
-                    );
-
-                return {
-                    "textTransform": "unset" as const,
-                    "backgroundColor": disabled
-                        ? theme.colors.useCases.buttons.actionDisabledBackground
+    const useStyles = tss
+        .withName({ Button })
+        .withParams<{
+            variant: NonNullable<ButtonProps["variant"]>;
+            disabled: boolean;
+        }>()
+        .create(({ theme, variant, disabled }) => {
+            const textColor =
+                theme.colors.useCases.typography[
+                    disabled
+                        ? "textDisabled"
                         : (() => {
                               switch (variant) {
                                   case "primary":
+                                      return "textFocus";
                                   case "secondary":
-                                      return "transparent";
                                   case "ternary":
-                                      return theme.colors.useCases.surfaces
-                                          .background;
+                                      return "textPrimary";
                               }
-                          })(),
-                    "borderRadius": approxHeight / 2,
-                    borderWidth,
-                    "borderStyle": "solid",
-                    "borderColor": disabled
-                        ? "transparent"
-                        : hoverBackgroundColor,
-                    ...theme.spacing.topBottom(
-                        "padding",
-                        paddingSpacingTopBottom,
-                    ),
-                    ...theme.spacing.rightLeft(
-                        "padding",
-                        (() => {
-                            if (
-                                theme.windowInnerWidth >= breakpointsValues.xl
-                            ) {
-                                return 3;
-                            }
+                          })()
+                ];
 
-                            return 4;
-                        })(),
-                    ),
-                    "&.MuiButton-text": {
-                        "color": textColor,
-                    },
+            const hoverTextColor = (() => {
+                switch (theme.isDarkModeEnabled) {
+                    case true:
+                        switch (variant) {
+                            case "ternary":
+                                return theme.colors.useCases.surfaces
+                                    .background;
+                            default:
+                                return theme.colors.palette.dark.main;
+                        }
+                    case false:
+                        switch (variant) {
+                            case "primary":
+                                return theme.colors.palette.dark.main;
+                            case "secondary":
+                                return theme.colors.palette.light.main;
+                            case "ternary":
+                                return theme.colors.useCases.surfaces
+                                    .background;
+                        }
+                }
+            })();
 
-                    "&:hover, &:focus": {
-                        "backgroundColor": hoverBackgroundColor,
-                        "& .MuiSvgIcon-root": {
-                            "color": hoverTextColor,
-                        },
+            return {
+                "root": (() => {
+                    const hoverBackgroundColor =
+                        theme.colors.useCases.buttons[
+                            (() => {
+                                switch (variant) {
+                                    case "primary":
+                                        return "actionHoverPrimary";
+                                    case "secondary":
+                                    case "ternary":
+                                        return "actionHoverSecondary";
+                                }
+                            })()
+                        ];
+
+                    const paddingSpacingTopBottom = 2;
+
+                    const borderWidth = (() => {
+                        switch (variant) {
+                            case "primary":
+                            case "secondary":
+                                return 2;
+                            case "ternary":
+                                return 0;
+                        }
+                    })();
+
+                    const approxHeight =
+                        2 * theme.spacing(paddingSpacingTopBottom) +
+                        2 * borderWidth +
+                        pxToNumber(
+                            theme.typography.variants[
+                                variantNameUsedForMuiButton
+                            ].style.lineHeight,
+                        );
+
+                    return {
+                        "textTransform": "unset" as const,
+                        "backgroundColor": disabled
+                            ? theme.colors.useCases.buttons
+                                  .actionDisabledBackground
+                            : (() => {
+                                  switch (variant) {
+                                      case "primary":
+                                      case "secondary":
+                                          return "transparent";
+                                      case "ternary":
+                                          return theme.colors.useCases.surfaces
+                                              .background;
+                                  }
+                              })(),
+                        "borderRadius": approxHeight / 2,
+                        borderWidth,
+                        "borderStyle": "solid",
+                        "borderColor": disabled
+                            ? "transparent"
+                            : hoverBackgroundColor,
+                        ...theme.spacing.topBottom(
+                            "padding",
+                            paddingSpacingTopBottom,
+                        ),
+                        ...theme.spacing.rightLeft(
+                            "padding",
+                            (() => {
+                                if (
+                                    theme.windowInnerWidth >=
+                                    breakpointsValues.xl
+                                ) {
+                                    return 3;
+                                }
+
+                                return 4;
+                            })(),
+                        ),
                         "&.MuiButton-text": {
-                            "color": hoverTextColor,
+                            "color": textColor,
                         },
-                    },
-                } as const;
-            })(),
-            "icon": {
-                "color": textColor,
-            },
-        };
-    });
+
+                        "&:hover, &:focus": {
+                            "backgroundColor": hoverBackgroundColor,
+                            "& .MuiSvgIcon-root": {
+                                "color": hoverTextColor,
+                            },
+                            "&.MuiButton-text": {
+                                "color": hoverTextColor,
+                            },
+                        },
+                    } as const;
+                })(),
+                "icon": {
+                    "color": textColor,
+                },
+            };
+        });
 
     return { Button };
 }

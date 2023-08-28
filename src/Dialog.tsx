@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@mui/material/Dialog";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import Checkbox from "@mui/material/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -47,7 +47,9 @@ export const Dialog = memo((props: DialogProps) => {
         muiDialogClasses,
     } = props;
 
-    const { cx, classes } = useStyles(undefined, { props });
+    const { cx, classes } = useStyles({
+        "classesOverrides": props.classes,
+    });
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -140,7 +142,7 @@ export const Dialog = memo((props: DialogProps) => {
     );
 });
 
-const useStyles = makeStyles({ "name": { Dialog } })(theme => ({
+const useStyles = tss.withName({ Dialog }).create(({ theme }) => ({
     "root": {
         "backgroundColor": theme.colors.useCases.surfaces.surface1,
         "borderRadius": 5,

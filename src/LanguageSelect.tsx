@@ -1,7 +1,7 @@
 import { useState, memo } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { createIcon } from "./Icon";
 import { Text } from "./Text/TextBase";
 import { useDomRect } from "powerhooks/useDomRect";
@@ -154,46 +154,50 @@ export function createLanguageSelect<Language extends string>(params: {
         );
     });
 
-    const useStyles = makeStyles<{
-        buttonWidth: number;
-        variant: LanguageSelectProps["variant"];
-    }>({ "name": { LanguageSelect } })((theme, { buttonWidth, variant }) => ({
-        "button": {
-            "padding": (() => {
-                switch (variant) {
-                    case "big":
-                        return undefined;
-                    case "small":
-                        return 0;
-                }
-            })(),
-            "&.Mui-focusVisible": {
-                "outline": "-webkit-focus-ring-color auto 1px",
-            },
-        },
-        "menu": {
-            "& .Mui-selected": {
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            },
-            "& .MuiPaper-root": {
-                "backgroundColor": theme.colors.useCases.surfaces.background,
-                "width": (() => {
+    const useStyles = tss
+        .withParams<{
+            buttonWidth: number;
+            variant: LanguageSelectProps["variant"];
+        }>()
+        .withName({ LanguageSelect })
+        .create(({ theme, buttonWidth, variant }) => ({
+            "button": {
+                "padding": (() => {
                     switch (variant) {
                         case "big":
-                            return buttonWidth;
-                        case "small":
                             return undefined;
+                        case "small":
+                            return 0;
                     }
                 })(),
+                "&.Mui-focusVisible": {
+                    "outline": "-webkit-focus-ring-color auto 1px",
+                },
             },
-            "& a": {
+            "menu": {
+                "& .Mui-selected": {
+                    "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                },
+                "& .MuiPaper-root": {
+                    "backgroundColor":
+                        theme.colors.useCases.surfaces.background,
+                    "width": (() => {
+                        switch (variant) {
+                            case "big":
+                                return buttonWidth;
+                            case "small":
+                                return undefined;
+                        }
+                    })(),
+                },
+                "& a": {
+                    "color": theme.colors.useCases.typography.textPrimary,
+                },
+            },
+            "icon": {
                 "color": theme.colors.useCases.typography.textPrimary,
             },
-        },
-        "icon": {
-            "color": theme.colors.useCases.typography.textPrimary,
-        },
-    }));
+        }));
 
     return { LanguageSelect };
 }

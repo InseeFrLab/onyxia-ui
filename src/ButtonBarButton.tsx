@@ -1,6 +1,6 @@
 import type { ReactNode, FC } from "react";
 import { memo } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import type { IconProps } from "./Icon";
 import { createButton } from "./Button";
 
@@ -54,7 +54,7 @@ export function createButtonBarButton<IconId extends string = never>(params: {
         );
     });
 
-    const useStyles = makeStyles({ "name": { ButtonBarButton } })(theme => ({
+    const useStyles = tss.withName({ ButtonBarButton }).create(({ theme }) => ({
         "root": {
             "backgroundColor": "transparent",
             "borderRadius": "unset",

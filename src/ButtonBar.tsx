@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { memo } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import type { IconProps } from "./Icon";
 import { createButtonBarButton } from "./ButtonBarButton";
@@ -53,7 +53,7 @@ export function createButtonBar<IconId extends string = never>(params: {
         },
     );
 
-    const useStyles = makeStyles({ "name": { ButtonBar } })(theme => ({
+    const useStyles = tss.withName({ ButtonBar }).create(({ theme }) => ({
         "root": {
             "backgroundColor": theme.colors.useCases.surfaces.surface1,
             "boxShadow": theme.shadows[1],

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import MuiLink from "@mui/material/Link";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -59,31 +59,33 @@ export const CollapsibleSectionHeader = memo(
     },
 );
 
-const useStyles = makeStyles<{ isCollapsed: boolean }>({
-    "name": { CollapsibleSectionHeader },
-})((...[theme, { isCollapsed }]) => ({
-    "root": {
-        "display": "flex",
-        "alignItems": "center",
-    },
-    "chevron": {
-        "paddingLeft": 0,
-        ...(!isCollapsed
-            ? {}
-            : {
-                  "width": 0,
-                  "paddingLeft": 0,
-                  "paddingRight": 0,
-                  "visibility": "hidden",
-              }),
-    },
-    "link": {
-        "cursor": "pointer",
-        //Ugly solution to vertically align with text
-        "paddingTop":
-            0.183 *
-            pxToNumber(
-                theme.typography.variants["section heading"].style.lineHeight,
-            ),
-    },
-}));
+const useStyles = tss
+    .withName({ CollapsibleSectionHeader })
+    .withParams<{ isCollapsed: boolean }>()
+    .create(({ theme, isCollapsed }) => ({
+        "root": {
+            "display": "flex",
+            "alignItems": "center",
+        },
+        "chevron": {
+            "paddingLeft": 0,
+            ...(!isCollapsed
+                ? {}
+                : {
+                      "width": 0,
+                      "paddingLeft": 0,
+                      "paddingRight": 0,
+                      "visibility": "hidden",
+                  }),
+        },
+        "link": {
+            "cursor": "pointer",
+            //Ugly solution to vertically align with text
+            "paddingTop":
+                0.183 *
+                pxToNumber(
+                    theme.typography.variants["section heading"].style
+                        .lineHeight,
+                ),
+        },
+    }));

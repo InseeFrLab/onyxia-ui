@@ -4,7 +4,7 @@ import type { SliderProps } from "@mui/material/Slider";
 import { assert } from "tsafe/assert";
 import { is } from "tsafe/is";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { makeStyles } from "../lib/ThemeProvider";
+import { tss } from "../lib/ThemeProvider";
 import { Text } from "../Text/TextBase";
 import type { ReactNode } from "react";
 import { symToStr } from "tsafe/symToStr";
@@ -32,27 +32,29 @@ export type SimpleOrRangeSliderProps = {
     onValueChange(params: { extremity: "low" | "high"; value: number }): void;
 };
 
-const useStyles = makeStyles<{ isRange: boolean }>()((theme, { isRange }) => ({
-    "label": {
-        "marginBottom": theme.spacing(3),
-    },
-    "helpIcon": {
-        "marginLeft": theme.spacing(2),
-        "color": theme.colors.useCases.typography.textSecondary,
-        "verticalAlign": "text-bottom",
-    },
-    "wrapper": {
-        "display": "flex",
-        "alignItems": "center",
-    },
-    "slider": {
-        "flex": 1,
-        //"margin": theme.spacing(0, 4),
-        "margin": theme.spacing({ "topBottom": 0, "rightLeft": 4 }),
-        "marginLeft": isRange ? undefined : 0,
-        "minWidth": 150,
-    },
-}));
+const useStyles = tss
+    .withParams<{ isRange: boolean }>()
+    .create(({ theme, isRange }) => ({
+        "label": {
+            "marginBottom": theme.spacing(3),
+        },
+        "helpIcon": {
+            "marginLeft": theme.spacing(2),
+            "color": theme.colors.useCases.typography.textSecondary,
+            "verticalAlign": "text-bottom",
+        },
+        "wrapper": {
+            "display": "flex",
+            "alignItems": "center",
+        },
+        "slider": {
+            "flex": 1,
+            //"margin": theme.spacing(0, 4),
+            "margin": theme.spacing({ "topBottom": 0, "rightLeft": 4 }),
+            "marginLeft": isRange ? undefined : 0,
+            "minWidth": 150,
+        },
+    }));
 
 const { Icon } = createIcon({ "help": HelpIcon });
 
@@ -189,8 +191,31 @@ const { ValueDisplay } = (() => {
         maxValue: number;
     };
 
-    const useStyles = makeStyles<{ maxText: string }>()(
-        (theme, { maxText }) => ({
+    const ValueDisplay = memo((props: Props) => {
+        const { value, maxValue, unit, semantic } = props;
+
+        const { classes } = useStyles({ "maxText": `${maxValue} ${unit}` });
+
+        return (
+            <div className={classes.root}>
+                <div>
+                    <Text typo="label 1" className={classes.label}>
+                        {value} {unit}
+                    </Text>
+                    {semantic !== undefined && (
+                        <Text className={classes.caption} typo="caption">
+                            {capitalize(semantic)}
+                        </Text>
+                    )}
+                </div>
+            </div>
+        );
+    });
+
+    const useStyles = tss
+        .withName({ ValueDisplay })
+        .withParams<{ maxText: string }>()
+        .create(({ theme, maxText }) => ({
             "root": {
                 "display": "flex",
                 "alignItems": "center",
@@ -215,29 +240,7 @@ const { ValueDisplay } = (() => {
                     },
                 },
             },
-        }),
-    );
-
-    const ValueDisplay = memo((props: Props) => {
-        const { value, maxValue, unit, semantic } = props;
-
-        const { classes } = useStyles({ "maxText": `${maxValue} ${unit}` });
-
-        return (
-            <div className={classes.root}>
-                <div>
-                    <Text typo="label 1" className={classes.label}>
-                        {value} {unit}
-                    </Text>
-                    {semantic !== undefined && (
-                        <Text className={classes.caption} typo="caption">
-                            {capitalize(semantic)}
-                        </Text>
-                    )}
-                </div>
-            </div>
-        );
-    });
+        }));
 
     return { ValueDisplay };
 })();

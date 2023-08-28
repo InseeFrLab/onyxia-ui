@@ -1,7 +1,7 @@
 import { Text } from "./Text/TextBase";
 import { createIcon } from "./Icon";
 import chevronLeft from "@mui/icons-material/ChevronLeft";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { useState, useMemo, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
@@ -70,16 +70,14 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         [tabWidth, tabs.length],
     );
 
-    const { classes, cx, css } = useStyles(
-        {
-            tabsWrapperWidth,
-            leftArrowWidth,
-            leftArrowHeight,
-            offset,
-            tabWidth,
-        },
-        { props },
-    );
+    const { classes, cx, css } = useStyles({
+        tabsWrapperWidth,
+        leftArrowWidth,
+        leftArrowHeight,
+        offset,
+        tabWidth,
+        "classesOverrides": props.classes,
+    });
 
     const areArrowsVisible = tabs.length > maxTabCount;
 
@@ -248,65 +246,65 @@ const { CustomButton } = (() => {
           }
     );
 
-    const useStyles = makeStyles<
-        Pick<
-            CustomButtonProps,
-            "isSelected" | "isFirst" | "size" | "isDisabled" | "isVisible"
-        > & {
-            "arrowDirection": undefined | "left" | "right";
-        }
-    >()(
-        (
-            theme,
-            {
+    const useStyles = tss
+        .withParams<
+            Pick<
+                CustomButtonProps,
+                "isSelected" | "isFirst" | "size" | "isDisabled" | "isVisible"
+            > & {
+                "arrowDirection": undefined | "left" | "right";
+            }
+        >()
+        .create(
+            ({
+                theme,
                 isSelected,
                 isFirst,
                 size,
                 isDisabled,
                 arrowDirection,
                 isVisible,
-            },
-        ) => ({
-            "root": {
-                "backgroundColor":
-                    theme.colors.useCases.surfaces[
-                        isSelected ? "surface1" : "surface2"
-                    ],
-                "boxShadow":
-                    arrowDirection === undefined && isVisible
-                        ? [
-                              theme.shadows[4],
-                              ...(isSelected || isFirst
-                                  ? [theme.shadows[5]]
-                                  : []),
-                          ].join(", ")
-                        : (() => {
-                              switch (arrowDirection) {
-                                  case "right":
-                                      return `inset ${theme.shadows[4]}`;
-                                  case "left":
-                                      return `inset ${theme.shadows[5]}`;
-                              }
-                          })(),
-                "padding": theme.spacing(
-                    (() => {
-                        switch (size) {
-                            case "big":
-                                return { "topBottom": 3, "rightLeft": 4 };
-                            case "small":
-                                return { "topBottom": 2, "rightLeft": 3 };
-                        }
-                    })(),
-                ),
-                "display": "flex",
-                "alignItems": "center",
-                "cursor": !isDisabled ? "pointer" : "default",
-            },
-            "typo": {
-                "fontWeight": isSelected ? 600 : undefined,
-            },
-        }),
-    );
+            }) => ({
+                "root": {
+                    "backgroundColor":
+                        theme.colors.useCases.surfaces[
+                            isSelected ? "surface1" : "surface2"
+                        ],
+                    "boxShadow":
+                        arrowDirection === undefined && isVisible
+                            ? [
+                                  theme.shadows[4],
+                                  ...(isSelected || isFirst
+                                      ? [theme.shadows[5]]
+                                      : []),
+                              ].join(", ")
+                            : (() => {
+                                  switch (arrowDirection) {
+                                      case "right":
+                                          return `inset ${theme.shadows[4]}`;
+                                      case "left":
+                                          return `inset ${theme.shadows[5]}`;
+                                  }
+                              })(),
+                    "padding": theme.spacing(
+                        (() => {
+                            switch (size) {
+                                case "big":
+                                    return { "topBottom": 3, "rightLeft": 4 };
+                                case "small":
+                                    return { "topBottom": 2, "rightLeft": 3 };
+                            }
+                        })(),
+                    ),
+                    "display": "flex",
+                    "alignItems": "center",
+                    "cursor": !isDisabled ? "pointer" : "default",
+                },
+                "typo": {
+                    "fontWeight": isSelected ? 600 : undefined,
+                },
+            }),
+        );
 
     const CustomButton = memo(
         forwardRef<any, CustomButtonProps>((props, ref) => {
@@ -426,59 +424,64 @@ const { CustomButton } = (() => {
     return { CustomButton };
 })();
 
-const useStyles = makeStyles<{
-    tabsWrapperWidth: number;
-    leftArrowWidth: number;
-    leftArrowHeight: number;
-    offset: number;
-    tabWidth: number;
-}>({
-    "name": { Tabs },
-})(
-    (
-        theme,
-        { tabsWrapperWidth, leftArrowWidth, leftArrowHeight, offset, tabWidth },
-    ) => {
-        const arrows = {
-            "top": 0,
-            "zIndex": 1,
-            "position": "absolute",
-        } as const;
+const useStyles = tss
+    .withParams<{
+        tabsWrapperWidth: number;
+        leftArrowWidth: number;
+        leftArrowHeight: number;
+        offset: number;
+        tabWidth: number;
+    }>()
+    .withName({ Tabs })
+    .create(
+        ({
+            theme,
+            tabsWrapperWidth,
+            leftArrowWidth,
+            leftArrowHeight,
+            offset,
+            tabWidth,
+        }) => {
+            const arrows = {
+                "top": 0,
+                "zIndex": 1,
+                "position": "absolute",
+            } as const;
 
-        return {
-            "root": {
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-                "visibility": tabWidth === 0 ? "hidden" : "visible",
-            },
-            "top": {
-                "overflow": "hidden",
-                "position": "relative",
-            },
-            "leftArrow": {
-                ...arrows,
-                "left": 0,
-            },
-            "rightArrow": {
-                ...arrows,
-                "right": 0,
-            },
-            "tabsWrapper": {
-                "transition": "left 250ms",
-                "transitionTimingFunction": "ease",
-                "position": "relative",
-                "left": offset * tabWidth,
-                "transform": `translateX(${leftArrowWidth}px)`,
-                "zIndex": 0,
-                "width": tabsWrapperWidth,
-                "display": "flex",
-            },
-            "tab": {
-                "flex": 1,
-                "height": leftArrowHeight || undefined,
-            },
-            "content": {
-                "padding": theme.spacing(4),
-            },
-        };
-    },
-);
+            return {
+                "root": {
+                    "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                    "visibility": tabWidth === 0 ? "hidden" : "visible",
+                },
+                "top": {
+                    "overflow": "hidden",
+                    "position": "relative",
+                },
+                "leftArrow": {
+                    ...arrows,
+                    "left": 0,
+                },
+                "rightArrow": {
+                    ...arrows,
+                    "right": 0,
+                },
+                "tabsWrapper": {
+                    "transition": "left 250ms",
+                    "transitionTimingFunction": "ease",
+                    "position": "relative",
+                    "left": offset * tabWidth,
+                    "transform": `translateX(${leftArrowWidth}px)`,
+                    "zIndex": 0,
+                    "width": tabsWrapperWidth,
+                    "display": "flex",
+                },
+                "tab": {
+                    "flex": 1,
+                    "height": leftArrowHeight || undefined,
+                },
+                "content": {
+                    "padding": theme.spacing(4),
+                },
+            };
+        },
+    );

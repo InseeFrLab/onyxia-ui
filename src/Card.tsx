@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { forwardRef, memo } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 
@@ -37,7 +37,7 @@ export const Card = memo(
     }),
 );
 
-const useStyles = makeStyles({ "name": { Card } })(theme => ({
+const useStyles = tss.withName({ Card }).create(({ theme }) => ({
     "root": {
         "borderRadius": 8,
         "boxShadow": theme.shadows[1],

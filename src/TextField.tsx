@@ -1,4 +1,4 @@
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
@@ -486,70 +486,71 @@ export const TextField = memo((props: TextFieldProps) => {
     );
 });
 
-const useStyles = makeStyles<{
-    hasError: boolean;
-    rootHeight: number;
-}>({
-    "name": { TextField },
-})((theme, { hasError, rootHeight }) => ({
-    "muiAutocomplete": {
-        "minWidth": 145,
-    },
-    "muiTextField": {
-        "& .MuiFormHelperText-root": {
-            "position": "absolute",
-            "top": rootHeight,
-            "visibility": rootHeight === 0 ? "hidden" : undefined,
+const useStyles = tss
+    .withParams<{
+        hasError: boolean;
+        rootHeight: number;
+    }>()
+    .withName({ TextField })
+    .create(({ theme, hasError, rootHeight }) => ({
+        "muiAutocomplete": {
+            "minWidth": 145,
         },
-        "& .MuiFormLabel-root": {
+        "muiTextField": {
+            "& .MuiFormHelperText-root": {
+                "position": "absolute",
+                "top": rootHeight,
+                "visibility": rootHeight === 0 ? "hidden" : undefined,
+            },
+            "& .MuiFormLabel-root": {
+                "color": hasError
+                    ? theme.colors.useCases.alertSeverity.error.main
+                    : theme.colors.useCases.typography.textSecondary,
+            },
+            "&:focus": {
+                "outline": "unset",
+            },
+            "& input:-webkit-autofill": {
+                ...(() => {
+                    switch (getBrowser()) {
+                        case "chrome":
+                        case "safari":
+                            return {
+                                "WebkitTextFillColor":
+                                    theme.colors.useCases.typography[
+                                        theme.isDarkModeEnabled
+                                            ? "textPrimary"
+                                            : "textSecondary"
+                                    ],
+                                "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
+                            };
+                        default:
+                            return {};
+                    }
+                })(),
+            },
+            "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                "borderBottomWidth": 1,
+            },
+            "& .MuiInput-underline:after": {
+                "borderBottomWidth": 1,
+            },
+        },
+        "helperText": {
             "color": hasError
                 ? theme.colors.useCases.alertSeverity.error.main
-                : theme.colors.useCases.typography.textSecondary,
+                : theme.colors.useCases.typography.textDisabled,
+            "whiteSpace": "nowrap",
         },
-        "&:focus": {
-            "outline": "unset",
-        },
-        "& input:-webkit-autofill": {
+        "questionMark": {
+            "fontSize": "inherit",
             ...(() => {
-                switch (getBrowser()) {
-                    case "chrome":
-                    case "safari":
-                        return {
-                            "WebkitTextFillColor":
-                                theme.colors.useCases.typography[
-                                    theme.isDarkModeEnabled
-                                        ? "textPrimary"
-                                        : "textSecondary"
-                                ],
-                            "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
-                        };
-                    default:
-                        return {};
-                }
+                const factor = 1.5;
+
+                return {
+                    "width": `${factor}em`,
+                    "height": `${factor}em`,
+                };
             })(),
         },
-        "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-            "borderBottomWidth": 1,
-        },
-        "& .MuiInput-underline:after": {
-            "borderBottomWidth": 1,
-        },
-    },
-    "helperText": {
-        "color": hasError
-            ? theme.colors.useCases.alertSeverity.error.main
-            : theme.colors.useCases.typography.textDisabled,
-        "whiteSpace": "nowrap",
-    },
-    "questionMark": {
-        "fontSize": "inherit",
-        ...(() => {
-            const factor = 1.5;
-
-            return {
-                "width": `${factor}em`,
-                "height": `${factor}em`,
-            };
-        })(),
-    },
-}));
+    }));

@@ -1,4 +1,4 @@
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { memo } from "react";
 import MuiCircularProgress from "@mui/material/CircularProgress";
 
@@ -22,13 +22,14 @@ export const CircularProgress = memo((props: CircularProgressProps) => {
     );
 });
 
-const useStyles = makeStyles<Pick<Required<CircularProgressProps>, "color">>({
-    "name": { CircularProgress },
-})((theme, { color }) => ({
-    "root": {
-        "color":
-            color !== "textPrimary"
-                ? undefined
-                : theme.colors.useCases.typography.textPrimary,
-    },
-}));
+const useStyles = tss
+    .withName({ CircularProgress })
+    .withParams<Pick<Required<CircularProgressProps>, "color">>()
+    .create(({ theme, color }) => ({
+        "root": {
+            "color":
+                color !== "textPrimary"
+                    ? undefined
+                    : theme.colors.useCases.typography.textPrimary,
+        },
+    }));

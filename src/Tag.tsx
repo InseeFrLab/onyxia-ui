@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { ReactNode } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 
 export type TagProps = {
@@ -13,7 +13,9 @@ export type TagProps = {
 export const Tag = memo((props: TagProps) => {
     const { text, className, onClick } = props;
 
-    const { classes, cx } = useStyles(undefined, { props });
+    const { classes, cx } = useStyles({
+        "classesOverrides": props.classes,
+    });
 
     return (
         <div className={cx(classes.root, className)} onClick={onClick}>
@@ -28,9 +30,7 @@ export const Tag = memo((props: TagProps) => {
     );
 });
 
-const useStyles = makeStyles({
-    "name": { Tag },
-})(theme => ({
+const useStyles = tss.withName({ Tag }).create(({ theme }) => ({
     "root": {
         "backgroundColor":
             theme.colors.palette[theme.isDarkModeEnabled ? "light" : "dark"]

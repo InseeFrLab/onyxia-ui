@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { ReactNode, ReactElement } from "react";
 import MuiTooltip from "@mui/material/Tooltip";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 
 export type TooltipProps = {
@@ -33,7 +33,7 @@ export const Tooltip = memo((props: TooltipProps) => {
     );
 });
 
-const useStyles = makeStyles({ "name": { Tooltip } })(theme => ({
+const useStyles = tss.withName({ Tooltip }).create(({ theme }) => ({
     "root": {
         "color": theme.colors.palette.light.light,
     },

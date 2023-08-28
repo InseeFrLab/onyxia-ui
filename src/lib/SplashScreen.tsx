@@ -11,7 +11,7 @@ import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { createMakeStyles, keyframes } from "tss-react";
+import { tss, keyframes } from "tss-react";
 import type { Theme } from "./ThemeProvider";
 import { Evt } from "evt";
 import { id } from "tsafe/id";
@@ -237,8 +237,6 @@ const context = createContext<boolean>(false);
 export function createSplashScreen(params: { useTheme(): Theme }) {
     const { useTheme } = params;
 
-    const { makeStyles } = createMakeStyles({ useTheme });
-
     function SplashScreen(props: SplashScreenProps) {
         const { children, Logo } = props;
 
@@ -277,6 +275,7 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         })();
 
         const { classes } = useStyles({
+            "theme": useTheme(),
             isVisible,
             isFadingOut,
             isTransparencyEnabled,
@@ -318,51 +317,55 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         );
     }
 
-    const useStyles = makeStyles<{
-        isVisible: boolean;
-        isFadingOut: boolean;
-        isTransparencyEnabled: boolean;
-        isViewPortAdapterEnabled: boolean;
-    }>({ "name": { SplashScreen } })(
-        (
-            theme,
-            {
+    const useStyles = tss
+        .withParams<{
+            theme: Theme;
+            isVisible: boolean;
+            isFadingOut: boolean;
+            isTransparencyEnabled: boolean;
+            isViewPortAdapterEnabled: boolean;
+        }>()
+        .withName({ SplashScreen })
+        .create(
+            ({
+                theme,
                 isVisible,
                 isFadingOut,
                 isTransparencyEnabled,
                 isViewPortAdapterEnabled,
-            },
-        ) => ({
-            "root": {
-                "width": "100%",
-                "height": isViewPortAdapterEnabled ? "100%" : "100vh",
-                "position": "fixed",
-                "top": 0,
-                "left": 0,
-                "zIndex": 10,
-                "backgroundColor": (() => {
-                    const color = new Color(
-                        theme.colors.useCases.surfaces.background,
-                    ).rgb();
+            }) => ({
+                "root": {
+                    "width": "100%",
+                    "height": isViewPortAdapterEnabled ? "100%" : "100vh",
+                    "position": "fixed",
+                    "top": 0,
+                    "left": 0,
+                    "zIndex": 10,
+                    "backgroundColor": (() => {
+                        const color = new Color(
+                            theme.colors.useCases.surfaces.background,
+                        ).rgb();
 
-                    return color
-                        .alpha(
-                            isTransparencyEnabled ? 0.6 : (color as any).valpha,
-                        )
-                        .string();
-                })(),
-                "backdropFilter": isTransparencyEnabled
-                    ? "blur(10px)"
-                    : undefined,
-                "display": "flex",
-                "alignItems": "center",
-                "justifyContent": "center",
-                "visibility": isVisible ? "visible" : "hidden",
-                "opacity": isFadingOut ? 0 : 1,
-                "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
-            },
-        }),
-    );
+                        return color
+                            .alpha(
+                                isTransparencyEnabled
+                                    ? 0.6
+                                    : (color as any).valpha,
+                            )
+                            .string();
+                    })(),
+                    "backdropFilter": isTransparencyEnabled
+                        ? "blur(10px)"
+                        : undefined,
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "visibility": isVisible ? "visible" : "hidden",
+                    "opacity": isFadingOut ? 0 : 1,
+                    "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
+                },
+            }),
+        );
 
     return { SplashScreen };
 }
@@ -374,16 +377,18 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
 export function createOnyxiaSplashScreenLogo(params: { useTheme(): Theme }) {
     const { useTheme } = params;
 
-    const { makeStyles } = createMakeStyles({ useTheme });
-
     const OnyxiaSplashScreenLogo = memo(() => {
-        const { classes } = useStyles();
+        const { classes } = useStyles({
+            "theme": useTheme(),
+        });
 
         return <OnyxiaLogoSvg className={classes.root} />;
     });
 
-    const useStyles = makeStyles({ "name": { OnyxiaSplashScreenLogo } })(
-        theme => ({
+    const useStyles = tss
+        .withParams<{ theme: Theme }>()
+        .withName({ OnyxiaSplashScreenLogo })
+        .create(({ theme }) => ({
             "root": {
                 "height": "20%",
                 "fill": theme.colors.useCases.typography.textFocus,
@@ -411,8 +416,7 @@ export function createOnyxiaSplashScreenLogo(params: { useTheme(): Theme }) {
                     },
                 },
             },
-        }),
-    );
+        }));
 
     return { OnyxiaSplashScreenLogo };
 }

@@ -1,6 +1,6 @@
 import { useMemo, forwardRef, memo } from "react";
 import type { FC } from "react";
-import { makeStyles } from "./lib/ThemeProvider";
+import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { useDomRect } from "powerhooks/useDomRect";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
@@ -61,7 +61,6 @@ export function createPageHeader<IconId extends string>(params?: {
                 className,
                 titleCollapseParams: props_titleCollapseParams,
                 helpCollapseParams: props_helpCollapseParams,
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 classes: props_classes,
                 //For the forwarding, rest should be empty (typewise)
                 ...rest
@@ -92,12 +91,10 @@ export function createPageHeader<IconId extends string>(params?: {
                 return { isHelpClosed, closeHelp };
             })();
 
-            const { classes, cx } = useStyles(
-                {
-                    helperHeight,
-                },
-                { props },
-            );
+            const { classes, cx } = useStyles({
+                helperHeight,
+                "classesOverrides": props_classes,
+            });
 
             const { titleCollapseParams } = useMemo(() => {
                 const titleCollapseParams =
@@ -205,41 +202,41 @@ export function createPageHeader<IconId extends string>(params?: {
     return { PageHeader };
 }
 
-const useStyles = makeStyles<{
-    helperHeight: number;
-}>({ "name": "PageHeader" })((theme, { helperHeight }) => ({
-    "root": {
-        "backgroundColor": "inherit",
-    },
-    "title": {
-        "display": "flex",
-        "alignItems": "center",
-    },
-    "titleIcon": {
-        "marginRight": theme.spacing(3),
-    },
-    "help": {
-        "display": "flex",
-        "backgroundColor": theme.colors.useCases.surfaces.surface2,
-        "alignItems": "start",
-        "padding": theme.spacing(3),
-        "borderRadius": helperHeight * 0.15,
-    },
-    "helpMiddle": {
-        "flex": 1,
-    },
-    "helpIcon": {
-        "marginRight": theme.spacing(3),
-        "color": theme.colors.useCases.typography.textFocus,
-    },
-    "closeButton": {
-        "padding": 0,
-        "marginLeft": theme.spacing(3),
-    },
-    "titleBottomDivForSpacing": {
-        "height": theme.spacing(4),
-    },
-    "helpBottomDivForSpacing": {
-        "height": theme.spacing(3),
-    },
-}));
+const useStyles = tss
+    .withParams<{ helperHeight: number }>()
+    .create(({ theme, helperHeight }) => ({
+        "root": {
+            "backgroundColor": "inherit",
+        },
+        "title": {
+            "display": "flex",
+            "alignItems": "center",
+        },
+        "titleIcon": {
+            "marginRight": theme.spacing(3),
+        },
+        "help": {
+            "display": "flex",
+            "backgroundColor": theme.colors.useCases.surfaces.surface2,
+            "alignItems": "start",
+            "padding": theme.spacing(3),
+            "borderRadius": helperHeight * 0.15,
+        },
+        "helpMiddle": {
+            "flex": 1,
+        },
+        "helpIcon": {
+            "marginRight": theme.spacing(3),
+            "color": theme.colors.useCases.typography.textFocus,
+        },
+        "closeButton": {
+            "padding": 0,
+            "marginLeft": theme.spacing(3),
+        },
+        "titleBottomDivForSpacing": {
+            "height": theme.spacing(4),
+        },
+        "helpBottomDivForSpacing": {
+            "height": theme.spacing(3),
+        },
+    }));

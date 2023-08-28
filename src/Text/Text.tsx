@@ -4,7 +4,7 @@ import { TypographyDesc } from "../lib/typography";
 import type { PaletteBase, ColorUseCasesBase } from "../lib/color";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { createMakeStyles } from "tss-react";
+import { tss } from "tss-react";
 
 export function createText<
     TypographyVariantNameCustom extends string = never,
@@ -16,8 +16,6 @@ export function createText<
     >;
 }) {
     const { useTheme } = params;
-
-    const { makeStyles } = createMakeStyles({ useTheme });
 
     type TextProps = {
         className?: string | null;
@@ -55,6 +53,7 @@ export function createText<
             const theme = useTheme();
 
             const { classes, cx } = useStyles({
+                theme,
                 typo,
                 color,
                 fixedSize_enabled,
@@ -79,74 +78,76 @@ export function createText<
         }),
     );
 
-    const useStyles = makeStyles<
-        {
-            color: NonNullable<TextProps["color"]>;
-            children: string | undefined;
-        } & Pick<
-            TextProps,
-            | "typo"
-            | "fixedSize_enabled"
-            | "fixedSize_content"
-            | "fixedSize_fontWeight"
-        >
-    >({ "name": "Text" })(
-        (
-            theme,
+    const useStyles = tss
+        .withParams<
             {
+                theme: ReturnType<typeof useTheme>;
+                color: NonNullable<TextProps["color"]>;
+                children: string | undefined;
+            } & Pick<
+                TextProps,
+                | "typo"
+                | "fixedSize_enabled"
+                | "fixedSize_content"
+                | "fixedSize_fontWeight"
+            >
+        >()
+        .withName("Text")
+        .create(
+            ({
+                theme,
                 typo,
                 color,
                 fixedSize_enabled,
                 fixedSize_fontWeight,
                 fixedSize_content,
                 children,
-            },
-        ) => ({
-            "root": {
-                ...theme.typography.variants[typo].style,
-                "color":
-                    theme.colors.useCases.typography[
-                        (() => {
-                            switch (color) {
-                                case "primary":
-                                    return "textPrimary";
-                                case "secondary":
-                                    return "textSecondary";
-                                case "disabled":
-                                    return "textDisabled";
-                                case "focus":
-                                    return "textFocus";
-                            }
-                        })()
-                    ],
-                "padding": 0,
-                "margin": 0,
-                ...(!fixedSize_enabled
-                    ? {}
-                    : {
-                          "display": "inline-flex",
-                          "flexDirection": "column",
-                          "alignItems": "center",
-                          "justifyContent": "space-between",
-                          "&::after": {
-                              "content": fixedSize_content
-                                  ? `"${fixedSize_content}"`
-                                  : (assert(children !== undefined),
-                                    `"${children}_"`),
-                              "height": 0,
-                              "visibility": "hidden",
-                              "overflow": "hidden",
-                              "userSelect": "none",
-                              "pointerEvents": "none",
-                              "fontWeight": fixedSize_fontWeight,
-                              "@media speech": {
-                                  "display": "none",
+            }) => ({
+                "root": {
+                    ...theme.typography.variants[typo].style,
+                    "color":
+                        theme.colors.useCases.typography[
+                            (() => {
+                                switch (color) {
+                                    case "primary":
+                                        return "textPrimary";
+                                    case "secondary":
+                                        return "textSecondary";
+                                    case "disabled":
+                                        return "textDisabled";
+                                    case "focus":
+                                        return "textFocus";
+                                }
+                            })()
+                        ],
+                    "padding": 0,
+                    "margin": 0,
+                    ...(!fixedSize_enabled
+                        ? {}
+                        : {
+                              "display": "inline-flex",
+                              "flexDirection": "column",
+                              "alignItems": "center",
+                              "justifyContent": "space-between",
+                              "&::after": {
+                                  "content": fixedSize_content
+                                      ? `"${fixedSize_content}"`
+                                      : (assert(children !== undefined),
+                                        `"${children}_"`),
+                                  "height": 0,
+                                  "visibility": "hidden",
+                                  "overflow": "hidden",
+                                  "userSelect": "none",
+                                  "pointerEvents": "none",
+                                  "fontWeight": fixedSize_fontWeight,
+                                  "@media speech": {
+                                      "display": "none",
+                                  },
                               },
-                          },
-                      }),
-            },
-        }),
-    );
+                          }),
+                },
+            }),
+        );
 
     return { Text };
 }

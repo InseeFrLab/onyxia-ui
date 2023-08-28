@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { makeStyles, Icon, IconButton, Text, Button } from "./theme";
+import { tss, Icon, IconButton, Text, Button } from "./theme";
 //Cherry pick the custom components you wish to import.
 import { Alert } from "onyxia-ui/Alert";
 
@@ -9,17 +9,6 @@ import { Alert } from "onyxia-ui/Alert";
 import Switch from "@mui/material/Switch";
 import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
 
-//See: https://github.com/garronej/tss-react
-const useStyles= makeStyles()(theme => ({
-    "root": {
-        "backgroundColor": theme.colors.useCases.surfaces.background,
-        /*
-        theme.colors.palette.shinyPink.main <- your custom color
-        theme.colors.useCases.flashes.cute  <- your custom use case
-        theme.muiTheme                      <- the theme object as defined by @mui/material
-        */
-    },
-}));
 
 export function MyComponent() {
 
@@ -87,3 +76,18 @@ export function MyComponent() {
         </div>
     );
 }
+
+
+//See: https://github.com/garronej/tss-react
+const useStyles = tss
+    .withName({ MyComponent })
+    .create(({ theme }) => ({
+        "root": {
+            "backgroundColor": theme.colors.useCases.surfaces.background,
+            /*
+            theme.colors.palette.shinyPink.main <- your custom color
+            theme.colors.useCases.flashes.cute  <- your custom use case
+            theme.muiTheme                      <- the theme object as defined by @mui/material
+            */
+        },
+    }));
