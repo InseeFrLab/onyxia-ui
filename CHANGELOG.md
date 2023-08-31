@@ -656,7 +656,7 @@ Doc UI marc
 - Merge pull request #8 from garronej/new_components
 
 New components  
-- Add DirectoryHeader and Breadcrump  
+- Add DirectoryHeader and Breadcrumb  
 - Merge remote-tracking branch 'origin/main' into new_components  
 - Merge pull request #6 from garronej/DarkModeSwitch-corrections
 

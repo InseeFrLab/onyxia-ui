@@ -9,7 +9,7 @@ import { symToStr } from "tsafe/symToStr";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 
-export type BreadcrumpProps = {
+export type BreadcrumbProps = {
     className?: string;
     path: string[];
     /** Default: 0 */
@@ -25,7 +25,7 @@ export type BreadcrumpProps = {
     separatorChar?: string;
 };
 
-export const Breadcrump = memo((props: BreadcrumpProps) => {
+export const Breadcrumb = memo((props: BreadcrumbProps) => {
     const {
         minDepth = 0,
         isNavigationDisabled = false,
@@ -193,7 +193,7 @@ const { Section } = (() => {
     }
 
     const useStyles = tss
-        .withName(`${symToStr({ Breadcrump })}${symToStr({ Section })}`)
+        .withName(`${symToStr({ Breadcrumb })}${symToStr({ Section })}`)
         .withParams<Pick<Props, "isClickable" | "isFocused" | "isLast">>()
         .create(({ theme, isClickable, isFocused, isLast }) => ({
             "root": {

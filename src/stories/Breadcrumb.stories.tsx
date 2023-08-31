@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
-import { Breadcrump } from "../Breadcrump";
-import type { BreadcrumpProps } from "../Breadcrump";
+import { Breadcrumb } from "../Breadcrumb";
+import type { BreadcrumbProps } from "../Breadcrumb";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 import { symToStr } from "tsafe/symToStr";
@@ -9,7 +9,7 @@ import type { UnpackEvt } from "evt";
 import { Evt } from "evt";
 
 function Component(
-    props: Omit<BreadcrumpProps, "evtAction"> & {
+    props: Omit<BreadcrumbProps, "evtAction"> & {
         /** Toggle to fire a translation event */
         tick: boolean;
     },
@@ -30,7 +30,7 @@ function Component(
     }, [tick]);
 
     const [evtAction] = useState(() =>
-        Evt.create<UnpackEvt<BreadcrumpProps["evtAction"]>>(),
+        Evt.create<UnpackEvt<BreadcrumbProps["evtAction"]>>(),
     );
 
     useEffectOnValueChange(() => {
@@ -41,7 +41,7 @@ function Component(
     }, [evtAction, index]);
 
     return (
-        <Breadcrump
+        <Breadcrumb
             isNavigationDisabled={isNavigationDisabled}
             evtAction={evtAction}
             minDepth={minDepth}
@@ -54,7 +54,7 @@ function Component(
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ Breadcrump })]: Component },
+    "wrappedComponent": { [symToStr({ Breadcrumb })]: Component },
     "argTypes": {
         "tick": {
             "control": {
