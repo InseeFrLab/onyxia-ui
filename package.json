@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "0.58.1",
+    "version": "0.58.2",
     "description": "A uli toolkit, like material-ui but with stronger typing and more opinionated",
     "repository": {
         "type": "git",
