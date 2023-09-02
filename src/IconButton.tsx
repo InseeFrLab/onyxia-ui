@@ -142,7 +142,7 @@ export function createIconButton<IconId extends string = never>(params?: {
         .create(({ theme, disabled }) => ({
             "root": {
                 "padding": theme.spacing(2),
-                "&:hover, &:focus": {
+                "&:hover": {
                     "backgroundColor": "unset",
                     "& svg": {
                         "color":

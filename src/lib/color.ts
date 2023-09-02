@@ -162,7 +162,7 @@ export function createDefaultColorUseCases(
         },
         "buttons": {
             "actionHoverPrimary":
-                palette.focus[isDarkModeEnabled ? "light2" : "main"],
+                palette.focus[isDarkModeEnabled ? "light" : "main"],
             "actionHoverSecondary": isDarkModeEnabled
                 ? palette.light.light
                 : palette.dark.main,
