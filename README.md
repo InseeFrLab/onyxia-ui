@@ -14,33 +14,22 @@
     <img src="https://img.shields.io/npm/l/onyxia-ui">
 </p>
 <p align="center">
-  <a href="https://ui.onyxia.dev">Documentation</a>
+  <a href="https://inseefrlab.github.io/onyxia-ui/">Documentation</a>
 </p>
 
-Default design system carefully crafted by [Marc Hufschmitt](http://marchufschmitt.fr/)
+This project is a React UI toolkit that implement a design system created for [Onyxia](https://onyxia.sh) by [Marc Hufschmitt](http://marchufschmitt.fr/).
 
-This project is under active development. It's APIs are susceptible to change until v1.
-
-WARNING: `onyxia-ui` is a SPA only toolkit, it's not compatible with SSR or SSG.
-
-# Motivation
-
-[Material-ui](https://mui.com) is at it's core a vanilla JavaScript library.  
-We argue that the experience for TypeScript developers is not optimal and somewhat frustrating.
-Also we find problematic how hard it is to build an app that won't break on any other screen size.
-In consequence, we wanted to create a ui toolkit that would be compatible with
-`mui` v5 large library of components but that would also improves it in the following ways:
+This project provide [some custom components](https://inseefrlab.github.io/onyxia-ui/?path=/story/sandbox-alert--vue-no-title) but you can also use
+any [MUI component](https://mui.com/) they will be automatically styled to fit the design system.
 
 -   Optimized for typescript, theme customization without module augmentation.
--   Responsive design **way** more easy to implement.
--   Built in support for the dark mode, persistent across reload.
--   Easier, more guided, theme customization.
--   Provide splash screen that hides your components while they are not yet loaded.
--   Leverages an arguably better styling API: [TSS](https://github.com/garronej/tss-react).
+-   Built in support for the dark mode.
+-   If you want to diverge from the Onyxia Design system, the theme is customizable, you can for example change the fonts and the colors.
+-   Provide splash screen that hide the screen when needed.
+
+Disclaimer: `onyxia-ui` is not SSR compatible.
 
 # Showcase
-
-UI built with this toolkit.
 
 ## [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
 
@@ -85,7 +74,7 @@ yarn add onyxia-ui @mui/material @emotion/react @emotion/styled
 yarn add @mui/icons-material
 ```
 
-At this stage, the documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  
+The documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  
 The actual theme configuration [happens here](https://github.com/garronej/onyxia-ui/blob/main/src/test/src/theme.ts).  
 If you want to experiment with it you can run the demo app with:
 
@@ -93,7 +82,7 @@ NOTE for [Storybook](https://storybook.js.org) users: As of writing this lines s
 mui and TSS runs emotion 11 so there is [some changes](https://github.com/garronej/onyxia-ui/blob/324de62248074582b227e584c53fb2e123f5325f/.storybook/main.js#L31-L32)
 to be made to your `.storybook/main.js` to make it uses emotion 11.
 
-[Launch dev environement](https://datalab.sspcloud.fr/launcher/inseefrlab-helm-charts-datascience/vscode?autoLaunch=true&onyxia.friendlyName=«Onyxia-ui»&onyxia.share=true&s3.enabled=false&kubernetes.role=«admin»&security.allowlist.enabled=false&git.repository=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Fonyxia-ui»&init.personalInit=«https%3A%2F%2Fraw.githubusercontent.com%2FInseeFrLab%2Fonyxia-ui%2Fmain%2Fonyxia-init.sh»)
+[Launch dev environment](https://datalab.sspcloud.fr/launcher/inseefrlab-helm-charts-datascience/vscode?autoLaunch=true&onyxia.friendlyName=«Onyxia-ui»&onyxia.share=true&s3.enabled=false&kubernetes.role=«admin»&security.allowlist.enabled=false&git.repository=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Fonyxia-ui»&init.personalInit=«https%3A%2F%2Fraw.githubusercontent.com%2FInseeFrLab%2Fonyxia-ui%2Fmain%2Fonyxia-init.sh»)
 
 ```bash
 git clone https://github.com/garronej/onyxia-ui
