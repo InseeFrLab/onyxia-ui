@@ -26,15 +26,12 @@ import { ReactComponent as BarSvg } from "./assets/bar.svg";
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "getTypographyDesc": ({
         windowInnerWidth,
-        //When users go to it's browser setting he can select the font size "small", "medium", "default"
-        //You can choose to take that into account for example by doing "rootFontSizePx": 10 * browserFontSizeFactor (default)
-        browserFontSizeFactor,
-        windowInnerHeight
+        rootFontSizePx
     }) => {
+
         const typographyDesc = defaultGetTypographyDesc({
             windowInnerWidth,
-            browserFontSizeFactor,
-            windowInnerHeight
+            rootFontSizePx
         });
 
         return {
@@ -89,7 +86,7 @@ export const { IconButton } = createIconButton({ Icon });
 export const { Button } = createButton({ Icon });
 export const { Text } = createText({ useTheme });
 
-export const { tss } = createTss({ 
+export const { tss } = createTss({
     "useContext": function useContext() {
         const theme = useTheme();
         return { theme };

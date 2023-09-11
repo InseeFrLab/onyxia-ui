@@ -24,7 +24,6 @@ import {
 } from "./typography";
 import { createMuiPaletteOptions } from "./color";
 import { shadows } from "./shadows";
-import { useBrowserFontSizeFactor } from "powerhooks/useBrowserFontSizeFactor";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig, Spacing } from "./spacing";
 import { createTss } from "tss-react";
@@ -32,12 +31,6 @@ import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen } from "./SplashScreen";
 import type { SplashScreenProps } from "./SplashScreen";
-import {
-    ViewPortAdapter,
-    ViewPortOutOfRangeError,
-} from "powerhooks/ViewPortAdapter";
-import type { ViewPortAdapterProps } from "powerhooks/ViewPortAdapter";
-import memoize from "memoizee";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { capitalize } from "tsafe/capitalize";
@@ -46,10 +39,9 @@ import {
     useIsDarkModeEnabled,
     evtIsDarkModeEnabled,
 } from "./useIsDarkModeEnabled";
+import { useRootFontSizePx } from "../tools/useRootFontSizePx";
+import { memoize } from "../tools/memoize";
 
-export { useDomRect } from "powerhooks/useDomRect";
-export { useWindowInnerSize, useBrowserFontSizeFactor };
-export { ViewPortOutOfRangeError };
 import type { ReactComponent } from "../tools/ReactComponent";
 
 export type Theme<
@@ -104,10 +96,6 @@ export const useStyles = tss.create({});
 
 export type ThemeProviderProps = {
     children: ReactNode;
-    /** NOTE: Each time the callback's ref update the
-     * the callback will be invoked again, it's best
-     * a cont callback */
-    getViewPortConfig?: ViewPortAdapterProps["getConfig"];
     splashScreen?: Omit<SplashScreenProps, "children">;
 };
 
@@ -167,13 +155,11 @@ export function createThemeProvider<
             (
                 isDarkModeEnabled: boolean,
                 windowInnerWidth: number,
-                windowInnerHeight: number,
-                browserFontSizeFactor: number,
+                rootFontSizePx: number,
             ) => {
                 const typographyDesc = getTypographyDesc({
                     windowInnerWidth,
-                    windowInnerHeight,
-                    browserFontSizeFactor,
+                    rootFontSizePx,
                 });
                 const useCases = createColorUseCases({
                     palette,
@@ -306,19 +292,18 @@ export function createThemeProvider<
 
         function useTheme() {
             const { isDarkModeEnabled } = useIsDarkModeEnabled();
-            const { windowInnerWidth, windowInnerHeight } =
-                useWindowInnerSize();
-            const { browserFontSizeFactor } = useBrowserFontSizeFactor();
+            const { windowInnerWidth } = useWindowInnerSize();
 
             const isDarkModeEnabledOverride = useContext(
                 isDarkModeEnabledOverrideContext,
             );
 
+            const { rootFontSizePx } = useRootFontSizePx();
+
             return createTheme(
                 isDarkModeEnabledOverride ?? isDarkModeEnabled,
                 windowInnerWidth,
-                windowInnerHeight,
-                browserFontSizeFactor,
+                rootFontSizePx,
             );
         }
 
@@ -397,24 +382,12 @@ export function createThemeProvider<
         }
 
         function ThemeProvider(props: ThemeProviderProps) {
-            const { getViewPortConfig, children, splashScreen } = props;
-
-            // prettier-ignore
-            const ViewPortAdapterOrId = useGuaranteedMemo(
-                (): ReactComponent<{ children: ReactNode; }> => getViewPortConfig === undefined ?
-                    (({ children }) => <>{children}</>) :
-                    (({ children }) => <ViewPortAdapter getConfig={getViewPortConfig}>{children}</ViewPortAdapter>),
-                [getViewPortConfig]
-            );
+            const { children, splashScreen } = props;
 
             return (
-                <ViewPortAdapterOrId>
-                    <ThemeProviderWithinViewPortAdapter
-                        splashScreen={splashScreen}
-                    >
-                        {children}
-                    </ThemeProviderWithinViewPortAdapter>
-                </ViewPortAdapterOrId>
+                <ThemeProviderWithinViewPortAdapter splashScreen={splashScreen}>
+                    {children}
+                </ThemeProviderWithinViewPortAdapter>
             );
         }
 

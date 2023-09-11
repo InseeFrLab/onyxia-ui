@@ -20,7 +20,6 @@ import type { ReactComponent } from "../tools/ReactComponent";
 import * as runExclusive from "run-exclusive";
 import { OnyxiaLogoSvg } from "../assets/svg/OnyxiaLogo";
 import { useConst } from "powerhooks/useConst";
-import { useViewPortState } from "powerhooks/ViewPortAdapter";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
 
 let fadeOutDuration = 700;
@@ -266,20 +265,11 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         const [isFadingOut, setIsFadingOut] = useState(false);
         const [isVisible, setIsVisible] = useState(true);
 
-        const { isViewPortAdapterEnabled } = (function useClosure() {
-            const { viewPortState } = useViewPortState();
-
-            const isViewPortAdapterEnabled = viewPortState !== undefined;
-
-            return { isViewPortAdapterEnabled };
-        })();
-
         const { classes } = useStyles({
             "theme": useTheme(),
             isVisible,
             isFadingOut,
             isTransparencyEnabled,
-            isViewPortAdapterEnabled,
         });
 
         useEffect(() => {
@@ -323,49 +313,38 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
             isVisible: boolean;
             isFadingOut: boolean;
             isTransparencyEnabled: boolean;
-            isViewPortAdapterEnabled: boolean;
         }>()
         .withName({ SplashScreen })
-        .create(
-            ({
-                theme,
-                isVisible,
-                isFadingOut,
-                isTransparencyEnabled,
-                isViewPortAdapterEnabled,
-            }) => ({
-                "root": {
-                    "width": "100%",
-                    "height": isViewPortAdapterEnabled ? "100%" : "100vh",
-                    "position": "fixed",
-                    "top": 0,
-                    "left": 0,
-                    "zIndex": 10,
-                    "backgroundColor": (() => {
-                        const color = new Color(
-                            theme.colors.useCases.surfaces.background,
-                        ).rgb();
+        .create(({ theme, isVisible, isFadingOut, isTransparencyEnabled }) => ({
+            "root": {
+                "width": "100%",
+                "height": window.innerHeight,
+                "position": "fixed",
+                "top": 0,
+                "left": 0,
+                "zIndex": 10,
+                "backgroundColor": (() => {
+                    const color = new Color(
+                        theme.colors.useCases.surfaces.background,
+                    ).rgb();
 
-                        return color
-                            .alpha(
-                                isTransparencyEnabled
-                                    ? 0.6
-                                    : (color as any).valpha,
-                            )
-                            .string();
-                    })(),
-                    "backdropFilter": isTransparencyEnabled
-                        ? "blur(10px)"
-                        : undefined,
-                    "display": "flex",
-                    "alignItems": "center",
-                    "justifyContent": "center",
-                    "visibility": isVisible ? "visible" : "hidden",
-                    "opacity": isFadingOut ? 0 : 1,
-                    "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
-                },
-            }),
-        );
+                    return color
+                        .alpha(
+                            isTransparencyEnabled ? 0.6 : (color as any).valpha,
+                        )
+                        .string();
+                })(),
+                "backdropFilter": isTransparencyEnabled
+                    ? "blur(10px)"
+                    : undefined,
+                "display": "flex",
+                "alignItems": "center",
+                "justifyContent": "center",
+                "visibility": isVisible ? "visible" : "hidden",
+                "opacity": isFadingOut ? 0 : 1,
+                "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
+            },
+        }));
 
     return { SplashScreen };
 }

@@ -3,8 +3,6 @@ import type { TypographyOptions as MuiTypographyOptions } from "@mui/material/st
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { objectKeys } from "tsafe/objectKeys";
-export type { ChromeFontSize } from "powerhooks/ViewPortAdapter";
-export { chromeFontSizesFactors } from "powerhooks/ViewPortAdapter";
 
 export type TypographyDesc<CustomVariantName extends string> = {
     fontFamily: string;
@@ -88,16 +86,15 @@ export type ComputedTypography<CustomVariantName extends string> = {
 
 export type GetTypographyDesc<CustomVariantName extends string> = (params: {
     windowInnerWidth: number;
-    windowInnerHeight: number;
-    browserFontSizeFactor: number;
+    rootFontSizePx: number;
 }) => TypographyDesc<CustomVariantName>;
 
 export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
     windowInnerWidth,
-    browserFontSizeFactor,
+    rootFontSizePx,
 }) => ({
     "fontFamily": "sans-serif",
-    "rootFontSizePx": 16 * browserFontSizeFactor,
+    "rootFontSizePx": rootFontSizePx,
     "variants": {
         "display heading": {
             "htmlComponent": "h1",

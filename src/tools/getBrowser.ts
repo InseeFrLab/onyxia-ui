@@ -1,4 +1,4 @@
-import memoize from "memoizee";
+import { memoize } from "./memoize";
 
 export const getBrowser = memoize(
     (): "chrome" | "safari" | "firefox" | undefined => {
