@@ -2,10 +2,7 @@
     <img src="https://user-images.githubusercontent.com/6702424/120405033-efe83900-c347-11eb-9a7c-7b680c26a18c.png">  
 </p>
 <p align="center">
-    <i>A disruptive UI toolkit</i><br>
-    <i>Optimized for TypeScript</i><br>
-    <i>Highly customizable but looks great out of the box.</i><br>
-    <i>Compatible with mui large library of components</i>
+    <i>The Onyxia UI toolkit</i><br>
     <br>
     <br>
     <img src="https://github.com/garronej/onyxia-ui/workflows/ci/badge.svg?branch=main">
