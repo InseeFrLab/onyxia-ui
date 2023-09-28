@@ -26,6 +26,8 @@ any [MUI component](https://mui.com/) they will be automatically styled to fit t
 
 Disclaimer: `onyxia-ui` is not SSR compatible.
 
+A note about the integration of [Onyxia](https://onyxia.sh) and Onyxia-UI can be found [here](https://docs.onyxia.sh/contributing/onyxia/dependencies#onyxia-ui).
+
 # Showcase
 
 ## [datalab.sspcloud.fr](https://datalab.sspcloud.fr/catalog/inseefrlab-helm-charts-datascience)
