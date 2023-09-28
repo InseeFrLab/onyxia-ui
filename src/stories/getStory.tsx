@@ -8,7 +8,7 @@ import { id } from "tsafe/id";
 import { GlobalStyles } from "tss-react";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { ReactComponent } from "../tools/ReactComponent";
-import { Text, useTheme } from "./theme";
+import { Text, useTheme, ThemeProvider } from "./theme";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
@@ -73,7 +73,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         const theme = useTheme();
 
         return (
-            <>
+            <ThemeProvider>
                 <GlobalStyles
                     styles={{
                         "html": {
@@ -95,7 +95,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                 >
                     <Component {...props} />
                 </div>
-            </>
+            </ThemeProvider>
         );
     };
 
