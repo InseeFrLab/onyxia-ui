@@ -85,6 +85,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                         },
                         "#root": {
                             "height": "100vh",
+                            "padding": theme.spacing(4),
                         },
                     }}
                 />

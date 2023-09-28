@@ -15,16 +15,8 @@ import { Param0 } from "tsafe";
 
 export const { ThemeProvider, StoryProvider, useTheme } = createThemeProvider({
     "isReactStrictModeEnabled": false,
-    "getTypographyDesc": ({
-        windowInnerWidth,
-        browserFontSizeFactor,
-        windowInnerHeight,
-    }) => ({
-        ...defaultGetTypographyDesc({
-            windowInnerWidth,
-            browserFontSizeFactor,
-            windowInnerHeight,
-        }),
+    "getTypographyDesc": params => ({
+        ...defaultGetTypographyDesc(params),
         "fontFamily": '"Work Sans", sans-serif',
         //"fontFamily": "Marianne, sans-serif",
     }),

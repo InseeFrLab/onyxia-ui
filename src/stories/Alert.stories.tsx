@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Alert } from "../Alert";
 import { Text } from "./theme";
 import { sectionName } from "./sectionName";
