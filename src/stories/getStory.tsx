@@ -83,6 +83,9 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                             "padding": `0 !important`,
                             "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
                         },
+                        "#root": {
+                            "height": "100vh",
+                        },
                     }}
                 />
                 <ScreenSize />
