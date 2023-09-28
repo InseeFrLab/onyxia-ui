@@ -1,19 +1,14 @@
+import * as React from "react";
 import type { Meta, Story } from "@storybook/react";
 import type { ArgType } from "@storybook/addons";
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { symToStr } from "tsafe/symToStr";
-import {
-    useIsDarkModeEnabled,
-    chromeFontSizesFactors,
-    breakpointsValues,
-} from "../lib";
-import type { ThemeProviderProps, ChromeFontSize } from "../lib";
-import { ThemeProvider, Text, useTheme } from "./theme";
+import { useIsDarkModeEnabled, breakpointsValues } from "../lib";
 import { id } from "tsafe/id";
 import { GlobalStyles } from "tss-react";
-import { objectKeys } from "tsafe/objectKeys";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { ReactComponent } from "../tools/ReactComponent";
+import { Text, useTheme } from "./theme";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
@@ -67,38 +62,18 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         Props & {
             darkMode: boolean;
             width: number;
-            chromeFontSize: ChromeFontSize;
-            targetWindowInnerWidth: number;
         }
-    > = ({
-        darkMode,
-        width,
-        targetWindowInnerWidth,
-        chromeFontSize,
-        ...props
-    }) => {
+    > = ({ darkMode, width, ...props }) => {
         const { setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
         useEffect(() => {
             setIsDarkModeEnabled(darkMode);
         }, [darkMode]);
 
-        const getViewPortConfig = useCallback<
-            NonNullable<ThemeProviderProps["getViewPortConfig"]>
-        >(
-            ({ windowInnerWidth }) => ({
-                "targetBrowserFontSizeFactor":
-                    chromeFontSizesFactors[chromeFontSize],
-                "targetWindowInnerWidth":
-                    targetWindowInnerWidth || windowInnerWidth,
-            }),
-            [targetWindowInnerWidth, chromeFontSize],
-        );
-
         const theme = useTheme();
 
         return (
-            <ThemeProvider getViewPortConfig={getViewPortConfig}>
+            <>
                 <GlobalStyles
                     styles={{
                         "html": {
@@ -120,7 +95,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                 >
                     <Component {...props} />
                 </div>
-            </ThemeProvider>
+            </>
         );
     };
 
@@ -130,8 +105,6 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         out.args = {
             "darkMode": false,
             "width": defaultWidth ?? 0,
-            "targetWindowInnerWidth": 0,
-            "chromeFontSize": "Medium (Recommended)",
             ...props,
         };
 
@@ -150,18 +123,6 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                         "max": 1920,
                         "step": 1,
                     },
-                },
-                "targetWindowInnerWidth": {
-                    "control": {
-                        "type": "range",
-                        "min": 0,
-                        "max": 2560,
-                        "step": 10,
-                    },
-                },
-                "chromeFontSize": {
-                    "options": objectKeys(chromeFontSizesFactors),
-                    "control": { "type": "select" },
                 },
                 ...argTypes,
             },
