@@ -22,6 +22,7 @@ export type PageHeaderProps<IconId extends string> = {
     className?: string;
     titleCollapseParams?: CollapseParams;
     helpCollapseParams?: CollapseParams;
+    onCloseHelp?: () => void;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
 
@@ -48,8 +49,15 @@ export function createPageHeader<IconId extends string>(params?: {
     };
 
     const PageHeader = memo((props: PageHeaderProps<IconId>) => {
-        const { mainIcon, title, helpTitle, helpIcon, helpContent, className } =
-            props;
+        const {
+            mainIcon,
+            title,
+            helpTitle,
+            helpIcon,
+            helpContent,
+            className,
+            onCloseHelp,
+        } = props;
 
         const { isTitleCollapsed, titleCollapseParams } =
             (function useClosure() {
@@ -110,9 +118,10 @@ export function createPageHeader<IconId extends string>(params?: {
 
             const isHelpClosed = pageHeaderClosedHelpers.includes(title);
 
-            const closeHelp = useConstCallback(() =>
-                setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]),
-            );
+            const closeHelp = useConstCallback(() => {
+                onCloseHelp?.();
+                setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]);
+            });
 
             return { isHelpClosed, closeHelp };
         })();
