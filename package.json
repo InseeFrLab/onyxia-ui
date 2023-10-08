@@ -16,9 +16,9 @@
         "format": "npm run _format -- --write",
         "format:check": "npm run _format -- --list-different",
         "storybook": "start-storybook -p 6006 --static-dir ./.storybook/static",
-        "yarn_link": "ts-node src/bin/yarn_link.ts",
-        "start_spa": "yarn yarn_link && cd src/test/spa && yarn start",
-        "copy-files": "copyfiles -u 1 src/assets/**/*.svg src/assets/**/*.css src/assets/**/*.woff2 dist/"
+        "copy-files": "copyfiles -u 1 src/assets/**/*.svg src/assets/**/*.css src/assets/**/*.woff2 dist/",
+        "link-in-web": "ts-node --skipProject scripts/link-in-app.ts web",
+        "start-test-app": "yarn build && ts-node --skipProject scripts/link-in-test-app.ts && cd test-app && rm -rf node_modules/.cache && yarn start"
     },
     "lint-staged": {
         "*.{ts,tsx}": [

@@ -4,23 +4,51 @@ import { execSync } from "child_process";
 import { join as pathJoin, relative as pathRelative } from "path";
 import * as fs from "fs";
 
-const onyxiaUiDirPath = pathJoin(__dirname, "..", "..");
+const projectDirPath = pathJoin(__dirname, "..");
 
+//NOTE: This is only required because of: https://github.com/garronej/ts-ci/blob/c0e207b9677523d4ec97fe672ddd72ccbb3c1cc4/README.md?plain=1#L54-L58
 fs.writeFileSync(
-    pathJoin(onyxiaUiDirPath, "dist", "package.json"),
+    pathJoin(projectDirPath, "dist", "package.json"),
     Buffer.from(
         JSON.stringify(
             (() => {
                 const packageJsonParsed = JSON.parse(
                     fs
-                        .readFileSync(pathJoin(onyxiaUiDirPath, "package.json"))
+                        .readFileSync(pathJoin(projectDirPath, "package.json"))
                         .toString("utf8"),
                 );
 
                 return {
                     ...packageJsonParsed,
-                    "main": packageJsonParsed["main"].replace(/^dist\//, ""),
-                    "types": packageJsonParsed["types"].replace(/^dist\//, ""),
+                    "main": packageJsonParsed["main"]?.replace(/^dist\//, ""),
+                    "types": packageJsonParsed["types"]?.replace(/^dist\//, ""),
+                    "module": packageJsonParsed["module"]?.replace(
+                        /^dist\//,
+                        "",
+                    ),
+                    "bin": !("bin" in packageJsonParsed)
+                        ? undefined
+                        : Object.fromEntries(
+                              Object.entries(packageJsonParsed["bin"]).map(
+                                  ([key, value]) => [
+                                      key,
+                                      (value as string).replace(/^dist\//, ""),
+                                  ],
+                              ),
+                          ),
+                    "exports": !("exports" in packageJsonParsed)
+                        ? undefined
+                        : Object.fromEntries(
+                              Object.entries(packageJsonParsed["exports"]).map(
+                                  ([key, value]) => [
+                                      key,
+                                      (value as string).replace(
+                                          /^\.\/dist\//,
+                                          "./",
+                                      ),
+                                  ],
+                              ),
+                          ),
                 };
             })(),
             null,
@@ -31,8 +59,8 @@ fs.writeFileSync(
 );
 
 const commonThirdPartyDeps = (() => {
-    const namespaceModuleNames = ["@emotion", "@mui"];
-    const standaloneModuleNames = ["react", "@types/react", "tss-react"];
+    const namespaceModuleNames: string[] = ["@emotion", "@mui"];
+    const standaloneModuleNames = ["react", "@types/react"];
 
     return [
         ...namespaceModuleNames
@@ -40,7 +68,7 @@ const commonThirdPartyDeps = (() => {
                 fs
                     .readdirSync(
                         pathJoin(
-                            onyxiaUiDirPath,
+                            projectDirPath,
                             "node_modules",
                             namespaceModuleName,
                         ),
@@ -55,7 +83,7 @@ const commonThirdPartyDeps = (() => {
     ];
 })();
 
-const yarnHomeDirPath = pathJoin(onyxiaUiDirPath, ".yarn_home");
+const yarnHomeDirPath = pathJoin(projectDirPath, ".yarn_home");
 
 fs.rmSync(yarnHomeDirPath, { "recursive": true, "force": true });
 
@@ -70,7 +98,7 @@ const execYarnLink = (params: { targetModuleName?: string; cwd: string }) => {
         ...(targetModuleName !== undefined ? [targetModuleName] : []),
     ].join(" ");
 
-    console.log(`$ cd ${pathRelative(onyxiaUiDirPath, cwd) || "."} && ${cmd}`);
+    console.log(`$ cd ${pathRelative(projectDirPath, cwd) || "."} && ${cmd}`);
 
     execSync(cmd, {
         cwd,
@@ -81,10 +109,10 @@ const execYarnLink = (params: { targetModuleName?: string; cwd: string }) => {
     });
 };
 
-const testAppNames = ["spa"] as const;
+const testAppNames = ["test-app"] as const;
 
 const getTestAppPath = (testAppName: typeof testAppNames[number]) =>
-    pathJoin(onyxiaUiDirPath, "src", "test", testAppName);
+    pathJoin(projectDirPath, testAppName);
 
 testAppNames.forEach(testAppName =>
     execSync("yarn install", { "cwd": getTestAppPath(testAppName) }),
@@ -102,7 +130,7 @@ commonThirdPartyDeps.forEach(commonThirdPartyDep => {
 
     const localInstallPath = pathJoin(
         ...[
-            onyxiaUiDirPath,
+            projectDirPath,
             "node_modules",
             ...(commonThirdPartyDep.startsWith("@")
                 ? commonThirdPartyDep.split("/")
@@ -122,11 +150,15 @@ commonThirdPartyDeps.forEach(commonThirdPartyDep => {
 
 console.log("=== Linking in house dependencies ===");
 
-execYarnLink({ "cwd": pathJoin(onyxiaUiDirPath, "dist") });
+execYarnLink({ "cwd": pathJoin(projectDirPath, "dist") });
 
 testAppNames.forEach(testAppName =>
     execYarnLink({
         "cwd": getTestAppPath(testAppName),
-        "targetModuleName": "onyxia-ui",
+        "targetModuleName": JSON.parse(
+            fs
+                .readFileSync(pathJoin(projectDirPath, "package.json"))
+                .toString("utf8"),
+        )["name"],
     }),
 );

@@ -37,8 +37,8 @@ jspm_packages
 .node_repl_history
 
 .vscode
-.idea
+
 .DS_Store
 
-/dist
 /.yarn_home
+/dist
