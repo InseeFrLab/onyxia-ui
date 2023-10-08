@@ -29,8 +29,7 @@ import type { SpacingConfig, Spacing } from "./spacing";
 import { createTss } from "tss-react";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
-import { createSplashScreen } from "./SplashScreen";
-import type { SplashScreenProps } from "./SplashScreen";
+import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "./breakpoints";
 import { capitalize } from "tsafe/capitalize";
@@ -94,11 +93,6 @@ export const { tss } = createTss({
 
 export const useStyles = tss.create({});
 
-export type ThemeProviderProps = {
-    children: ReactNode;
-    splashScreen?: Omit<SplashScreenProps, "children">;
-};
-
 export declare namespace ThemeProviderProps {
     type WithChildren = {
         children: ReactNode;
@@ -130,6 +124,8 @@ export function createThemeProvider<
     spacingConfig?: SpacingConfig;
     defaultIsDarkModeEnabled?: boolean;
     getIconSizeInPx?: GetIconSizeInPx;
+    /** If undefined, splash screen is disabled */
+    splashScreenParams?: SplashScreenParams;
     /** Default true */
 }) {
     const {
@@ -144,6 +140,7 @@ export function createThemeProvider<
         spacingConfig = defaultSpacingConfig,
         defaultIsDarkModeEnabled,
         getIconSizeInPx = defaultGetIconSizeInPx,
+        splashScreenParams,
     } = params;
 
     if (defaultIsDarkModeEnabled !== undefined) {
@@ -310,89 +307,71 @@ export function createThemeProvider<
         return { useTheme };
     })();
 
-    const { SplashScreen } = createSplashScreen({ useTheme });
+    const MaybeSplashScreen =
+        splashScreenParams === undefined
+            ? ({ children }: { children: ReactNode }) => <>{children}</>
+            : createSplashScreen({
+                  useTheme,
+                  "Logo": splashScreenParams.Logo,
+                  "fadeOutDuration": splashScreenParams.fadeOutDuration,
+                  "minimumDisplayDuration":
+                      splashScreenParams.minimumDisplayDuration,
+              }).SplashScreen;
 
-    const { ThemeProvider } = (() => {
-        function ThemeProviderWithinViewPortAdapter(props: {
-            splashScreen: ThemeProviderProps["splashScreen"];
-            children: ReactNode;
-        }) {
-            const { splashScreen, children } = props;
+    function ThemeProvider(props: { children: ReactNode }) {
+        const { children } = props;
 
-            const theme = useTheme();
+        const theme = useTheme();
 
-            {
-                const backgroundColor =
-                    theme.colors.useCases.surfaces.background;
+        {
+            const backgroundColor = theme.colors.useCases.surfaces.background;
 
-                useEffect(() => {
-                    document.documentElement.style.backgroundColor =
-                        backgroundColor;
+            useEffect(() => {
+                document.documentElement.style.backgroundColor =
+                    backgroundColor;
 
-                    // eslint-disable-next-line no-constant-condition
-                    while (true) {
-                        const element = document.querySelector(
-                            "meta[name=theme-color]",
-                        );
+                // eslint-disable-next-line no-constant-condition
+                while (true) {
+                    const element = document.querySelector(
+                        "meta[name=theme-color]",
+                    );
 
-                        if (element === null) {
-                            break;
-                        }
-
-                        element.remove();
+                    if (element === null) {
+                        break;
                     }
 
-                    document.head.insertAdjacentHTML(
-                        "beforeend",
-                        `<meta name="theme-color" content="${backgroundColor}">`,
-                    );
-                }, [backgroundColor]);
-            }
+                    element.remove();
+                }
 
-            const isStoryProvider =
-                useContext(isDarkModeEnabledOverrideContext) !== undefined;
-
-            // prettier-ignore
-            const CssBaselineOrScopedCssBaseline = useGuaranteedMemo(
-                (): ReactComponent<{ children: ReactNode }> =>
-                    isStoryProvider
-                        ? ({ children }) => (<ScopedCssBaseline>{children}</ScopedCssBaseline>)
-                        : ({ children }) => (<><CssBaseline />{children}</>),
-                [isStoryProvider],
-            );
-
-            // prettier-ignore
-            const SplashScreenOrId = useGuaranteedMemo(
-                (): ReactComponent<{ children: ReactNode }> =>
-                    splashScreen === undefined ?
-                        (({ children }) => <>{children}</>) :
-                        (({ children }) => <SplashScreen {...splashScreen}>{children}</SplashScreen>),
-                [splashScreen],
-            );
-
-            return (
-                <themeBaseContext.Provider value={theme}>
-                    <MuiThemeProvider theme={theme.muiTheme}>
-                        <CssBaselineOrScopedCssBaseline>
-                            <SplashScreenOrId>{children}</SplashScreenOrId>
-                        </CssBaselineOrScopedCssBaseline>
-                    </MuiThemeProvider>
-                </themeBaseContext.Provider>
-            );
+                document.head.insertAdjacentHTML(
+                    "beforeend",
+                    `<meta name="theme-color" content="${backgroundColor}">`,
+                );
+            }, [backgroundColor]);
         }
 
-        function ThemeProvider(props: ThemeProviderProps) {
-            const { children, splashScreen } = props;
+        const isStoryProvider =
+            useContext(isDarkModeEnabledOverrideContext) !== undefined;
 
-            return (
-                <ThemeProviderWithinViewPortAdapter splashScreen={splashScreen}>
-                    {children}
-                </ThemeProviderWithinViewPortAdapter>
-            );
-        }
+        // prettier-ignore
+        const CssBaselineOrScopedCssBaseline = useGuaranteedMemo(
+            (): ReactComponent<{ children: ReactNode }> =>
+                isStoryProvider
+                    ? ({ children }) => (<ScopedCssBaseline>{children}</ScopedCssBaseline>)
+                    : ({ children }) => (<><CssBaseline />{children}</>),
+            [isStoryProvider],
+        );
 
-        return { ThemeProvider };
-    })();
+        return (
+            <themeBaseContext.Provider value={theme}>
+                <MuiThemeProvider theme={theme.muiTheme}>
+                    <CssBaselineOrScopedCssBaseline>
+                        <MaybeSplashScreen>{children}</MaybeSplashScreen>
+                    </CssBaselineOrScopedCssBaseline>
+                </MuiThemeProvider>
+            </themeBaseContext.Provider>
+        );
+    }
 
     function StoryProvider(props: { dark?: boolean; children: ReactNode }) {
         const { dark = false, children } = props;
@@ -408,20 +387,9 @@ export function createThemeProvider<
         );
     }
 
-    const { tss } = createTss({
-        "useContext": function useContext() {
-            const theme = useTheme();
-            return { theme };
-        },
-    });
-
-    const useStyles = tss.create({});
-
     return {
         ThemeProvider,
         useTheme,
         StoryProvider,
-        tss,
-        useStyles,
     };
 }

@@ -4,22 +4,21 @@ import {
     useRef,
     useContext,
     createContext,
-    memo,
+    type ReactNode,
 } from "react";
-import type { ReactNode } from "react";
 import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { tss, keyframes } from "tss-react";
+import { tss } from "tss-react";
 import type { Theme } from "./ThemeProvider";
 import { Evt } from "evt";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
-import type { ReactComponent } from "../tools/ReactComponent";
 import * as runExclusive from "run-exclusive";
 import { useConst } from "powerhooks/useConst";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
+import type { ReactComponent } from "../tools/ReactComponent";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -221,29 +220,37 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 
 export { useSplashScreen };
 
-export type SplashScreenProps = {
-    Logo: ReactComponent;
+export type SplashScreenParams = {
+    /**
+     * onyxia-ui/AnimatedOnyxiaLogo is the logo used in Onyxia Datalab
+     * but if you are using this toolkit in another context you should provide your own logo.
+     *
+     * You have to create your own version of this component
+     * you are expected to size it in percentage.
+     */
+    Logo: ReactComponent<{ theme: Theme }>;
     /** Default 700ms */
     fadeOutDuration?: number;
     /** Default 1000 (1 second)*/
     minimumDisplayDuration?: number;
-    children: ReactNode;
 };
 
 const context = createContext<boolean>(false);
 
-export function createSplashScreen(params: { useTheme(): Theme }) {
-    const { useTheme } = params;
+export function createSplashScreen(
+    params: SplashScreenParams & { useTheme(): Theme },
+) {
+    const { Logo, useTheme } = params;
 
-    function SplashScreen(props: SplashScreenProps) {
-        const { children, Logo } = props;
+    function SplashScreen(props: { children: ReactNode }) {
+        const { children } = props;
 
-        if (props?.fadeOutDuration !== undefined) {
-            fadeOutDuration = props.fadeOutDuration;
+        if (params?.fadeOutDuration !== undefined) {
+            fadeOutDuration = params.fadeOutDuration;
         }
 
-        if (props?.minimumDisplayDuration !== undefined) {
-            minimumDisplayDuration = props.minimumDisplayDuration;
+        if (params?.minimumDisplayDuration !== undefined) {
+            minimumDisplayDuration = params.minimumDisplayDuration;
         }
 
         const { isSplashScreenShown, isTransparencyEnabled } =
@@ -264,8 +271,10 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         const [isFadingOut, setIsFadingOut] = useState(false);
         const [isVisible, setIsVisible] = useState(true);
 
+        const theme = useTheme();
+
         const { classes } = useStyles({
-            "theme": useTheme(),
+            theme,
             isVisible,
             isFadingOut,
             isTransparencyEnabled,
@@ -299,7 +308,7 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         return (
             <context.Provider value={true}>
                 <div className={classes.root}>
-                    <Logo />
+                    <Logo theme={theme} />
                 </div>
                 {children}
             </context.Provider>
@@ -346,75 +355,4 @@ export function createSplashScreen(params: { useTheme(): Theme }) {
         }));
 
     return { SplashScreen };
-}
-
-/**
- * You have to create your own version of this component
- * you are expected to size it in percentage.
- */
-export function createOnyxiaSplashScreenLogo(params: { useTheme(): Theme }) {
-    const { useTheme } = params;
-
-    const OnyxiaSplashScreenLogo = memo(() => {
-        const { classes } = useStyles({
-            "theme": useTheme(),
-        });
-
-        return (
-            <svg
-                className={classes.root}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 445 293"
-            >
-                <g>
-                    <path d="M106.253 215.9L140.204 250.02C151.012 260.883 168.528 260.883 179.322 250.02L213.273 215.9L159.763 162.123L106.253 215.9Z" />
-                    <path d="M232.743 215.9L266.693 250.02C277.502 260.883 295.018 260.883 305.812 250.02L339.762 215.9L286.253 162.123L232.743 215.9Z" />
-                </g>
-                <g>
-                    <path d="M43 152.331L76.9508 186.452C87.7594 197.314 105.275 197.314 116.069 186.452L150.02 152.331L96.5099 98.5537L43 152.331Z" />
-                    <path d="M169.49 152.331L203.441 186.452C214.25 197.314 231.765 197.314 242.559 186.452L276.51 152.331L223 98.5537L169.49 152.331Z" />
-                    <path d="M349.49 98.5537L295.98 152.331L329.931 186.452C340.74 197.314 358.256 197.314 369.049 186.452L403 152.331L349.49 98.5537Z" />
-                </g>
-                <g>
-                    <path d="M232.743 88.7774L266.693 122.898C277.502 133.761 295.018 133.761 305.812 122.898L339.762 88.7774L286.253 35L232.743 88.7774Z" />
-                    <path d="M106.253 88.7774L140.204 122.898C151.012 133.761 168.528 133.761 179.322 122.898L213.273 88.7774L159.763 35L106.253 88.7774Z" />
-                </g>
-            </svg>
-        );
-    });
-
-    const useStyles = tss
-        .withParams<{ theme: Theme }>()
-        .withName({ OnyxiaSplashScreenLogo })
-        .create(({ theme }) => ({
-            "root": {
-                "height": "20%",
-                "fill": theme.colors.useCases.typography.textFocus,
-                "& g": {
-                    "opacity": 0,
-                    "animation": `${keyframes`
-                            60%, 100% {
-                                opacity: 0;
-                            }
-                            0% {
-                                opacity: 0;
-                            }
-                            40% {
-                                opacity: 1;
-                            }
-                            `} 3.5s infinite ease-in-out`,
-                    "&:nth-of-type(1)": {
-                        "animationDelay": ".4s",
-                    },
-                    "&:nth-of-type(2)": {
-                        "animationDelay": ".8s",
-                    },
-                    "&:nth-of-type(3)": {
-                        "animationDelay": "1.2s",
-                    },
-                },
-            },
-        }));
-
-    return { OnyxiaSplashScreenLogo };
 }

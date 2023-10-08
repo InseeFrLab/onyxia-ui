@@ -10,8 +10,7 @@ import { createButton } from "onyxia-ui/Button";
 import { createText } from "onyxia-ui/Text";
 import type { Param0 } from "tsafe";
 import { createTss } from "tss-react";
-import { createOnyxiaSplashScreenLogo } from "onyxia-ui/lib/SplashScreen";
-import type { ThemeProviderProps } from "onyxia-ui";
+import { AnimatedOnyxiaLogo } from "onyxia-ui/AnimatedOnyxiaLogo";
 import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
 
@@ -24,15 +23,12 @@ import { ReactComponent as FooSvg } from "./assets/foo.svg";
 import { ReactComponent as BarSvg } from "./assets/bar.svg";
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
-    "getTypographyDesc": ({ windowInnerWidth, rootFontSizePx }) => {
-        const typographyDesc = defaultGetTypographyDesc({
-            windowInnerWidth,
-            rootFontSizePx,
-        });
+    "getTypographyDesc": params => {
+        const typographyDesc = defaultGetTypographyDesc(params);
 
         return {
+            ...typographyDesc,
             "fontFamily": '"Work Sans", sans-serif',
-            "rootFontSizePx": typographyDesc.rootFontSizePx,
             "variants": {
                 ...typographyDesc.variants,
                 "display heading": {
@@ -67,6 +63,10 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
             "warning": palette.orangeWarning.light,
         },
     }),
+    "splashScreenParams": {
+        "Logo": AnimatedOnyxiaLogo,
+        "fadeOutDuration": 500,
+    },
 });
 
 export const { Icon } = createIcon({
@@ -90,10 +90,3 @@ export const { tss } = createTss({
 });
 
 export const useStyles = tss.create({});
-
-const { OnyxiaSplashScreenLogo } = createOnyxiaSplashScreenLogo({ useTheme });
-
-export const splashScreen: ThemeProviderProps["splashScreen"] = {
-    "Logo": OnyxiaSplashScreenLogo,
-    "fadeOutDuration": 500,
-};
