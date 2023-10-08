@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useEvt } from "evt/hooks/useEvt";
 import { Evt } from "evt";
 import { assert } from "tsafe/assert";
 
 function getRootFontSizePx() {
     const value = window
-        .getComputedStyle(window.document.documentElement)
+        .getComputedStyle(document.documentElement)
         .getPropertyValue("font-size");
 
     const match = value.match(/(\d+)px/);
@@ -26,6 +26,21 @@ export function useRootFontSizePx() {
             ),
         [],
     );
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            setRootFontSizePx(getRootFontSizePx());
+        });
+
+        [document.body, document.documentElement].forEach(element =>
+            observer.observe(element, {
+                "attributes": true,
+                "attributeFilter": ["style"],
+            }),
+        );
+
+        return () => observer.disconnect();
+    }, []);
 
     return { rootFontSizePx };
 }
