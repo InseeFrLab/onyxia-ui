@@ -1,10 +1,12 @@
-import { useState, memo } from "react";
+import { useEffect, useReducer, useRef, memo } from "react";
+import type { RefObject } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
 import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
-import { getScrollableParent } from "powerhooks/getScrollableParent";
-import { tss } from "./lib/ThemeProvider";
+import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
+import { useStateRef } from "powerhooks/useStateRef";
+import { useStyles } from "tss-react";
 
 export type CollapseParams =
     | CollapseParams.Controlled
@@ -13,7 +15,6 @@ export namespace CollapseParams {
     export type Common = {
         /** Default 250ms */
         transitionDuration?: number;
-        classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     };
 
     export type Controlled = Common & {
@@ -24,6 +25,8 @@ export namespace CollapseParams {
     export type CollapsesOnScroll = Common & {
         behavior: "collapses on scroll";
         scrollTopThreshold: number;
+        scrollableElementRef: RefObject<any>;
+        onIsCollapsedValueChange?: (isCollapsed: boolean) => void;
     };
 }
 
@@ -40,94 +43,106 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         domRect: { height: childrenWrapperHeight },
     } = useDomRect();
 
-    const [isCollapsedIfDependsOfScroll, setIsCollapsedIfDependsOfScroll] =
-        useState(false);
+    const { css, cx } = useStyles();
 
-    useEvt(
-        ctx => {
-            const childrenWrapperElement = childrenWrapperRef.current;
+    //We use a ref instead of a state because we want to be able to
+    //synchronously reset the state when the div that scrolls have been changed
+    const isCollapsedIfDependsOfScrollRef = useRef(false);
 
-            if (!childrenWrapperElement) {
-                return;
-            }
+    useGuaranteedMemo(() => {
+        isCollapsedIfDependsOfScrollRef.current = false;
+    }, [
+        rest.behavior === "collapses on scroll"
+            ? rest.scrollableElementRef.current ?? Object
+            : Object,
+    ]);
 
-            if (rest.behavior !== "collapses on scroll") {
-                return;
-            }
+    useEffect(() => {
+        if (rest.behavior !== "collapses on scroll") {
+            return;
+        }
 
-            if (childrenWrapperHeight === 0) {
-                return;
-            }
+        rest.onIsCollapsedValueChange?.(
+            isCollapsedIfDependsOfScrollRef.current,
+        );
+    }, [isCollapsedIfDependsOfScrollRef.current]);
 
-            const { scrollTopThreshold } = rest;
+    const dummyRef = useStateRef<HTMLDivElement>(null);
 
-            const scrollElement = getScrollableParent({
-                "element": childrenWrapperElement,
-                "doReturnElementIfScrollable": false,
-            });
+    {
+        const ref =
+            rest.behavior !== "collapses on scroll"
+                ? dummyRef
+                : rest.scrollableElementRef;
 
-            Evt.from(ctx, scrollElement, "scroll")
-                .toStateful()
-                .pipe(() => [scrollElement.scrollTop])
-                .attach(scrollTop =>
-                    setIsCollapsedIfDependsOfScroll(isCollapsed =>
-                        isCollapsed
-                            ? scrollTop + childrenWrapperHeight * 1.3 >
-                              scrollTopThreshold
-                            : scrollTop > scrollTopThreshold,
-                    ),
-                );
-        },
-        [
-            childrenWrapperRef.current,
-            ...(rest.behavior !== "collapses on scroll"
-                ? [null, null]
-                : [rest.scrollTopThreshold, childrenWrapperHeight]),
-        ],
-    );
+        const [, forceUpdate] = useReducer(counter => counter + 1, 0);
 
-    const { classes, cx } = useStyles({
-        "isCollapsed": (() => {
-            switch (rest.behavior) {
-                case "collapses on scroll":
-                    return isCollapsedIfDependsOfScroll;
-                case "controlled":
-                    return rest.isCollapsed;
-            }
-        })(),
-        childrenWrapperHeight,
-        transitionDuration,
-        "classesOverrides": props.classes,
-    });
+        useEvt(
+            ctx => {
+                const element = ref.current;
+
+                if (!element) {
+                    return;
+                }
+
+                if (rest.behavior !== "collapses on scroll") {
+                    return;
+                }
+
+                const { scrollTopThreshold } = rest;
+
+                Evt.from(ctx, element, "scroll")
+                    .pipe(event => [(event as any).target.scrollTop as number])
+                    .toStateful(element.scrollTop)
+                    .attach(scrollTop => {
+                        isCollapsedIfDependsOfScrollRef.current =
+                            isCollapsedIfDependsOfScrollRef.current
+                                ? scrollTop + childrenWrapperHeight * 1.3 >
+                                  scrollTopThreshold
+                                : scrollTop > scrollTopThreshold;
+
+                        forceUpdate();
+                    });
+            },
+            [
+                rest.behavior,
+                ...(rest.behavior !== "collapses on scroll"
+                    ? [null, null, null]
+                    : [
+                          rest.scrollTopThreshold,
+                          rest.scrollableElementRef,
+                          childrenWrapperHeight,
+                      ]),
+            ],
+        );
+    }
+
+    const isCollapsed = (() => {
+        switch (rest.behavior) {
+            case "collapses on scroll":
+                return isCollapsedIfDependsOfScrollRef.current;
+            case "controlled":
+                return rest.isCollapsed;
+        }
+    })();
 
     return (
-        <div className={cx(classes.root, className)}>
-            <div className={classes.inner} ref={childrenWrapperRef}>
-                {children}
-                <div className={classes.bottomDivForSpacing} />
-            </div>
+        <div
+            className={cx(
+                css({
+                    "height": isCollapsed
+                        ? 0
+                        : childrenWrapperHeight || undefined,
+                    "opacity": isCollapsed ? 0 : 1,
+                    "transition": ["height", "padding", "margin", "opacity"]
+                        .map(prop => `${prop} ${transitionDuration}ms`)
+                        .join(", "),
+                    "overflow": "hidden",
+                }),
+                className,
+            )}
+        >
+            <div ref={childrenWrapperRef}>{children}</div>
         </div>
     );
 });
-
-const useStyles = tss
-    .withName({ CollapsibleWrapper })
-    .withParams<{
-        isCollapsed: boolean;
-        childrenWrapperHeight: number;
-        transitionDuration: number;
-    }>()
-    .create(({ childrenWrapperHeight, isCollapsed, transitionDuration }) => ({
-        "root": {
-            "height": isCollapsed ? 0 : childrenWrapperHeight || undefined,
-            "opacity": isCollapsed ? 0 : 1,
-            "transition": ["height", "padding", "margin", "opacity"]
-                .map(prop => `${prop} ${transitionDuration}ms`)
-                .join(", "),
-            "overflow": "hidden",
-        },
-        "inner": {},
-        "bottomDivForSpacing": {
-            //height: 30
-        },
-    }));

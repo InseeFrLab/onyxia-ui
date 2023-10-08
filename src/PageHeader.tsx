@@ -1,5 +1,4 @@
-import { useMemo, forwardRef, memo } from "react";
-import type { FC } from "react";
+import { useState, memo } from "react";
 import { tss } from "./lib/ThemeProvider";
 import { Text } from "./Text/TextBase";
 import { useDomRect } from "powerhooks/useDomRect";
@@ -9,12 +8,10 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import { createIcon } from "./Icon";
 import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
+import type { FC } from "react";
 import CloseSharp from "@mui/icons-material/CloseSharp";
 import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
-import { CollapsibleWrapper } from "./CollapsibleWrapper";
-import type { CollapseParams } from "./CollapsibleWrapper";
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
+import { CollapsibleWrapper, type CollapseParams } from "./CollapsibleWrapper";
 
 export type PageHeaderProps<IconId extends string> = {
     mainIcon?: IconId;
@@ -50,163 +47,202 @@ export function createPageHeader<IconId extends string>(params?: {
         }),
     };
 
-    const PageHeader = memo(
-        forwardRef<any, PageHeaderProps<IconId>>((props, ref) => {
-            const {
-                mainIcon,
-                title,
-                helpTitle,
-                helpIcon,
-                helpContent,
-                className,
-                titleCollapseParams: props_titleCollapseParams,
-                helpCollapseParams: props_helpCollapseParams,
-                classes: props_classes,
-                //For the forwarding, rest should be empty (typewise)
-                ...rest
-            } = props;
+    const PageHeader = memo((props: PageHeaderProps<IconId>) => {
+        const { mainIcon, title, helpTitle, helpIcon, helpContent, className } =
+            props;
 
-            //For the forwarding, rest should be empty (typewise),
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            assert<Equals<typeof rest, {}>>();
+        const { isTitleCollapsed, titleCollapseParams } =
+            (function useClosure() {
+                const [
+                    isTitleCollapsedIfDependsOnScroll,
+                    setIsTitleCollapsedIfDependsOnScroll,
+                ] = useState(false);
 
-            const {
-                ref: helperRef,
-                domRect: { height: helperHeight },
-            } = useDomRect<HTMLDivElement>();
+                let isTitleCollapsed: boolean;
 
-            const { isHelpClosed, closeHelp } = (function useClosure() {
-                const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
-                    usePageHeaderClosedHelpers();
+                let { titleCollapseParams } = props;
 
-                const isHelpClosed = pageHeaderClosedHelpers.includes(title);
+                switch (titleCollapseParams?.behavior) {
+                    case "controlled":
+                        isTitleCollapsed = titleCollapseParams.isCollapsed;
+                        break;
+                    case "collapses on scroll":
+                        {
+                            const tmp =
+                                titleCollapseParams.onIsCollapsedValueChange;
 
-                const closeHelp = useConstCallback(() =>
-                    setPageHeaderClosedHelpers([
-                        ...pageHeaderClosedHelpers,
-                        title,
-                    ]),
-                );
+                            titleCollapseParams.onIsCollapsedValueChange =
+                                isCollapsed => {
+                                    setIsTitleCollapsedIfDependsOnScroll(
+                                        isCollapsed,
+                                    );
 
-                return { isHelpClosed, closeHelp };
+                                    tmp?.(isCollapsed);
+                                };
+
+                            isTitleCollapsed =
+                                isTitleCollapsedIfDependsOnScroll;
+                        }
+                        break;
+                    case undefined:
+                        {
+                            const isCollapsed = false;
+                            titleCollapseParams = id<CollapseParams>({
+                                "behavior": "controlled",
+                                isCollapsed,
+                            });
+                            isTitleCollapsed = isCollapsed;
+                        }
+                        break;
+                }
+
+                return { isTitleCollapsed, titleCollapseParams };
             })();
 
-            const { classes, cx } = useStyles({
-                helperHeight,
-                "classesOverrides": props_classes,
-            });
+        const {
+            ref: helperRef,
+            domRect: { height: helperHeight },
+        } = useDomRect<HTMLDivElement>();
 
-            const { titleCollapseParams } = useMemo(() => {
-                const titleCollapseParams =
-                    props_titleCollapseParams ??
-                    id<CollapseParams>({
-                        "behavior": "controlled",
-                        "isCollapsed": false,
-                    });
+        const { isHelpClosed, closeHelp } = (function useClosure() {
+            const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
+                usePageHeaderClosedHelpers();
 
-                titleCollapseParams.classes = {
-                    ...titleCollapseParams.classes,
-                    "bottomDivForSpacing": cx(
-                        classes.titleBottomDivForSpacing,
-                        titleCollapseParams.classes?.bottomDivForSpacing,
-                    ),
-                };
+            const isHelpClosed = pageHeaderClosedHelpers.includes(title);
 
-                return { titleCollapseParams };
-            }, [
-                props_titleCollapseParams,
-                cx,
-                classes.titleBottomDivForSpacing,
-            ]);
+            const closeHelp = useConstCallback(() =>
+                setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]),
+            );
 
-            const { helpCollapseParams } = useMemo(() => {
-                const helpCollapseParams = isHelpClosed
+            return { isHelpClosed, closeHelp };
+        })();
+
+        const { isHelpCollapsed, helpCollapseParams } = (function useClosure() {
+            const [
+                isHelpCollapsedIfDependsOnScroll,
+                setIsHelpCollapsedIfDependsOnScroll,
+            ] = useState(false);
+
+            let isHelpCollapsed: boolean;
+
+            let { helpCollapseParams } = props;
+
+            switch (helpCollapseParams?.behavior) {
+                case "controlled":
+                    isHelpCollapsed = helpCollapseParams.isCollapsed;
+                    break;
+                case "collapses on scroll":
+                    {
+                        const tmp = helpCollapseParams.onIsCollapsedValueChange;
+
+                        helpCollapseParams.onIsCollapsedValueChange =
+                            isCollapsed => {
+                                setIsHelpCollapsedIfDependsOnScroll(
+                                    isCollapsed,
+                                );
+
+                                tmp?.(isCollapsed);
+                            };
+
+                        isHelpCollapsed = isHelpCollapsedIfDependsOnScroll;
+                    }
+                    break;
+                case undefined:
+                    {
+                        const isCollapsed = false;
+                        helpCollapseParams = id<CollapseParams>({
+                            "behavior": "controlled",
+                            isCollapsed,
+                        });
+                        isHelpCollapsed = isCollapsed;
+                    }
+                    break;
+            }
+
+            return {
+                isHelpCollapsed,
+                "helpCollapseParams": isHelpClosed
                     ? {
                           "behavior": "controlled" as const,
                           "isCollapsed": true,
                       }
-                    : props_helpCollapseParams ?? {
-                          "behavior": "controlled",
-                          "isCollapsed": false,
-                      };
+                    : helpCollapseParams,
+            };
+        })();
 
-                helpCollapseParams.classes = {
-                    ...titleCollapseParams.classes,
-                    "bottomDivForSpacing": cx(
-                        classes.helpBottomDivForSpacing,
-                        helpCollapseParams.classes?.bottomDivForSpacing,
-                    ),
-                };
+        const { classes, cx } = useStyles({
+            helperHeight,
+            isTitleCollapsed,
+            "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
+            "classesOverrides": props.classes,
+        });
 
-                return { helpCollapseParams };
-            }, [
-                isHelpClosed,
-                props_helpCollapseParams,
-                cx,
-                classes.helpBottomDivForSpacing,
-            ]);
-
-            return (
-                <div
-                    className={cx(classes.root, className)}
-                    ref={ref}
-                    {...rest}
+        return (
+            <div className={cx(classes.root, className)}>
+                <CollapsibleWrapper {...titleCollapseParams}>
+                    <Text typo="page heading" className={classes.title}>
+                        {mainIcon && (
+                            <Icon
+                                iconId={mainIcon}
+                                className={classes.titleIcon}
+                                size="large"
+                            />
+                        )}
+                        {title}
+                    </Text>
+                </CollapsibleWrapper>
+                <CollapsibleWrapper
+                    className={classes.helpCollapsibleWrapper}
+                    {...helpCollapseParams}
                 >
-                    <CollapsibleWrapper {...titleCollapseParams}>
-                        <Text typo="page heading" className={classes.title}>
-                            {mainIcon && (
-                                <Icon
-                                    iconId={mainIcon}
-                                    className={classes.titleIcon}
-                                    size="large"
-                                />
-                            )}
-                            {title}
-                        </Text>
-                    </CollapsibleWrapper>
-                    <CollapsibleWrapper {...helpCollapseParams}>
-                        <div ref={helperRef} className={classes.help}>
-                            {helpIcon && (
-                                <div>
-                                    {helpIcon === "sentimentSatisfied" ? (
-                                        <LocalIcon
-                                            iconId="sentimentSatisfied"
-                                            className={classes.helpIcon}
-                                        />
-                                    ) : (
-                                        <Icon
-                                            iconId={helpIcon}
-                                            className={classes.helpIcon}
-                                        />
-                                    )}
-                                </div>
-                            )}
-                            <div className={classes.helpMiddle}>
-                                <Text typo="navigation label">{helpTitle}</Text>
-                                <Text typo="body 1">{helpContent}</Text>
-                            </div>
+                    <div ref={helperRef} className={classes.help}>
+                        {helpIcon && (
                             <div>
-                                <IconButton
-                                    iconId="close"
-                                    onClick={closeHelp}
-                                    className={classes.closeButton}
-                                />
+                                {helpIcon === "sentimentSatisfied" ? (
+                                    <LocalIcon
+                                        iconId="sentimentSatisfied"
+                                        className={classes.helpIcon}
+                                    />
+                                ) : (
+                                    <Icon
+                                        iconId={helpIcon}
+                                        className={classes.helpIcon}
+                                    />
+                                )}
                             </div>
+                        )}
+                        <div className={classes.helpMiddle}>
+                            <Text typo="navigation label">{helpTitle}</Text>
+                            <Text typo="body 1">{helpContent}</Text>
                         </div>
-                    </CollapsibleWrapper>
-                </div>
-            );
-        }),
-    );
+                        <div>
+                            <IconButton
+                                iconId="close"
+                                onClick={closeHelp}
+                                className={classes.closeButton}
+                            />
+                        </div>
+                    </div>
+                </CollapsibleWrapper>
+            </div>
+        );
+    });
 
     return { PageHeader };
 }
 
 const useStyles = tss
-    .withParams<{ helperHeight: number }>()
-    .create(({ theme, helperHeight }) => ({
+    .withName("PageHeader")
+    .withParams<{
+        helperHeight: number;
+        isTitleCollapsed: boolean;
+        isHelpCollapsed: boolean;
+    }>()
+    .create(({ theme, helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
         "root": {
             "backgroundColor": "inherit",
+            "marginBottom":
+                !isTitleCollapsed || !isHelpCollapsed ? theme.spacing(3) : 0,
         },
         "title": {
             "display": "flex",
@@ -233,10 +269,7 @@ const useStyles = tss
             "padding": 0,
             "marginLeft": theme.spacing(3),
         },
-        "titleBottomDivForSpacing": {
-            "height": theme.spacing(4),
-        },
-        "helpBottomDivForSpacing": {
-            "height": theme.spacing(3),
+        "helpCollapsibleWrapper": {
+            "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
         },
     }));
