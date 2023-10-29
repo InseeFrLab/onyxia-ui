@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { memo, forwardRef, ElementType } from "react";
-import type { ForwardedRef, MouseEventHandler } from "react";
+import type { MouseEventHandler } from "react";
 import { tss } from "./lib/ThemeProvider";
 import SvgIcon from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import type { IconSizeName } from "./lib/icon";
+import { type IconSizeName, muiComponentNameToFileName } from "./lib/icon";
+import { createDynamicSvg } from "./tools/LazySvg";
+import { id } from "tsafe/id";
 
 /**
  * Size:
@@ -40,39 +42,19 @@ export type IconProps<IconId extends string = string> = {
     onClick?: MouseEventHandler<SVGSVGElement>;
 };
 
-export type MuiIconLike = (props: {
-    ref: ForwardedRef<SVGSVGElement>;
-    className: string;
-    onClick?: MouseEventHandler<SVGSVGElement>;
-}) => JSX.Element;
-
-export type SvgComponentLike = ElementType;
-
-function isMuiIcon(
-    Component: MuiIconLike | SvgComponentLike,
-): Component is MuiIconLike {
-    return "type" in (Component as any);
-}
-
-export function createIcon<IconId extends string>(componentByIconId: {
-    readonly [iconId in IconId]: MuiIconLike | SvgComponentLike;
+export function createIcon<IconId extends string>(params: {
+    /**
+     * If your app is hosted at the origin (e.g. https://example.com/), set publicUrl to ''.
+     * If your app is hosted at a sub-path (e.g. https://example.com/sub-path/), set publicUrl to '/sub-path'.
+     *
+     * If you are using create-react-app you can set:
+     * "publicUrl": process.env["PUBLIC_URL"]
+     * (It is constrained by what's in the "homepage" filed of package.json)
+     **/
+    publicUrl: string;
+    customIcons?: Record<IconId, ElementType | string>;
 }) {
-    const useStyles = tss
-        .withParams<{
-            size: IconSizeName;
-        }>()
-        .create(({ theme, size }) => ({
-            "root": {
-                "color": "inherit",
-                // https://stackoverflow.com/a/24626986/3731798
-                //"verticalAlign": "top",
-                //"display": "inline-block"
-                "verticalAlign": "top",
-                "fontSize": theme.iconSizesInPxByName[size],
-                "width": "1em",
-                "height": "1em",
-            },
-        }));
+    const { publicUrl, customIcons } = params;
 
     const Icon = memo(
         forwardRef<SVGSVGElement, IconProps<IconId>>((props, ref) => {
@@ -89,17 +71,26 @@ export function createIcon<IconId extends string>(componentByIconId: {
 
             const { classes, cx } = useStyles({ size });
 
-            const Component: MuiIconLike | SvgComponentLike =
-                componentByIconId[iconId];
+            const Component = (() => {
+                const customIcon =
+                    customIcons !== undefined && iconId in customIcons
+                        ? customIcons[iconId]
+                        : undefined;
 
-            return isMuiIcon(Component) ? (
-                <Component
-                    ref={ref}
-                    className={cx(classes.root, className)}
-                    onClick={onClick}
-                    {...rest}
-                />
-            ) : (
+                if (customIcon !== undefined) {
+                    return typeof customIcon === "string"
+                        ? createDynamicSvg(customIcon)
+                        : id<ElementType>(customIcon);
+                }
+
+                return createDynamicSvg(
+                    `${publicUrl}/material-icons/${muiComponentNameToFileName(
+                        iconId,
+                    )}`,
+                );
+            })();
+
+            return (
                 <SvgIcon
                     ref={ref}
                     onClick={onClick}
@@ -110,6 +101,24 @@ export function createIcon<IconId extends string>(componentByIconId: {
             );
         }),
     );
+
+    const useStyles = tss
+        .withName({ Icon })
+        .withParams<{
+            size: IconSizeName;
+        }>()
+        .create(({ theme, size }) => ({
+            "root": {
+                "color": "inherit",
+                // https://stackoverflow.com/a/24626986/3731798
+                //"verticalAlign": "top",
+                //"display": "inline-block"
+                "verticalAlign": "top",
+                "fontSize": theme.iconSizesInPxByName[size],
+                "width": "1em",
+                "height": "1em",
+            },
+        }));
 
     return { Icon };
 }
