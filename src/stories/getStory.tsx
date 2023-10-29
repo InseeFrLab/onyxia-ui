@@ -77,9 +77,6 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
             <ThemeProvider>
                 <GlobalStyles
                     styles={{
-                        "html": {
-                            "fontSize": "100% !important",
-                        },
                         "body": {
                             "padding": `0 !important`,
                             "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
