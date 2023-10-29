@@ -1,19 +1,12 @@
 import { memo } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useIsDarkModeEnabled } from "./lib";
-import DarkModeIcon from "@mui/icons-material/Brightness4";
-import LightModeIcon from "@mui/icons-material/Brightness7";
-import { createIcon } from "./Icon";
-import { createIconButton } from "./IconButton";
 import type { IconProps } from "./Icon";
-import { tss } from "./lib/ThemeProvider";
-
-const { Icon } = createIcon({
-    "darkModeIcon": DarkModeIcon,
-    "lightModeIcon": LightModeIcon,
-});
-
-const { IconButton } = createIconButton({ Icon });
+import { tss } from "./lib/tss";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { id } from "tsafe/id";
+import { IconButton } from "./IconButton";
+import { symToStr } from "tsafe/symToStr";
 
 export type DarkModeSwitchProps = {
     className?: string;
@@ -37,11 +30,17 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
             className={cx(classes.root, className)}
             onClick={onClick}
             size={size}
-            iconId={isDarkModeEnabled ? "lightModeIcon" : "darkModeIcon"}
+            iconId={
+                isDarkModeEnabled
+                    ? id<MuiIconsComponentName>("Brightness7")
+                    : id<MuiIconsComponentName>("Brightness4")
+            }
             aria-label={ariaLabel ?? "Dark mode switch"}
         />
     );
 });
+
+DarkModeSwitch.displayName = symToStr({ DarkModeSwitch });
 
 const useStyles = tss.withName({ DarkModeSwitch }).create(({ theme }) => ({
     "root": {

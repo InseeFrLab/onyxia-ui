@@ -1,12 +1,9 @@
-import { createLeftBar } from "../LeftBar";
-import { Icon } from "./theme";
+import { LeftBar } from "../LeftBar";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-
-const { LeftBar } = createLeftBar({
-    Icon,
-    "persistIsPanelOpen": false,
-});
+import { id } from "tsafe/id";
+import type { CustomIconId } from "./theme";
+import type { MuiIconsComponentName } from "../MuiIconsComponentName";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -16,17 +13,19 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const VueNoTitle = getStory({
+    "defaultIsPanelOpen": true,
+    "doPersistIsPanelOpen": false,
     "currentItemId": "item2",
     "items": {
         "item1": {
-            "iconId": "tour",
+            "iconId": id<CustomIconId>("tour"),
             "label": "Item 1",
             "link": {
                 "href": "https://example.com",
             },
         },
         "item2": {
-            "iconId": "services",
+            "iconId": id<CustomIconId>("services"),
             "label": "Item two",
             "link": {
                 "href": "#",
@@ -34,16 +33,16 @@ export const VueNoTitle = getStory({
             },
         },
         "item3": {
-            "iconId": "help",
+            "iconId": id<MuiIconsComponentName>("Help"),
             "label": "Item three",
-            "hasDividerBelow": true,
+            "belowDivider": true,
             "link": {
                 "href": "#",
             },
             "availability": "greyed",
         },
         "item4": {
-            "iconId": "home",
+            "iconId": id<MuiIconsComponentName>("Home"),
             "label": "The fourth item",
             "link": {
                 "href": "#",

@@ -1,27 +1,26 @@
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 import { useState, useEffect, useMemo, useReducer, memo } from "react";
 import type { ReactNode, RefObject } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import MuiTextField from "@mui/material/TextField";
 import { getBrowser } from "./tools/getBrowser";
 import InputAdornment from "@mui/material/InputAdornment";
-import { createIconButton } from "./IconButton";
-import { createIcon } from "./Icon";
 import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
 import { useEvt } from "evt/hooks";
 import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
 import { Tooltip } from "./Tooltip";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
-import Help from "@mui/icons-material/Help";
 import { useDomRect } from "powerhooks/useDomRect";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import Autocomplete from "@mui/material/Autocomplete";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { IconButton } from "./IconButton";
+import { Icon } from "./Icon";
+import { id } from "tsafe/id";
 
 export type TextFieldProps = {
     className?: string;
@@ -148,14 +147,6 @@ export type TextFieldProps = {
         | "url"
         | "photo";
 };
-
-const { Icon } = createIcon({
-    "visibilityOff": VisibilityOff,
-    "visibility": Visibility,
-    "help": Help,
-});
-
-const { IconButton } = createIconButton({ Icon });
 
 export const TextField = memo((props: TextFieldProps) => {
     const {
@@ -341,7 +332,9 @@ export const TextField = memo((props: TextFieldProps) => {
                     <InputAdornment position="end">
                         <IconButton
                             iconId={
-                                isPasswordShown ? "visibilityOff" : "visibility"
+                                isPasswordShown
+                                    ? id<MuiIconsComponentName>("VisibilityOff")
+                                    : id<MuiIconsComponentName>("Visibility")
                             }
                             onClick={toggleIsPasswordShown}
                         />
@@ -417,7 +410,10 @@ export const TextField = memo((props: TextFieldProps) => {
             &nbsp;
             {questionMarkHelperText !== undefined && (
                 <Tooltip title={questionMarkHelperText}>
-                    <Icon iconId="help" className={classes.questionMark} />
+                    <Icon
+                        iconId={id<MuiIconsComponentName>("Help")}
+                        className={classes.questionMark}
+                    />
                 </Tooltip>
             )}
         </Text>

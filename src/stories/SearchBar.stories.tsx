@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { SearchBar } from "../SearchBar";
 import type { SearchBarProps } from "../SearchBar";

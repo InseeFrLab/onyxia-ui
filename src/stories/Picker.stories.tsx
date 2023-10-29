@@ -1,6 +1,7 @@
+import React from "react";
 import { Picker } from "../Picker";
 import type { PickerProps } from "../Picker";
-import { Button } from "./theme";
+import { Button } from "../Button";
 import { useStateRef } from "powerhooks/useStateRef";
 import { useState } from "react";
 import { sectionName } from "./sectionName";

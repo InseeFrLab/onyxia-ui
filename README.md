@@ -23,8 +23,10 @@ any [MUI component](https://mui.com/) they will be automatically styled to fit t
 -   Built in support for the dark mode.
 -   If you want to diverge from the Onyxia Design system, the theme is customizable, you can for example change the fonts and the colors.
 -   Provide splash screen that hide the screen when needed.
+-   Icons are downloaded at runtime. [The full catalog of mui icons](https://mui.com/material-ui/material-icons/) is
+    is available **at runtime**. (No hard import required)
 
-Disclaimer: `onyxia-ui` is not SSR compatible.
+Disclaimer: `onyxia-ui` is specifically designed to build SPA and is not SSR compatible.
 
 A note about the integration of [Onyxia](https://onyxia.sh) and Onyxia-UI can be found [here](https://docs.onyxia.sh/contributing/onyxia/dependencies#onyxia-ui).
 
@@ -68,9 +70,14 @@ A note about the integration of [Onyxia](https://onyxia.sh) and Onyxia-UI can be
 
 ```bash
 yarn add onyxia-ui @mui/material @emotion/react @emotion/styled
+```
 
-# If you plan on using icons from: https://mui.com/components/material-icons/
-yarn add @mui/icons-material
+Add this script to your `package.json`
+
+```diff
+"scripts": {
+    "prepare": "fetch-material-icons"
+}
 ```
 
 The documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  

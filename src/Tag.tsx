@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { ReactNode } from "react";
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 
 export type TagProps = {
     className?: string;

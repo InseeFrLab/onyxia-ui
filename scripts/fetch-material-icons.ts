@@ -1,14 +1,15 @@
-import { join as pathJoin } from "path";
+import { join as pathJoin, basename as pathBasename } from "path";
 import fs from "fs";
 import { downloadAndUnzip } from "./tools/downloadAndUnzip";
 import { muiComponentNameToFileName } from "../src/lib/icon";
 import { assert } from "tsafe/assert";
+import { transformCodebase } from "./tools/transformCodebase";
 
 const rootDirPath = pathJoin(__dirname, "..");
 
 (async () => {
     console.log(
-        "NOTE: The following operation will take about a minute to complete.",
+        "NOTE: The following operation will take about a minute to complete if it's a first install",
     );
 
     const version = "5.14.15";
@@ -28,6 +29,21 @@ const rootDirPath = pathJoin(__dirname, "..");
         ],
         "doUseCache": true,
         "projectDirPath": rootDirPath,
+    });
+
+    fs.writeFileSync(
+        pathJoin(iconsDirPath, ".gitignore"),
+        Buffer.from("*", "utf8"),
+    );
+
+    transformCodebase({
+        "srcDirPath": iconsDirPath,
+        "destDirPath": pathJoin(
+            rootDirPath,
+            ".storybook",
+            "static",
+            pathBasename(iconsDirPath),
+        ),
     });
 
     const iconFileNames = fs
@@ -55,7 +71,7 @@ const rootDirPath = pathJoin(__dirname, "..");
     const tsCode = [
         ``,
         [
-            `export type MuiIconId =`,
+            `export type MuiIconsComponentName =`,
             muiComponentNames
                 .map(
                     (muiIconId, i) =>
@@ -67,7 +83,11 @@ const rootDirPath = pathJoin(__dirname, "..");
         ``,
     ].join("\n");
 
-    const typeFilePath = pathJoin(iconsDirPath, "type.ts");
+    const typeFilePath = pathJoin(
+        rootDirPath,
+        "src",
+        "MuiIconsComponentName.ts",
+    );
 
     fs.writeFileSync(typeFilePath, Buffer.from(tsCode, "utf8"));
 })();

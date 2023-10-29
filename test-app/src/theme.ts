@@ -4,25 +4,23 @@ import {
     createDefaultColorUseCases,
     defaultGetTypographyDesc,
 } from "onyxia-ui/lib";
-import { createIcon } from "onyxia-ui/Icon";
-import { createIconButton } from "onyxia-ui/IconButton";
-import { createButton } from "onyxia-ui/Button";
-import { createText } from "onyxia-ui/Text";
-import type { Param0 } from "tsafe";
 import { createTss } from "tss-react";
 import { AnimatedOnyxiaLogo } from "onyxia-ui/AnimatedOnyxiaLogo";
+import { createTextWithCustomTypos } from "onyxia-ui/Text";
 import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
 
-//Import icons from https://material-ui.com/components/material-icons/ that you plan to use
-import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
-import EditIcon from "@mui/icons-material/Edit";
-
 //Import your custom icons
 import { ReactComponent as FooSvg } from "./assets/foo.svg";
-import { ReactComponent as BarSvg } from "./assets/bar.svg";
+import barSvgUrl from "./assets/bar.svg";
+
+const customIcons = {
+    "foo": FooSvg,
+    "bar": barSvgUrl,
+};
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
+    "publicUrl": process.env.PUBLIC_URL,
     "getTypographyDesc": params => {
         const typographyDesc = defaultGetTypographyDesc(params);
 
@@ -67,20 +65,14 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
         "Logo": AnimatedOnyxiaLogo,
         "fadeOutDuration": 500,
     },
+    customIcons,
 });
 
-export const { Icon } = createIcon({
-    "hello": EmojiPeopleIcon,
-    "edit": EditIcon,
-    "foo": FooSvg,
-    "bar": BarSvg,
+export type CustomIconId = keyof typeof customIcons;
+
+export const { Text } = createTextWithCustomTypos({
+    useTheme,
 });
-
-export type IconId = Param0<typeof Icon>["iconId"];
-
-export const { IconButton } = createIconButton({ Icon });
-export const { Button } = createButton({ Icon });
-export const { Text } = createText({ useTheme });
 
 export const { tss } = createTss({
     "useContext": function useContext() {

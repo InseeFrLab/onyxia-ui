@@ -2,6 +2,7 @@ import { useState, useEffect, memo } from "react";
 import MuiCheckbox from "@mui/material/Checkbox";
 import type { CheckboxProps as MuiCheckboxProps } from "@mui/material/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
+import { symToStr } from "tsafe/symToStr";
 
 export type CheckboxProps = MuiCheckboxProps;
 
@@ -38,3 +39,5 @@ export const Checkbox = memo((props: CheckboxProps) => {
         />
     );
 });
+
+Checkbox.displayName = symToStr({ Checkbox });

@@ -1,11 +1,12 @@
 import { memo } from "react";
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 import MuiLink from "@mui/material/Link";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { createIconButton } from "./IconButton";
-import { createIcon } from "./Icon";
 import { pxToNumber } from "./tools/pxToNumber";
+import { IconButton } from "./IconButton";
+import { id } from "tsafe/id";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { symToStr } from "tsafe/symToStr";
 
 export type CollapsibleSectionHeaderProps = {
     className?: string;
@@ -16,10 +17,6 @@ export type CollapsibleSectionHeaderProps = {
     /** Default "Show all", provide your own string for internationalization. */
     showAllStr?: string;
 };
-
-const { IconButton } = createIconButton(
-    createIcon({ "chevronLeft": ChevronLeftIcon }),
-);
 
 export const CollapsibleSectionHeader = memo(
     (props: CollapsibleSectionHeaderProps) => {
@@ -39,7 +36,7 @@ export const CollapsibleSectionHeader = memo(
                 <IconButton
                     className={classes.chevron}
                     size="large"
-                    iconId="chevronLeft"
+                    iconId={id<MuiIconsComponentName>("ChevronLeft")}
                     onClick={onToggleIsCollapsed}
                 />
                 <Text typo="section heading"> {title} </Text>
@@ -58,6 +55,8 @@ export const CollapsibleSectionHeader = memo(
         );
     },
 );
+
+CollapsibleSectionHeader.displayName = symToStr({ CollapsibleSectionHeader });
 
 const useStyles = tss
     .withName({ CollapsibleSectionHeader })

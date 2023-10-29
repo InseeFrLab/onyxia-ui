@@ -1,3 +1,4 @@
+import React from "react";
 import { Tabs } from "../Tabs";
 import type { TabProps } from "../Tabs";
 import { sectionName } from "./sectionName";

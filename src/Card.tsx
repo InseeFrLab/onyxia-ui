@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { forwardRef, memo } from "react";
-import { tss } from "./lib/ThemeProvider";
+import { tss } from "./lib/tss";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 

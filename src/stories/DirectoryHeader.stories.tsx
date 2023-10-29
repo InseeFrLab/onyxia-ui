@@ -1,10 +1,11 @@
+import React from "react";
 import { memo } from "react";
 import { DirectoryHeader } from "../DirectoryHeader";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 import { ReactComponent as ServicesSvg } from "./assets/svg/Services.svg";
 import imgUrl from "./assets/img/utilitr.png";
-import { useStyles } from "../lib/ThemeProvider";
+import { useStyles } from "../lib/tss";
 import Avatar from "@mui/material/Avatar";
 
 const { meta, getStory } = getStoryFactory({

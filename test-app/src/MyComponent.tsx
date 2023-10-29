@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { tss, Icon, IconButton, Text, Button } from "./theme";
+import { tss, Text } from "./theme";
 //Cherry pick the custom components you wish to import.
 import { Alert } from "onyxia-ui/Alert";
 
@@ -8,6 +8,11 @@ import { Alert } from "onyxia-ui/Alert";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@mui/material/Switch";
 import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
+import type { MuiIconsComponentName } from "onyxia-ui/MuiIconsComponentName";
+import { id } from "tsafe/id";
+import { Icon } from "onyxia-ui/Icon";
+import { IconButton } from "onyxia-ui/IconButton";
+import { Button } from "onyxia-ui/Button";
 
 export function MyComponent() {
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
@@ -41,13 +46,25 @@ export function MyComponent() {
         }, [isLoading]);
     }
 
-    const { classes } = useStyles();
+    const { classes, css } = useStyles();
 
     return (
         <div className={classes.root}>
             <Alert severity="success">Onyxia UI successfully setup!</Alert>
             <Text typo="my hero">
-                <Icon iconId="hello" />
+                <Icon
+                    iconId={id<MuiIconsComponentName>("EmojiPeople")}
+                    className={css({
+                        "fontSize": "inherit",
+                        ...(() => {
+                            const factor = 0.92;
+                            return {
+                                "width": `${factor}em`,
+                                "height": `${factor}em`,
+                            };
+                        })(),
+                    })}
+                />
                 Hello World
             </Text>
             <Text typo="display heading">
@@ -70,7 +87,10 @@ export function MyComponent() {
                 Show splash screen a few seconds
             </Button>
             <br />
-            <IconButton iconId="edit" href="http://example.com" />
+            <IconButton
+                iconId={id<MuiIconsComponentName>("Edit")}
+                href="http://example.com"
+            />
         </div>
     );
 }

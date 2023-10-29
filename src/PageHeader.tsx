@@ -1,22 +1,19 @@
 import { useState, memo } from "react";
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 import { useDomRect } from "powerhooks/useDomRect";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { id } from "tsafe/id";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { createIcon } from "./Icon";
-import { createIconButton } from "./IconButton";
-import type { IconProps } from "./Icon";
-import type { FC } from "react";
-import CloseSharp from "@mui/icons-material/CloseSharp";
-import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
 import { CollapsibleWrapper, type CollapseParams } from "./CollapsibleWrapper";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
 
-export type PageHeaderProps<IconId extends string> = {
-    mainIcon?: IconId;
+export type PageHeaderProps = {
+    mainIcon?: string;
     title: string;
-    helpIcon?: IconId | "sentimentSatisfied";
+    helpIcon?: string;
     helpTitle: NonNullable<React.ReactNode>;
     helpContent: NonNullable<React.ReactNode>;
     className?: string;
@@ -32,216 +29,183 @@ const { usePageHeaderClosedHelpers } = createUseGlobalState({
     "doPersistAcrossReloads": false,
 });
 
-const { Icon: LocalIcon } = createIcon({
-    "close": CloseSharp,
-    "sentimentSatisfied": SentimentSatisfiedIcon,
-});
+export const PageHeader = memo((props: PageHeaderProps) => {
+    const {
+        mainIcon,
+        title,
+        helpTitle,
+        helpIcon,
+        helpContent,
+        className,
+        onCloseHelp,
+    } = props;
 
-const { IconButton } = createIconButton({ "Icon": LocalIcon });
+    const { isTitleCollapsed, titleCollapseParams } = (function useClosure() {
+        const [
+            isTitleCollapsedIfDependsOnScroll,
+            setIsTitleCollapsedIfDependsOnScroll,
+        ] = useState(false);
 
-export function createPageHeader<IconId extends string>(params?: {
-    Icon(props: IconProps<IconId>): ReturnType<FC>;
-}) {
-    const { Icon } = params ?? {
-        "Icon": id<(props: IconProps<IconId>) => JSX.Element>(() => {
-            throw new Error("never");
-        }),
-    };
+        let isTitleCollapsed: boolean;
 
-    const PageHeader = memo((props: PageHeaderProps<IconId>) => {
-        const {
-            mainIcon,
-            title,
-            helpTitle,
-            helpIcon,
-            helpContent,
-            className,
-            onCloseHelp,
-        } = props;
+        let { titleCollapseParams } = props;
 
-        const { isTitleCollapsed, titleCollapseParams } =
-            (function useClosure() {
-                const [
-                    isTitleCollapsedIfDependsOnScroll,
-                    setIsTitleCollapsedIfDependsOnScroll,
-                ] = useState(false);
+        switch (titleCollapseParams?.behavior) {
+            case "controlled":
+                isTitleCollapsed = titleCollapseParams.isCollapsed;
+                break;
+            case "collapses on scroll":
+                {
+                    const tmp = titleCollapseParams.onIsCollapsedValueChange;
 
-                let isTitleCollapsed: boolean;
+                    titleCollapseParams.onIsCollapsedValueChange =
+                        isCollapsed => {
+                            setIsTitleCollapsedIfDependsOnScroll(isCollapsed);
 
-                let { titleCollapseParams } = props;
+                            tmp?.(isCollapsed);
+                        };
 
-                switch (titleCollapseParams?.behavior) {
-                    case "controlled":
-                        isTitleCollapsed = titleCollapseParams.isCollapsed;
-                        break;
-                    case "collapses on scroll":
-                        {
-                            const tmp =
-                                titleCollapseParams.onIsCollapsedValueChange;
-
-                            titleCollapseParams.onIsCollapsedValueChange =
-                                isCollapsed => {
-                                    setIsTitleCollapsedIfDependsOnScroll(
-                                        isCollapsed,
-                                    );
-
-                                    tmp?.(isCollapsed);
-                                };
-
-                            isTitleCollapsed =
-                                isTitleCollapsedIfDependsOnScroll;
-                        }
-                        break;
-                    case undefined:
-                        {
-                            const isCollapsed = false;
-                            titleCollapseParams = id<CollapseParams>({
-                                "behavior": "controlled",
-                                isCollapsed,
-                            });
-                            isTitleCollapsed = isCollapsed;
-                        }
-                        break;
+                    isTitleCollapsed = isTitleCollapsedIfDependsOnScroll;
                 }
+                break;
+            case undefined:
+                {
+                    const isCollapsed = false;
+                    titleCollapseParams = id<CollapseParams>({
+                        "behavior": "controlled",
+                        isCollapsed,
+                    });
+                    isTitleCollapsed = isCollapsed;
+                }
+                break;
+        }
 
-                return { isTitleCollapsed, titleCollapseParams };
-            })();
+        return { isTitleCollapsed, titleCollapseParams };
+    })();
 
-        const {
-            ref: helperRef,
-            domRect: { height: helperHeight },
-        } = useDomRect<HTMLDivElement>();
+    const {
+        ref: helperRef,
+        domRect: { height: helperHeight },
+    } = useDomRect<HTMLDivElement>();
 
-        const { isHelpClosed, closeHelp } = (function useClosure() {
-            const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
-                usePageHeaderClosedHelpers();
+    const { isHelpClosed, closeHelp } = (function useClosure() {
+        const { pageHeaderClosedHelpers, setPageHeaderClosedHelpers } =
+            usePageHeaderClosedHelpers();
 
-            const isHelpClosed = pageHeaderClosedHelpers.includes(title);
+        const isHelpClosed = pageHeaderClosedHelpers.includes(title);
 
-            const closeHelp = useConstCallback(() => {
-                onCloseHelp?.();
-                setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]);
-            });
-
-            return { isHelpClosed, closeHelp };
-        })();
-
-        const { isHelpCollapsed, helpCollapseParams } = (function useClosure() {
-            const [
-                isHelpCollapsedIfDependsOnScroll,
-                setIsHelpCollapsedIfDependsOnScroll,
-            ] = useState(false);
-
-            let isHelpCollapsed: boolean;
-
-            let { helpCollapseParams } = props;
-
-            switch (helpCollapseParams?.behavior) {
-                case "controlled":
-                    isHelpCollapsed = helpCollapseParams.isCollapsed;
-                    break;
-                case "collapses on scroll":
-                    {
-                        const tmp = helpCollapseParams.onIsCollapsedValueChange;
-
-                        helpCollapseParams.onIsCollapsedValueChange =
-                            isCollapsed => {
-                                setIsHelpCollapsedIfDependsOnScroll(
-                                    isCollapsed,
-                                );
-
-                                tmp?.(isCollapsed);
-                            };
-
-                        isHelpCollapsed = isHelpCollapsedIfDependsOnScroll;
-                    }
-                    break;
-                case undefined:
-                    {
-                        const isCollapsed = false;
-                        helpCollapseParams = id<CollapseParams>({
-                            "behavior": "controlled",
-                            isCollapsed,
-                        });
-                        isHelpCollapsed = isCollapsed;
-                    }
-                    break;
-            }
-
-            return {
-                isHelpCollapsed,
-                "helpCollapseParams": isHelpClosed
-                    ? {
-                          "behavior": "controlled" as const,
-                          "isCollapsed": true,
-                      }
-                    : helpCollapseParams,
-            };
-        })();
-
-        const { classes, cx } = useStyles({
-            helperHeight,
-            isTitleCollapsed,
-            "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
-            "classesOverrides": props.classes,
+        const closeHelp = useConstCallback(() => {
+            onCloseHelp?.();
+            setPageHeaderClosedHelpers([...pageHeaderClosedHelpers, title]);
         });
 
-        return (
-            <div className={cx(classes.root, className)}>
-                <CollapsibleWrapper {...titleCollapseParams}>
-                    <Text typo="page heading" className={classes.title}>
-                        {mainIcon && (
-                            <Icon
-                                iconId={mainIcon}
-                                className={classes.titleIcon}
-                                size="large"
-                            />
-                        )}
-                        {title}
-                    </Text>
-                </CollapsibleWrapper>
-                <CollapsibleWrapper
-                    className={classes.helpCollapsibleWrapper}
-                    {...helpCollapseParams}
-                >
-                    <div ref={helperRef} className={classes.help}>
-                        {helpIcon && (
-                            <div>
-                                {helpIcon === "sentimentSatisfied" ? (
-                                    <LocalIcon
-                                        iconId="sentimentSatisfied"
-                                        className={classes.helpIcon}
-                                    />
-                                ) : (
-                                    <Icon
-                                        iconId={helpIcon}
-                                        className={classes.helpIcon}
-                                    />
-                                )}
-                            </div>
-                        )}
-                        <div className={classes.helpMiddle}>
-                            <Text typo="navigation label">{helpTitle}</Text>
-                            <Text typo="body 1">{helpContent}</Text>
-                        </div>
-                        <div>
-                            <IconButton
-                                iconId="close"
-                                onClick={closeHelp}
-                                className={classes.closeButton}
-                            />
-                        </div>
-                    </div>
-                </CollapsibleWrapper>
-            </div>
-        );
+        return { isHelpClosed, closeHelp };
+    })();
+
+    const { isHelpCollapsed, helpCollapseParams } = (function useClosure() {
+        const [
+            isHelpCollapsedIfDependsOnScroll,
+            setIsHelpCollapsedIfDependsOnScroll,
+        ] = useState(false);
+
+        let isHelpCollapsed: boolean;
+
+        let { helpCollapseParams } = props;
+
+        switch (helpCollapseParams?.behavior) {
+            case "controlled":
+                isHelpCollapsed = helpCollapseParams.isCollapsed;
+                break;
+            case "collapses on scroll":
+                {
+                    const tmp = helpCollapseParams.onIsCollapsedValueChange;
+
+                    helpCollapseParams.onIsCollapsedValueChange =
+                        isCollapsed => {
+                            setIsHelpCollapsedIfDependsOnScroll(isCollapsed);
+
+                            tmp?.(isCollapsed);
+                        };
+
+                    isHelpCollapsed = isHelpCollapsedIfDependsOnScroll;
+                }
+                break;
+            case undefined:
+                {
+                    const isCollapsed = false;
+                    helpCollapseParams = id<CollapseParams>({
+                        "behavior": "controlled",
+                        isCollapsed,
+                    });
+                    isHelpCollapsed = isCollapsed;
+                }
+                break;
+        }
+
+        return {
+            isHelpCollapsed,
+            "helpCollapseParams": isHelpClosed
+                ? {
+                      "behavior": "controlled" as const,
+                      "isCollapsed": true,
+                  }
+                : helpCollapseParams,
+        };
+    })();
+
+    const { classes, cx } = useStyles({
+        helperHeight,
+        isTitleCollapsed,
+        "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
+        "classesOverrides": props.classes,
     });
 
-    return { PageHeader };
-}
+    return (
+        <div className={cx(classes.root, className)}>
+            <CollapsibleWrapper {...titleCollapseParams}>
+                <Text typo="page heading" className={classes.title}>
+                    {mainIcon && (
+                        <Icon
+                            iconId={mainIcon}
+                            className={classes.titleIcon}
+                            size="large"
+                        />
+                    )}
+                    {title}
+                </Text>
+            </CollapsibleWrapper>
+            <CollapsibleWrapper
+                className={classes.helpCollapsibleWrapper}
+                {...helpCollapseParams}
+            >
+                <div ref={helperRef} className={classes.help}>
+                    {helpIcon !== undefined && (
+                        <div>
+                            <Icon
+                                iconId={helpIcon}
+                                className={classes.helpIcon}
+                            />
+                        </div>
+                    )}
+                    <div className={classes.helpMiddle}>
+                        <Text typo="navigation label">{helpTitle}</Text>
+                        <Text typo="body 1">{helpContent}</Text>
+                    </div>
+                    <div>
+                        <IconButton
+                            iconId={id<MuiIconsComponentName>("Close")}
+                            onClick={closeHelp}
+                            className={classes.closeButton}
+                        />
+                    </div>
+                </div>
+            </CollapsibleWrapper>
+        </div>
+    );
+});
 
 const useStyles = tss
-    .withName("PageHeader")
+    .withName({ PageHeader })
     .withParams<{
         helperHeight: number;
         isTitleCollapsed: boolean;

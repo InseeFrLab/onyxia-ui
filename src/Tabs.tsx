@@ -1,7 +1,5 @@
-import { Text } from "./Text/TextBase";
-import { createIcon } from "./Icon";
-import chevronLeft from "@mui/icons-material/ChevronLeft";
-import { tss } from "./lib/ThemeProvider";
+import { Text } from "./Text";
+import { tss } from "./lib/tss";
 import { useState, useMemo, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
@@ -12,10 +10,9 @@ import type { Equals } from "tsafe";
 import { useEvt } from "evt/hooks";
 import { useStateRef } from "powerhooks/useStateRef";
 import { Evt } from "evt";
-
-const { Icon } = createIcon({
-    chevronLeft,
-});
+import { Icon } from "./Icon";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { id } from "tsafe/id";
 
 export type TabProps<TabId extends string = string> = {
     className?: string;
@@ -372,7 +369,9 @@ const { CustomButton } = (() => {
                             case "arrow":
                                 return (
                                     <Icon
-                                        iconId="chevronLeft"
+                                        iconId={id<MuiIconsComponentName>(
+                                            "ChevronLeft",
+                                        )}
                                         className={cx(
                                             (() => {
                                                 switch (props.direction) {

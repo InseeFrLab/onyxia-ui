@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Alert } from "../Alert";
-import { Text } from "./theme";
+import { Text } from "../Text";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 

@@ -4,16 +4,17 @@ import type { SliderProps } from "@mui/material/Slider";
 import { assert } from "tsafe/assert";
 import { is } from "tsafe/is";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { tss } from "../lib/ThemeProvider";
-import { Text } from "../Text/TextBase";
+import { tss } from "../lib/tss";
+import { Text } from "../Text";
 import type { ReactNode } from "react";
 import { symToStr } from "tsafe/symToStr";
 import { capitalize } from "tsafe/capitalize";
 import { useWithProps } from "powerhooks/useWithProps";
 import { useDomRect } from "powerhooks/useDomRect";
 import { Tooltip } from "../Tooltip";
-import { createIcon } from "../Icon";
-import HelpIcon from "@mui/icons-material/Help";
+import type { MuiIconsComponentName } from "../MuiIconsComponentName";
+import { id } from "tsafe/id";
+import { Icon } from "../Icon";
 
 export type SimpleOrRangeSliderProps = {
     className?: string;
@@ -55,8 +56,6 @@ const useStyles = tss
             "minWidth": 150,
         },
     }));
-
-const { Icon } = createIcon({ "help": HelpIcon });
 
 export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
     const {
@@ -149,7 +148,7 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
                 {extraInfo !== undefined && (
                     <Tooltip title={extraInfo}>
                         <Icon
-                            iconId="help"
+                            iconId={id<MuiIconsComponentName>("Help")}
                             size="extra small"
                             className={classes.helpIcon}
                         />

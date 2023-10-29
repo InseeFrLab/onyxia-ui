@@ -1,4 +1,4 @@
-import { tss } from "./lib/ThemeProvider";
+import { tss } from "./lib/tss";
 import { memo } from "react";
 import MuiCircularProgress from "@mui/material/CircularProgress";
 

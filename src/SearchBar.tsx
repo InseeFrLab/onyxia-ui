@@ -1,25 +1,18 @@
 import { useRef, useState, forwardRef, memo } from "react";
 import type { ChangeEventHandler } from "react";
-import { tss } from "./lib/ThemeProvider";
+import { tss } from "./lib/tss";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { useClickAway } from "powerhooks/useClickAway";
 import { useEvt } from "evt/hooks";
-import { createIcon } from "./Icon";
-import { createIconButton } from "./IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { useMergeRefs } from "powerhooks/useMergeRefs";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
-
-const { Icon } = createIcon({
-    "search": SearchIcon,
-    "cancel": CancelIcon,
-});
-
-const { IconButton } = createIconButton({ Icon });
+import { id } from "tsafe/id";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
 
 export type SearchBarProps = {
     className?: string;
@@ -141,7 +134,7 @@ export const SearchBar = memo(
             >
                 <div>
                     <Icon
-                        iconId="search"
+                        iconId={id<MuiIconsComponentName>("Search")}
                         onClick={onIconClick}
                         className={classes.icon}
                     />
@@ -159,7 +152,7 @@ export const SearchBar = memo(
                                 placeholder={placeholder}
                             />
                             <IconButton
-                                iconId="cancel"
+                                iconId={id<MuiIconsComponentName>("Cancel")}
                                 size="small"
                                 disabled={search === ""}
                                 onClick={onClearButtonClick}

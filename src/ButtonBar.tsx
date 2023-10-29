@@ -1,66 +1,54 @@
-import type { FC } from "react";
 import { memo } from "react";
-import { tss } from "./lib/ThemeProvider";
+import { tss } from "./lib/tss";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
-import type { IconProps } from "./Icon";
-import { createButtonBarButton } from "./ButtonBarButton";
+import { ButtonBarButton } from "./ButtonBarButton";
+import { symToStr } from "tsafe/symToStr";
 
-export type ButtonBarProps<
-    ButtonId extends string = never,
-    IconId extends string = never,
-> = {
+export type ButtonBarProps<ButtonId extends string = never> = {
     className?: string;
     buttons: readonly {
         buttonId: ButtonId;
-        icon: IconId;
+        icon: string;
         label: string;
         isDisabled: boolean;
     }[];
     onClick(buttonId: ButtonId): void;
 };
 
-export function createButtonBar<IconId extends string = never>(params: {
-    Icon(props: IconProps<IconId>): ReturnType<FC>;
-}) {
-    const { Icon } = params;
+export const ButtonBar = memo(
+    <ButtonId extends string>(props: ButtonBarProps<ButtonId>) => {
+        const { className, buttons, onClick } = props;
 
-    const { ButtonBarButton } = createButtonBarButton({ Icon });
+        const { classes, cx } = useStyles();
 
-    const ButtonBar = memo(
-        <ButtonId extends string>(props: ButtonBarProps<ButtonId, IconId>) => {
-            const { className, buttons, onClick } = props;
+        const onClickFactory = useCallbackFactory(([buttonId]: [ButtonId]) =>
+            onClick(buttonId),
+        );
 
-            const { classes, cx } = useStyles();
+        return (
+            <div className={cx(classes.root, className)}>
+                {buttons.map(({ buttonId, icon, isDisabled, label }) => (
+                    <ButtonBarButton
+                        startIcon={icon}
+                        disabled={isDisabled}
+                        key={buttonId}
+                        onClick={onClickFactory(buttonId)}
+                    >
+                        {label}
+                    </ButtonBarButton>
+                ))}
+            </div>
+        );
+    },
+);
 
-            const onClickFactory = useCallbackFactory(
-                ([buttonId]: [ButtonId]) => onClick(buttonId),
-            );
+ButtonBar.displayName = symToStr({ ButtonBar });
 
-            return (
-                <div className={cx(classes.root, className)}>
-                    {buttons.map(({ buttonId, icon, isDisabled, label }) => (
-                        <ButtonBarButton
-                            startIcon={icon}
-                            disabled={isDisabled}
-                            key={buttonId}
-                            onClick={onClickFactory(buttonId)}
-                        >
-                            {label}
-                        </ButtonBarButton>
-                    ))}
-                </div>
-            );
-        },
-    );
-
-    const useStyles = tss.withName({ ButtonBar }).create(({ theme }) => ({
-        "root": {
-            "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            "boxShadow": theme.shadows[1],
-            "borderRadius": 8,
-            "overflow": "hidden",
-        },
-    }));
-
-    return { ButtonBar };
-}
+const useStyles = tss.withName({ ButtonBar }).create(({ theme }) => ({
+    "root": {
+        "backgroundColor": theme.colors.useCases.surfaces.surface1,
+        "boxShadow": theme.shadows[1],
+        "borderRadius": 8,
+        "overflow": "hidden",
+    },
+}));

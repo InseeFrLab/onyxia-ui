@@ -2,16 +2,14 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import Popper from "@mui/material/Popper";
-import CloseIcon from "@mui/icons-material/Close";
-import DoneIcon from "@mui/icons-material/Done";
 import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 import type { AutocompleteCloseReason } from "@mui/material/Autocomplete";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
 import { useEvt } from "evt/hooks";
-import { tss } from "./lib/ThemeProvider";
+import { tss } from "./lib/tss";
 import { useClickAway } from "powerhooks/useClickAway";
-import { Text } from "./Text/TextBase";
+import { Text } from "./Text";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import MuiLink from "@mui/material/Link";
 import { same } from "evt/tools/inDepth/same";
@@ -20,13 +18,14 @@ import type { StatefulReadonlyEvt } from "evt";
 import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
 import { arrDiff } from "evt/tools/reducers/diff";
-import { createButton } from "./Button";
+import { Button } from "./Button";
 import { useStateRef } from "powerhooks/useStateRef";
 import { assert } from "tsafe/assert";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
-
-const { Button } = createButton();
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { id } from "tsafe/id";
+import { createSpecificIcon } from "./Icon";
 
 export type PickerProps = {
     className?: string;
@@ -216,7 +215,9 @@ export const Picker = memo((props: PickerProps) => {
                             renderOption={(props, option, { selected }) => (
                                 <li {...props}>
                                     <Box
-                                        component={DoneIcon}
+                                        component={createSpecificIcon(
+                                            id<MuiIconsComponentName>("Done"),
+                                        )}
                                         sx={{
                                             "width": 17,
                                             "height": 17,
@@ -260,7 +261,9 @@ export const Picker = memo((props: PickerProps) => {
                                         {option.label}
                                     </Box>
                                     <Box
-                                        component={CloseIcon}
+                                        component={createSpecificIcon(
+                                            id<MuiIconsComponentName>("Close"),
+                                        )}
                                         sx={{
                                             "opacity": 0.6,
                                             "width": 18,

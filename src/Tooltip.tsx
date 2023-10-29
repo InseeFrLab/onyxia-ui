@@ -1,8 +1,8 @@
 import { memo } from "react";
 import type { ReactNode, ReactElement } from "react";
 import MuiTooltip from "@mui/material/Tooltip";
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 
 export type TooltipProps = {
     title: NonNullable<ReactNode> | undefined;

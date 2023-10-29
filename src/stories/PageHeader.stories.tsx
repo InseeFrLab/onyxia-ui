@@ -1,17 +1,13 @@
-import { useRef } from "react";
-import { createPageHeader } from "../PageHeader";
-import type { PageHeaderProps } from "../PageHeader";
-import { Icon } from "./theme";
-import type { IconId } from "./theme";
+import React from "react";
+import { PageHeader, type PageHeaderProps } from "../PageHeader";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { symToStr } from "tsafe/symToStr";
-
-const { PageHeader } = createPageHeader({ Icon });
+import { useStateRef } from "powerhooks/useStateRef";
 
 function Component(
     props: Omit<
-        PageHeaderProps<IconId>,
+        PageHeaderProps,
         "titleCollapseParams" | "helpCollapseParams"
     > & {
         transitionDuration: number;
@@ -19,7 +15,7 @@ function Component(
 ) {
     const { transitionDuration, ...rest } = props;
 
-    const scrollableElementRef = useRef<HTMLDivElement>();
+    const scrollableElementRef = useStateRef<HTMLDivElement>(null);
 
     return (
         <div

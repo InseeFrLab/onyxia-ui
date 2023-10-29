@@ -1,5 +1,6 @@
+import React from "react";
 import { Dialog } from "../Dialog";
-import { Button } from "./theme";
+import { Button } from "../Button";
 import type { DialogProps } from "../Dialog";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";

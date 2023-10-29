@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@mui/material/Dialog";
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 import Checkbox from "@mui/material/Checkbox";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@mui/material/FormControlLabel";

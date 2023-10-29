@@ -1,13 +1,16 @@
-import { Icon } from "./theme";
+import { Icon } from "../Icon";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import type { IconId } from "./theme";
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
+import type { CustomIconId } from "./theme";
+import type { MuiIconsComponentName } from "../MuiIconsComponentName";
+import { id } from "tsafe/id";
 
-const iconIds = ["tour", "services", "help", "home"] as const;
-
-assert<Equals<IconId, typeof iconIds[number]>>();
+const iconIds = [
+    id<CustomIconId>("tour"),
+    id<CustomIconId>("services"),
+    id<MuiIconsComponentName>("Help"),
+    id<MuiIconsComponentName>("Home"),
+] as const;
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -27,6 +30,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Home = getStory({
-    "iconId": "home",
+    "iconId": id<MuiIconsComponentName>("Home"),
     "size": "default",
 });

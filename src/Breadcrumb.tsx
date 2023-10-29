@@ -1,6 +1,6 @@
-import { tss } from "./lib/ThemeProvider";
+import { tss } from "./lib/tss";
 import { useMemo, useState, useEffect, memo } from "react";
-import { Text } from "./Text/TextBase";
+import { Text } from "./Text";
 import { useEvt } from "evt/hooks";
 import { Evt } from "evt";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";

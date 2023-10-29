@@ -1,6 +1,6 @@
+import React from "react";
 import { useState } from "react";
-import { createLanguageSelect } from "../LanguageSelect";
-import type { LanguageSelectProps } from "../LanguageSelect";
+import { LanguageSelect, type LanguageSelectProps } from "../LanguageSelect";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { symToStr } from "tsafe/symToStr";
@@ -11,19 +11,19 @@ const languagesPrettyPrint = {
     "fr": "Français",
 };
 
-const { LanguageSelect } = createLanguageSelect({
-    languagesPrettyPrint,
-});
-
 type Language = keyof typeof languagesPrettyPrint;
 
 function Component(
-    props: Omit<LanguageSelectProps<Language>, "language" | "onLanguageChange">,
+    props: Omit<
+        LanguageSelectProps<Language>,
+        "language" | "onLanguageChange" | "languagesPrettyPrint"
+    >,
 ) {
     const [language, setLanguage] = useState<Language>("en");
 
     return (
         <LanguageSelect
+            languagesPrettyPrint={languagesPrettyPrint}
             language={language}
             onLanguageChange={setLanguage}
             {...props}
@@ -36,7 +36,10 @@ const { meta, getStory } = getStoryFactory({
     "wrappedComponent": { [symToStr({ LanguageSelect })]: Component },
     "argTypes": {
         "variant": {
-            "options": id<LanguageSelectProps["variant"][]>(["big", "small"]),
+            "options": id<LanguageSelectProps<Language>["variant"][]>([
+                "big",
+                "small",
+            ]),
             "control": { "type": "radio" },
         },
     },

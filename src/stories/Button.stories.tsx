@@ -1,4 +1,4 @@
-import { Button } from "./theme";
+import { Button } from "../Button";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
 

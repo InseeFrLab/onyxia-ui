@@ -1,11 +1,6 @@
-import { createButtonBarButton } from "../ButtonBarButton";
+import { ButtonBarButton } from "../ButtonBarButton";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
-import { Icon } from "./theme";
-
-const { ButtonBarButton } = createButtonBarButton({
-    "Icon": Icon,
-});
 
 const { meta, getStory } = getStoryFactory({
     sectionName,

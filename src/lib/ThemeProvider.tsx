@@ -1,5 +1,5 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useEffect } from "react";
+import { useContext, createContext, useEffect, type ElementType } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -26,7 +26,6 @@ import { createMuiPaletteOptions } from "./color";
 import { shadows } from "./shadows";
 import { defaultSpacingConfig } from "./spacing";
 import type { SpacingConfig, Spacing } from "./spacing";
-import { createTss } from "tss-react";
 import type { IconSizeName, GetIconSizeInPx } from "./icon";
 import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
 import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
@@ -59,39 +58,17 @@ export type Theme<
     muiTheme: MuiTheme;
     iconSizesInPxByName: Record<IconSizeName, number>;
     windowInnerWidth: number;
+    publicUrl: string;
+    customIcons: Record<string, ElementType | string>;
 };
 
-const themeBaseContext = createContext<Theme | undefined>(undefined);
+/** Exported only for internal usage */
+export const themeContext = createContext<Theme | undefined>(undefined);
+
+// NOTE: Only For Storybook
 const isDarkModeEnabledOverrideContext = createContext<boolean | undefined>(
     undefined,
 );
-
-/** Used internally, do not export globally */
-
-export function useIsThemeProvided(): boolean {
-    const theme = useContext(themeBaseContext);
-
-    return theme !== undefined;
-}
-
-function useThemeBase() {
-    const theme = useContext(themeBaseContext);
-
-    if (theme === undefined) {
-        throw new Error("Your app should be wrapped into ThemeProvider");
-    }
-
-    return theme;
-}
-
-export const { tss } = createTss({
-    "useContext": function useContext() {
-        const theme = useThemeBase();
-        return { theme };
-    },
-});
-
-export const useStyles = tss.create({});
 
 export declare namespace ThemeProviderProps {
     type WithChildren = {
@@ -112,6 +89,20 @@ export declare namespace ThemeProviderProps {
     export type WithoutZoom = WithChildren;
 }
 
+/**
+ * publicUrl:
+ *
+ * If your site is hosted by navigating to `https://www.example.com`
+ * set publicUrl to ""
+ * If your site is hosted by navigating to `https://www.example.com/my-app`
+ * Then you want to set publicUrl to `/my-app`
+ *
+ * Be mindful that `${window.location.origin}${publicUrl}/material-icons/xxx.svg` must resolve
+ * to the icon that have been automatically copied in your public folder.
+ *
+ * If your are still using `create-react-app` you can just set
+ * publicUrl to `process.env.PUBLIC_URL` and don't have to think about it further.
+ */
 export function createThemeProvider<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
@@ -126,7 +117,12 @@ export function createThemeProvider<
     getIconSizeInPx?: GetIconSizeInPx;
     /** If undefined, splash screen is disabled */
     splashScreenParams?: SplashScreenParams;
-    /** Default true */
+    publicUrl: string;
+    customIcons?: Record<string, ElementType | string>;
+    leftBarParams?: {
+        defaultIsPanelOpen: boolean;
+        persistIsPanelOpen: boolean;
+    };
 }) {
     const {
         palette = defaultPalette as NonNullable<typeof params["palette"]>,
@@ -141,6 +137,8 @@ export function createThemeProvider<
         defaultIsDarkModeEnabled,
         getIconSizeInPx = defaultGetIconSizeInPx,
         splashScreenParams,
+        publicUrl,
+        customIcons,
     } = params;
 
     if (defaultIsDarkModeEnabled !== undefined) {
@@ -282,6 +280,10 @@ export function createThemeProvider<
                         "rootFontSizePx": typographyDesc.rootFontSizePx,
                     }),
                     windowInnerWidth,
+                    publicUrl,
+                    "customIcons": {
+                        ...customIcons,
+                    },
                 });
             },
             { "max": 1 },
@@ -363,13 +365,13 @@ export function createThemeProvider<
         );
 
         return (
-            <themeBaseContext.Provider value={theme}>
+            <themeContext.Provider value={theme}>
                 <MuiThemeProvider theme={theme.muiTheme}>
                     <CssBaselineOrScopedCssBaseline>
                         <MaybeSplashScreen>{children}</MaybeSplashScreen>
                     </CssBaselineOrScopedCssBaseline>
                 </MuiThemeProvider>
-            </themeBaseContext.Provider>
+            </themeContext.Provider>
         );
     }
 

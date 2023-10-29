@@ -1,11 +1,12 @@
 import { useReducer, memo } from "react";
 import type { ReactNode } from "react";
-import { createIcon } from "./Icon";
-import { createIconButton } from "./IconButton";
 import MuiAlert from "@mui/material/Alert";
-import { Text } from "./Text/TextBase";
-import { tss } from "./lib/ThemeProvider";
-import CloseSharp from "@mui/icons-material/CloseSharp";
+import { Text } from "./Text";
+import { tss } from "./lib/tss";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { id } from "tsafe/id";
+import { symToStr } from "tsafe/symToStr";
+import { IconButton } from "./IconButton";
 
 export type AlertProps =
     | AlertProps.NonClosable
@@ -33,12 +34,6 @@ export namespace AlertProps {
         onClose: () => void;
     };
 }
-
-const { IconButton } = createIconButton(
-    createIcon({
-        "closeSharp": CloseSharp,
-    }),
-);
 
 export const Alert = memo((props: AlertProps) => {
     const { severity, children, className, ...rest } = props;
@@ -73,7 +68,7 @@ export const Alert = memo((props: AlertProps) => {
                 "doDisplayCross" in rest &&
                 rest.doDisplayCross && (
                     <IconButton
-                        iconId="closeSharp"
+                        iconId={id<MuiIconsComponentName>("CloseSharp")}
                         aria-label="close"
                         onClick={
                             "isClosed" in rest
@@ -95,6 +90,8 @@ export const Alert = memo((props: AlertProps) => {
         </MuiAlert>
     );
 });
+
+Alert.displayName = symToStr({ Alert });
 
 const useStyles = tss
     .withName({ Alert })

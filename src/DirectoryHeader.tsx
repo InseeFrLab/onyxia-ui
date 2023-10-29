@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { tss } from "./lib/ThemeProvider";
-import { Text } from "./Text/TextBase";
-import { createIcon } from "./Icon";
-import { createIconButton } from "./IconButton";
+import { tss } from "./lib/tss";
+import { Text } from "./Text";
 import { memo } from "react";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { pxToNumber } from "./tools/pxToNumber";
+import { IconButton } from "./IconButton";
+import type { MuiIconsComponentName } from "./MuiIconsComponentName";
+import { id } from "tsafe/id";
 
 /**
  * image:
@@ -38,12 +38,6 @@ export type Props = {
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
 
-const { IconButton } = createIconButton(
-    createIcon({
-        "chevronLeft": ChevronLeftIcon,
-    }),
-);
-
 export const DirectoryHeader = memo((props: Props) => {
     const { className, image, title, subtitle, onGoBack } = props;
 
@@ -56,7 +50,7 @@ export const DirectoryHeader = memo((props: Props) => {
             <div>
                 <IconButton
                     size="large"
-                    iconId="chevronLeft"
+                    iconId={id<MuiIconsComponentName>("ChevronLeft")}
                     onClick={onGoBack}
                 />
             </div>

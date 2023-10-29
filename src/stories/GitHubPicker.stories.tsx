@@ -1,5 +1,6 @@
+import React from "react";
 import { GitHubPicker } from "../GitHubPicker";
-import { Button } from "./theme";
+import { Button } from "../Button";
 import { useStateRef } from "powerhooks/useStateRef";
 import { useState } from "react";
 import type { GitHubPickerProps } from "../GitHubPicker";

@@ -1,5 +1,6 @@
+import React from "react";
 import { Card } from "../Card";
-import { Text } from "./theme";
+import { Text } from "../Text";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 

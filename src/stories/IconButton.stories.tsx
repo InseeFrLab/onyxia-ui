@@ -1,14 +1,16 @@
-import { IconButton } from "./theme";
+import { IconButton } from "../IconButton";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
+import type { CustomIconId } from "./theme";
+import type { MuiIconsComponentName } from "../MuiIconsComponentName";
+import { id } from "tsafe/id";
 
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
-import type { IconId } from "./theme";
-
-const iconIds = ["tour", "services", "help", "home"] as const;
-
-assert<Equals<IconId, typeof iconIds[number]>>();
+const iconIds = [
+    id<CustomIconId>("tour"),
+    id<CustomIconId>("services"),
+    id<MuiIconsComponentName>("Help"),
+    id<MuiIconsComponentName>("Home"),
+] as const;
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -24,6 +26,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Vue = getStory({
-    "iconId": "home",
+    "iconId": id<MuiIconsComponentName>("Home"),
     ...logCallbacks(["onClick"]),
 });

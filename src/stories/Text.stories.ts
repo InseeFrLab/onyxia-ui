@@ -1,4 +1,4 @@
-import { Text } from "./theme";
+import { Text } from "../Text";
 import type { TypographyDesc } from "../lib/typography";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
@@ -16,12 +16,20 @@ const variantNameBase = [
     "navigation label",
     "body 1",
     "body 2",
+    "body 3",
     "caption",
 ] as const;
 
-assert<
-    Equals<TypographyDesc.VariantNameBase, typeof variantNameBase[number]>
->();
+{
+    type A = TypographyDesc.VariantNameBase;
+    type B = typeof variantNameBase[number];
+
+    type X = Exclude<A, B>;
+    type Y = Exclude<B, A>;
+
+    assert<Equals<X, never>>();
+    assert<Equals<Y, never>>();
+}
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
