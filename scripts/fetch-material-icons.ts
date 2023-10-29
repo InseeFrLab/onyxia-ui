@@ -1,11 +1,7 @@
 import { join as pathJoin } from "path";
 import fs from "fs";
-import { capitalize } from "tsafe/capitalize";
 import { downloadAndUnzip } from "./tools/downloadAndUnzip";
-import {
-    wordByNumberEntries,
-    muiComponentNameToFileName,
-} from "../src/lib/icon";
+import { muiComponentNameToFileName } from "../src/lib/icon";
 import { assert } from "tsafe/assert";
 
 const rootDirPath = pathJoin(__dirname, "..");
@@ -29,8 +25,6 @@ const rootDirPath = pathJoin(__dirname, "..");
         "destDirPath": iconsDirPath,
         "specificDirsToExtract": [
             `material-ui-${version}/packages/mui-icons-material/material-icons`,
-            //For testing
-            `material-ui-${version}/packages/mui-icons-material/lib/esm`,
         ],
         "doUseCache": true,
         "projectDirPath": rootDirPath,
@@ -40,55 +34,9 @@ const rootDirPath = pathJoin(__dirname, "..");
         .readdirSync(iconsDirPath)
         .filter(name => name.endsWith(".svg"));
 
-    const muiComponentNames = iconFileNames
-        .map(name => name.replace(/_24px.svg$/, ""))
-        .map(name =>
-            name.split("_").map(part => {
-                for (const [start, word] of wordByNumberEntries) {
-                    if (/[0-9]x[0-9]/.test(part)) {
-                        return part;
-                    }
-
-                    if (part.startsWith(start)) {
-                        return `${word}${capitalize(part.slice(start.length))}`;
-                    }
-                }
-                return part;
-            }),
-        )
-        .map(parts => parts.map(part => (part === "tenK" ? "oneKk" : part)))
-        .map(parts => parts.map(capitalize).join(""));
-
-    {
-        //let errorCount = 0;
-
-        muiComponentNames.forEach((muiComponentName, i) => {
-            /*
-            if( !fs.existsSync(pathJoin(iconsDirPath, `${muiComponentName}.js`)) ){
-                errorCount++;
-            }
-            */
-
-            assert(
-                fs.existsSync(pathJoin(iconsDirPath, `${muiComponentName}.js`)),
-                `There is no ${muiComponentName}.js Mui component, generated from ${iconFileNames[i]}`,
-            );
-        });
-
-        /*
-        console.log({ errorCount });
-
-        if( Date.now() > 0 ){
-            process.exit(0);
-        }
-        */
-
-        fs.readdirSync(iconsDirPath)
-            .filter(name => !name.endsWith(".svg"))
-            .forEach(name =>
-                fs.rmSync(pathJoin(iconsDirPath, name), { "recursive": true }),
-            );
-    }
+    const muiComponentNames = iconFileNames.map(fileName =>
+        myDestRewriter({ "base": fileName }).replace(/\.js$/, ""),
+    );
 
     muiComponentNames.forEach((muiComponentName, i) => {
         const reconstitutedFileName =
@@ -126,33 +74,97 @@ const rootDirPath = pathJoin(__dirname, "..");
     fs.writeFileSync(typeFilePath, Buffer.from(tsCode, "utf8"));
 })();
 
-/*
+// Copy-paste from https://github.com/mui/material-ui/blob/master/packages/mui-icons-material/renameFilters/material-design-icons.mjs
+const { myDestRewriter } = (() => {
+    const singleDigitNumbers: any = [
+        "Zero",
+        "One",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+    ];
+    const twoDigitNumbers1: any = [
+        "Ten",
+        "Eleven",
+        "Twelve",
+        "Thirteen",
+        "Fourteen",
+        "Fifteen",
+        "Sixteen",
+        "Seventeen",
+        "Eighteen",
+        "Nineteen",
+    ];
 
-const muiIconsDirPath = pathJoin(rootDirPath, "node_modules", "@mui/", "icons-material");
+    function myDestRewriter(svgPathObj: { base: string }) {
+        let fileName = svgPathObj.base;
 
-const tsCode = [
-    `import { lazy } from "react";`,
-    ``,
-    [
-        `export const muiComponentByIconId = {`,
-        fs.readdirSync(muiIconsDirPath)
-            .filter(name => name.endsWith(".js") && capitalize(name) === name)
-            .map(name => name.replace(/\.js$/, ""))
-            .map(componentName => `    "${uncapitalize(componentName)}": lazy(() => import("@mui/icons-material/${componentName}")) as any`)
-            .join(",\n"),
-        `};`
-    ].join("\n"),
-    ``,
-    `export type MuiIconId = keyof typeof muiComponentByIconId;`,
-    ``
-].join("\n");
+        fileName = fileName
+            .replace(/_([0-9]+)px\.svg/, ".js")
+            .replace(/(^.)|(_)(.)/g, (match, p1, p2, p3) =>
+                (p1 || p3).toUpperCase(),
+            );
 
-const destFilePath = pathJoin(rootDirPath, "src", "generated", "muiComponentByIconId.ts");
+        if (fileName.startsWith("3dRotation")) {
+            return `ThreeD${fileName.slice(2)}`;
+        }
 
-fs.mkdirSync(pathDirname(destFilePath), { "recursive": true });
+        if (fileName.startsWith("3p")) {
+            return `ThreeP${fileName.slice(2)}`;
+        }
 
-fs.writeFileSync(
-    pathJoin(rootDirPath, "src", "generated", "muiComponentByIconId.ts"),
-    Buffer.from(tsCode, "utf8")
-);
-*/
+        if (fileName.startsWith("30fps")) {
+            return `ThirtyFps${fileName.slice(5)}`;
+        }
+        if (fileName.startsWith("60fps")) {
+            return `SixtyFps${fileName.slice(5)}`;
+        }
+        if (fileName.startsWith("360")) {
+            return `ThreeSixty${fileName.slice(3)}`;
+        }
+
+        if (/\dk/.test(fileName)) {
+            return `${singleDigitNumbers[fileName[0]]}K${fileName.slice(2)}`;
+        }
+
+        if (/^\dmp/.test(fileName)) {
+            return `${singleDigitNumbers[fileName[0]]}M${fileName.slice(2)}`;
+        }
+        if (/^1\dmp/.test(fileName)) {
+            return `${twoDigitNumbers1[fileName[1]]}M${fileName.slice(3)}`;
+        }
+        if (/^2\dmp/.test(fileName)) {
+            return `Twenty${singleDigitNumbers[fileName[1]]}M${fileName.slice(
+                3,
+            )}`;
+        }
+
+        if (fileName.startsWith("1x")) {
+            return `TimesOne${fileName.slice(2)}`;
+        }
+
+        if (fileName.startsWith("3g")) {
+            return `ThreeG${fileName.slice(2)}`;
+        }
+        if (fileName.startsWith("4g")) {
+            return `FourG${fileName.slice(2)}`;
+        }
+        if (fileName.startsWith("5g")) {
+            return `FiveG${fileName.slice(2)}`;
+        }
+
+        // All other names starting with a number between 10 and 19
+        if (/^1\d/.test(fileName)) {
+            return `${twoDigitNumbers1[fileName[1]]}${fileName.slice(2)}`;
+        }
+
+        return fileName;
+    }
+
+    return { myDestRewriter };
+})();
