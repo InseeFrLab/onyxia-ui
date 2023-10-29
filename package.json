@@ -21,6 +21,9 @@
         "link-in-web": "yarn build && ts-node --skipProject scripts/link-in-app.ts web",
         "start-test-app": "yarn build && ts-node --skipProject scripts/link-in-test-app.ts && cd test-app && rm -rf node_modules/.cache && yarn start"
     },
+    "bin": {
+        "copy-material-icons-to-public": "dist/bin/copy-material-icons-to-public.js"
+    },
     "lint-staged": {
         "*.{ts,tsx}": [
             "eslint --fix"

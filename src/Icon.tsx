@@ -9,6 +9,8 @@ import type { Equals } from "tsafe";
 import { type IconSizeName, muiComponentNameToFileName } from "./lib/icon";
 import { createDynamicSvg } from "./tools/LazySvg";
 import { id } from "tsafe/id";
+import { MuiIconId } from "./assets/material-icons/type";
+import { typeGuard } from "tsafe/typeGuard";
 
 /**
  * Size:
@@ -34,15 +36,15 @@ import { id } from "tsafe/id";
  * simply set the style "color".
  *
  */
-export type IconProps<IconId extends string = string> = {
-    iconId: IconId;
+export type IconProps<CustomIconId extends string = string> = {
+    iconId: CustomIconId | MuiIconId;
     className?: string;
     /** default default */
     size?: IconSizeName;
     onClick?: MouseEventHandler<SVGSVGElement>;
 };
 
-export function createIcon<IconId extends string>(params: {
+export function createIcon<CustomIconId extends string>(params: {
     /**
      * If your app is hosted at the origin (e.g. https://example.com/), set publicUrl to ''.
      * If your app is hosted at a sub-path (e.g. https://example.com/sub-path/), set publicUrl to '/sub-path'.
@@ -52,12 +54,12 @@ export function createIcon<IconId extends string>(params: {
      * (It is constrained by what's in the "homepage" filed of package.json)
      **/
     publicUrl: string;
-    customIcons?: Record<IconId, ElementType | string>;
+    customIcons?: Record<CustomIconId, ElementType | string>;
 }) {
     const { publicUrl, customIcons } = params;
 
     const Icon = memo(
-        forwardRef<SVGSVGElement, IconProps<IconId>>((props, ref) => {
+        forwardRef<SVGSVGElement, IconProps<CustomIconId>>((props, ref) => {
             const {
                 iconId,
                 className,
@@ -73,7 +75,8 @@ export function createIcon<IconId extends string>(params: {
 
             const Component = (() => {
                 const customIcon =
-                    customIcons !== undefined && iconId in customIcons
+                    customIcons !== undefined &&
+                    typeGuard<CustomIconId>(iconId, iconId in customIcons)
                         ? customIcons[iconId]
                         : undefined;
 

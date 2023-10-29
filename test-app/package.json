@@ -27,7 +27,10 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "copy-material-icons-to-public": "node node_modules/onyxia-ui/bin/copy-material-icons-to-public.js",
+        "prestart": "yarn copy-material-icons-to-public",
+        "prebuild": "yarn copy-material-icons-to-public"
     },
     "eslintConfig": {
         "extends": [
