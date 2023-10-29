@@ -42,8 +42,6 @@ const rootDirPath = pathJoin(__dirname, "..");
         const reconstitutedFileName =
             muiComponentNameToFileName(muiComponentName);
 
-        console.log(i);
-
         assert(
             iconFileNames.includes(reconstitutedFileName),
             [

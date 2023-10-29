@@ -1,5 +1,4 @@
 import { breakpointsValues } from "./breakpoints";
-import { capitalize } from "tsafe/capitalize";
 import { uncapitalize } from "tsafe/uncapitalize";
 
 export const iconSizeNames = [
@@ -82,37 +81,37 @@ export function getIconSizesInPxByName(params: {
     return out;
 }
 
-export const wordByNumberEntries = [
-    ["10", "ten"],
-    ["11", "eleven"],
-    ["12", "twelve"],
-    ["13", "thirteen"],
-    ["14", "fourteen"],
-    ["15", "fifteen"],
-    ["16", "sixteen"],
-    ["17", "seventeen"],
-    ["18", "eighteen"],
-    ["19", "nineteen"],
-    ["21", "twentyOne"],
-    ["22", "twentyTwo"],
-    ["23", "twentyThree"],
-    ["24", "twentyFour"],
-    ["20", "twenty"],
-    ["30", "thirty"],
-    ["360", "threeSixty"],
-    ["60", "sixty"],
-    ["1", "one"],
-    ["2", "two"],
-    ["3", "three"],
-    ["4", "four"],
-    ["5", "five"],
-    ["6", "six"],
-    ["7", "seven"],
-    ["8", "eight"],
-    ["9", "nine"],
-];
-
 export const { muiComponentNameToFileName } = (() => {
+    const wordByNumberEntries = [
+        ["10", "ten"],
+        ["11", "eleven"],
+        ["12", "twelve"],
+        ["13", "thirteen"],
+        ["14", "fourteen"],
+        ["15", "fifteen"],
+        ["16", "sixteen"],
+        ["17", "seventeen"],
+        ["18", "eighteen"],
+        ["19", "nineteen"],
+        ["21", "twentyOne"],
+        ["22", "twentyTwo"],
+        ["23", "twentyThree"],
+        ["24", "twentyFour"],
+        ["20", "twenty"],
+        ["30", "thirty"],
+        ["360", "threeSixty"],
+        ["60", "sixty"],
+        ["1", "one"],
+        ["2", "two"],
+        ["3", "three"],
+        ["4", "four"],
+        ["5", "five"],
+        ["6", "six"],
+        ["7", "seven"],
+        ["8", "eight"],
+        ["9", "nine"],
+    ];
+
     const numberByWord = Object.fromEntries(
         wordByNumberEntries.map(([num, word]) => [word.toLowerCase(), num]),
     );
@@ -159,6 +158,44 @@ export const { muiComponentNameToFileName } = (() => {
                 baseIconFilename = "grid_3x3";
             } else if (baseMuiComponentName === "Grid4x4") {
                 baseIconFilename = "grid_4x4";
+            } else if (baseMuiComponentName === "TimesOneMobiledata") {
+                baseIconFilename = "1x_mobiledata";
+            } else if (baseMuiComponentName === "TwentyZeroMp") {
+                baseIconFilename = "20mp";
+            } else if (baseMuiComponentName === "Crop169") {
+                baseIconFilename = "crop_16_9";
+            } else if (baseMuiComponentName === "Forward10") {
+                baseIconFilename = "forward_10";
+            } else if (baseMuiComponentName === "Forward30") {
+                baseIconFilename = "forward_30";
+            } else if (baseMuiComponentName === "LooksOne") {
+                baseIconFilename = "looks_one";
+            } else if (baseMuiComponentName === "LooksTwo") {
+                baseIconFilename = "looks_two";
+            } else if (baseMuiComponentName === "PlusOne") {
+                baseIconFilename = "plus_one";
+            } else if (baseMuiComponentName === "RepeatOne") {
+                baseIconFilename = "repeat_one";
+            } else if (baseMuiComponentName === "RepeatOneOn") {
+                baseIconFilename = "repeat_one_on";
+            } else if (baseMuiComponentName === "Replay10") {
+                baseIconFilename = "replay_10";
+            } else if (baseMuiComponentName === "Replay30") {
+                baseIconFilename = "replay_30";
+            } else if (baseMuiComponentName === "Rotate90DegreesCcw") {
+                baseIconFilename = "rotate_90_degrees_ccw";
+            } else if (baseMuiComponentName === "Rotate90DegreesCw") {
+                baseIconFilename = "rotate_90_degrees_cw";
+            } else if (baseMuiComponentName === "StarBorderPurple500") {
+                baseIconFilename = "star_border_purple500";
+            } else if (baseMuiComponentName === "StarPurple500") {
+                baseIconFilename = "star_purple500";
+            } else if (baseMuiComponentName === "Timer10") {
+                baseIconFilename = "timer_10";
+            } else if (baseMuiComponentName === "Timer10Select") {
+                baseIconFilename = "timer_10_select";
+            } else if (baseMuiComponentName === "TwoWheeler") {
+                baseIconFilename = "two_wheeler";
             } else {
                 break special_cases;
             }
@@ -185,8 +222,6 @@ export const { muiComponentNameToFileName } = (() => {
             .split(/(?=[A-Z0-9])/)
             .map(word => uncapitalize(word))
             .map((word, i) => {
-                console.log("===>", word);
-
                 const num = numberByWord[word];
 
                 if (num === undefined) {
@@ -221,21 +256,8 @@ export const { muiComponentNameToFileName } = (() => {
                 return `${acc}${word}`;
             }, "")
             .replace(/!!!$/, "")
-            //.join("_")
-            //.replace(/!!!_up/, "_up")
-            //.replace(/!!!$/, "")
-            //.replace(/!!!_/, "")
-            //.replace(/_2_tone$/, "_two_tone")
             .replace(/^co_2/, "co2")
             .replace(/$/, `${isTwoTone ? "_two_tone" : ""}_24px.svg`);
-        /*
-        .replace("_k_", "k_")
-        .replace("_mp_", "mp_")
-        .replace("_x_", "x_")
-        .replace("_fps_", "fps_")
-        .replace("3_d_", "3d_")
-        .replace("3_g_", "3g_");
-        */
 
         return iconFileName;
     }
