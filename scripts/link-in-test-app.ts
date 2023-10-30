@@ -111,7 +111,7 @@ const execYarnLink = (params: { targetModuleName?: string; cwd: string }) => {
 
 const testAppNames = ["test-app"] as const;
 
-const getTestAppPath = (testAppName: typeof testAppNames[number]) =>
+const getTestAppPath = (testAppName: (typeof testAppNames)[number]) =>
     pathJoin(projectDirPath, testAppName);
 
 testAppNames.forEach(testAppName =>

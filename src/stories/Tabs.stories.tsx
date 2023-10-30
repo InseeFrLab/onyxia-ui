@@ -26,7 +26,7 @@ function Component(
                 } as const),
         ),
     );
-    type TabId = typeof tabs[number]["id"];
+    type TabId = (typeof tabs)[number]["id"];
 
     const [activeTabId, setActiveTabId] = useState<TabId>("tab5");
 

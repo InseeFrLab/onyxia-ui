@@ -22,7 +22,7 @@ const variantNameBase = [
 
 {
     type A = TypographyDesc.VariantNameBase;
-    type B = typeof variantNameBase[number];
+    type B = (typeof variantNameBase)[number];
 
     type X = Exclude<A, B>;
     type Y = Exclude<B, A>;

@@ -9,7 +9,7 @@ export const iconSizeNames = [
     "large",
 ] as const;
 
-export type IconSizeName = typeof iconSizeNames[number];
+export type IconSizeName = (typeof iconSizeNames)[number];
 
 export type GetIconSizeInPx = (params: {
     sizeName: IconSizeName;

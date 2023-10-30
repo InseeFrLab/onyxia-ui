@@ -125,12 +125,12 @@ export function createThemeProvider<
     };
 }) {
     const {
-        palette = defaultPalette as NonNullable<typeof params["palette"]>,
+        palette = defaultPalette as NonNullable<(typeof params)["palette"]>,
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
-            typeof params["createColorUseCases"]
+            (typeof params)["createColorUseCases"]
         >,
         getTypographyDesc = defaultGetTypographyDesc as NonNullable<
-            typeof params["getTypographyDesc"]
+            (typeof params)["getTypographyDesc"]
         >,
         isReactStrictModeEnabled = false,
         spacingConfig = defaultSpacingConfig,
