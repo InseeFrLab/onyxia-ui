@@ -1,53 +1,23 @@
-import { join as pathJoin, basename as pathBasename } from "path";
+// Generate material icons type
+// Put the material-icons folder in the public dir of storybook
+
+import { join as pathJoin } from "path";
 import fs from "fs";
-import { downloadAndUnzip } from "./tools/downloadAndUnzip";
 import { muiComponentNameToFileName } from "../src/lib/icon";
 import { assert } from "tsafe/assert";
-import { transformCodebase } from "./tools/transformCodebase";
+import { downloadMaterialIcons } from "../src/bin/copy-material-icons-to-public";
 
 const rootDirPath = pathJoin(__dirname, "..");
 
 (async () => {
-    console.log(
-        "NOTE: The following operation will take about a minute to complete if it's a first install",
-    );
+    const publicDirPath = pathJoin(rootDirPath, ".storybook", "static");
 
-    const version = "5.14.15";
-
-    const iconsDirPath = pathJoin(
-        rootDirPath,
-        "src",
-        "assets",
-        "material-icons",
-    );
-
-    await downloadAndUnzip({
-        "url": `https://github.com/mui/material-ui/archive/refs/tags/v${version}.zip`,
-        "destDirPath": iconsDirPath,
-        "specificDirsToExtract": [
-            `material-ui-${version}/packages/mui-icons-material/material-icons`,
-        ],
-        "doUseCache": true,
-        "projectDirPath": rootDirPath,
-    });
-
-    fs.writeFileSync(
-        pathJoin(iconsDirPath, ".gitignore"),
-        Buffer.from("*", "utf8"),
-    );
-
-    transformCodebase({
-        "srcDirPath": iconsDirPath,
-        "destDirPath": pathJoin(
-            rootDirPath,
-            ".storybook",
-            "static",
-            pathBasename(iconsDirPath),
-        ),
+    await downloadMaterialIcons({
+        publicDirPath,
     });
 
     const iconFileNames = fs
-        .readdirSync(iconsDirPath)
+        .readdirSync(pathJoin(publicDirPath, "material-icons"))
         .filter(name => name.endsWith(".svg"));
 
     const muiComponentNames = iconFileNames.map(fileName =>

@@ -116,6 +116,14 @@ which will end up impacting your docker image size.
 }
 ```
 
+OPTIONAL: Use cache in your Workflow to speed up your CI pipeline
+
+```yarn
+    - uses: bahmutov/npm-install@v1
+      env:
+        XDG_CACHE_HOME: "/home/runner/.cache/yarn"
+```
+
 This will enable you to do this:
 
 ```tsx

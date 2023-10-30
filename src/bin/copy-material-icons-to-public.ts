@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { join as pathJoin, resolve as pathResolve } from "path";
+import { join as pathJoin } from "path";
 import * as fs from "fs";
 import { assert } from "tsafe/assert";
 import { getProjectRoot } from "./tools/getProjectRoot";
 import type { Equals } from "tsafe";
+import { downloadAndUnzip } from "./tools/downloadAndUnzip";
 
-(async () => {
-    const projectDirPath = process.cwd();
+const projectDirPath = process.cwd();
 
+async function readPublicDirPath() {
     const viteConfigFilePath = (() => {
         for (const ext of [".js", ".ts"]) {
             const candidateFilePath = pathJoin(
@@ -111,53 +112,39 @@ import type { Equals } from "tsafe";
         fs.mkdirSync(publicDirPath, { "recursive": true });
     }
 
+    return publicDirPath;
+}
+
+export async function downloadMaterialIcons(params: { publicDirPath: string }) {
+    const { publicDirPath } = params;
+
     const materialIconsDirPath = pathJoin(publicDirPath, "material-icons");
 
     if (fs.existsSync(materialIconsDirPath)) {
         fs.rmSync(materialIconsDirPath, { "recursive": true, "force": true });
     }
 
-    (function callee(depth: number) {
-        const parentProjectDirPath = pathResolve(
-            pathJoin(...[projectDirPath, ...new Array(depth).fill("..")]),
-        );
+    console.log(
+        "NOTE: Download of material icons takes a while if it's the first time you run this script",
+    );
 
-        const materialIconsPathInNodeModules = pathJoin(
-            ...[
-                parentProjectDirPath,
-                "node_modules",
-                "onyxia-ui",
-                "assets",
-                "material-icons",
-            ],
-        );
+    const version = "5.14.15";
 
-        if (!fs.existsSync(materialIconsPathInNodeModules)) {
-            if (parentProjectDirPath === "/") {
-                console.error(
-                    [
-                        "Can't find material-icons directory",
-                        `please submit an issue about it here ${getRepoIssueUrl()}`,
-                    ].join(" "),
-                );
-                process.exit(-1);
-            }
-
-            callee(depth + 1);
-
-            return;
-        }
-
-        fs.cpSync(materialIconsPathInNodeModules, materialIconsDirPath, {
-            "recursive": true,
-        });
-    })(0);
+    await downloadAndUnzip({
+        "url": `https://github.com/mui/material-ui/archive/refs/tags/v${version}.zip`,
+        "destDirPath": materialIconsDirPath,
+        "specificDirsToExtract": [
+            `material-ui-${version}/packages/mui-icons-material/material-icons`,
+        ],
+        "doUseCache": true,
+        projectDirPath,
+    });
 
     fs.writeFileSync(
         pathJoin(materialIconsDirPath, ".gitignore"),
         Buffer.from("*", "utf8"),
     );
-})();
+}
 
 function getRepoIssueUrl() {
     const reactDsfrRepoUrl = JSON.parse(
@@ -169,4 +156,13 @@ function getRepoIssueUrl() {
         .replace(/\.git$/, "");
 
     return `${reactDsfrRepoUrl}/issues`;
+}
+
+//Execute this only if the script is called directly (and not with import)
+if (require.main === module) {
+    (async () => {
+        await downloadMaterialIcons({
+            "publicDirPath": await readPublicDirPath(),
+        });
+    })();
 }

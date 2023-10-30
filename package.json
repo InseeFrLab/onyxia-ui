@@ -9,8 +9,7 @@
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
     "scripts": {
-        "fetch-material-icons": "ts-node --skipProject scripts/fetch-material-icons.ts",
-        "prepare": "yarn fetch-material-icons",
+        "prepare": "ts-node --skipProject scripts/prepare.ts",
         "build": "tsc && yarn copy-files",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
@@ -18,7 +17,7 @@
         "format": "npm run _format -- --write",
         "format:check": "npm run _format -- --list-different",
         "storybook": "start-storybook -p 6006 --static-dir ./.storybook/static",
-        "copy-files": "cpx \"src/assets/**/*.{svg,css,woff2,gitignore}\" dist/assets/",
+        "copy-files": "cpx \"src/assets/**/*.{css,woff2}\" dist/assets/",
         "link-in-web": "yarn build && ts-node --skipProject scripts/link-in-app.ts web",
         "start-test-app": "yarn build && ts-node --skipProject scripts/link-in-test-app.ts && cd test-app && rm -rf node_modules/.cache && yarn start"
     },
@@ -73,7 +72,10 @@
         "powerhooks": "^1.0.0",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.6.4",
-        "tss-react": "^4.9.0"
+        "tss-react": "^4.9.0",
+        "yauzl": "^2.10.0",
+        "yazl": "^2.5.1",
+        "make-fetch-happen": "^13.0.0"
     },
     "devDependencies": {
         "@emotion/css": "^11.11.2",
@@ -109,7 +111,6 @@
         "husky": "^4.3.8",
         "i18nifty": "^1.3.6",
         "lint-staged": "^11.0.0",
-        "make-fetch-happen": "^13.0.0",
         "prettier": "^2.3.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -118,8 +119,6 @@
         "storybook-dark-mode": "^1.1.0",
         "ts-node": "^10.3.0",
         "typescript": "^4.7.4",
-        "webpack": "^5.73.0",
-        "yauzl": "^2.10.0",
-        "yazl": "^2.5.1"
+        "webpack": "^5.73.0"
     }
 }
