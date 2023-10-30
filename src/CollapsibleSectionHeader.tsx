@@ -4,9 +4,8 @@ import { Text } from "./Text";
 import MuiLink from "@mui/material/Link";
 import { pxToNumber } from "./tools/pxToNumber";
 import { IconButton } from "./IconButton";
-import { id } from "tsafe/id";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
 import { symToStr } from "tsafe/symToStr";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export type CollapsibleSectionHeaderProps = {
     className?: string;
@@ -36,7 +35,7 @@ export const CollapsibleSectionHeader = memo(
                 <IconButton
                     className={classes.chevron}
                     size="large"
-                    iconId={id<MuiIconsComponentName>("ChevronLeft")}
+                    icon={ChevronLeftIcon}
                     onClick={onToggleIsCollapsed}
                 />
                 <Text typo="section heading"> {title} </Text>

@@ -2,8 +2,8 @@ import { LeftBar } from "../LeftBar";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { id } from "tsafe/id";
-import type { CustomIconId } from "./theme";
-import type { MuiIconsComponentName } from "../MuiIconsComponentName";
+import type { MuiIconComponentName } from "../MuiIconComponentName";
+import { customIcons } from "./theme";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -18,14 +18,14 @@ export const VueNoTitle = getStory({
     "currentItemId": "item2",
     "items": {
         "item1": {
-            "iconId": id<CustomIconId>("tour"),
+            "icon": customIcons.tourSvgUrl,
             "label": "Item 1",
             "link": {
                 "href": "https://example.com",
             },
         },
         "item2": {
-            "iconId": id<CustomIconId>("services"),
+            "icon": customIcons.servicesSvgUrl,
             "label": "Item two",
             "link": {
                 "href": "#",
@@ -33,7 +33,7 @@ export const VueNoTitle = getStory({
             },
         },
         "item3": {
-            "iconId": id<MuiIconsComponentName>("Help"),
+            "icon": id<MuiIconComponentName>("Help"),
             "label": "Item three",
             "belowDivider": true,
             "link": {
@@ -42,7 +42,7 @@ export const VueNoTitle = getStory({
             "availability": "greyed",
         },
         "item4": {
-            "iconId": id<MuiIconsComponentName>("Home"),
+            "icon": id<MuiIconComponentName>("Home"),
             "label": "The fourth item",
             "link": {
                 "href": "#",

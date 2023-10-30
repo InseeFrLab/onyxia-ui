@@ -42,4 +42,4 @@ jspm_packages
 
 /.yarn_home
 /dist
-/src/MuiIconsComponentName.ts
+/src/MuiIconComponentName.ts

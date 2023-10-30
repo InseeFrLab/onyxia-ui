@@ -23,9 +23,9 @@ import { assert } from "tsafe/assert";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
 import { createSpecificIcon } from "./Icon";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
 import { Button } from "./Button";
-import { id } from "tsafe/id";
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
 
 export type GitHubPickerProps = {
     className?: string;
@@ -203,9 +203,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                             renderOption={(props, option, { selected }) => (
                                 <li {...props}>
                                     <Box
-                                        component={createSpecificIcon(
-                                            id<MuiIconsComponentName>("Done"),
-                                        )}
+                                        component={createSpecificIcon(DoneIcon)}
                                         sx={{
                                             "width": 17,
                                             "height": 17,
@@ -248,7 +246,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                     </Box>
                                     <Box
                                         component={createSpecificIcon(
-                                            id<MuiIconsComponentName>("Close"),
+                                            CloseIcon,
                                         )}
                                         sx={{
                                             "opacity": 0.6,

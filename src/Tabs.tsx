@@ -11,8 +11,7 @@ import { useEvt } from "evt/hooks";
 import { useStateRef } from "powerhooks/useStateRef";
 import { Evt } from "evt";
 import { Icon } from "./Icon";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { id } from "tsafe/id";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export type TabProps<TabId extends string = string> = {
     className?: string;
@@ -369,9 +368,7 @@ const { CustomButton } = (() => {
                             case "arrow":
                                 return (
                                     <Icon
-                                        iconId={id<MuiIconsComponentName>(
-                                            "ChevronLeft",
-                                        )}
+                                        icon={ChevronLeftIcon}
                                         className={cx(
                                             (() => {
                                                 switch (props.direction) {

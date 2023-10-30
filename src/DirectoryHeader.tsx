@@ -4,8 +4,7 @@ import { Text } from "./Text";
 import { memo } from "react";
 import { pxToNumber } from "./tools/pxToNumber";
 import { IconButton } from "./IconButton";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { id } from "tsafe/id";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 /**
  * image:
@@ -50,7 +49,7 @@ export const DirectoryHeader = memo((props: Props) => {
             <div>
                 <IconButton
                     size="large"
-                    iconId={id<MuiIconsComponentName>("ChevronLeft")}
+                    icon={ChevronLeftIcon}
                     onClick={onGoBack}
                 />
             </div>

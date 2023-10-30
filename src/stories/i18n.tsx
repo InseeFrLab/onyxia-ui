@@ -1,3 +1,4 @@
+import React from "react";
 import { createI18nApi, declareComponentKeys } from "i18nifty";
 
 const { i18n } = declareComponentKeys<

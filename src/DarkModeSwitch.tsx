@@ -3,10 +3,10 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import { useIsDarkModeEnabled } from "./lib";
 import type { IconProps } from "./Icon";
 import { tss } from "./lib/tss";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { id } from "tsafe/id";
 import { IconButton } from "./IconButton";
 import { symToStr } from "tsafe/symToStr";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 
 export type DarkModeSwitchProps = {
     className?: string;
@@ -30,11 +30,7 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
             className={cx(classes.root, className)}
             onClick={onClick}
             size={size}
-            iconId={
-                isDarkModeEnabled
-                    ? id<MuiIconsComponentName>("Brightness7")
-                    : id<MuiIconsComponentName>("Brightness4")
-            }
+            icon={isDarkModeEnabled ? Brightness7Icon : Brightness4Icon}
             aria-label={ariaLabel ?? "Dark mode switch"}
         />
     );

@@ -17,10 +17,11 @@ import type { Equals } from "tsafe";
 import Autocomplete from "@mui/material/Autocomplete";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
 import { IconButton } from "./IconButton";
 import { Icon } from "./Icon";
-import { id } from "tsafe/id";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import HelpIcon from "@mui/icons-material/Help";
 
 export type TextFieldProps = {
     className?: string;
@@ -331,10 +332,10 @@ export const TextField = memo((props: TextFieldProps) => {
                 ) : type === "password" ? (
                     <InputAdornment position="end">
                         <IconButton
-                            iconId={
+                            icon={
                                 isPasswordShown
-                                    ? id<MuiIconsComponentName>("VisibilityOff")
-                                    : id<MuiIconsComponentName>("Visibility")
+                                    ? VisibilityOffIcon
+                                    : VisibilityIcon
                             }
                             onClick={toggleIsPasswordShown}
                         />
@@ -410,10 +411,7 @@ export const TextField = memo((props: TextFieldProps) => {
             &nbsp;
             {questionMarkHelperText !== undefined && (
                 <Tooltip title={questionMarkHelperText}>
-                    <Icon
-                        iconId={id<MuiIconsComponentName>("Help")}
-                        className={classes.questionMark}
-                    />
+                    <Icon icon={HelpIcon} className={classes.questionMark} />
                 </Tooltip>
             )}
         </Text>

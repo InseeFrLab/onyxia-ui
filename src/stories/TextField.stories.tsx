@@ -127,7 +127,7 @@ export const VueWithHintAndQuestionMark = getStory({
 });
 
 export const VueTextArea = getStory({
-    "multiline": true,
+    "doRenderAsTextArea": true,
     "defaultValue": "First line\nSecond line",
     "inputProps_aria-label": "the aria label",
     "label": "This is the label",

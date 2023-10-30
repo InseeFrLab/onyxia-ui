@@ -5,4 +5,4 @@ node_modules/
 /CHANGELOG.md
 /src/test/
 /.yarn_home/
-/src/MuiIconsComponentName.ts
+/src/MuiIconComponentName.ts

@@ -10,9 +10,9 @@ import type { ButtonProps as MuiButtonProps } from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { objectKeys } from "tsafe/objectKeys";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { id } from "tsafe/id";
 import { Icon } from "./Icon";
+import PublicIcon from "@mui/icons-material/Public";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export type LanguageSelectProps<Language extends string> = {
     className?: string;
@@ -79,7 +79,7 @@ export function LanguageSelect<Language extends string>(
                 >
                     {doShowIcon && (
                         <Icon
-                            iconId={id<MuiIconsComponentName>("Public")}
+                            icon={PublicIcon}
                             className={classes.icon}
                             size={(() => {
                                 switch (variant) {
@@ -108,10 +108,7 @@ export function LanguageSelect<Language extends string>(
                         {languagesPrettyPrint[language]}
                     </Text>
                     {variant === "big" && (
-                        <Icon
-                            className={classes.icon}
-                            iconId={id<MuiIconsComponentName>("ExpandMore")}
-                        />
+                        <Icon className={classes.icon} icon={ExpandMoreIcon} />
                     )}
                 </MuiButton>
             </Tooltip>

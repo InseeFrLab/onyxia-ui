@@ -71,7 +71,7 @@ const rootDirPath = pathJoin(__dirname, "..");
     const tsCode = [
         ``,
         [
-            `export type MuiIconsComponentName =`,
+            `export type MuiIconComponentName =`,
             muiComponentNames
                 .map(
                     (muiIconId, i) =>
@@ -86,7 +86,7 @@ const rootDirPath = pathJoin(__dirname, "..");
     const typeFilePath = pathJoin(
         rootDirPath,
         "src",
-        "MuiIconsComponentName.ts",
+        "MuiIconComponentName.ts",
     );
 
     fs.writeFileSync(typeFilePath, Buffer.from(tsCode, "utf8"));

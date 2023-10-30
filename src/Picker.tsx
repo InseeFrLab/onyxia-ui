@@ -23,9 +23,9 @@ import { useStateRef } from "powerhooks/useStateRef";
 import { assert } from "tsafe/assert";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { id } from "tsafe/id";
 import { createSpecificIcon } from "./Icon";
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
 
 export type PickerProps = {
     className?: string;
@@ -215,9 +215,7 @@ export const Picker = memo((props: PickerProps) => {
                             renderOption={(props, option, { selected }) => (
                                 <li {...props}>
                                     <Box
-                                        component={createSpecificIcon(
-                                            id<MuiIconsComponentName>("Done"),
-                                        )}
+                                        component={createSpecificIcon(DoneIcon)}
                                         sx={{
                                             "width": 17,
                                             "height": 17,
@@ -262,7 +260,7 @@ export const Picker = memo((props: PickerProps) => {
                                     </Box>
                                     <Box
                                         component={createSpecificIcon(
-                                            id<MuiIconsComponentName>("Close"),
+                                            CloseIcon,
                                         )}
                                         sx={{
                                             "opacity": 0.6,

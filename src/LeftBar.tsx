@@ -17,22 +17,8 @@ import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import type { UseNamedStateReturnType } from "powerhooks/useNamedState";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { Icon } from "./Icon";
-
-export type Item<IconId extends string = string> = {
-    iconId: IconId;
-    label: NonNullable<ReactNode>;
-    /** Defaults to available */
-    availability?: "available" | "greyed" | "not visible";
-    /** Default: false (no divider). A string can be provided, is will be used as "about" for a11y  */
-    belowDivider?: string | boolean;
-    link: {
-        href: string;
-        onClick?: (event: { preventDefault: () => void }) => void;
-        target?: "_blank";
-    };
-};
+import { Icon, type IconProps } from "./Icon";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 export type LeftBarProps<ItemId extends string> = {
     className?: string;
@@ -40,10 +26,26 @@ export type LeftBarProps<ItemId extends string> = {
     doPersistIsPanelOpen: boolean;
     collapsedWidth?: number;
     currentItemId: ItemId | null;
-    items: Record<ItemId, Item>;
+    items: Record<ItemId, LeftBarProps.Item>;
     /** Default reduce */
     reduceText?: string;
 };
+
+export namespace LeftBarProps {
+    export type Item = {
+        icon: IconProps.Icon;
+        label: NonNullable<ReactNode>;
+        /** Defaults to available */
+        availability?: "available" | "greyed" | "not visible";
+        /** Default: false (no divider). A string can be provided, is will be used as "about" for a11y  */
+        belowDivider?: string | boolean;
+        link: {
+            href: string;
+            onClick?: (event: { preventDefault: () => void }) => void;
+            target?: "_blank";
+        };
+    };
+}
 
 let useIsCollapsed:
     | (() => UseNamedStateReturnType<boolean, "isCollapsed">)
@@ -84,7 +86,7 @@ function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
 
     const toggleIsCollapsedLink = useMemo(
         () =>
-            id<Item["link"]>({
+            id<LeftBarProps.Item["link"]>({
                 "href": "#",
                 "onClick": event => {
                     event.preventDefault();
@@ -125,7 +127,7 @@ function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
                         isCollapsed={isCollapsed}
                         collapsedWidth={collapsedWidth}
                         isCurrent={undefined}
-                        iconId={id<MuiIconsComponentName>("ChevronLeft")}
+                        icon={ChevronLeftIcon}
                         label={reduceText}
                         link={toggleIsCollapsedLink}
                     />
@@ -196,7 +198,7 @@ const { CustomButton } = (() => {
         isCollapsed: boolean;
         collapsedWidth: number;
         isCurrent: boolean | undefined;
-    } & Item;
+    } & LeftBarProps.Item;
 
     const CustomButton = memo((props: Props) => {
         const {
@@ -204,7 +206,7 @@ const { CustomButton } = (() => {
             isCollapsed,
             collapsedWidth,
             isCurrent,
-            iconId,
+            icon,
             label,
             link,
             belowDivider = false,
@@ -237,7 +239,7 @@ const { CustomButton } = (() => {
                     <div className={classes.iconWrapper}>
                         <div className={classes.iconHoverBox} />
                         <Icon
-                            iconId={iconId}
+                            icon={icon}
                             className={classes.icon}
                             size={iconSize}
                         />

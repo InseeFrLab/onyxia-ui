@@ -3,10 +3,9 @@ import type { ReactNode } from "react";
 import MuiAlert from "@mui/material/Alert";
 import { Text } from "./Text";
 import { tss } from "./lib/tss";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { id } from "tsafe/id";
 import { symToStr } from "tsafe/symToStr";
 import { IconButton } from "./IconButton";
+import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 
 export type AlertProps =
     | AlertProps.NonClosable
@@ -68,7 +67,7 @@ export const Alert = memo((props: AlertProps) => {
                 "doDisplayCross" in rest &&
                 rest.doDisplayCross && (
                     <IconButton
-                        iconId={id<MuiIconsComponentName>("CloseSharp")}
+                        icon={CloseSharpIcon}
                         aria-label="close"
                         onClick={
                             "isClosed" in rest

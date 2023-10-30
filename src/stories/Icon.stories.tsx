@@ -1,23 +1,23 @@
 import { Icon } from "../Icon";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import type { CustomIconId } from "./theme";
-import type { MuiIconsComponentName } from "../MuiIconsComponentName";
+import { customIcons } from "./theme";
+import type { MuiIconComponentName } from "../MuiIconComponentName";
 import { id } from "tsafe/id";
 
-const iconIds = [
-    id<CustomIconId>("tour"),
-    id<CustomIconId>("services"),
-    id<MuiIconsComponentName>("Help"),
-    id<MuiIconsComponentName>("Home"),
+const icons = [
+    id<MuiIconComponentName>("Home"),
+    id<MuiIconComponentName>("Help"),
+    customIcons.tourSvgUrl,
+    customIcons.servicesSvgUrl,
 ] as const;
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
     "wrappedComponent": { Icon },
     "argTypes": {
-        "iconId": {
-            "options": iconIds,
+        "icon": {
+            "options": icons,
             "control": { "type": "radio" },
         },
         "size": {
@@ -30,6 +30,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Home = getStory({
-    "iconId": id<MuiIconsComponentName>("Home"),
+    "icon": icons[0],
     "size": "default",
 });

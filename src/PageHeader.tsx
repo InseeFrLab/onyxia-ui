@@ -6,14 +6,14 @@ import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { id } from "tsafe/id";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { CollapsibleWrapper, type CollapseParams } from "./CollapsibleWrapper";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
-import { Icon } from "./Icon";
+import { Icon, type IconProps } from "./Icon";
 import { IconButton } from "./IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 export type PageHeaderProps = {
-    mainIcon?: string;
+    mainIcon?: IconProps.Icon;
     title: string;
-    helpIcon?: string;
+    helpIcon?: IconProps.Icon;
     helpTitle: NonNullable<React.ReactNode>;
     helpContent: NonNullable<React.ReactNode>;
     className?: string;
@@ -166,7 +166,7 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                 <Text typo="page heading" className={classes.title}>
                     {mainIcon && (
                         <Icon
-                            iconId={mainIcon}
+                            icon={mainIcon}
                             className={classes.titleIcon}
                             size="large"
                         />
@@ -182,7 +182,7 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                     {helpIcon !== undefined && (
                         <div>
                             <Icon
-                                iconId={helpIcon}
+                                icon={helpIcon}
                                 className={classes.helpIcon}
                             />
                         </div>
@@ -193,7 +193,7 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                     </div>
                     <div>
                         <IconButton
-                            iconId={id<MuiIconsComponentName>("Close")}
+                            icon={CloseIcon}
                             onClick={closeHelp}
                             className={classes.closeButton}
                         />

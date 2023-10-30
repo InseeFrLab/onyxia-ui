@@ -2,10 +2,9 @@
 import { tss } from "./lib/tss";
 import { forwardRef, memo } from "react";
 import MuiIconButton from "@mui/material/IconButton";
-import type { IconProps } from "./Icon";
+import { Icon, type IconProps } from "./Icon";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { Icon } from "./Icon";
 import { symToStr } from "tsafe/symToStr";
 
 export type IconButtonProps =
@@ -17,7 +16,7 @@ export namespace IconButtonProps {
     type Common = {
         className?: string;
         iconClassName?: string;
-        iconId: string;
+        icon: IconProps.Icon;
         size?: IconProps["size"];
         /** Defaults to false */
         disabled?: boolean;
@@ -53,7 +52,7 @@ export const IconButton = memo(
         const {
             className,
             iconClassName,
-            iconId,
+            icon,
             size,
             disabled = false,
             autoFocus = false,
@@ -118,7 +117,7 @@ export const IconButton = memo(
                 })()}
             >
                 <Icon
-                    iconId={iconId}
+                    icon={icon}
                     className={cx(classes.icon, iconClassName)}
                     size={size}
                 />

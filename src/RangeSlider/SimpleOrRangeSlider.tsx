@@ -12,9 +12,8 @@ import { capitalize } from "tsafe/capitalize";
 import { useWithProps } from "powerhooks/useWithProps";
 import { useDomRect } from "powerhooks/useDomRect";
 import { Tooltip } from "../Tooltip";
-import type { MuiIconsComponentName } from "../MuiIconsComponentName";
-import { id } from "tsafe/id";
 import { Icon } from "../Icon";
+import HelpIcon from "@mui/icons-material/Help";
 
 export type SimpleOrRangeSliderProps = {
     className?: string;
@@ -148,7 +147,7 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
                 {extraInfo !== undefined && (
                     <Tooltip title={extraInfo}>
                         <Icon
-                            iconId={id<MuiIconsComponentName>("Help")}
+                            icon={HelpIcon}
                             size="extra small"
                             className={classes.helpIcon}
                         />

@@ -1,13 +1,15 @@
-import { memo, forwardRef } from "react";
+import { memo, forwardRef, type ElementType } from "react";
 import type { MouseEventHandler } from "react";
 import { tss } from "./lib/tss";
 import SvgIcon from "@mui/material/SvgIcon";
-import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { type IconSizeName, muiComponentNameToFileName } from "./lib/icon";
 import { createDynamicSvg } from "./tools/LazySvg";
 import { symToStr } from "tsafe/symToStr";
 import memoize from "memoizee";
+import type { OverridableComponent } from "@mui/material/OverridableComponent";
+import type { SvgIconTypeMap } from "@mui/material/SvgIcon";
+import { assert } from "tsafe/assert";
 
 /**
  *
@@ -20,23 +22,15 @@ import memoize from "memoizee";
  * If, for example you'd like to use this one: https://mui.com/material-ui/material-icons/?selected=AddHomeWork
  * use: iconId: "AddHomeWork"
  * This parameter is not typed because there's too much many MUI icons, it would slow down the ide too much.
- * import type { MuiIconsComponentName } from "onyxia-ui/MuiIconsComponentName"
+ * import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName"
  * import { id } from "tsafe/id"
- * iconId: id<MuiIconsComponentName>("AddHomeWork")
- *
- * Custom Icons:
- * The custom icons are defined using the customIcons params createThemeProvider() function.
- * If you have done:
- * createThemeProvider({ customIcons: { myCustomIcon: "https://example.com/myCustomIcon.svg" } })
- * you can use: iconId: "myCustomIcon"
- * You can also import SVG as components and use them as custom icons:
- * import { ReactComponent as MyCustomIcon } from "./myCustomIcon.svg"
- * createThemeProvider({ customIcons: { myCustomIcon: MyCustomIcon } })
- *
- * I encourage you to enforce the type safety on your side.
+ * icon={id<MuiIconComponentName>("AddHomeWork")}
+ * You can also pass the mui component directly:
+ * import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
+ * icon={AddHomeWorkIcon}
  *
  * SVG url:
- * Example: iconId: "https://example.com/myCustomIcon.svg"
+ * Example: icon="https://example.com/myCustomIcon.svg"
  * It's important that the string ends with ".svg".
  *
  * ======== Size:
@@ -63,16 +57,31 @@ import memoize from "memoizee";
  *
  */
 export type IconProps = {
-    iconId: string;
+    icon: IconProps.Icon;
     className?: string;
     /** default default */
     size?: IconSizeName;
     onClick?: MouseEventHandler<SVGSVGElement>;
 };
 
+export namespace IconProps {
+    type MuiComponentType = OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+        muiName: string;
+    };
+    type SvgUrl = `${"http" | "/" | ""}${string}.svg`;
+    /**
+     * Eg: "AddHomeWork"
+     * All the MUI icons are listed here: https://mui.com/material-ui/material-icons/
+     * The type is too big to be used here but can be imported from "onyxia-ui/MuiIconComponentName"
+     */
+    type MuiComponentName = string;
+
+    export type Icon = MuiComponentName | SvgUrl | MuiComponentType;
+}
+
 export const Icon = memo(
     forwardRef<SVGSVGElement, IconProps>((props, ref) => {
-        const { iconId, className, size = "default", onClick, ...rest } = props;
+        const { icon, className, size = "default", onClick, ...rest } = props;
 
         //For the forwarding, rest should be empty (typewise),
         assert<Equals<typeof rest, {}>>();
@@ -80,30 +89,39 @@ export const Icon = memo(
         const {
             classes,
             cx,
-            theme: { customIcons, publicUrl },
+            theme: { publicUrl },
         } = useStyles({ size });
 
-        const Component = (() => {
-            const customIcon =
-                iconId in customIcons ? customIcons[iconId] : undefined;
+        if (typeof icon !== "string") {
+            const MuiIconComponent = icon;
 
-            if (customIcon !== undefined) {
-                return typeof customIcon === "string"
-                    ? createDynamicSvg(customIcon)
-                    : customIcon;
-            }
+            return (
+                <MuiIconComponent
+                    ref={ref}
+                    className={cx(classes.root, className)}
+                    onClick={onClick}
+                    {...rest}
+                />
+            );
+        }
 
+        const SvgComponent: ElementType = (() => {
             if (
-                iconId.startsWith("http") ||
-                iconId.startsWith("/") ||
-                iconId.endsWith(".svg")
+                icon.startsWith("http") ||
+                icon.startsWith("/") ||
+                icon.endsWith(".svg")
             ) {
-                return createDynamicSvg(iconId);
+                return createDynamicSvg(icon);
             }
+
+            assert(
+                publicUrl !== undefined,
+                "If you are using material icons you must provide a publicUrl to create theme",
+            );
 
             return createDynamicSvg(
                 `${publicUrl}/material-icons/${muiComponentNameToFileName(
-                    iconId,
+                    icon,
                 )}`,
             );
         })();
@@ -113,7 +131,7 @@ export const Icon = memo(
                 ref={ref}
                 onClick={onClick}
                 className={cx(classes.root, className)}
-                component={Component}
+                component={SvgComponent}
                 {...rest}
             />
         );
@@ -140,22 +158,16 @@ const useStyles = tss
         },
     }));
 
-export const createSpecificIcon = memoize(
-    (
-        iconId: string,
-    ): ((props: Omit<IconProps, "iconId">) => ReturnType<React.FC>) => {
-        //svgUrlToSvgComponent(svgUrl);
+export const createSpecificIcon = memoize((icon: IconProps.Icon) => {
+    const SpecificIcon = forwardRef<
+        SVGSVGElement,
+        Omit<IconProps, "icon" | "ref">
+    >((props, ref) => <Icon icon={icon} ref={ref} {...props} />);
 
-        const SpecificIcon = forwardRef<
-            SVGSVGElement,
-            Omit<IconProps, "iconId" | "ref">
-        >((props, ref) => <Icon iconId={iconId} ref={ref} {...props} />);
+    SpecificIcon.displayName = Icon.displayName;
 
-        SpecificIcon.displayName = Icon.displayName;
-
-        return SpecificIcon;
-    },
-);
+    return SpecificIcon;
+});
 
 /*
 NOTES:

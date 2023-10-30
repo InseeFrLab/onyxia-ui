@@ -8,7 +8,7 @@ import type { Equals } from "tsafe/Equals";
 import { breakpointsValues } from "./lib/breakpoints";
 import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
-import { Icon } from "./Icon";
+import { Icon, type IconProps } from "./Icon";
 import { symToStr } from "tsafe/symToStr";
 
 export type ButtonProps = ButtonProps.Regular | ButtonProps.Submit;
@@ -25,8 +25,8 @@ export namespace ButtonProps {
         /** Defaults to false */
         disabled?: boolean;
 
-        startIcon?: string;
-        endIcon?: string;
+        startIcon?: IconProps.Icon;
+        endIcon?: IconProps.Icon;
 
         /** Defaults to false */
         autoFocus?: boolean;
@@ -74,10 +74,10 @@ export const Button = memo(
         });
 
         const IconWd = useGuaranteedMemo(
-            () => (props: { iconId: string }) =>
+            () => (props: { icon: IconProps.Icon }) =>
                 (
                     <Icon
-                        iconId={props.iconId}
+                        icon={props.icon}
                         className={classes.icon}
                         size="default"
                     />
@@ -93,12 +93,12 @@ export const Button = memo(
                 disabled={disabled}
                 startIcon={
                     startIcon === undefined ? undefined : (
-                        <IconWd iconId={startIcon} />
+                        <IconWd icon={startIcon} />
                     )
                 }
                 endIcon={
                     endIcon === undefined ? undefined : (
-                        <IconWd iconId={endIcon} />
+                        <IconWd icon={endIcon} />
                     )
                 }
                 autoFocus={autoFocus}

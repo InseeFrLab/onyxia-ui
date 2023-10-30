@@ -1,5 +1,5 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useEffect, type ElementType } from "react";
+import { useContext, createContext, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Theme as MuiTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -58,8 +58,7 @@ export type Theme<
     muiTheme: MuiTheme;
     iconSizesInPxByName: Record<IconSizeName, number>;
     windowInnerWidth: number;
-    publicUrl: string;
-    customIcons: Record<string, ElementType | string>;
+    publicUrl: string | undefined;
 };
 
 /** Exported only for internal usage */
@@ -92,6 +91,8 @@ export declare namespace ThemeProviderProps {
 /**
  * publicUrl:
  *
+ * If you do not use the copy-material-icons-to-public script, you can set publicUrl to undefined.
+ *
  * If your site is hosted by navigating to `https://www.example.com`
  * set publicUrl to ""
  * If your site is hosted by navigating to `https://www.example.com/my-app`
@@ -117,8 +118,7 @@ export function createThemeProvider<
     getIconSizeInPx?: GetIconSizeInPx;
     /** If undefined, splash screen is disabled */
     splashScreenParams?: SplashScreenParams;
-    publicUrl: string;
-    customIcons?: Record<string, ElementType | string>;
+    publicUrl: string | undefined;
     leftBarParams?: {
         defaultIsPanelOpen: boolean;
         persistIsPanelOpen: boolean;
@@ -138,7 +138,6 @@ export function createThemeProvider<
         getIconSizeInPx = defaultGetIconSizeInPx,
         splashScreenParams,
         publicUrl,
-        customIcons,
     } = params;
 
     if (defaultIsDarkModeEnabled !== undefined) {
@@ -281,9 +280,6 @@ export function createThemeProvider<
                     }),
                     windowInnerWidth,
                     publicUrl,
-                    "customIcons": {
-                        ...customIcons,
-                    },
                 });
             },
             { "max": 1 },

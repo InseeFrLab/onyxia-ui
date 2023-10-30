@@ -9,10 +9,10 @@ import type { Equals } from "tsafe";
 import { useMergeRefs } from "powerhooks/useMergeRefs";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
-import { id } from "tsafe/id";
-import type { MuiIconsComponentName } from "./MuiIconsComponentName";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
+import CancelIcon from "@mui/icons-material/Cancel";
+import SearchIcon from "@mui/icons-material/Search";
 
 export type SearchBarProps = {
     className?: string;
@@ -134,7 +134,7 @@ export const SearchBar = memo(
             >
                 <div>
                     <Icon
-                        iconId={id<MuiIconsComponentName>("Search")}
+                        icon={SearchIcon}
                         onClick={onIconClick}
                         className={classes.icon}
                     />
@@ -152,7 +152,7 @@ export const SearchBar = memo(
                                 placeholder={placeholder}
                             />
                             <IconButton
-                                iconId={id<MuiIconsComponentName>("Cancel")}
+                                icon={CancelIcon}
                                 size="small"
                                 disabled={search === ""}
                                 onClick={onClearButtonClick}

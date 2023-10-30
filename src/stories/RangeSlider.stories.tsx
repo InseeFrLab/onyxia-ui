@@ -1,3 +1,4 @@
+import React from "react";
 import { RangeSlider } from "../RangeSlider";
 import type { RangeSliderProps } from "../RangeSlider";
 import { sectionName } from "./sectionName";

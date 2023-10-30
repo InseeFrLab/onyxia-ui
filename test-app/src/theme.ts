@@ -11,13 +11,8 @@ import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
 
 //Import your custom icons
-import { ReactComponent as FooSvg } from "./assets/foo.svg";
+import fooSvgUrl from "./assets/foo.svg";
 import barSvgUrl from "./assets/bar.svg";
-
-const customIcons = {
-    "foo": FooSvg,
-    "bar": barSvgUrl,
-};
 
 export const { ThemeProvider, useTheme } = createThemeProvider({
     "publicUrl": process.env.PUBLIC_URL,
@@ -65,10 +60,7 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
         "Logo": AnimatedOnyxiaLogo,
         "fadeOutDuration": 500,
     },
-    customIcons,
 });
-
-export type CustomIconId = keyof typeof customIcons;
 
 export const { Text } = createTextWithCustomTypos({
     useTheme,
@@ -82,3 +74,8 @@ export const { tss } = createTss({
 });
 
 export const useStyles = tss.create({});
+
+export const customIcons = {
+    fooSvgUrl,
+    barSvgUrl,
+};

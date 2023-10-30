@@ -72,13 +72,80 @@ A note about the integration of [Onyxia](https://onyxia.sh) and Onyxia-UI can be
 yarn add onyxia-ui @mui/material @emotion/react @emotion/styled
 ```
 
-Add this script to your `package.json`
+## Icons
+
+Onyxia-ui enables you to use icons from [the Material Design Library](https://mui.com/material-ui/material-icons/).  
+Or to provide your own icon as SVG urls.
+
+### Using Material Icons: With hard import
+
+If you know what icon you'll need ahead of time, implement this approach:
+
+```bash
+yarn add @mui/icons-material
+```
+
+`src/theme.ts`
+
+```ts
+const { ThemeProvider } = createThemeProvider({
+    // ...
+    publicUrl: undefined,
+});
+```
+
+Now if you want to use [AccessAlarms](https://mui.com/material-ui/material-icons/?selected=AccessAlarms)
+
+```tsx
+import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+
+<Icon icon={AccessAlarmIcon} />;
+```
+
+### Using Material Icons: With lazy loading
+
+If you don't know ahead of time what icon you will need. This is the case if your app
+renders user generated content that might include icons then you can opt for downloading the
+icons dynamically.  
+Be aware that this involves including a 35MB directory of icons in your `public/` directory
+which will end up impacting your docker image size.
 
 ```diff
 "scripts": {
-    "prepare": "fetch-material-icons"
+    "prepare": "copy-material-icons-to-public"
 }
 ```
+
+This will enable you to do this:
+
+```tsx
+import { Icon } from "onyxia-ui/Icon";
+
+// https://mui.com/material-ui/material-icons/?selected=AccessAlarms
+<Icon icon="AccessAlarms" />;
+```
+
+Or, if you want type safety:
+
+```tsx
+import { Icon } from "onyxia-ui/Icon";
+import { id } from "tsafe/id";
+import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName";
+
+// https://mui.com/material-ui/material-icons/?selected=AccessAlarms
+<Icon icon={id<MuiIconComponentName>("AccessAlarms")} />;
+```
+
+### Using custom SVGs as icons
+
+```tsx
+import myIconSvgUrl from "./assets/my-icon.svg";
+
+<Icon icon={myIconSvgUrl} />
+<Icon icon="https://example.com/foo/my-icon.svg" />
+```
+
+## Documentation
 
 The documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  
 The actual theme configuration [happens here](https://github.com/garronej/onyxia-ui/blob/main/src/test/src/theme.ts).  
@@ -97,7 +164,3 @@ yarn
 yarn build
 yarn start
 ```
-
-## JEST config
-
-You have to configure JEST so that it transpiled your module using [`"transformIgnorePatterns": [ "node_modules/(?!@onyxia-ui)" ]`.](https://github.com/InseeFrLab/onyxia-ui/blob/d3b1e9c681ba9fb66b900f6a5dddba170eb2e909/src/test/spa/package.json#L21-L25).
