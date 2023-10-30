@@ -42,12 +42,7 @@
     "files": [
         "src/",
         "!src/stories/",
-        "!src/test/",
-        "!src/bin/",
         "dist/",
-        "!dist/stories/",
-        "!dist/test/",
-        "!dist/bin/",
         "!dist/package.json",
         "!dist/tsconfig.tsbuildinfo"
     ],
