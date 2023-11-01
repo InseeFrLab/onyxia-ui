@@ -10,6 +10,7 @@ import memoize from "memoizee";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
 import type { SvgIconTypeMap } from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
+import { capitalize } from "tsafe/capitalize";
 
 /**
  *
@@ -121,7 +122,9 @@ export const Icon = memo(
 
             return createDynamicSvg(
                 `${publicUrl}/material-icons/${muiComponentNameToFileName(
-                    icon,
+                    // NOTE: Capitalize because all the Mui component name are capitalized.
+                    // and we want to be resilient if the user got confused and passed a lowercased name.
+                    capitalize(icon),
                 )}`,
             );
         })();
