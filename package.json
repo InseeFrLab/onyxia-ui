@@ -65,7 +65,8 @@
         "powerhooks": "^1.0.0",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.6.4",
-        "tss-react": "^4.9.0"
+        "tss-react": "^4.9.0",
+        "make-fetch-happen": "^11.0.3"
     },
     "devDependencies": {
         "@emotion/css": "^11.11.2",
