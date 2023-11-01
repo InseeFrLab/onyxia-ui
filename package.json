@@ -9,7 +9,7 @@
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
     "scripts": {
-        "build": "tsc && yarn copy-files",
+        "build": "tsc && rm -rf dist/assets && cp -r src/assets dist/assets",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
