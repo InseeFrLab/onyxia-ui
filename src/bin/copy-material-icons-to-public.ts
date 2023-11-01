@@ -6,7 +6,7 @@ import * as fs from "fs";
 import { assert } from "tsafe/assert";
 import { getProjectRoot } from "./tools/getProjectRoot";
 import type { Equals } from "tsafe";
-import { downloadAndUnzip } from "./tools/downloadAndUnzip";
+const downloadAndUnzip: any = null;
 
 const projectDirPath = process.cwd();
 

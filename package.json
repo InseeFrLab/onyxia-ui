@@ -9,7 +9,6 @@
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
     "scripts": {
-        "prepare": "ts-node --skipProject scripts/prepare.ts",
         "build": "tsc && yarn copy-files",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
@@ -17,7 +16,6 @@
         "format": "npm run _format -- --write",
         "format:check": "npm run _format -- --list-different",
         "storybook": "start-storybook -p 6006 --static-dir ./.storybook/static",
-        "copy-files": "cpx \"src/assets/**/*.{css,woff2}\" dist/assets/",
         "link-in-web": "yarn build && ts-node --skipProject scripts/link-in-app.ts web",
         "start-test-app": "yarn build && ts-node --skipProject scripts/link-in-test-app.ts && cd test-app && rm -rf node_modules/.cache && yarn start"
     },
@@ -67,10 +65,7 @@
         "powerhooks": "^1.0.0",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.6.4",
-        "tss-react": "^4.9.0",
-        "yauzl": "^2.10.0",
-        "yazl": "^2.5.1",
-        "make-fetch-happen": "^11.0.3"
+        "tss-react": "^4.9.0"
     },
     "devDependencies": {
         "@emotion/css": "^11.11.2",
@@ -88,17 +83,12 @@
         "@storybook/react": "^6.5.9",
         "@storybook/theming": "^6.5.9",
         "@types/color": "^3.0.3",
-        "@types/make-fetch-happen": "^10.0.1",
         "@types/memoizee": "^0.4.8",
         "@types/node": "^17.0.24",
         "@types/react": "^18.0.14",
         "@types/react-dom": "^18.0.5",
-        "@types/yauzl": "^2.10.2",
-        "@types/yazl": "^2.4.4",
         "@typescript-eslint/eslint-plugin": "^4.24.0",
         "@typescript-eslint/parser": "^4.24.0",
-        "copyfiles": "^2.4.1",
-        "cpx": "^1.5.0",
         "eslint": "^7.26.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-storybook": "^0.5.13",
