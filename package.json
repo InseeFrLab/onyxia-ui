@@ -10,7 +10,7 @@
     "types": "dist/lib/index.d.ts",
     "scripts": {
         "prepare": "ts-node --skipProject scripts/prepare.ts",
-        "build": "tsc && rm -rf dist/assets && cp -r src/assets dist/assets",
+        "build": "tsc && cpx \"src/assets/**/*.{css,woff2}\" dist/assets/",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
@@ -111,6 +111,7 @@
         "webpack": "^5.73.0",
         "@types/make-fetch-happen": "^10.0.3",
         "@types/yauzl": "^2.10.2",
-        "@types/yazl": "^2.4.4"
+        "@types/yazl": "^2.4.4",
+        "cpx": "^1.5.0"
     }
 }
