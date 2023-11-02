@@ -74,15 +74,15 @@ export const LazySvg = memo(
 
 LazySvg.displayName = symToStr({ LazySvg });
 
-export const createDynamicSvg = memoize((svgUrl: string) => {
-    const DynamicSvgWithUrl = forwardRef<
+export const createLazySvg = memoize((svgUrl: string) => {
+    const LazySvgWithUrl = forwardRef<
         SVGSVGElement,
         Omit<LazySvgProps, "svgUrl" | "ref">
     >((props, ref) => <LazySvg svgUrl={svgUrl} ref={ref} {...props} />);
 
-    DynamicSvgWithUrl.displayName = LazySvg.displayName;
+    LazySvgWithUrl.displayName = LazySvg.displayName;
 
-    return DynamicSvgWithUrl;
+    return LazySvgWithUrl;
 });
 
 const svgUrlToSvgComponent = memoize(

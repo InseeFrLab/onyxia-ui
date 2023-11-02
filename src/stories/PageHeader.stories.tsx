@@ -4,6 +4,9 @@ import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { symToStr } from "tsafe/symToStr";
 import { useStateRef } from "powerhooks/useStateRef";
+import type { MuiIconComponentName } from "../MuiIconComponentName";
+import { id } from "tsafe/id";
+import accountSvgUrl from "./assets/svg/account_v1.svg";
 
 function Component(
     props: Omit<
@@ -77,9 +80,18 @@ export default meta;
 
 export const VueDefault = getStory({
     "helpContent": "This is the content of the help",
-    "helpIcon": "sentimentSatisfied",
+    "helpIcon": id<MuiIconComponentName>("SentimentSatisfied"),
     "helpTitle": "This is the help title",
-    "mainIcon": "home",
+    "mainIcon": id<MuiIconComponentName>("Home"),
+    "title": "This is the title",
+    "transitionDuration": 250,
+});
+
+export const VueWithCustomIcon = getStory({
+    "helpContent": "This is the content of the help",
+    "helpIcon": accountSvgUrl,
+    "helpTitle": "This is the help title",
+    "mainIcon": accountSvgUrl,
     "title": "This is the title",
     "transitionDuration": 250,
 });

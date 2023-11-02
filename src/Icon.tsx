@@ -4,7 +4,7 @@ import { tss } from "./lib/tss";
 import SvgIcon from "@mui/material/SvgIcon";
 import type { Equals } from "tsafe";
 import { type IconSizeName, muiComponentNameToFileName } from "./lib/icon";
-import { createDynamicSvg } from "./tools/LazySvg";
+import { createLazySvg } from "./tools/LazySvg";
 import { symToStr } from "tsafe/symToStr";
 import memoize from "memoizee";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -112,7 +112,7 @@ export const Icon = memo(
                 icon.startsWith("/") ||
                 icon.endsWith(".svg")
             ) {
-                return createDynamicSvg(icon);
+                return createLazySvg(icon);
             }
 
             assert(
@@ -120,7 +120,7 @@ export const Icon = memo(
                 "If you are using material icons you must provide a publicUrl to create theme",
             );
 
-            return createDynamicSvg(
+            return createLazySvg(
                 `${publicUrl}/material-icons/${muiComponentNameToFileName(
                     // NOTE: Capitalize because all the Mui component name are capitalized.
                     // and we want to be resilient if the user got confused and passed a lowercased name.
