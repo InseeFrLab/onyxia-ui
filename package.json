@@ -4,7 +4,7 @@
     "description": "The Onyxia UI toolkit",
     "repository": {
         "type": "git",
-        "url": "git://github.com/garronej/onyxia-ui.git"
+        "url": "git://github.com/InseeFrLab/onyxia-ui.git"
     },
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
@@ -46,7 +46,6 @@
         "!dist/tsconfig.tsbuildinfo"
     ],
     "keywords": [],
-    "homepage": "https://ui.onyxia.dev",
     "peerDependencies": {
         "@emotion/react": "^11.9.0",
         "@mui/material": "^5.9.3",
