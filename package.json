@@ -66,6 +66,7 @@
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.6.4",
         "tss-react": "^4.9.0",
+        "memoizee": "^0.4.15",
         "make-fetch-happen": "^10.2.1",
         "yauzl": "^2.10.0",
         "yazl": "^2.5.1"
