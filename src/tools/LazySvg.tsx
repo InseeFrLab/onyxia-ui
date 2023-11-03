@@ -87,7 +87,11 @@ export const createLazySvg = memoize((svgUrl: string) => {
 
 const svgUrlToSvgComponent = memoize(
     async (svgUrl: string) => {
-        const rawSvgString = await fetch(svgUrl)
+        const rawSvgString = await fetch(
+            svgUrl.startsWith("http") || svgUrl.startsWith("/")
+                ? svgUrl
+                : `https://${svgUrl}`,
+        )
             .then(response => response.text())
             .catch(() => undefined);
 
