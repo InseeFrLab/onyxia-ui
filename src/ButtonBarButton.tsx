@@ -11,14 +11,13 @@ export type ButtonBarButtonProps =
 export namespace ButtonBarButtonProps {
     type Common = {
         className?: string;
-
         startIcon?: string;
         disabled?: boolean;
         children: NonNullable<ReactNode>;
     };
 
     export type Regular = Common & {
-        onClick?: () => void;
+        onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
         href?: string;
         /** Defaults to true if href is defined */
         doOpenNewTabIfHref?: boolean;
