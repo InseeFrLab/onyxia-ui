@@ -10,7 +10,7 @@
     "types": "dist/lib/index.d.ts",
     "scripts": {
         "prepare": "ts-node --skipProject scripts/prepare.ts",
-        "build": "tsc && cpx \"src/assets/**/*.{css,woff2}\" dist/assets/",
+        "build": "tsc && cpx \"src/assets/**/*.{svg,css,woff2}\" dist/assets/",
         "lint:check": "eslint . --ext .ts,.tsx",
         "lint": "npm run lint:check -- --fix",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",

@@ -5,6 +5,7 @@ import {
     useContext,
     createContext,
     type ReactNode,
+    type ComponentType,
 } from "react";
 import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
@@ -18,7 +19,6 @@ import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import * as runExclusive from "run-exclusive";
 import { useConst } from "powerhooks/useConst";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
-import type { ReactComponent } from "../tools/ReactComponent";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -221,14 +221,8 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 export { useSplashScreen };
 
 export type SplashScreenParams = {
-    /**
-     * onyxia-ui/AnimatedOnyxiaLogo is the logo used in Onyxia Datalab
-     * but if you are using this toolkit in another context you should provide your own logo.
-     *
-     * You have to create your own version of this component
-     * you are expected to size it in percentage.
-     */
-    Logo: ReactComponent<{ theme: Theme }>;
+    /** If you want to change the size set the root width and/or height in percent. */
+    Logo: ComponentType<{ className: string }>;
     /** Default 700ms */
     fadeOutDuration?: number;
     /** Default 1000 (1 second)*/
@@ -308,7 +302,7 @@ export function createSplashScreen(
         return (
             <context.Provider value={true}>
                 <div className={classes.root}>
-                    <Logo theme={theme} />
+                    <Logo className={classes.logo} />
                 </div>
                 {children}
             </context.Provider>
@@ -351,6 +345,9 @@ export function createSplashScreen(
                 "visibility": isVisible ? "visible" : "hidden",
                 "opacity": isFadingOut ? 0 : 1,
                 "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
+            },
+            "logo": {
+                "height": "20%",
             },
         }));
 

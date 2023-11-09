@@ -39,6 +39,6 @@ export { defaultGetIconSizeInPx } from "./icon";
 export { useSplashScreen } from "./SplashScreen";
 
 export type { Theme, ThemeProviderProps } from "./ThemeProvider";
-export { createThemeProvider } from "./ThemeProvider";
+export { createThemeProvider, useTheme } from "./ThemeProvider";
 
 export { pxToNumber } from "../tools/pxToNumber";

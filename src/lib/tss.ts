@@ -1,15 +1,10 @@
-import { useContext } from "react";
 import { createTss } from "tss-react";
-import { themeContext } from "./ThemeProvider";
+import { useTheme } from "./ThemeProvider";
 
 /** NOTE: Used internally, do not export globally */
 export const { tss } = createTss({
     "useContext": function useTssContext() {
-        const theme = useContext(themeContext);
-
-        if (theme === undefined) {
-            throw new Error("Your app should be wrapped into ThemeProvider");
-        }
+        const theme = useTheme();
 
         return { theme };
     },

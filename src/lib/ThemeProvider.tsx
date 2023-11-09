@@ -39,6 +39,7 @@ import {
 } from "./useIsDarkModeEnabled";
 import { useRootFontSizePx } from "../tools/useRootFontSizePx";
 import { memoize } from "../tools/memoize";
+import { Reflect } from "tsafe/Reflect";
 
 import type { ReactComponent } from "../tools/ReactComponent";
 
@@ -61,8 +62,17 @@ export type Theme<
     publicUrl: string | undefined;
 };
 
-/** Exported only for internal usage */
-export const themeContext = createContext<Theme | undefined>(undefined);
+const themeContext = createContext<Theme | undefined>(undefined);
+
+export function useTheme<T = Theme>(): T {
+    const theme = useContext(themeContext);
+
+    if (theme === undefined) {
+        throw new Error("Your app should be wrapped into ThemeProvider");
+    }
+
+    return theme as T;
+}
 
 // NOTE: Only For Storybook
 const isDarkModeEnabledOverrideContext = createContext<boolean | undefined>(
@@ -387,7 +397,7 @@ export function createThemeProvider<
 
     return {
         ThemeProvider,
-        useTheme,
+        ofTypeTheme: Reflect<ReturnType<typeof useTheme>>(),
         StoryProvider,
     };
 }

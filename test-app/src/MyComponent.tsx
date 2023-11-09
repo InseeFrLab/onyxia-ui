@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { tss, Text, customIcons } from "./theme";
+import { tss } from "./tss";
+import { Text, customIcons } from "./theme";
 //Cherry pick the custom components you wish to import.
 import { Alert } from "onyxia-ui/Alert";
 

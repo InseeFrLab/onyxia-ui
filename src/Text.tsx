@@ -134,12 +134,16 @@ const useStyles = tss
         }),
     );
 
-export function createTextWithCustomTypos<
-    TypographyVariantNameCustom extends string = never,
->(params: { useTheme: () => Theme<any, any, TypographyVariantNameCustom> }) {
-    // NOTE: We do not actually need the theme here, it's just used for type inference.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { useTheme: _ } = params;
+type ExtractCustomTypographyVariantName<T> = T extends Theme<
+    any,
+    any,
+    infer CustomTypographyVariantName
+>
+    ? CustomTypographyVariantName
+    : never;
+
+export function createTextWithCustomTypos<T extends Theme<any, any, any>>() {
+    type TypographyVariantNameCustom = ExtractCustomTypographyVariantName<T>;
 
     return {
         "Text": Text as any as React.MemoExoticComponent<

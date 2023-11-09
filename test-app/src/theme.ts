@@ -3,18 +3,18 @@ import {
     defaultPalette,
     createDefaultColorUseCases,
     defaultGetTypographyDesc,
-} from "onyxia-ui/lib";
-import { createTss } from "tss-react";
-import { AnimatedOnyxiaLogo } from "onyxia-ui/AnimatedOnyxiaLogo";
+} from "onyxia-ui";
+import { createAnimatedLogo } from "onyxia-ui/AnimatedLogo";
 import { createTextWithCustomTypos } from "onyxia-ui/Text";
 import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
+import logoSvgUrl from "onyxia-ui/assets/logo.svg";
 
 //Import your custom icons
 import fooSvgUrl from "./assets/foo.svg";
 import barSvgUrl from "./assets/bar.svg";
 
-export const { ThemeProvider, useTheme } = createThemeProvider({
+export const { ThemeProvider, ofTypeTheme } = createThemeProvider({
     "publicUrl": process.env.PUBLIC_URL,
     "getTypographyDesc": params => {
         const typographyDesc = defaultGetTypographyDesc(params);
@@ -57,23 +57,15 @@ export const { ThemeProvider, useTheme } = createThemeProvider({
         },
     }),
     "splashScreenParams": {
-        "Logo": AnimatedOnyxiaLogo,
+        "Logo": createAnimatedLogo(logoSvgUrl),
         "fadeOutDuration": 500,
+        //"fadeOutDuration": 10_000_000,
     },
 });
 
-export const { Text } = createTextWithCustomTypos({
-    useTheme,
-});
+export type Theme = typeof ofTypeTheme;
 
-export const { tss } = createTss({
-    "useContext": function useContext() {
-        const theme = useTheme();
-        return { theme };
-    },
-});
-
-export const useStyles = tss.create({});
+export const { Text } = createTextWithCustomTypos<Theme>();
 
 export const customIcons = {
     fooSvgUrl,
