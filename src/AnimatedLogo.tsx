@@ -37,15 +37,9 @@ const useStyles = tss.withName({ AnimatedLogo }).create(() => {
 
     return {
         "root": {
-            "border": "1px solid red",
-
             ...Object.fromEntries(
-                [
-                    ["animation-group1", ".4"],
-                    ["animation-group2", ".8"],
-                    ["animation-group3", "1.2"],
-                ].map(([className, delaySecond]) => [
-                    `.${className}`,
+                [".4", ".8", "1.2"].map((delaySecond, index) => [
+                    `.splashscreen-animation-group${index + 1}`,
                     {
                         "opacity": 0,
                         animation,
