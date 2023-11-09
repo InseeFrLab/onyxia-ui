@@ -5,23 +5,30 @@ import { symToStr } from "tsafe/symToStr";
 import { LazySvg, type LazySvgProps } from "./tools/LazySvg";
 import { tss } from "./lib/tss";
 import { assert, type Equals } from "tsafe/assert";
+import {
+    type ThemedAssetUrl,
+    useResolveAssetVariantUrl,
+} from "./lib/ThemedAssetUrl";
 
 export type ThemedSvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
-    svgUrl: string;
+    svgUrl: ThemedAssetUrl;
 };
 
-assert<Equals<ThemedSvgProps, LazySvgProps>>();
+assert<Equals<Omit<ThemedSvgProps, "svgUrl">, Omit<LazySvgProps, "svgUrl">>>();
 
 export const ThemedSvg = memo(
     forwardRef<SVGSVGElement, ThemedSvgProps>((props, ref) => {
-        const { className, ...rest } = props;
+        const { className, svgUrl, ...rest } = props;
 
         const { classes, cx } = useStyles();
+
+        const resolvedThemedSvgUrl = useResolveAssetVariantUrl(svgUrl);
 
         return (
             <LazySvg
                 {...rest}
                 ref={ref}
+                svgUrl={resolvedThemedSvgUrl}
                 className={cx(classes.root, className)}
             />
         );

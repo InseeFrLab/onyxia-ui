@@ -38,6 +38,12 @@ export { defaultGetIconSizeInPx } from "./icon";
 
 export { useSplashScreen } from "./SplashScreen";
 
+export {
+    type ThemedAssetUrl,
+    resolveAssetVariantUrl,
+    useResolveAssetVariantUrl,
+} from "./ThemedAssetUrl";
+
 export type { Theme, ThemeProviderProps } from "./ThemeProvider";
 export { createThemeProvider, useTheme } from "./ThemeProvider";
 

@@ -4,7 +4,6 @@ import {
     createDefaultColorUseCases,
     defaultGetTypographyDesc,
 } from "onyxia-ui";
-import { createAnimatedLogo } from "onyxia-ui/AnimatedLogo";
 import { createTextWithCustomTypos } from "onyxia-ui/Text";
 import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
@@ -57,7 +56,7 @@ const { ThemeProvider, ofTypeTheme } = createThemeProvider({
         },
     }),
     "splashScreenParams": {
-        "Logo": createAnimatedLogo(logoSvgUrl),
+        "assetUrl": logoSvgUrl,
         "fadeOutDuration": 500,
         //"fadeOutDuration": 10_000_000,
     },

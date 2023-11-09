@@ -320,7 +320,7 @@ export function createThemeProvider<
             ? ({ children }: { children: ReactNode }) => <>{children}</>
             : createSplashScreen({
                   useTheme,
-                  "Logo": splashScreenParams.Logo,
+                  "assetUrl": splashScreenParams.assetUrl,
                   "fadeOutDuration": splashScreenParams.fadeOutDuration,
                   "minimumDisplayDuration":
                       splashScreenParams.minimumDisplayDuration,

@@ -5,7 +5,6 @@ import {
     useContext,
     createContext,
     type ReactNode,
-    type ComponentType,
 } from "react";
 import Color from "color";
 import { useRerenderOnStateChange } from "evt/hooks";
@@ -19,6 +18,9 @@ import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import * as runExclusive from "run-exclusive";
 import { useConst } from "powerhooks/useConst";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
+import { keyframes } from "tss-react";
+import { ThemedImage } from "../ThemedImage";
+import { ThemedAssetUrl } from "./ThemedAssetUrl";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -222,7 +224,7 @@ export { useSplashScreen };
 
 export type SplashScreenParams = {
     /** If you want to change the size set the root width and/or height in percent. */
-    Logo: ComponentType<{ className: string }>;
+    assetUrl: ThemedAssetUrl;
     /** Default 700ms */
     fadeOutDuration?: number;
     /** Default 1000 (1 second)*/
@@ -234,7 +236,7 @@ const context = createContext<boolean>(false);
 export function createSplashScreen(
     params: SplashScreenParams & { useTheme(): Theme },
 ) {
-    const { Logo, useTheme } = params;
+    const { assetUrl, useTheme } = params;
 
     function SplashScreen(props: { children: ReactNode }) {
         const { children } = props;
@@ -302,12 +304,30 @@ export function createSplashScreen(
         return (
             <context.Provider value={true}>
                 <div className={classes.root}>
-                    {isVisible && <Logo className={classes.logo} />}
+                    {isVisible && (
+                        <ThemedImage
+                            className={classes.themedImage}
+                            url={assetUrl}
+                        />
+                    )}
                 </div>
                 {children}
             </context.Provider>
         );
     }
+
+    const getAnimation = (delay: string) =>
+        `${keyframes`
+    0% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    60%, 100% {
+        opacity: 0;
+    }
+    `} ${delay} infinite ease-in-out`;
 
     const useStyles = tss
         .withParams<{
@@ -346,8 +366,30 @@ export function createSplashScreen(
                 "opacity": isFadingOut ? 0 : 1,
                 "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
             },
-            "logo": {
+            "themedImage": {
                 "height": "20%",
+                "svg:&": {
+                    "&.splashscreen-animation": {
+                        "opacity": 0,
+                        "animation": getAnimation("3s"),
+                        "animationDelay": "0.3s",
+                    },
+                    ...Object.fromEntries(
+                        [".3s", ".7s", "1.1s"].map((animationDelay, index) => [
+                            `.splashscreen-animation-group${index + 1}`,
+                            {
+                                "opacity": 0,
+                                "animation": getAnimation("3.5s"),
+                                animationDelay,
+                            },
+                        ]),
+                    ),
+                },
+                "img:&": {
+                    "opacity": 0,
+                    "animation": getAnimation("3s"),
+                    "animationDelay": "0.3s",
+                },
             },
         }));
 
