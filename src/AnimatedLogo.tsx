@@ -39,7 +39,8 @@ const useStyles = tss.withName({ AnimatedLogo }).create(() => ({
     "root": {
         "&.splashscreen-animation": {
             "opacity": 0,
-            "animation": getAnimation("2.3s"),
+            "animation": getAnimation("3s"),
+            "animationDelay": "0.3s",
         },
         ...Object.fromEntries(
             [".3s", ".7s", "1.1s"].map((animationDelay, index) => [
