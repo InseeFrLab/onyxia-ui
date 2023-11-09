@@ -2,6 +2,7 @@ import "minimal-polyfills/Object.fromEntries";
 import React, { useEffect, useState, forwardRef, memo } from "react";
 import memoize from "memoizee";
 import { symToStr } from "tsafe/symToStr";
+import { capitalize } from "tsafe/capitalize";
 
 export type LazySvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: string;
@@ -58,10 +59,22 @@ export const LazySvg = memo(
             svgInnerHtml,
         } = state;
 
+        const svgRootProps = Object.fromEntries(
+            Object.entries(svgRootAttrs).map(([key, value]) => [
+                key
+                    .split("-")
+                    .map((part, index) =>
+                        index === 0 ? part : capitalize(part),
+                    )
+                    .join(""),
+                value,
+            ]),
+        );
+
         return (
             <svg
                 ref={ref}
-                {...svgRootAttrs}
+                {...svgRootProps}
                 {...svgComponentProps}
                 className={[class_svgRootAttrs, svgComponentProps.className]
                     .filter(className => !!className)
