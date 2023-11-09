@@ -14,7 +14,7 @@ import logoSvgUrl from "onyxia-ui/assets/logo.svg";
 import fooSvgUrl from "./assets/foo.svg";
 import barSvgUrl from "./assets/bar.svg";
 
-export const { ThemeProvider, ofTypeTheme } = createThemeProvider({
+const { ThemeProvider, ofTypeTheme } = createThemeProvider({
     "publicUrl": process.env.PUBLIC_URL,
     "getTypographyDesc": params => {
         const typographyDesc = defaultGetTypographyDesc(params);
@@ -62,6 +62,8 @@ export const { ThemeProvider, ofTypeTheme } = createThemeProvider({
         //"fadeOutDuration": 10_000_000,
     },
 });
+
+export { ThemeProvider };
 
 export type Theme = typeof ofTypeTheme;
 
