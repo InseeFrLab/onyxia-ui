@@ -336,62 +336,77 @@ export function createSplashScreen(
             isFadingOut: boolean;
             isTransparencyEnabled: boolean;
         }>()
+        .withNestedSelectors<"themedImage">()
         .withName({ SplashScreen })
-        .create(({ theme, isVisible, isFadingOut, isTransparencyEnabled }) => ({
-            "root": {
-                "width": "100%",
-                "height": window.innerHeight,
-                "position": "fixed",
-                "top": 0,
-                "left": 0,
-                "zIndex": 10,
-                "backgroundColor": (() => {
-                    const color = new Color(
-                        theme.colors.useCases.surfaces.background,
-                    ).rgb();
+        .create(
+            ({
+                theme,
+                isVisible,
+                isFadingOut,
+                isTransparencyEnabled,
+                classes,
+            }) => ({
+                "root": {
+                    "width": "100%",
+                    "height": window.innerHeight,
+                    "position": "fixed",
+                    "top": 0,
+                    "left": 0,
+                    "zIndex": 10,
+                    "backgroundColor": (() => {
+                        const color = new Color(
+                            theme.colors.useCases.surfaces.background,
+                        ).rgb();
 
-                    return color
-                        .alpha(
-                            isTransparencyEnabled ? 0.6 : (color as any).valpha,
-                        )
-                        .string();
-                })(),
-                "backdropFilter": isTransparencyEnabled
-                    ? "blur(10px)"
-                    : undefined,
-                "display": "flex",
-                "alignItems": "center",
-                "justifyContent": "center",
-                "visibility": isVisible ? "visible" : "hidden",
-                "opacity": isFadingOut ? 0 : 1,
-                "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
-            },
-            "themedImage": {
-                "height": "20%",
-                "svg:&": {
-                    "&.splashscreen-animation": {
+                        return color
+                            .alpha(
+                                isTransparencyEnabled
+                                    ? 0.6
+                                    : (color as any).valpha,
+                            )
+                            .string();
+                    })(),
+                    "backdropFilter": isTransparencyEnabled
+                        ? "blur(10px)"
+                        : undefined,
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "visibility": isVisible ? "visible" : "hidden",
+                    "opacity": isFadingOut ? 0 : 1,
+                    "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
+                    [`& svg.${classes.themedImage}`]: {
+                        "&.splashscreen-animation": {
+                            "opacity": 0,
+                            "animation": getAnimation("3s"),
+                            "animationDelay": "0.3s",
+                        },
+                        ...Object.fromEntries(
+                            [".3s", ".7s", "1.1s"].map(
+                                (animationDelay, index) => [
+                                    `& .splashscreen-animation-group${
+                                        index + 1
+                                    }`,
+                                    {
+                                        "opacity": 0,
+                                        "animation": getAnimation("3.5s"),
+                                        animationDelay,
+                                    },
+                                ],
+                            ),
+                        ),
+                    },
+                    [`& img.${classes.themedImage}`]: {
                         "opacity": 0,
                         "animation": getAnimation("3s"),
                         "animationDelay": "0.3s",
                     },
-                    ...Object.fromEntries(
-                        [".3s", ".7s", "1.1s"].map((animationDelay, index) => [
-                            `.splashscreen-animation-group${index + 1}`,
-                            {
-                                "opacity": 0,
-                                "animation": getAnimation("3.5s"),
-                                animationDelay,
-                            },
-                        ]),
-                    ),
                 },
-                "img:&": {
-                    "opacity": 0,
-                    "animation": getAnimation("3s"),
-                    "animationDelay": "0.3s",
+                "themedImage": {
+                    "height": "20%",
                 },
-            },
-        }));
+            }),
+        );
 
     return { SplashScreen };
 }

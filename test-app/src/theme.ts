@@ -58,7 +58,6 @@ const { ThemeProvider, ofTypeTheme } = createThemeProvider({
     "splashScreenParams": {
         "assetUrl": logoSvgUrl,
         "fadeOutDuration": 500,
-        //"fadeOutDuration": 10_000_000,
     },
 });
 
