@@ -22,34 +22,37 @@ export const AnimatedLogo = memo((props: Props) => {
 
 AnimatedLogo.displayName = symToStr({ AnimatedLogo });
 
-const useStyles = tss.withName({ AnimatedLogo }).create(() => {
-    const animation = `${keyframes`
-                            0% {
-                                opacity: 0;
-                            }
-                            40% {
-                                opacity: 1;
-                            }
-                            60%, 100% {
-                                opacity: 0;
-                            }
-                            `} 3.5s infinite ease-in-out`;
+const getAnimation = (delay: string) =>
+    `${keyframes`
+    0% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    60%, 100% {
+        opacity: 0;
+    }
+    `} ${delay} infinite ease-in-out`;
 
-    return {
-        "root": {
-            ...Object.fromEntries(
-                [".4", ".8", "1.2"].map((delaySecond, index) => [
-                    `.splashscreen-animation-group${index + 1}`,
-                    {
-                        "opacity": 0,
-                        animation,
-                        "animationDelay": `${delaySecond}s`,
-                    },
-                ]),
-            ),
+const useStyles = tss.withName({ AnimatedLogo }).create(() => ({
+    "root": {
+        "&.splashscreen-animation": {
+            "opacity": 0,
+            "animation": getAnimation("2.3s"),
         },
-    };
-});
+        ...Object.fromEntries(
+            [".3s", ".7s", "1.1s"].map((animationDelay, index) => [
+                `.splashscreen-animation-group${index + 1}`,
+                {
+                    "opacity": 0,
+                    "animation": getAnimation("3.5s"),
+                    animationDelay,
+                },
+            ]),
+        ),
+    },
+}));
 
 export const createAnimatedLogo = (svgUrl: string) => {
     const AnimatedLogoWithUrl = (props: Omit<Props, "svgUrl">) => (

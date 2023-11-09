@@ -302,7 +302,7 @@ export function createSplashScreen(
         return (
             <context.Provider value={true}>
                 <div className={classes.root}>
-                    <Logo className={classes.logo} />
+                    {isVisible && <Logo className={classes.logo} />}
                 </div>
                 {children}
             </context.Provider>
