@@ -230,7 +230,7 @@ export type SplashScreenParams = {
     /** Default 1000 (1 second)*/
     minimumDisplayDuration?: number;
     /** Default 1 */
-    assetScale?: number;
+    assetScaleFactor?: number;
 };
 
 const context = createContext<boolean>(false);
@@ -238,7 +238,7 @@ const context = createContext<boolean>(false);
 export function createSplashScreen(
     params: SplashScreenParams & { useTheme(): Theme },
 ) {
-    const { assetUrl, useTheme, assetScale = 1 } = params;
+    const { assetUrl, useTheme, assetScaleFactor = 1 } = params;
 
     function SplashScreen(props: { children: ReactNode }) {
         const { children } = props;
@@ -276,7 +276,7 @@ export function createSplashScreen(
             isVisible,
             isFadingOut,
             isTransparencyEnabled,
-            assetScale,
+            assetScaleFactor,
         });
 
         useEffect(() => {
@@ -338,7 +338,7 @@ export function createSplashScreen(
             isVisible: boolean;
             isFadingOut: boolean;
             isTransparencyEnabled: boolean;
-            assetScale: number;
+            assetScaleFactor: number;
         }>()
         .withNestedSelectors<"themedImage">()
         .withName({ SplashScreen })
@@ -348,7 +348,7 @@ export function createSplashScreen(
                 isVisible,
                 isFadingOut,
                 isTransparencyEnabled,
-                assetScale,
+                assetScaleFactor,
                 classes,
             }) => ({
                 "root": {
@@ -408,7 +408,7 @@ export function createSplashScreen(
                     },
                 },
                 "themedImage": {
-                    "height": `${assetScale * 15}%`,
+                    "height": `${assetScaleFactor * 15}%`,
                 },
             }),
         );

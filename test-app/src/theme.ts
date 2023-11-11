@@ -57,7 +57,7 @@ const { ThemeProvider, ofTypeTheme } = createThemeProvider({
     }),
     "splashScreenParams": {
         "assetUrl": logoSvgUrl,
-        "assetScale": 1,
+        "assetScaleFactor": 1,
     },
 });
 
