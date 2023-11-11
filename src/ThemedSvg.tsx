@@ -9,6 +9,7 @@ import {
     type ThemedAssetUrl,
     useResolveAssetVariantUrl,
 } from "./lib/ThemedAssetUrl";
+import type { Theme } from "./lib/ThemeProvider";
 
 export type ThemedSvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: ThemedAssetUrl;
@@ -40,27 +41,33 @@ ThemedSvg.displayName = symToStr({ ThemedSvg });
 const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
     "root": {
         ...Object.fromEntries(
-            [
-                [
-                    "focus-color-fill",
-                    theme.colors.useCases.typography.textFocus,
+            getClassesAndColors({ "colorUseCases": theme.colors.useCases }).map(
+                ({ className, color }) => [
+                    ["&.", "& ."]
+                        .map(prefix => `${prefix}${className}`)
+                        .join(", "),
+                    { "fill": color },
                 ],
-                [
-                    "text-color-fill",
-                    theme.colors.useCases.typography.textPrimary,
-                ],
-                ["surface-color-fill", theme.colors.useCases.surfaces.surface1],
-                [
-                    "background-color-fill",
-                    theme.colors.useCases.surfaces.background,
-                ],
-            ].map(([className, color]) => [
-                ["&.", "& ."].map(prefix => `${prefix}${className}`).join(", "),
-                { "fill": color },
-            ]),
+            ),
         ),
     },
 }));
+
+export function getClassesAndColors(params: {
+    colorUseCases: Theme["colors"]["useCases"];
+}): { className: string; color: string }[] {
+    const { colorUseCases } = params;
+
+    return [
+        ["focus-color-fill", colorUseCases.typography.textFocus],
+        ["text-color-fill", colorUseCases.typography.textPrimary],
+        ["surface-color-fill", colorUseCases.surfaces.surface1],
+        ["background-color-fill", colorUseCases.surfaces.background],
+    ].map(([className, color]) => ({
+        className,
+        color,
+    }));
+}
 
 export const createThemedSvg = memoize((svgUrl: string) => {
     const ThemedSvgWithUrl = forwardRef<
