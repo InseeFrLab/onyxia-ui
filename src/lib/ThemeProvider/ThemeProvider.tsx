@@ -291,6 +291,7 @@ export function createThemeProvider<
                   "fadeOutDuration": splashScreenParams.fadeOutDuration,
                   "minimumDisplayDuration":
                       splashScreenParams.minimumDisplayDuration,
+                  "assetScaleFactor": splashScreenParams.assetScaleFactor,
               }).SplashScreen;
 
     function ThemeProvider(props: { children: ReactNode }) {
@@ -330,7 +331,7 @@ export function createThemeProvider<
 
         // prettier-ignore
         const CssBaselineOrScopedCssBaseline = useGuaranteedMemo(
-            (): ((props: { children: ReactNode; })=>JSX.Element) =>
+            (): ((props: { children: ReactNode; }) => JSX.Element) =>
                 isStoryProvider
                     ? ({ children }) => (<ScopedCssBaseline>{children}</ScopedCssBaseline>)
                     : ({ children }) => (<><CssBaseline />{children}</>),
