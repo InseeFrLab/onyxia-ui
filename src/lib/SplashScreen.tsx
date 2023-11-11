@@ -408,7 +408,11 @@ export function createSplashScreen(
                     },
                 },
                 "themedImage": {
-                    "height": `${assetScaleFactor * 15}%`,
+                    "border": "1px solid red",
+                    "height": `${
+                        (console.log({ assetScaleFactor }), assetScaleFactor) *
+                        15
+                    }%`,
                 },
             }),
         );

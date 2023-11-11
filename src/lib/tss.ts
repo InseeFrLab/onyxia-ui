@@ -1,5 +1,5 @@
 import { createTss } from "tss-react";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "./ThemeProvider/useTheme";
 
 /** NOTE: Used internally, do not export globally */
 export const { tss } = createTss({

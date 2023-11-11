@@ -1,7 +1,6 @@
 import "minimal-polyfills/Object.fromEntries";
 import { useContext, createContext, useEffect } from "react";
 import type { ReactNode } from "react";
-import type { Theme as MuiTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
@@ -14,65 +13,33 @@ import type {
     PaletteBase,
     ColorUseCasesBase,
     CreateColorUseCase,
-} from "./color";
-import { defaultPalette, createDefaultColorUseCases } from "./color";
-import type { ComputedTypography, GetTypographyDesc } from "./typography";
+} from "../color";
+import { defaultPalette, createDefaultColorUseCases } from "../color";
+import type { GetTypographyDesc } from "../typography";
 import {
     defaultGetTypographyDesc,
     createMuiTypographyOptions,
     getComputedTypography,
-} from "./typography";
-import { createMuiPaletteOptions } from "./color";
-import { shadows } from "./shadows";
-import { defaultSpacingConfig } from "./spacing";
-import type { SpacingConfig, Spacing } from "./spacing";
-import type { IconSizeName, GetIconSizeInPx } from "./icon";
-import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "./icon";
-import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
+} from "../typography";
+import { createMuiPaletteOptions } from "../color";
+import { shadows } from "../shadows";
+import { defaultSpacingConfig } from "../spacing";
+import type { SpacingConfig, Spacing } from "../spacing";
+import type { GetIconSizeInPx } from "../icon";
+import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "../icon";
+import { createSplashScreen, type SplashScreenParams } from "../SplashScreen";
 import { id } from "tsafe/id";
-import { breakpointsValues } from "./breakpoints";
+import { breakpointsValues } from "../breakpoints";
 import { capitalize } from "tsafe/capitalize";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import {
     useIsDarkModeEnabled,
     evtIsDarkModeEnabled,
-} from "./useIsDarkModeEnabled";
-import { useRootFontSizePx } from "../tools/useRootFontSizePx";
-import { memoize } from "../tools/memoize";
+} from "../useIsDarkModeEnabled";
+import { useRootFontSizePx } from "../../tools/useRootFontSizePx";
+import { memoize } from "../../tools/memoize";
 import { Reflect } from "tsafe/Reflect";
-
-import type { ReactComponent } from "../tools/ReactComponent";
-
-export type Theme<
-    Palette extends PaletteBase = PaletteBase,
-    ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
-    CustomTypographyVariantName extends string = never,
-> = {
-    colors: {
-        palette: Palette;
-        useCases: ColorUseCases;
-    };
-    isDarkModeEnabled: boolean;
-    typography: ComputedTypography<CustomTypographyVariantName>;
-    shadows: typeof shadows;
-    spacing: Spacing;
-    muiTheme: MuiTheme;
-    iconSizesInPxByName: Record<IconSizeName, number>;
-    windowInnerWidth: number;
-    publicUrl: string | undefined;
-};
-
-const themeContext = createContext<Theme | undefined>(undefined);
-
-export function useTheme<T = Theme>(): T {
-    const theme = useContext(themeContext);
-
-    if (theme === undefined) {
-        throw new Error("Your app should be wrapped into ThemeProvider");
-    }
-
-    return theme as T;
-}
+import { Theme, themeContext } from "./useTheme";
 
 // NOTE: Only For Storybook
 const isDarkModeEnabledOverrideContext = createContext<boolean | undefined>(
@@ -363,7 +330,7 @@ export function createThemeProvider<
 
         // prettier-ignore
         const CssBaselineOrScopedCssBaseline = useGuaranteedMemo(
-            (): ReactComponent<{ children: ReactNode }> =>
+            (): ((props: { children: ReactNode; })=>JSX.Element) =>
                 isStoryProvider
                     ? ({ children }) => (<ScopedCssBaseline>{children}</ScopedCssBaseline>)
                     : ({ children }) => (<><CssBaseline />{children}</>),
