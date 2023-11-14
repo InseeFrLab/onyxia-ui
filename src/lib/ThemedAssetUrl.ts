@@ -23,7 +23,7 @@ export type ThemedAssetUrl =
           dark: string;
       };
 
-export function resolveThemedAsset(params: {
+export function resolveThemedAssetUrl(params: {
     isDarkModeEnabled: boolean;
     themedAssetUrl: ThemedAssetUrl;
 }): string {
@@ -36,12 +36,12 @@ export function resolveThemedAsset(params: {
     return isDarkModeEnabled ? themedAssetUrl.dark : themedAssetUrl.light;
 }
 
-export function useResolveThemedAsset() {
+export function useResolveThemedAssetUrl() {
     const { isDarkModeEnabled } = useIsDarkModeEnabled();
 
     const f = useMemo(
         () => (themedAssetUrl: ThemedAssetUrl) =>
-            resolveThemedAsset({
+            resolveThemedAssetUrl({
                 isDarkModeEnabled,
                 themedAssetUrl,
             }),
@@ -49,6 +49,6 @@ export function useResolveThemedAsset() {
     );
 
     return {
-        "resolveThemedAsset": f,
+        "resolveThemedAssetUrl": f,
     };
 }

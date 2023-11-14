@@ -7,7 +7,7 @@ import { tss } from "./lib/tss";
 import { assert, type Equals } from "tsafe/assert";
 import {
     type ThemedAssetUrl,
-    useResolveThemedAsset,
+    useResolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
 import type { Theme } from "./lib/ThemeProvider";
 
@@ -23,13 +23,13 @@ export const ThemedSvg = memo(
 
         const { classes, cx } = useStyles();
 
-        const { resolveThemedAsset } = useResolveThemedAsset();
+        const { resolveThemedAssetUrl } = useResolveThemedAssetUrl();
 
         return (
             <LazySvg
                 {...rest}
                 ref={ref}
-                svgUrl={resolveThemedAsset(svgUrl)}
+                svgUrl={resolveThemedAssetUrl(svgUrl)}
                 className={cx(classes.root, className)}
             />
         );

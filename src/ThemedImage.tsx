@@ -1,7 +1,7 @@
 import { ThemedSvg } from "./ThemedSvg";
 import {
     type ThemedAssetUrl,
-    useResolveThemedAsset,
+    useResolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
 
 type Props = {
@@ -13,9 +13,9 @@ type Props = {
 export function ThemedImage(props: Props) {
     const { className, alt = "" } = props;
 
-    const { resolveThemedAsset } = useResolveThemedAsset();
+    const { resolveThemedAssetUrl } = useResolveThemedAssetUrl();
 
-    const url = resolveThemedAsset(props.url);
+    const url = resolveThemedAssetUrl(props.url);
 
     return url.endsWith(".svg") ? (
         <ThemedSvg svgUrl={url} className={className} />
