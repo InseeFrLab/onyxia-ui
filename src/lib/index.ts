@@ -40,8 +40,8 @@ export { useSplashScreen } from "./SplashScreen";
 
 export {
     type ThemedAssetUrl,
-    resolveAssetVariantUrl,
-    useResolveAssetVariantUrl,
+    resolveThemedAsset,
+    useResolveThemedAsset,
 } from "./ThemedAssetUrl";
 
 export type { Theme, ThemeProviderProps } from "./ThemeProvider";
