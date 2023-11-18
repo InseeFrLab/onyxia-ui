@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useConstCallback } from "powerhooks/useConstCallback";
-import { useIsDarkModeEnabled } from "./lib";
+import { useDarkMode } from "./lib";
 import type { IconProps } from "./Icon";
 import { tss } from "./lib/tss";
 import { IconButton } from "./IconButton";
@@ -17,7 +17,7 @@ export type DarkModeSwitchProps = {
 
 export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
     const { className, size, ariaLabel } = props;
-    const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
+    const { isDarkModeEnabled, setIsDarkModeEnabled } = useDarkMode();
 
     const onClick = useConstCallback(() => {
         setIsDarkModeEnabled(!isDarkModeEnabled);

@@ -11,7 +11,7 @@ import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { tss } from "tss-react";
-import type { Theme } from "./ThemeProvider";
+import { type Theme, useTheme } from "./theme";
 import { Evt } from "evt";
 import { id } from "tsafe/id";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
@@ -21,7 +21,6 @@ import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObserv
 import { keyframes } from "tss-react";
 import { ThemedImage } from "../ThemedImage";
 import { ThemedAssetUrl } from "./ThemedAssetUrl";
-import { useTheme } from "./ThemeProvider/theme";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;

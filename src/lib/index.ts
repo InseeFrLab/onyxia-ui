@@ -35,7 +35,8 @@ export {
     useResolveThemedAssetUrl,
 } from "./ThemedAssetUrl";
 
-export type { Theme } from "./ThemeProvider";
-export { createThemeProvider, useTheme, useDarkMode } from "./ThemeProvider";
+export type { Theme } from "./theme";
+export { useDarkMode } from "./darkMode";
+export { createOnyxiaUi } from "./OnyxiaUi";
 
 export { pxToNumber } from "../tools/pxToNumber";
