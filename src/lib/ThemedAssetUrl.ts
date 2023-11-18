@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useIsDarkModeEnabled } from "./useIsDarkModeEnabled";
+import { useDarkMode } from "./darkMode";
 
 /**
  * ThemedAssetUrl is a type that enable Onyxia administrators to provide a different asset url
@@ -37,7 +37,7 @@ export function resolveThemedAssetUrl(params: {
 }
 
 export function useResolveThemedAssetUrl() {
-    const { isDarkModeEnabled } = useIsDarkModeEnabled();
+    const { isDarkModeEnabled } = useDarkMode();
 
     const f = useMemo(
         () => (themedAssetUrl: ThemedAssetUrl) =>

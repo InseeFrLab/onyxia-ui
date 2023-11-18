@@ -1,7 +1,7 @@
 import { memo, forwardRef, createElement } from "react";
 import { assert, type Equals } from "tsafe/assert";
 import { tss } from "./lib/tss";
-import type { Theme } from "./lib/ThemeProvider";
+import type { Theme } from "./lib/theme";
 import { symToStr } from "tsafe/symToStr";
 import type { TypographyDesc } from "./lib/typography";
 

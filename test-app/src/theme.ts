@@ -1,5 +1,5 @@
 import {
-    createThemeProvider,
+    createOnyxiaUi,
     defaultPalette,
     createDefaultColorUseCases,
     defaultGetTypographyDesc,
@@ -13,8 +13,8 @@ import logoSvgUrl from "onyxia-ui/assets/logo.svg";
 import fooSvgUrl from "./assets/foo.svg";
 import barSvgUrl from "./assets/bar.svg";
 
-const { ThemeProvider, ofTypeTheme } = createThemeProvider({
-    "publicUrl": process.env.PUBLIC_URL,
+const { OnyxiaUi, ofTypeTheme } = createOnyxiaUi({
+    "BASE_URL": process.env.PUBLIC_URL,
     "getTypographyDesc": params => {
         const typographyDesc = defaultGetTypographyDesc(params);
 
@@ -61,7 +61,7 @@ const { ThemeProvider, ofTypeTheme } = createThemeProvider({
     },
 });
 
-export { ThemeProvider };
+export { OnyxiaUi };
 
 export type Theme = typeof ofTypeTheme;
 

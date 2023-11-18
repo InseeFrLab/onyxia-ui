@@ -8,7 +8,7 @@ import { Alert } from "onyxia-ui/Alert";
 //and to toggle it's state.
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@mui/material/Switch";
-import { useSplashScreen, useIsDarkModeEnabled } from "onyxia-ui";
+import { useSplashScreen, useDarkMode } from "onyxia-ui";
 import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName";
 import { id } from "tsafe/id";
 import { Icon } from "onyxia-ui/Icon";
@@ -16,7 +16,7 @@ import { IconButton } from "onyxia-ui/IconButton";
 import { Button } from "onyxia-ui/Button";
 
 export function MyComponent() {
-    const { isDarkModeEnabled, setIsDarkModeEnabled } = useIsDarkModeEnabled();
+    const { isDarkModeEnabled, setIsDarkModeEnabled } = useDarkMode();
 
     {
         const { hideRootSplashScreen } = useSplashScreen();

@@ -9,7 +9,7 @@ import {
     type ThemedAssetUrl,
     useResolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
-import type { Theme } from "./lib/ThemeProvider";
+import type { Theme } from "./lib/theme";
 
 export type ThemedSvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: ThemedAssetUrl;

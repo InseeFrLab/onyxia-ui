@@ -36,7 +36,9 @@ export {
 } from "./ThemedAssetUrl";
 
 export type { Theme } from "./theme";
+export { useTheme } from "./theme";
 export { useDarkMode } from "./darkMode";
 export { createOnyxiaUi } from "./OnyxiaUi";
+export { useSplashScreen } from "./SplashScreen";
 
 export { pxToNumber } from "../tools/pxToNumber";

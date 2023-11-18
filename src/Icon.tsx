@@ -11,6 +11,7 @@ import type { OverridableComponent } from "@mui/material/OverridableComponent";
 import type { SvgIconTypeMap } from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
 import { capitalize } from "tsafe/capitalize";
+import { useViteStyleBaseUrl } from "./lib/baseUrl";
 
 /**
  *
@@ -87,11 +88,9 @@ export const Icon = memo(
         //For the forwarding, rest should be empty (typewise),
         assert<Equals<typeof rest, {}>>();
 
-        const {
-            classes,
-            cx,
-            theme: { publicUrl },
-        } = useStyles({ size });
+        const { classes, cx } = useStyles({ size });
+
+        const { BASE_URL } = useViteStyleBaseUrl();
 
         if (typeof icon !== "string") {
             const MuiIconComponent = icon;
@@ -115,13 +114,8 @@ export const Icon = memo(
                 return createLazySvg(icon);
             }
 
-            assert(
-                publicUrl !== undefined,
-                "If you are using material icons you must provide a publicUrl to create theme",
-            );
-
             return createLazySvg(
-                `${publicUrl}/material-icons/${muiComponentNameToFileName(
+                `${BASE_URL}material-icons/${muiComponentNameToFileName(
                     // NOTE: Capitalize because all the Mui component name are capitalized.
                     // and we want to be resilient if the user got confused and passed a lowercased name.
                     capitalize(icon),
