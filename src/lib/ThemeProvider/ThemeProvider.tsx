@@ -1,8 +1,7 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useContext, createContext, useEffect } from "react";
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import {
     createTheme as createMuiTheme,
@@ -31,7 +30,6 @@ import { createSplashScreen, type SplashScreenParams } from "../SplashScreen";
 import { id } from "tsafe/id";
 import { breakpointsValues } from "../breakpoints";
 import { capitalize } from "tsafe/capitalize";
-import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import {
     useIsDarkModeEnabled,
     evtIsDarkModeEnabled,
@@ -40,11 +38,6 @@ import { useRootFontSizePx } from "../../tools/useRootFontSizePx";
 import { memoize } from "../../tools/memoize";
 import { Reflect } from "tsafe/Reflect";
 import { Theme, themeContext } from "./useTheme";
-
-// NOTE: Only For Storybook
-const isDarkModeEnabledOverrideContext = createContext<boolean | undefined>(
-    undefined,
-);
 
 export declare namespace ThemeProviderProps {
     type WithChildren = {
@@ -266,14 +259,10 @@ export function createThemeProvider<
             const { isDarkModeEnabled } = useIsDarkModeEnabled();
             const { windowInnerWidth } = useWindowInnerSize();
 
-            const isDarkModeEnabledOverride = useContext(
-                isDarkModeEnabledOverrideContext,
-            );
-
             const { rootFontSizePx } = useRootFontSizePx();
 
             return createTheme(
-                isDarkModeEnabledOverride ?? isDarkModeEnabled,
+                isDarkModeEnabled,
                 windowInnerWidth,
                 rootFontSizePx,
             );
@@ -326,46 +315,18 @@ export function createThemeProvider<
             }, [backgroundColor]);
         }
 
-        const isStoryProvider =
-            useContext(isDarkModeEnabledOverrideContext) !== undefined;
-
-        // prettier-ignore
-        const CssBaselineOrScopedCssBaseline = useGuaranteedMemo(
-            (): ((props: { children: ReactNode; }) => JSX.Element) =>
-                isStoryProvider
-                    ? ({ children }) => (<ScopedCssBaseline>{children}</ScopedCssBaseline>)
-                    : ({ children }) => (<><CssBaseline />{children}</>),
-            [isStoryProvider],
-        );
-
         return (
             <themeContext.Provider value={theme}>
                 <MuiThemeProvider theme={theme.muiTheme}>
-                    <CssBaselineOrScopedCssBaseline>
-                        <MaybeSplashScreen>{children}</MaybeSplashScreen>
-                    </CssBaselineOrScopedCssBaseline>
+                    <CssBaseline />
+                    <MaybeSplashScreen>{children}</MaybeSplashScreen>
                 </MuiThemeProvider>
             </themeContext.Provider>
-        );
-    }
-
-    function StoryProvider(props: { dark?: boolean; children: ReactNode }) {
-        const { dark = false, children } = props;
-
-        useEffect(() => {
-            evtIsDarkModeEnabled.state = dark;
-        }, [dark]);
-
-        return (
-            <isDarkModeEnabledOverrideContext.Provider value={dark}>
-                <ThemeProvider>{children}</ThemeProvider>
-            </isDarkModeEnabledOverrideContext.Provider>
         );
     }
 
     return {
         ThemeProvider,
         ofTypeTheme: Reflect<ReturnType<typeof useTheme>>(),
-        StoryProvider,
     };
 }

@@ -4,7 +4,7 @@ import { Button } from "../../../Button";
 
 import { Fragment } from "react";
 import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
-import { StoryProvider } from "../../theme";
+import { ThemeProvider } from "../../theme";
 import { Text } from "../../../Text";
 import { Button } from "../../../Button";
 import { css } from "@emotion/css";
@@ -15,9 +15,9 @@ import { useDarkMode } from "storybook-dark-mode";
     component={Button}
     decorators={[
         Story => (
-            <StoryProvider dark={useDarkMode()}>
+            <ThemeProvider defaultIsDarkModeEnabled={useDarkMode()}>
                 <Story />
-            </StoryProvider>
+            </ThemeProvider>
         ),
     ]}
     parameters={{
@@ -93,11 +93,11 @@ such as canceling, rewinding or resetting values ​​on a form.
         {[false, true].map(dark => (
             <Fragment key={dark}>
                 <div className={css({ "margin": 20 })} />
-                <StoryProvider dark={dark}>
+                <ThemeProvider dark={dark}>
                     <Button href="#" variant="secondary">
                         Button text
                     </Button>
-                </StoryProvider>
+                </ThemeProvider>
             </Fragment>
         ))}
     </Story>
@@ -119,11 +119,11 @@ is used for external links or resetting values ​​on a form.
         {[false, true].map(dark => (
             <Fragment key={dark}>
                 <div className={css({ "margin": 20 })} />
-                <StoryProvider dark={dark}>
+                <ThemeProvider dark={dark}>
                     <Button href="#" variant="ternary">
                         Button text
                     </Button>
-                </StoryProvider>
+                </ThemeProvider>
             </Fragment>
         ))}
     </Story>
@@ -145,12 +145,12 @@ to the user that he must take an upstream action.
     <Story name=" Disabled status">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <StoryProvider dark={dark}>
+                <ThemeProvider dark={dark}>
                     <div className={css({ "margin": 20 })} />
                     <Button href="#" disabled="true">
                         Button text
                     </Button>
-                </StoryProvider>
+                </ThemeProvider>
             </Fragment>
         ))}
     </Story>
@@ -178,11 +178,11 @@ Two variations are possible:
         {[false, true].map(dark => (
             <Fragment key={dark}>
                 <div className={css({ "margin": 20 })} />
-                <StoryProvider dark={dark}>
+                <ThemeProvider dark={dark}>
                     <Button href="#" endIcon="help">
                         Button text
                     </Button>
-                </StoryProvider>
+                </ThemeProvider>
             </Fragment>
         ))}
     </Story>
@@ -199,11 +199,11 @@ Two variations are possible:
         {[false, true].map(dark => (
             <Fragment key={dark}>
                 <div className={css({ "margin": 20 })} />
-                <StoryProvider dark={dark}>
+                <ThemeProvider dark={dark}>
                     <Button href="#" startIcon="help">
                         Button text
                     </Button>
-                </StoryProvider>
+                </ThemeProvider>
             </Fragment>
         ))}
     </Story>

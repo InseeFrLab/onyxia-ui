@@ -3,12 +3,12 @@ import type { Meta, Story } from "@storybook/react";
 import type { ArgType } from "@storybook/addons";
 import { useEffect, useMemo } from "react";
 import { symToStr } from "tsafe/symToStr";
-import { useIsDarkModeEnabled, breakpointsValues } from "../lib";
+import { useTheme, useIsDarkModeEnabled, breakpointsValues } from "../lib";
 import { id } from "tsafe/id";
 import { GlobalStyles } from "tss-react";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { ReactComponent } from "../tools/ReactComponent";
-import { useTheme, ThemeProvider } from "./theme";
+import { ThemeProvider } from "./theme";
 import { Text } from "../Text";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
@@ -64,7 +64,19 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
             darkMode: boolean;
             width: number;
         }
-    > = ({ darkMode, width, ...props }) => {
+    > = props => {
+        return (
+            <ThemeProvider>
+                <ContextualizedTemplate {...props} />
+            </ThemeProvider>
+        );
+    };
+
+    const ContextualizedTemplate: typeof Template = ({
+        darkMode,
+        width,
+        ...props
+    }) => {
         const { setIsDarkModeEnabled } = useIsDarkModeEnabled();
 
         useEffect(() => {
@@ -74,7 +86,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         const theme = useTheme();
 
         return (
-            <ThemeProvider>
+            <>
                 <GlobalStyles
                     styles={{
                         "body": {
@@ -97,7 +109,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                 >
                     <Component {...props} />
                 </div>
-            </ThemeProvider>
+            </>
         );
     };
 

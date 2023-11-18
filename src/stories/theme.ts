@@ -5,7 +5,7 @@ import { createThemeProvider, defaultGetTypographyDesc } from "../lib";
 import tourSvgUrl from "./assets/svg/Tour.svg";
 import servicesSvgUrl from "./assets/svg/Services.svg";
 
-export const { ThemeProvider, StoryProvider, useTheme } = createThemeProvider({
+export const { ThemeProvider } = createThemeProvider({
     "isReactStrictModeEnabled": false,
     "getTypographyDesc": params => ({
         ...defaultGetTypographyDesc(params),
