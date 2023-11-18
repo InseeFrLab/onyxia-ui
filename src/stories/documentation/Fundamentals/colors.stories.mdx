@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Meta, Story, Canvas } from "@storybook/addon-docs";
 import { useDarkMode } from "storybook-dark-mode";
-import { ThemeProvider, Text, Checkbox } from "../../theme";
+import { OnyxiaUi } from "../../theme";
 import { useTheme } from "../../../lib";
 import { css } from "@emotion/css";
 
@@ -9,9 +9,9 @@ import { css } from "@emotion/css";
     title="Documentation/Fundamentals/Colors"
     decorators={[
         Story => (
-            <ThemeProvider defaultIsDarkModeEnabled={useDarkMode()}>
+            <OnyxiaUi darkMode={useDarkMode()}>
                 <Story />
-            </ThemeProvider>
+            </OnyxiaUi>
         ),
     ]}
 />

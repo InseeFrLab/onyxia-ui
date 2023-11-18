@@ -3,7 +3,7 @@
 
 import { Fragment } from "react";
 import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
-import { ThemeProvider } from "../../theme";
+import { OnyxiaUi } from "../../theme";
 import { Text } from "../../../Text";
 import { TextField } from "../../../TextField";
 import { css } from "@emotion/css";
@@ -14,9 +14,9 @@ import { useDarkMode } from "storybook-dark-mode";
     component={TextField}
     decorators={[
         Story => (
-            <ThemeProvider defaultIsDarkModeEnabled={useDarkMode()}>
+            <OnyxiaUi dark={useDarkMode()}>
                 <Story />
-            </ThemeProvider>
+            </OnyxiaUi>
         ),
     ]}
     parameters={{
@@ -61,7 +61,7 @@ The input field is made up of the following elements:
     <Story name="Default state">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -73,7 +73,7 @@ The input field is made up of the following elements:
     <Story name="Active state">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -85,7 +85,7 @@ The input field is made up of the following elements:
     <Story name="Error state">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -97,7 +97,7 @@ The input field is made up of the following elements:
     <Story name="Disabled state">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -113,7 +113,7 @@ An optional help text can be added to provide additional guidance to the user on
     <Story name="Help text field">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -127,7 +127,7 @@ A long help text improve the guidance of help text for the user on how to intera
     <Story name="Long Help text field">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -142,7 +142,7 @@ are typically used in a form to allow users to make the desired selection from t
     <Story name="Selection field">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -156,7 +156,7 @@ If the information being entered by the user is sensitive, use the password opti
     <Story name="Password field">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>

@@ -3,7 +3,7 @@
 
 import { Fragment } from "react";
 import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
-import { ThemeProvider } from "../../theme";
+import { OnyxiaUi } from "../../theme";
 import { Tabs } from "../../../Tabs";
 import { Text } from "../../../Text";
 import { css } from "@emotion/css";
@@ -14,9 +14,9 @@ import { useDarkMode } from "storybook-dark-mode";
     component={Tabs}
     decorators={[
         Story => (
-            <ThemeProvider defaultIsDarkModeEnabled={useDarkMode()}>
+            <OnyxiaUi dark={useDarkMode()}>
                 <Story />
-            </ThemeProvider>
+            </OnyxiaUi>
         ),
     ]}
     parameters={{
@@ -59,7 +59,7 @@ Tabs come in two sizes, large and small. By default, tabs will be large unless t
     <Story name="Tabs large">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -71,7 +71,7 @@ Tabs come in two sizes, large and small. By default, tabs will be large unless t
     <Story name="Tabs small">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -91,7 +91,7 @@ By default, scroll buttons will appear automatically if needed. Options are...
     <Story name="Scrolling">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -103,7 +103,7 @@ By default, scroll buttons will appear automatically if needed. Options are...
     <Story name="Selection Follows Focus">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <ThemeProvider dark={dark}></ThemeProvider>
+                <OnyxiaUi dark={dark}></OnyxiaUi>
             </Fragment>
         ))}
     </Story>

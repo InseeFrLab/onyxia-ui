@@ -1,17 +1,16 @@
-import "minimal-polyfills/Object.fromEntries";
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
-import { useState, useContext, type ReactNode } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
+import "minimal-polyfills/Object.fromEntries";
+import { useState, useContext, useEffect, type ReactNode } from "react";
 import * as mui from "@mui/material/styles";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { PaletteBase, ColorUseCasesBase } from "./color";
 import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
 import { assert } from "tsafe/assert";
-import { Evt, type StatefulEvt } from "evt";
+import type { StatefulEvt } from "evt";
 import { typeGuard } from "tsafe/typeGuard";
 import { useRootFontSizePx } from "../tools/useRootFontSizePx";
 import { memoize } from "../tools/memoize";
-import { Reflect } from "tsafe/Reflect";
 import {
     themeContext,
     createThemeFactory,
@@ -36,50 +35,49 @@ import { baseUrlContext } from "./baseUrl";
  * If using something else:
  * Figure out what's the equivalent in your context.
  *
- * isGlobal:
+ * isScoped:
  *
- * Default: true
+ * Default: false
  *
- * If true OnyxiaUi will apply transformation to the document automatically.
- * Set to false in storybook or in any context where you don't want OnyxiaUi
+ * If false OnyxiaUi will apply transformation to the document automatically.
+ * Set to true in storybook or in any context where you don't want OnyxiaUi
  * to have side effect beyond the scope of the children of the <OnyxiaUi /> component.
  */
 export function createOnyxiaUi<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
     CustomTypographyVariantName extends string = never,
+    IsScoped extends boolean = false,
 >(
     params: ParamsOfCreateThemeFactory<
         Palette,
         ColorUseCases,
         CustomTypographyVariantName
     > & {
-        /** Default true */
-        isGlobal?: boolean;
+        isScoped?: IsScoped;
         splashScreenParams?: SplashScreenParams;
         defaultIsDarkModeEnabled?: boolean;
         BASE_URL: string;
     },
 ): {
     OnyxiaUi: (props: {
-        /** Just for debug or for MDX */
-        dark?: boolean;
+        /** To dynamically force the mode */
+        darkMode?: boolean;
         children: ReactNode;
     }) => JSX.Element;
-    evtIsDarkModeEnabled: StatefulEvt<boolean>;
     ofTypeTheme: Theme<Palette, ColorUseCases, CustomTypographyVariantName>;
-} {
+} & (IsScoped extends true
+    ? {}
+    : {
+          evtIsDarkModeEnabled: StatefulEvt<boolean>;
+      }) {
     const {
-        isGlobal = true,
+        isScoped = false,
         splashScreenParams,
         defaultIsDarkModeEnabled = getIsDarkModeEnabledOsDefault(),
         BASE_URL,
         ...paramsOfCreateTheme
     } = params;
-
-    const evtIsDarkModeEnabled = isGlobal
-        ? createUseIsDarkModeEnabledGlobalState({ defaultIsDarkModeEnabled })
-        : Evt.create(defaultIsDarkModeEnabled);
 
     const { memoizedCreateTheme } = (() => {
         const { createTheme } = createThemeFactory(paramsOfCreateTheme);
@@ -97,7 +95,7 @@ export function createOnyxiaUi<
                 });
 
                 add_theme_meta_to_document: {
-                    if (!isGlobal) {
+                    if (isScoped) {
                         break add_theme_meta_to_document;
                     }
 
@@ -136,7 +134,7 @@ export function createOnyxiaUi<
 
     const CssGlobalBaselineOrScopedBaseline: (props: {
         children: ReactNode;
-    }) => JSX.Element = isGlobal
+    }) => JSX.Element = !isScoped
         ? ({ children }) => (
               <>
                   <CssBaseline />
@@ -144,46 +142,82 @@ export function createOnyxiaUi<
               </>
           )
         : ({ children }) => <ScopedCssBaseline>{children}</ScopedCssBaseline>;
-    function DarkModeProvider(props: {
-        dark: boolean | undefined;
+
+    const evtIsDarkModeEnabled = isScoped
+        ? undefined
+        : createUseIsDarkModeEnabledGlobalState({ defaultIsDarkModeEnabled });
+
+    const DarkModeProvider: (props: {
+        darkMode: boolean | undefined;
         children: ReactNode;
-    }) {
-        const { dark, children } = props;
+    }) => JSX.Element = isScoped
+        ? ({ darkMode, children }) => {
+              const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(
+                  darkMode ?? defaultIsDarkModeEnabled,
+              );
 
-        assert(evtIsDarkModeEnabled !== undefined);
+              useEffect(() => {
+                  if (darkMode === undefined) {
+                      return;
+                  }
 
-        useState(() => {
-            if (dark === undefined) {
-                return;
-            }
+                  setIsDarkModeEnabled(darkMode);
+              }, [darkMode]);
 
-            evtIsDarkModeEnabled.state = dark;
-        });
+              return (
+                  <isDarkModeEnabledContext.Provider
+                      value={{
+                          isDarkModeEnabled,
+                          setIsDarkModeEnabled,
+                      }}
+                  >
+                      {children}
+                  </isDarkModeEnabledContext.Provider>
+              );
+          }
+        : ({ darkMode, children }) => {
+              assert(evtIsDarkModeEnabled !== undefined);
 
-        useRerenderOnStateChange(evtIsDarkModeEnabled);
+              useState(() => {
+                  if (darkMode === undefined) {
+                      return;
+                  }
 
-        const setIsDarkModeEnabled = useConstCallback<
-            React.Dispatch<React.SetStateAction<boolean>>
-        >(
-            setStateAction =>
-                (evtIsDarkModeEnabled.state = typeGuard<
-                    (prevState: boolean) => boolean
-                >(setStateAction, typeof setStateAction === "function")
-                    ? setStateAction(evtIsDarkModeEnabled.state)
-                    : setStateAction),
-        );
+                  evtIsDarkModeEnabled.state = darkMode;
+              });
 
-        return (
-            <isDarkModeEnabledContext.Provider
-                value={{
-                    "isDarkModeEnabled": evtIsDarkModeEnabled.state,
-                    setIsDarkModeEnabled,
-                }}
-            >
-                {children}
-            </isDarkModeEnabledContext.Provider>
-        );
-    }
+              useEffect(() => {
+                  if (darkMode === undefined) {
+                      return;
+                  }
+
+                  evtIsDarkModeEnabled.state = darkMode;
+              }, [darkMode]);
+
+              useRerenderOnStateChange(evtIsDarkModeEnabled);
+
+              const setIsDarkModeEnabled = useConstCallback<
+                  React.Dispatch<React.SetStateAction<boolean>>
+              >(
+                  setStateAction =>
+                      (evtIsDarkModeEnabled.state = typeGuard<
+                          (prevState: boolean) => boolean
+                      >(setStateAction, typeof setStateAction === "function")
+                          ? setStateAction(evtIsDarkModeEnabled.state)
+                          : setStateAction),
+              );
+
+              return (
+                  <isDarkModeEnabledContext.Provider
+                      value={{
+                          "isDarkModeEnabled": evtIsDarkModeEnabled.state,
+                          setIsDarkModeEnabled,
+                      }}
+                  >
+                      {children}
+                  </isDarkModeEnabledContext.Provider>
+              );
+          };
 
     function ThemeProvider(props: { children: ReactNode }) {
         const { children } = props;
@@ -227,7 +261,7 @@ export function createOnyxiaUi<
         splashScreenParams === undefined
             ? ({ children }) => <>{children}</>
             : (assert(
-                  isGlobal,
+                  !isScoped,
                   "Can't use splash screen on a scoped theme provider",
               ),
               createSplashScreen({
@@ -238,28 +272,28 @@ export function createOnyxiaUi<
                   "assetScaleFactor": splashScreenParams.assetScaleFactor,
               }).SplashScreen);
 
-    function OnyxiaUi(props: { children: ReactNode; dark?: boolean }) {
-        const { dark, children } = props;
+    function OnyxiaUi(props: { children: ReactNode; darkMode?: boolean }) {
+        const { darkMode, children } = props;
         return (
-            <CssGlobalBaselineOrScopedBaseline>
-                <DarkModeProvider dark={dark}>
-                    <ThemeProvider>
-                        <MuiThemeProvider>
-                            <baseUrlContext.Provider value={BASE_URL}>
+            <DarkModeProvider darkMode={darkMode}>
+                <ThemeProvider>
+                    <MuiThemeProvider>
+                        <baseUrlContext.Provider value={BASE_URL}>
+                            <CssGlobalBaselineOrScopedBaseline>
                                 <MaybeSplashScreen>
                                     {children}
                                 </MaybeSplashScreen>
-                            </baseUrlContext.Provider>
-                        </MuiThemeProvider>
-                    </ThemeProvider>
-                </DarkModeProvider>
-            </CssGlobalBaselineOrScopedBaseline>
+                            </CssGlobalBaselineOrScopedBaseline>
+                        </baseUrlContext.Provider>
+                    </MuiThemeProvider>
+                </ThemeProvider>
+            </DarkModeProvider>
         );
     }
 
     return {
         OnyxiaUi,
-        evtIsDarkModeEnabled,
-        ofTypeTheme: Reflect<ReturnType<typeof memoizedCreateTheme>>(),
+        ofTypeTheme: null as any,
+        "evtIsDarkModeEnabled": evtIsDarkModeEnabled as any,
     };
 }

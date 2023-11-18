@@ -2,7 +2,7 @@
 
 import { Fragment } from "react";
 import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
-import { ThemeProvider } from "../../theme";
+import { OnyxiaUi } from "../../theme";
 import { Text } from "../../../Text";
 import { Alert } from "../../../Alert";
 import { css } from "@emotion/css";
@@ -13,9 +13,9 @@ import { useDarkMode } from "storybook-dark-mode";
     component={Alert}
     decorators={[
         Story => (
-            <ThemeProvider defaultIsDarkModeEnabled={useDarkMode()}>
+            <OnyxiaUi darkMode={useDarkMode()}>
                 <Story />
-            </ThemeProvider>
+            </OnyxiaUi>
         ),
     ]}
     parameters={{
@@ -70,11 +70,11 @@ Used when there are several errors in a form, or fatal errors for the user to re
         {[false, true].map(dark => (
             <Fragment key={dark}>
                 <div className={css({ "margin": 20 })} />
-                <ThemeProvider dark={dark}>
+                <OnyxiaUi dark={dark}>
                     <Alert severity="error">
                         <Text typo="body 1">This is an error</Text>
                     </Alert>
-                </ThemeProvider>
+                </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -95,11 +95,11 @@ Used to indicate to the user that an action or task has been completed successfu
         {[false, true].map(dark => (
             <Fragment key={dark}>
                 <div className={css({ "margin": 20 })} />
-                <ThemeProvider dark={dark}>
+                <OnyxiaUi dark={dark}>
                     <Alert severity="success">
                         <Text typo="body 1">This is an success</Text>
                     </Alert>
-                </ThemeProvider>
+                </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -117,17 +117,17 @@ Use to highlight important information
 
 <Canvas>
     <Story name="Info Alert">
-        <ThemeProvider dark={false}>
+        <OnyxiaUi dark={false}>
             <Alert severity="info">
                 <Text typo="body 1">This is an info</Text>
             </Alert>
-        </ThemeProvider>
+        </OnyxiaUi>
         <div className={css({ "margin": 20 })} />
-        <ThemeProvider dark={true}>
+        <OnyxiaUi dark={true}>
             <Alert severity="info">
                 <Text typo="body 1">This is an info</Text>
             </Alert>
-        </ThemeProvider>
+        </OnyxiaUi>
     </Story>
 </Canvas>
 
@@ -143,17 +143,17 @@ Use to highlight important information
 
 <Canvas>
     <Story name="Warning Alert">
-        <ThemeProvider dark={false}>
+        <OnyxiaUi dark={false}>
             <Alert severity="warning">
                 <Text typo="body 1">This is a warning</Text>
             </Alert>
-        </ThemeProvider>
+        </OnyxiaUi>
         <div className={css({ "margin": 20 })} />
-        <ThemeProvider dark={true}>
+        <OnyxiaUi dark={true}>
             <Alert severity="warning">
                 <Text typo="body 1">This is a warning</Text>
             </Alert>
-        </ThemeProvider>
+        </OnyxiaUi>
     </Story>
 </Canvas>
 

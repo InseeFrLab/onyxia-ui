@@ -1,15 +1,16 @@
 import * as React from "react";
 import type { Meta, Story } from "@storybook/react";
 import type { ArgType } from "@storybook/addons";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { symToStr } from "tsafe/symToStr";
-import { useTheme, useIsDarkModeEnabled, breakpointsValues } from "../lib";
+import { useTheme, breakpointsValues } from "../lib";
 import { id } from "tsafe/id";
 import { GlobalStyles } from "tss-react";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { ReactComponent } from "../tools/ReactComponent";
-import { ThemeProvider } from "./theme";
+import { OnyxiaUi } from "./theme";
 import { Text } from "../Text";
+import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
@@ -64,25 +65,13 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
             darkMode: boolean;
             width: number;
         }
-    > = props => {
-        return (
-            <ThemeProvider>
-                <ContextualizedTemplate {...props} />
-            </ThemeProvider>
-        );
-    };
+    > = props => (
+        <OnyxiaUi darkMode={props.darkMode}>
+            <ContextualizedTemplate {...props} />
+        </OnyxiaUi>
+    );
 
-    const ContextualizedTemplate: typeof Template = ({
-        darkMode,
-        width,
-        ...props
-    }) => {
-        const { setIsDarkModeEnabled } = useIsDarkModeEnabled();
-
-        useEffect(() => {
-            setIsDarkModeEnabled(darkMode);
-        }, [darkMode]);
-
+    const ContextualizedTemplate: typeof Template = ({ width, ...props }) => {
         const theme = useTheme();
 
         return (
@@ -93,8 +82,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                             "padding": `0 !important`,
                             "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
                         },
-                        "#root": {
-                            "height": "100vh",
+                        ".MuiScopedCssBaseline-root": {
                             "padding": theme.spacing(4),
                         },
                     }}
@@ -103,7 +91,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                 <div
                     style={{
                         "width": width || undefined,
-                        "border": "1px dashed #e8e8e8",
+                        "border": `1px dashed ${theme.colors.useCases.typography.textTertiary}`,
                         "display": "inline-block",
                     }}
                 >
@@ -117,7 +105,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         const out = Template.bind({});
 
         out.args = {
-            "darkMode": false,
+            "darkMode": getIsDarkModeEnabledOsDefault(),
             "width": defaultWidth ?? 0,
             ...props,
         };
