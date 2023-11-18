@@ -1,62 +1,30 @@
 import "minimal-polyfills/Object.fromEntries";
-import { useEffect } from "react";
-import type { ReactNode } from "react";
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+import { useState, useContext, type ReactNode } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
-import {
-    createTheme as createMuiTheme,
-    unstable_createMuiStrictModeTheme,
-} from "@mui/material/styles";
+import * as mui from "@mui/material/styles";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
-import type {
-    PaletteBase,
-    ColorUseCasesBase,
-    CreateColorUseCase,
-} from "../color";
-import { defaultPalette, createDefaultColorUseCases } from "../color";
-import type { GetTypographyDesc } from "../typography";
-import {
-    defaultGetTypographyDesc,
-    createMuiTypographyOptions,
-    getComputedTypography,
-} from "../typography";
-import { createMuiPaletteOptions } from "../color";
-import { shadows } from "../shadows";
-import { defaultSpacingConfig } from "../spacing";
-import type { SpacingConfig, Spacing } from "../spacing";
-import type { GetIconSizeInPx } from "../icon";
-import { defaultGetIconSizeInPx, getIconSizesInPxByName } from "../icon";
+import type { PaletteBase, ColorUseCasesBase } from "../color";
 import { createSplashScreen, type SplashScreenParams } from "../SplashScreen";
-import { id } from "tsafe/id";
-import { breakpointsValues } from "../breakpoints";
-import { capitalize } from "tsafe/capitalize";
-import {
-    useIsDarkModeEnabled,
-    evtIsDarkModeEnabled,
-} from "../useIsDarkModeEnabled";
+import { assert } from "tsafe/assert";
+import { Evt, type StatefulEvt } from "evt";
+import { typeGuard } from "tsafe/typeGuard";
 import { useRootFontSizePx } from "../../tools/useRootFontSizePx";
 import { memoize } from "../../tools/memoize";
 import { Reflect } from "tsafe/Reflect";
-import { Theme, themeContext } from "./useTheme";
-
-export declare namespace ThemeProviderProps {
-    type WithChildren = {
-        children: ReactNode;
-    };
-
-    export type WithZoom = {
-        zoomProviderReferenceWidth?: number;
-
-        /**
-         * Message to display when portrait mode, example:
-         *    This app isn't compatible with landscape mode yet,
-         *    please enable the rotation sensor and flip your phone.
-         */
-        portraitModeUnsupportedMessage?: ReactNode;
-    } & WithChildren;
-
-    export type WithoutZoom = WithChildren;
-}
+import {
+    themeContext,
+    createThemeFactory,
+    type ParamsOfCreateThemeFactory,
+    Theme,
+} from "./theme";
+import {
+    createUseIsDarkModeEnabledGlobalState,
+    isDarkModeEnabledContext,
+} from "./darkMode";
+import { useRerenderOnStateChange } from "evt/hooks/useRerenderOnStateChange";
+import { useConstCallback } from "powerhooks/useConstCallback";
+import { getIsDarkModeEnabledOsDefault } from "../../tools/getIsDarkModeEnabledOsDefault";
 
 /**
  * publicUrl:
@@ -78,255 +46,212 @@ export function createThemeProvider<
     Palette extends PaletteBase = PaletteBase,
     ColorUseCases extends ColorUseCasesBase = ColorUseCasesBase,
     CustomTypographyVariantName extends string = never,
->(params: {
-    isReactStrictModeEnabled?: boolean;
-    getTypographyDesc?: GetTypographyDesc<CustomTypographyVariantName>;
-    palette?: Palette;
-    createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
-    spacingConfig?: SpacingConfig;
-    defaultIsDarkModeEnabled?: boolean;
-    getIconSizeInPx?: GetIconSizeInPx;
-    /** If undefined, splash screen is disabled */
-    splashScreenParams?: SplashScreenParams;
-    publicUrl: string | undefined;
-    leftBarParams?: {
-        defaultIsPanelOpen: boolean;
-        persistIsPanelOpen: boolean;
-    };
-}) {
+>(
+    params: ParamsOfCreateThemeFactory<
+        Palette,
+        ColorUseCases,
+        CustomTypographyVariantName
+    > & {
+        isGlobal: boolean;
+        splashScreenParams?: SplashScreenParams;
+        //TODO: Set default
+        defaultIsDarkModeEnabled: boolean;
+    },
+): {
+    ThemeProvider: (props: {
+        /** Just for debug or for MDX */
+        dark?: boolean;
+        children: ReactNode;
+    }) => JSX.Element;
+    evtIsDarkModeEnabled: StatefulEvt<boolean>;
+    ofTypeTheme: Theme<Palette, ColorUseCases, CustomTypographyVariantName>;
+} {
     const {
-        palette = defaultPalette as NonNullable<(typeof params)["palette"]>,
-        createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
-            (typeof params)["createColorUseCases"]
-        >,
-        getTypographyDesc = defaultGetTypographyDesc as NonNullable<
-            (typeof params)["getTypographyDesc"]
-        >,
-        isReactStrictModeEnabled = false,
-        spacingConfig = defaultSpacingConfig,
-        defaultIsDarkModeEnabled,
-        getIconSizeInPx = defaultGetIconSizeInPx,
+        isGlobal,
         splashScreenParams,
-        publicUrl,
+        defaultIsDarkModeEnabled = getIsDarkModeEnabledOsDefault(),
+        ...paramsOfCreateTheme
     } = params;
 
-    if (defaultIsDarkModeEnabled !== undefined) {
-        evtIsDarkModeEnabled.state = defaultIsDarkModeEnabled;
-    }
+    const evtIsDarkModeEnabled = isGlobal
+        ? createUseIsDarkModeEnabledGlobalState({ defaultIsDarkModeEnabled })
+        : Evt.create(defaultIsDarkModeEnabled);
 
-    const { useTheme } = (() => {
-        const createTheme = memoize(
+    const { memoizedCreateTheme } = (() => {
+        const { createTheme } = createThemeFactory(paramsOfCreateTheme);
+
+        const memoizedCreateTheme = memoize(
             (
                 isDarkModeEnabled: boolean,
                 windowInnerWidth: number,
                 rootFontSizePx: number,
             ) => {
-                const typographyDesc = getTypographyDesc({
+                const theme = createTheme({
+                    isDarkModeEnabled,
                     windowInnerWidth,
                     rootFontSizePx,
                 });
-                const useCases = createColorUseCases({
-                    palette,
-                    isDarkModeEnabled,
-                });
 
-                const spacing = (
-                    factorOrExplicitNumberOfPx: number | `${number}px`,
-                ) =>
-                    spacingConfig({
-                        factorOrExplicitNumberOfPx,
-                        windowInnerWidth,
-                        "rootFontSizePx": typographyDesc.rootFontSizePx,
-                    });
+                add_theme_meta_to_document: {
+                    if (!isGlobal) {
+                        break add_theme_meta_to_document;
+                    }
 
-                return id<
-                    Theme<Palette, ColorUseCases, CustomTypographyVariantName>
-                >({
-                    "colors": { palette, useCases },
-                    "typography": getComputedTypography({ typographyDesc }),
-                    isDarkModeEnabled,
-                    shadows,
-                    ...(() => {
-                        const muiTheme = (
-                            isReactStrictModeEnabled
-                                ? unstable_createMuiStrictModeTheme
-                                : createMuiTheme
-                        )({
-                            // https://material-ui.com/customization/palette/#using-a-color-object
-                            "typography": createMuiTypographyOptions({
-                                typographyDesc,
-                            }),
-                            "palette": createMuiPaletteOptions({
-                                isDarkModeEnabled,
-                                palette,
-                                useCases,
-                            }),
-                            spacing,
-                            "breakpoints": {
-                                "values": { "xs": 0, ...breakpointsValues },
-                            },
-                            "components": {
-                                "MuiLink": {
-                                    "defaultProps": {
-                                        "underline": "hover",
-                                    },
-                                },
-                            },
-                        });
+                    const backgroundColor =
+                        theme.colors.useCases.surfaces.background;
 
-                        return {
-                            "spacing": (() => {
-                                const toFinalValue = (value: number | string) =>
-                                    typeof value === "number"
-                                        ? `${spacing(value)}px`
-                                        : value;
+                    document.documentElement.style.backgroundColor =
+                        backgroundColor;
 
-                                const out = ((
-                                    valueOrObject:
-                                        | number
-                                        | Record<
-                                              "topBottom" | "rightLeft",
-                                              number | string
-                                          >,
-                                ): string | number => {
-                                    if (typeof valueOrObject === "number") {
-                                        return spacing(valueOrObject);
-                                    }
+                    // eslint-disable-next-line no-constant-condition
+                    while (true) {
+                        const element = document.querySelector(
+                            "meta[name=theme-color]",
+                        );
 
-                                    const { rightLeft, topBottom } =
-                                        valueOrObject;
+                        if (element === null) {
+                            break;
+                        }
 
-                                    return [
-                                        topBottom,
-                                        rightLeft,
-                                        topBottom,
-                                        rightLeft,
-                                    ]
-                                        .map(toFinalValue)
-                                        .join(" ");
-                                }) as any as Spacing;
+                        element.remove();
+                    }
 
-                                const f = (params: {
-                                    axis: "vertical" | "horizontal";
-                                    kind: "padding" | "margin";
-                                    value: number | string;
-                                }): Record<string, string> => {
-                                    const { axis, kind, value } = params;
+                    document.head.insertAdjacentHTML(
+                        "beforeend",
+                        `<meta name="theme-color" content="${backgroundColor}">`,
+                    );
+                }
 
-                                    const finalValue =
-                                        typeof value === "number"
-                                            ? `${spacing(value)}px`
-                                            : value;
-
-                                    return Object.fromEntries(
-                                        (() => {
-                                            switch (axis) {
-                                                case "horizontal":
-                                                    return ["left", "right"];
-                                                case "vertical":
-                                                    return ["top", "bottom"];
-                                            }
-                                        })().map(direction => [
-                                            `${kind}${capitalize(direction)}`,
-                                            finalValue,
-                                        ]),
-                                    );
-                                };
-
-                                out.rightLeft = (kind, value) =>
-                                    f({ "axis": "horizontal", kind, value });
-                                out.topBottom = (kind, value) =>
-                                    f({ "axis": "vertical", kind, value });
-
-                                return out;
-                            })(),
-                            muiTheme,
-                        };
-                    })(),
-                    "iconSizesInPxByName": getIconSizesInPxByName({
-                        getIconSizeInPx,
-                        windowInnerWidth,
-                        "rootFontSizePx": typographyDesc.rootFontSizePx,
-                    }),
-                    windowInnerWidth,
-                    publicUrl,
-                });
+                return theme;
             },
             { "max": 1 },
         );
 
-        function useTheme() {
-            const { isDarkModeEnabled } = useIsDarkModeEnabled();
-            const { windowInnerWidth } = useWindowInnerSize();
-
-            const { rootFontSizePx } = useRootFontSizePx();
-
-            return createTheme(
-                isDarkModeEnabled,
-                windowInnerWidth,
-                rootFontSizePx,
-            );
-        }
-
-        return { useTheme };
+        return { memoizedCreateTheme };
     })();
 
-    const MaybeSplashScreen =
+    const CssGlobalBaselineOrScopedBaseline: (props: {
+        children: ReactNode;
+    }) => JSX.Element = isGlobal
+        ? ({ children }) => (
+              <>
+                  <CssBaseline />
+                  {children}
+              </>
+          )
+        : ({ children }) => <ScopedCssBaseline>{children}</ScopedCssBaseline>;
+    function DarkModeProvider(props: {
+        dark: boolean | undefined;
+        children: ReactNode;
+    }) {
+        const { dark, children } = props;
+
+        assert(evtIsDarkModeEnabled !== undefined);
+
+        useState(() => {
+            if (dark === undefined) {
+                return;
+            }
+
+            evtIsDarkModeEnabled.state = dark;
+        });
+
+        useRerenderOnStateChange(evtIsDarkModeEnabled);
+
+        const setIsDarkModeEnabled = useConstCallback<
+            React.Dispatch<React.SetStateAction<boolean>>
+        >(
+            setStateAction =>
+                (evtIsDarkModeEnabled.state = typeGuard<
+                    (prevState: boolean) => boolean
+                >(setStateAction, typeof setStateAction === "function")
+                    ? setStateAction(evtIsDarkModeEnabled.state)
+                    : setStateAction),
+        );
+
+        return (
+            <isDarkModeEnabledContext.Provider
+                value={{
+                    "isDarkModeEnabled": evtIsDarkModeEnabled.state,
+                    setIsDarkModeEnabled,
+                }}
+            >
+                {children}
+            </isDarkModeEnabledContext.Provider>
+        );
+    }
+
+    function OnyxiaThemeProvider(props: { children: ReactNode }) {
+        const { children } = props;
+
+        const isDarkModeEnabledApi = useContext(isDarkModeEnabledContext);
+
+        assert(isDarkModeEnabledApi !== undefined);
+
+        const { windowInnerWidth } = useWindowInnerSize();
+
+        const { rootFontSizePx } = useRootFontSizePx();
+
+        const theme = memoizedCreateTheme(
+            isDarkModeEnabledApi.isDarkModeEnabled,
+            windowInnerWidth,
+            rootFontSizePx,
+        );
+
+        return (
+            <themeContext.Provider value={theme}>
+                {children}
+            </themeContext.Provider>
+        );
+    }
+
+    function MuiThemeProvider(props: { children: ReactNode }) {
+        const { children } = props;
+
+        const theme = useContext(themeContext);
+
+        assert(theme !== undefined);
+
+        return (
+            <mui.ThemeProvider theme={theme.muiTheme}>
+                {children}
+            </mui.ThemeProvider>
+        );
+    }
+
+    const MaybeSplashScreen: (props: { children: ReactNode }) => JSX.Element =
         splashScreenParams === undefined
-            ? ({ children }: { children: ReactNode }) => <>{children}</>
-            : createSplashScreen({
-                  useTheme,
+            ? ({ children }) => <>{children}</>
+            : (assert(
+                  isGlobal,
+                  "Can't use splash screen on a scoped theme provider",
+              ),
+              createSplashScreen({
                   "assetUrl": splashScreenParams.assetUrl,
                   "fadeOutDuration": splashScreenParams.fadeOutDuration,
                   "minimumDisplayDuration":
                       splashScreenParams.minimumDisplayDuration,
                   "assetScaleFactor": splashScreenParams.assetScaleFactor,
-              }).SplashScreen;
+              }).SplashScreen);
 
-    function ThemeProvider(props: { children: ReactNode }) {
-        const { children } = props;
-
-        const theme = useTheme();
-
-        {
-            const backgroundColor = theme.colors.useCases.surfaces.background;
-
-            useEffect(() => {
-                document.documentElement.style.backgroundColor =
-                    backgroundColor;
-
-                // eslint-disable-next-line no-constant-condition
-                while (true) {
-                    const element = document.querySelector(
-                        "meta[name=theme-color]",
-                    );
-
-                    if (element === null) {
-                        break;
-                    }
-
-                    element.remove();
-                }
-
-                document.head.insertAdjacentHTML(
-                    "beforeend",
-                    `<meta name="theme-color" content="${backgroundColor}">`,
-                );
-            }, [backgroundColor]);
-        }
-
+    function ThemeProvider(props: { children: ReactNode; dark?: boolean }) {
+        const { dark, children } = props;
         return (
-            <themeContext.Provider value={theme}>
-                <MuiThemeProvider theme={theme.muiTheme}>
-                    <CssBaseline />
-                    <MaybeSplashScreen>{children}</MaybeSplashScreen>
-                </MuiThemeProvider>
-            </themeContext.Provider>
+            <CssGlobalBaselineOrScopedBaseline>
+                <DarkModeProvider dark={dark}>
+                    <OnyxiaThemeProvider>
+                        <MuiThemeProvider>
+                            <MaybeSplashScreen>{children}</MaybeSplashScreen>
+                        </MuiThemeProvider>
+                    </OnyxiaThemeProvider>
+                </DarkModeProvider>
+            </CssGlobalBaselineOrScopedBaseline>
         );
     }
 
     return {
         ThemeProvider,
-        ofTypeTheme: Reflect<ReturnType<typeof useTheme>>(),
+        evtIsDarkModeEnabled,
+        ofTypeTheme: Reflect<ReturnType<typeof memoizedCreateTheme>>(),
     };
 }

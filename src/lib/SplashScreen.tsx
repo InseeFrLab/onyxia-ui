@@ -21,6 +21,7 @@ import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObserv
 import { keyframes } from "tss-react";
 import { ThemedImage } from "../ThemedImage";
 import { ThemedAssetUrl } from "./ThemedAssetUrl";
+import { useTheme } from "./ThemeProvider/theme";
 
 let fadeOutDuration = 700;
 let minimumDisplayDuration = 1000;
@@ -235,10 +236,8 @@ export type SplashScreenParams = {
 
 const context = createContext<boolean>(false);
 
-export function createSplashScreen(
-    params: SplashScreenParams & { useTheme(): Theme },
-) {
-    const { assetUrl, useTheme, assetScaleFactor = 1 } = params;
+export function createSplashScreen(params: SplashScreenParams) {
+    const { assetUrl, assetScaleFactor = 1 } = params;
 
     function SplashScreen(props: { children: ReactNode }) {
         const { children } = props;

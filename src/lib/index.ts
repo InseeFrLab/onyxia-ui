@@ -13,13 +13,6 @@ export {
     changeColorOpacity,
 } from "./color";
 
-export { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
-
-export {
-    useIsDarkModeEnabled,
-    evtIsDarkModeEnabled,
-} from "./useIsDarkModeEnabled";
-
 export type {
     TypographyDesc,
     ComputedTypography,
@@ -36,15 +29,13 @@ export { defaultSpacingConfig } from "./spacing";
 export type { IconSizeName, GetIconSizeInPx } from "./icon";
 export { defaultGetIconSizeInPx } from "./icon";
 
-export { useSplashScreen } from "./SplashScreen";
-
 export {
     type ThemedAssetUrl,
     resolveThemedAssetUrl,
     useResolveThemedAssetUrl,
 } from "./ThemedAssetUrl";
 
-export type { Theme, ThemeProviderProps } from "./ThemeProvider";
-export { createThemeProvider, useTheme } from "./ThemeProvider";
+export type { Theme } from "./ThemeProvider";
+export { createThemeProvider, useTheme, useDarkMode } from "./ThemeProvider";
 
 export { pxToNumber } from "../tools/pxToNumber";
