@@ -76,7 +76,7 @@ function Component() {
     const { t } = useTranslation({ "Picker": null });
 
     return (
-        <div>
+        <div style={{ "minHeight": 400 }}>
             {selectedTags.map(tag => (
                 <span key={tag}>{tag}&nbsp;</span>
             ))}
