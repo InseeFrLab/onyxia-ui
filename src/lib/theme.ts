@@ -37,6 +37,7 @@ export type Theme<
     colors: {
         palette: Palette;
         useCases: ColorUseCases;
+        getUseCases: (params: { isDarkModeEnabled: boolean }) => ColorUseCases;
     };
     typography: ComputedTypography<CustomTypographyVariantName>;
     shadows: typeof shadows;
@@ -99,6 +100,13 @@ export function createThemeFactory<
             isDarkModeEnabled,
         });
 
+        const getUseCases_memoized = memoize((isDarkModeEnabled: boolean) =>
+            createColorUseCases({
+                palette,
+                isDarkModeEnabled,
+            }),
+        );
+
         const spacing = (factorOrExplicitNumberOfPx: number | `${number}px`) =>
             spacingConfig({
                 factorOrExplicitNumberOfPx,
@@ -107,7 +115,12 @@ export function createThemeFactory<
             });
 
         return {
-            "colors": { palette, useCases },
+            "colors": {
+                palette,
+                useCases,
+                "getUseCases": ({ isDarkModeEnabled }) =>
+                    getUseCases_memoized(isDarkModeEnabled),
+            },
             "typography": getComputedTypography({ typographyDesc }),
             isDarkModeEnabled,
             shadows,

@@ -10,6 +10,7 @@ import { variantNameUsedForMuiButton } from "./lib/typography";
 import { pxToNumber } from "./tools/pxToNumber";
 import { Icon, type IconProps } from "./Icon";
 import { symToStr } from "tsafe/symToStr";
+import { getContrastRatio } from "./tools/getContrastRatio";
 
 export type ButtonProps = ButtonProps.Regular | ButtonProps.Submit;
 
@@ -149,55 +150,71 @@ const useStyles = tss
         disabled: boolean;
     }>()
     .create(({ theme, variant, disabled }) => {
-        const textColor =
-            theme.colors.useCases.typography[
-                disabled
-                    ? "textDisabled"
-                    : (() => {
-                          switch (variant) {
-                              case "primary":
-                                  return "textFocus";
-                              case "secondary":
-                              case "ternary":
-                                  return "textPrimary";
-                          }
-                      })()
+        const textColor = (() => {
+            if (disabled) {
+                return theme.colors.useCases.typography.textDisabled;
+            }
+
+            switch (variant) {
+                case "primary": {
+                    return theme.colors.useCases.typography.textFocus;
+                }
+                case "secondary":
+                case "ternary":
+                    return theme.colors.useCases.typography.textPrimary;
+            }
+        })();
+
+        const hoverBackgroundColor =
+            theme.colors.useCases.buttons[
+                (() => {
+                    switch (variant) {
+                        case "primary":
+                            return "actionHoverPrimary";
+                        case "secondary":
+                        case "ternary":
+                            return "actionHoverSecondary";
+                    }
+                })()
             ];
 
         const hoverTextColor = (() => {
-            switch (theme.isDarkModeEnabled) {
-                case true:
-                    return theme.colors.palette[
-                        (() => {
-                            switch (variant) {
-                                case "primary":
-                                    return "light";
-                                case "secondary":
-                                case "ternary":
-                                    return "dark";
-                            }
-                        })()
-                    ].main;
-                case false:
-                    return theme.colors.palette.light.main;
+            if (variant !== "primary") {
+                return theme.colors.getUseCases({
+                    "isDarkModeEnabled": !theme.isDarkModeEnabled,
+                }).typography.textPrimary;
             }
+
+            const [textColorInDarkMode, textColorInLightMode] = [
+                true,
+                false,
+            ].map(
+                isDarkModeEnabled =>
+                    theme.colors.getUseCases({ isDarkModeEnabled }).typography
+                        .textPrimary,
+            );
+
+            const contrastRatioPref = getContrastRatio({
+                "backgroundHex": hoverBackgroundColor,
+                "textHex": textColorInDarkMode,
+            });
+
+            if (contrastRatioPref > 2.6) {
+                return textColorInDarkMode;
+            }
+
+            const contrastRatioAlt = getContrastRatio({
+                "backgroundHex": hoverBackgroundColor,
+                "textHex": textColorInLightMode,
+            });
+
+            return contrastRatioAlt > contrastRatioPref
+                ? textColorInLightMode
+                : textColorInDarkMode;
         })();
 
         return {
             "root": (() => {
-                const hoverBackgroundColor =
-                    theme.colors.useCases.buttons[
-                        (() => {
-                            switch (variant) {
-                                case "primary":
-                                    return "actionHoverPrimary";
-                                case "secondary":
-                                case "ternary":
-                                    return "actionHoverSecondary";
-                            }
-                        })()
-                    ];
-
                 const paddingSpacingTopBottom = 2;
 
                 const borderWidth = (() => {
