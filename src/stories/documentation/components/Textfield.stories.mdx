@@ -14,7 +14,7 @@ import { useDarkMode } from "storybook-dark-mode";
     component={TextField}
     decorators={[
         Story => (
-            <OnyxiaUi dark={useDarkMode()}>
+            <OnyxiaUi darkMode={useDarkMode()}>
                 <Story />
             </OnyxiaUi>
         ),
@@ -53,114 +53,26 @@ The input field is made up of the following elements:
 
 -   an error message - required if a change of state is to be notified to the user.
 
-## States
 
-### Default state
-
-<Canvas>
-    <Story name="Default state">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
-
-### Active state
-
-<Canvas>
-    <Story name="Active state">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
-
-### Error state
-
-<Canvas>
-    <Story name="Error state">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
-
-### Disabled state
-
-<Canvas>
-    <Story name="Disabled state">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
-
-## Options
 
 ### Field with help text
 
 An optional help text can be added to provide additional guidance to the user on how to interact with the component.
 
-<Canvas>
-    <Story name="Help text field">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
 
 ### Field with a long help text
 
 A long help text improve the guidance of help text for the user on how to interact with the component.
 
-<Canvas>
-    <Story name="Long Help text field">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
 
 ### Selection field
 
 Selection field provide a choice of options from a list. The selected components
 are typically used in a form to allow users to make the desired selection from the list of options.
 
-<Canvas>
-    <Story name="Selection field">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
-
 ### Passwords
 
 If the information being entered by the user is sensitive, use the password option to protect it.
-
-<Canvas>
-    <Story name="Password field">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <OnyxiaUi dark={dark}></OnyxiaUi>
-            </Fragment>
-        ))}
-    </Story>
-</Canvas>
 
 ## Rules of use
 
