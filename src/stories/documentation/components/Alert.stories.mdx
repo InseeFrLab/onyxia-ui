@@ -5,8 +5,8 @@ import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
 import { OnyxiaUi } from "../../theme";
 import { Text } from "../../../Text";
 import { Alert } from "../../../Alert";
-import { css } from "@emotion/css";
 import { useDarkMode } from "storybook-dark-mode";
+import { useCss } from "../../tss";
 
 <Meta
     title="Documentation/Components/Alert"
@@ -67,10 +67,10 @@ Used when there are several errors in a form, or fatal errors for the user to re
 
 <Canvas>
     <Story name="Error  Alert">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <div className={css({ "margin": 20 })} />
-                <OnyxiaUi dark={dark}>
+        {[false, true].map(darkMode => (
+            <Fragment key={darkMode}>
+                <div className={useCss({ "margin": 20 })} />
+                <OnyxiaUi darkMode={darkMode}>
                     <Alert severity="error">
                         <Text typo="body 1">This is an error</Text>
                     </Alert>
@@ -92,10 +92,10 @@ Used to indicate to the user that an action or task has been completed successfu
 
 <Canvas>
     <Story name="Success Alert">
-        {[false, true].map(dark => (
-            <Fragment key={dark}>
-                <div className={css({ "margin": 20 })} />
-                <OnyxiaUi dark={dark}>
+        {[false, true].map(darkMode => (
+            <Fragment key={darkMode}>
+                <div className={useCss({ "margin": 20 })} />
+                <OnyxiaUi darkMode={darkMode}>
                     <Alert severity="success">
                         <Text typo="body 1">This is an success</Text>
                     </Alert>
@@ -117,13 +117,13 @@ Use to highlight important information
 
 <Canvas>
     <Story name="Info Alert">
-        <OnyxiaUi dark={false}>
+        <OnyxiaUi darkMode={false}>
             <Alert severity="info">
                 <Text typo="body 1">This is an info</Text>
             </Alert>
         </OnyxiaUi>
-        <div className={css({ "margin": 20 })} />
-        <OnyxiaUi dark={true}>
+        <div className={useCss({ "margin": 20 })} />
+        <OnyxiaUi darkMode={true}>
             <Alert severity="info">
                 <Text typo="body 1">This is an info</Text>
             </Alert>
@@ -143,13 +143,13 @@ Use to highlight important information
 
 <Canvas>
     <Story name="Warning Alert">
-        <OnyxiaUi dark={false}>
+        <OnyxiaUi darkMode={false}>
             <Alert severity="warning">
                 <Text typo="body 1">This is a warning</Text>
             </Alert>
         </OnyxiaUi>
-        <div className={css({ "margin": 20 })} />
-        <OnyxiaUi dark={true}>
+        <div className={useCss({ "margin": 20 })} />
+        <OnyxiaUi darkMode={true}>
             <Alert severity="warning">
                 <Text typo="body 1">This is a warning</Text>
             </Alert>

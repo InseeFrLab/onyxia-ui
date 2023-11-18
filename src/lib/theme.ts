@@ -26,6 +26,7 @@ import type { Theme as MuiTheme } from "@mui/material";
 import type { ComputedTypography } from "./typography";
 import type { IconSizeName } from "./icon";
 import { useContext, createContext } from "react";
+import { memoize } from "../tools/memoize";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -221,8 +222,36 @@ export function useTheme<T = Theme>(): T {
     const theme = useContext(themeContext);
 
     if (theme === undefined) {
-        throw new Error("Your app should be wrapped into <OnyxiaUi />");
+        // If storybook
+        if ("__STORYBOOK_ADDONS" in window) {
+            // Storybook MDX is unrelyable, sometime the components gets rendered
+            // without the decorator
+            return getAllRedTheme() as T;
+        }
+
+        throw new Error(
+            "Your app should be wrapped into <OnyxiaUi />. Cannot useTheme() here.",
+        );
     }
 
     return theme as T;
 }
+
+const getAllRedTheme = memoize(() => {
+    const { createTheme } = createThemeFactory({
+        "palette": JSON.parse(
+            JSON.stringify(defaultPalette).replace(
+                /"#[^"]"/g,
+                `"${defaultPalette.redError.main}"`,
+            ),
+        ),
+    });
+
+    const theme = createTheme({
+        "isDarkModeEnabled": false,
+        "windowInnerWidth": window.innerWidth,
+        "rootFontSizePx": 16,
+    });
+
+    return theme;
+});

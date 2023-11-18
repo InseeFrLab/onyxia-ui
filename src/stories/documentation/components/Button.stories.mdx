@@ -7,15 +7,16 @@ import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
 import { OnyxiaUi } from "../../theme";
 import { Text } from "../../../Text";
 import { Button } from "../../../Button";
-import { css } from "@emotion/css";
 import { useDarkMode } from "storybook-dark-mode";
+import { useCss } from "../../tss";
+import { useTheme } from "../../../lib";
 
 <Meta
     title="documentation/Components/Button"
     component={Button}
     decorators={[
         Story => (
-            <OnyxiaUi dark={useDarkMode()}>
+            <OnyxiaUi darkMode={useDarkMode()}>
                 <Story />
             </OnyxiaUi>
         ),
@@ -66,7 +67,7 @@ The primary button is used for main actions such as submitting a form or redirec
 
 <Canvas>
     <Story name="Primary button">
-        <div className={css({ "margin": 20 })} />
+        <div className={useCss({ "margin": 20 })} />
             <Button href="#" variant="primary">
                 {" "}
                 Button text
@@ -92,12 +93,13 @@ such as canceling, rewinding or resetting values ​​on a form.
     <Story name="Secondary button">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <div className={css({ "margin": 20 })} />
-                <OnyxiaUi dark={dark}>
-                    <Button href="#" variant="secondary">
-                        Button text
-                    </Button>
-                </OnyxiaUi>
+                    <OnyxiaUi darkMode={dark}>
+                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                                <Button href="#" variant="secondary">
+                                    Button text
+                                </Button>
+                        </div>
+                    </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -118,12 +120,13 @@ is used for external links or resetting values ​​on a form.
     <Story name="Ternary button">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <div className={css({ "margin": 20 })} />
-                <OnyxiaUi dark={dark}>
-                    <Button href="#" variant="ternary">
-                        Button text
-                    </Button>
-                </OnyxiaUi>
+                    <OnyxiaUi darkMode={dark}>
+                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                            <Button href="#" variant="ternary">
+                                Button text
+                            </Button>
+                        </div>
+                    </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -145,12 +148,13 @@ to the user that he must take an upstream action.
     <Story name=" Disabled status">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <OnyxiaUi dark={dark}>
-                    <div className={css({ "margin": 20 })} />
-                    <Button href="#" disabled="true">
-                        Button text
-                    </Button>
-                </OnyxiaUi>
+                    <OnyxiaUi darkMode={dark}>
+                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                            <Button href="#" disabled="true">
+                                Button text
+                            </Button>
+                        </div>
+                    </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -177,12 +181,13 @@ Two variations are possible:
     <Story name="Button with right icon">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <div className={css({ "margin": 20 })} />
-                <OnyxiaUi dark={dark}>
-                    <Button href="#" endIcon="help">
-                        Button text
-                    </Button>
-                </OnyxiaUi>
+                    <OnyxiaUi darkMode={dark}>
+                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                            <Button href="#" endIcon="help">
+                                Button text
+                            </Button>
+                        </div>
+                    </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
@@ -198,12 +203,13 @@ Two variations are possible:
     <Story name="Button with left icon">
         {[false, true].map(dark => (
             <Fragment key={dark}>
-                <div className={css({ "margin": 20 })} />
-                <OnyxiaUi dark={dark}>
-                    <Button href="#" startIcon="help">
-                        Button text
-                    </Button>
-                </OnyxiaUi>
+                    <OnyxiaUi darkMode={dark}>
+                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                            <Button href="#" startIcon="help">
+                                Button text
+                            </Button>
+                        </div>
+                    </OnyxiaUi>
             </Fragment>
         ))}
     </Story>
