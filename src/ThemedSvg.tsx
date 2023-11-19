@@ -41,32 +41,51 @@ ThemedSvg.displayName = symToStr({ ThemedSvg });
 const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
     "root": {
         ...Object.fromEntries(
-            getClassesAndColors({ "colorUseCases": theme.colors.useCases }).map(
-                ({ className, color }) => [
-                    ["&.", "& ."]
-                        .map(prefix => `${prefix}${className}`)
-                        .join(", "),
-                    { "fill": color },
-                ],
-            ),
+            getClassesAndColors({
+                "palette": theme.colors.palette,
+                "useCases": theme.colors.useCases,
+            }).map(({ className, color }) => [
+                ["&.", "& ."].map(prefix => `${prefix}${className}`).join(", "),
+                { "fill": color },
+            ]),
         ),
     },
 }));
 
 export function getClassesAndColors(params: {
-    colorUseCases: Theme["colors"]["useCases"];
+    palette: Theme["colors"]["palette"];
+    useCases: Theme["colors"]["useCases"];
 }): { className: string; color: string }[] {
-    const { colorUseCases } = params;
+    const { palette, useCases } = params;
+
+    palette.focus.main;
+
+    const generatePaletteObject = (
+        colors: any,
+        type: "palette" | "useCases",
+    ) => {
+        const out: {
+            className: string;
+            color: string;
+        }[] = [];
+
+        for (const key in colors) {
+            const colorGroup = colors[key];
+            for (const colorKey in colorGroup) {
+                out.push({
+                    "className": `onyxia-fill-${type}-${key}-${colorKey}`,
+                    "color": colorGroup[colorKey],
+                });
+            }
+        }
+
+        return out;
+    };
 
     return [
-        ["focus-color-fill", colorUseCases.typography.textFocus],
-        ["text-color-fill", colorUseCases.typography.textPrimary],
-        ["surface-color-fill", colorUseCases.surfaces.surface1],
-        ["background-color-fill", colorUseCases.surfaces.background],
-    ].map(([className, color]) => ({
-        className,
-        color,
-    }));
+        ...generatePaletteObject(palette, "palette"),
+        ...generatePaletteObject(useCases, "useCases"),
+    ];
 }
 
 export const createThemedSvg = memoize((svgUrl: string) => {
