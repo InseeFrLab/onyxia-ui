@@ -58,8 +58,6 @@ export function getClassesAndColors(params: {
 }): { className: string; color: string }[] {
     const { palette, useCases } = params;
 
-    palette.focus.main;
-
     const generatePaletteObject = (
         colors: any,
         type: "palette" | "useCases",
