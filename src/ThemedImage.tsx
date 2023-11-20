@@ -3,6 +3,7 @@ import {
     type ThemedAssetUrl,
     useResolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
+import { getSafeUrl } from "./tools/getSafeUrl";
 
 type Props = {
     className?: string;
@@ -20,6 +21,6 @@ export function ThemedImage(props: Props) {
     return url.endsWith(".svg") ? (
         <ThemedSvg svgUrl={url} className={className} />
     ) : (
-        <img src={url} alt={alt} className={className} />
+        <img src={getSafeUrl(url)} alt={alt} className={className} />
     );
 }

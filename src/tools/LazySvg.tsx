@@ -3,6 +3,8 @@ import React, { useEffect, useState, forwardRef, memo } from "react";
 import memoize from "memoizee";
 import { symToStr } from "tsafe/symToStr";
 import { capitalize } from "tsafe/capitalize";
+import domPurify from "dompurify";
+import { getSafeUrl } from "./getSafeUrl";
 
 export type LazySvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: string;
@@ -100,11 +102,7 @@ export const createLazySvg = memoize((svgUrl: string) => {
 
 const svgUrlToSvgComponent = memoize(
     async (svgUrl: string) => {
-        const rawSvgString = await fetch(
-            svgUrl.startsWith("http") || svgUrl.startsWith("/")
-                ? svgUrl
-                : `https://${svgUrl}`,
-        )
+        const rawSvgString = await fetch(getSafeUrl(svgUrl))
             .then(response => response.text())
             .catch(() => undefined);
 
@@ -119,7 +117,9 @@ const svgUrlToSvgComponent = memoize(
             try {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(
-                    rawSvgString,
+                    domPurify.sanitize(rawSvgString, {
+                        "USE_PROFILES": { "svg": true },
+                    }),
                     "image/svg+xml",
                 );
                 svgElement = doc.querySelector("svg");
