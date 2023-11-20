@@ -18,7 +18,7 @@ export function ThemedImage(props: Props) {
 
     const url = resolveThemedAssetUrl(props.url);
 
-    return url.endsWith(".svg") ? (
+    return url.split("?")[0].endsWith(".svg") ? (
         <ThemedSvg svgUrl={url} className={className} />
     ) : (
         <img src={getSafeUrl(url)} alt={alt} className={className} />
