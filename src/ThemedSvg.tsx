@@ -15,12 +15,7 @@ import {
     resolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
 
-import {
-    type PaletteBase,
-    type ColorUseCasesBase,
-    defaultPalette,
-    createDefaultColorUseCases,
-} from "./lib/color";
+import { type PaletteBase, type ColorUseCasesBase } from "./lib/color";
 
 export type ThemedSvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: ThemedAssetUrl;
@@ -108,21 +103,13 @@ function getClassesAndColors(params: {
     ];
 }
 
-export async function getThemedSvgAsDataUrl<
-    Palette extends PaletteBase,
->(params: {
+export async function getThemedSvgAsDataUrl(params: {
     svgUrl: ThemedAssetUrl;
     isDarkModeEnabled: boolean;
-    palette: Palette | undefined;
-    /** undefined for default useCases */
-    useCases: ColorUseCasesBase | undefined;
+    palette: PaletteBase;
+    useCases: ColorUseCasesBase;
 }): Promise<`data:image/svg+xml,${string}`> {
-    const {
-        svgUrl,
-        isDarkModeEnabled,
-        palette = defaultPalette,
-        useCases: useCases_params,
-    } = params;
+    const { svgUrl, isDarkModeEnabled, palette, useCases } = params;
 
     const resolvedUrl = resolveThemedAssetUrl({
         "themedAssetUrl": svgUrl,
@@ -135,18 +122,15 @@ export async function getThemedSvgAsDataUrl<
         throw new Error(`Failed to fetch svg at url: ${resolvedUrl}`);
     }
 
-    const useCases =
-        useCases_params ??
-        createDefaultColorUseCases({ palette, isDarkModeEnabled });
-
     (function updateFillColor(element: Element) {
-        getClassesAndColors({ palette, useCases }).forEach(
-            ({ className, color }) => {
-                if (element.getAttribute("class")?.includes(className)) {
-                    element.setAttribute("fill", color);
-                }
-            },
-        );
+        getClassesAndColors({
+            palette,
+            useCases,
+        }).forEach(({ className, color }) => {
+            if (element.getAttribute("class")?.includes(className)) {
+                element.setAttribute("fill", color);
+            }
+        });
 
         for (const child of Array.from(element.children)) {
             updateFillColor(child);
@@ -159,12 +143,12 @@ export async function getThemedSvgAsDataUrl<
 }
 
 export function useThemedSvgAsDataUrl(svgUrl: ThemedAssetUrl) {
-    const { theme } = useTheme();
-
     const {
-        isDarkModeEnabled,
-        colors: { palette, useCases },
-    } = theme;
+        theme: {
+            isDarkModeEnabled,
+            colors: { palette, useCases },
+        },
+    } = useTheme();
 
     const [dataUrl, setDataUrl] = useState<string | undefined>(undefined);
 
@@ -196,7 +180,7 @@ export function useThemedSvgAsDataUrl(svgUrl: ThemedAssetUrl) {
         return () => {
             isActive = false;
         };
-    }, [isDarkModeEnabled, palette, useCases, svgUrl]);
+    }, [isDarkModeEnabled, palette, useCases]);
 
     return dataUrl;
 }

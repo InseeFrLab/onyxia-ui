@@ -3,13 +3,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import "minimal-polyfills/Object.fromEntries";
 import { useState, useContext, useEffect, type ReactNode } from "react";
 import * as mui from "@mui/material/styles";
-import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import type { PaletteBase, ColorUseCasesBase } from "./color";
 import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
 import { assert } from "tsafe/assert";
 import type { StatefulEvt } from "evt";
 import { typeGuard } from "tsafe/typeGuard";
-import { useRootFontSizePx } from "../tools/useRootFontSizePx";
 import { memoize } from "../tools/memoize";
 import {
     themeContext,
@@ -25,6 +23,9 @@ import { useRerenderOnStateChange } from "evt/hooks/useRerenderOnStateChange";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
 import { baseUrlContext } from "./baseUrl";
+import { getEvtRootFontSizePx } from "../tools/evtRootFontSizePx";
+import { getEvtWindowInnerSize } from "../tools/evtWindowInnerSize";
+import { Evt } from "evt";
 
 /**
  * BASE_URL:
@@ -69,7 +70,11 @@ export function createOnyxiaUi<
 } & (IsScoped extends true
     ? {}
     : {
-          evtIsDarkModeEnabled: StatefulEvt<boolean>;
+          evtTheme: StatefulEvt<
+              Theme<Palette, ColorUseCases, CustomTypographyVariantName> & {
+                  setIsDarkModeEnabled: (isDarkModeEnabled: boolean) => void;
+              }
+          >;
       }) {
     const {
         isScoped = false,
@@ -222,18 +227,19 @@ export function createOnyxiaUi<
     function ThemeProvider(props: { children: ReactNode }) {
         const { children } = props;
 
-        const isDarkModeEnabledApi = useContext(isDarkModeEnabledContext);
+        const isDarkModeEnabledContextValue = useContext(
+            isDarkModeEnabledContext,
+        );
 
-        assert(isDarkModeEnabledApi !== undefined);
+        assert(isDarkModeEnabledContextValue !== undefined);
 
-        const { windowInnerWidth } = useWindowInnerSize();
-
-        const { rootFontSizePx } = useRootFontSizePx();
+        useRerenderOnStateChange(evtWindowInnerSize);
+        useRerenderOnStateChange(evtRootFontSizePx);
 
         const theme = memoizedCreateTheme(
-            isDarkModeEnabledApi.isDarkModeEnabled,
-            windowInnerWidth,
-            rootFontSizePx,
+            isDarkModeEnabledContextValue.isDarkModeEnabled,
+            evtWindowInnerSize.state.windowInnerWidth,
+            evtRootFontSizePx.state,
         );
 
         return (
@@ -291,9 +297,34 @@ export function createOnyxiaUi<
         );
     }
 
+    const { evtRootFontSizePx } = getEvtRootFontSizePx();
+    const { evtWindowInnerSize } = getEvtWindowInnerSize();
+
+    const evtTheme = isScoped
+        ? undefined
+        : Evt.merge([
+              (assert(evtIsDarkModeEnabled !== undefined),
+              evtIsDarkModeEnabled),
+              evtRootFontSizePx,
+              evtWindowInnerSize,
+          ])
+              .toStateful()
+              .pipe(() => [
+                  {
+                      ...memoizedCreateTheme(
+                          evtIsDarkModeEnabled.state,
+                          evtWindowInnerSize.state.windowInnerWidth,
+                          evtRootFontSizePx.state,
+                      ),
+                      "setIsDarkModeEnabled": (isDarkModeEnabled: boolean) => {
+                          evtIsDarkModeEnabled.state = isDarkModeEnabled;
+                      },
+                  },
+              ]);
+
     return {
         OnyxiaUi,
         ofTypeTheme: null as any,
-        "evtIsDarkModeEnabled": evtIsDarkModeEnabled as any,
+        "evtTheme": evtTheme as any,
     };
 }
