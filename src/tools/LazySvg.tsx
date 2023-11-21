@@ -28,11 +28,29 @@ export const LazySvg = memo(
             let isActive = true;
 
             (async () => {
-                const resp = await svgUrlToSvgComponent(svgUrl);
+                const svgElement = await fetchSvgAsHTMLElement(svgUrl);
 
-                if (!isActive || resp === undefined) {
+                if (!isActive) {
                     return;
                 }
+
+                if (svgElement === undefined) {
+                    console.error(`Failed to fetch ${svgUrl}`);
+                    return;
+                }
+
+                if (svgElement === undefined) {
+                    return undefined;
+                }
+
+                const svgRootAttrs = Object.fromEntries(
+                    Array.from(svgElement.attributes).map(({ name, value }) => [
+                        name,
+                        value,
+                    ]),
+                );
+
+                const svgInnerHtml = svgElement.innerHTML;
 
                 setState(currentState => {
                     if (currentState?.svgUrl === svgUrl) {
@@ -41,8 +59,8 @@ export const LazySvg = memo(
 
                     return {
                         svgUrl,
-                        "svgInnerHtml": resp.svgInnerHtml,
-                        "svgRootAttrs": resp.svgRootAttrs,
+                        svgInnerHtml,
+                        svgRootAttrs,
                     };
                 });
             })();
@@ -100,14 +118,13 @@ export const createLazySvg = memoize((svgUrl: string) => {
     return LazySvgWithUrl;
 });
 
-const svgUrlToSvgComponent = memoize(
+export const fetchSvgAsHTMLElement = memoize(
     async (svgUrl: string) => {
         const rawSvgString = await fetch(getSafeUrl(svgUrl))
             .then(response => response.text())
             .catch(() => undefined);
 
         if (rawSvgString === undefined) {
-            console.error(`Failed to fetch ${svgUrl}`);
             return undefined;
         }
 
@@ -136,23 +153,7 @@ const svgUrlToSvgComponent = memoize(
             return svgElement;
         })();
 
-        if (svgElement === undefined) {
-            return undefined;
-        }
-
-        const svgRootAttrs = Object.fromEntries(
-            Array.from(svgElement.attributes).map(({ name, value }) => [
-                name,
-                value,
-            ]),
-        );
-
-        const svgInnerHtml = svgElement.innerHTML;
-
-        return {
-            svgInnerHtml,
-            svgRootAttrs,
-        };
+        return svgElement;
     },
     { "promise": true },
 );

@@ -1,15 +1,26 @@
 import "minimal-polyfills/Object.fromEntries";
-import { forwardRef, memo } from "react";
+import { forwardRef, useEffect, useState, memo } from "react";
 import memoize from "memoizee";
 import { symToStr } from "tsafe/symToStr";
-import { LazySvg, type LazySvgProps } from "./tools/LazySvg";
-import { tss } from "./lib/tss";
+import {
+    LazySvg,
+    fetchSvgAsHTMLElement,
+    type LazySvgProps,
+} from "./tools/LazySvg";
+import { tss, useStyles as useTheme } from "./lib/tss";
 import { assert, type Equals } from "tsafe/assert";
 import {
     type ThemedAssetUrl,
     useResolveThemedAssetUrl,
+    resolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
-import type { Theme } from "./lib/theme";
+
+import {
+    type PaletteBase,
+    type ColorUseCasesBase,
+    defaultPalette,
+    createDefaultColorUseCases,
+} from "./lib/color";
 
 export type ThemedSvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: ThemedAssetUrl;
@@ -38,6 +49,17 @@ export const ThemedSvg = memo(
 
 ThemedSvg.displayName = symToStr({ ThemedSvg });
 
+export const createThemedSvg = memoize((svgUrl: string) => {
+    const ThemedSvgWithUrl = forwardRef<
+        SVGSVGElement,
+        Omit<ThemedSvgProps, "svgUrl" | "ref">
+    >((props, ref) => <LazySvg svgUrl={svgUrl} ref={ref} {...props} />);
+
+    ThemedSvgWithUrl.displayName = ThemedSvg.displayName;
+
+    return ThemedSvgWithUrl;
+});
+
 const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
     "root": {
         ...Object.fromEntries(
@@ -52,9 +74,9 @@ const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
     },
 }));
 
-export function getClassesAndColors(params: {
-    palette: Theme["colors"]["palette"];
-    useCases: Theme["colors"]["useCases"];
+function getClassesAndColors(params: {
+    palette: PaletteBase;
+    useCases: ColorUseCasesBase;
 }): { className: string; color: string }[] {
     const { palette, useCases } = params;
 
@@ -86,13 +108,95 @@ export function getClassesAndColors(params: {
     ];
 }
 
-export const createThemedSvg = memoize((svgUrl: string) => {
-    const ThemedSvgWithUrl = forwardRef<
-        SVGSVGElement,
-        Omit<ThemedSvgProps, "svgUrl" | "ref">
-    >((props, ref) => <LazySvg svgUrl={svgUrl} ref={ref} {...props} />);
+export async function getThemedSvgAsDataUrl<
+    Palette extends PaletteBase,
+>(params: {
+    svgUrl: ThemedAssetUrl;
+    isDarkModeEnabled: boolean;
+    palette: Palette | undefined;
+    /** undefined for default useCases */
+    useCases: ColorUseCasesBase | undefined;
+}): Promise<`data:image/svg+xml,${string}`> {
+    const {
+        svgUrl,
+        isDarkModeEnabled,
+        palette = defaultPalette,
+        useCases: useCases_params,
+    } = params;
 
-    ThemedSvgWithUrl.displayName = ThemedSvg.displayName;
+    const resolvedUrl = resolveThemedAssetUrl({
+        "themedAssetUrl": svgUrl,
+        isDarkModeEnabled,
+    });
 
-    return ThemedSvgWithUrl;
-});
+    const svgElement = await fetchSvgAsHTMLElement(resolvedUrl);
+
+    if (svgElement === undefined) {
+        throw new Error(`Failed to fetch svg at url: ${resolvedUrl}`);
+    }
+
+    const useCases =
+        useCases_params ??
+        createDefaultColorUseCases({ palette, isDarkModeEnabled });
+
+    (function updateFillColor(element: Element) {
+        getClassesAndColors({ palette, useCases }).forEach(
+            ({ className, color }) => {
+                if (element.getAttribute("class")?.includes(className)) {
+                    element.setAttribute("fill", color);
+                }
+            },
+        );
+
+        for (const child of Array.from(element.children)) {
+            updateFillColor(child);
+        }
+    })(svgElement);
+
+    return `data:image/svg+xml,${encodeURIComponent(
+        new XMLSerializer().serializeToString(svgElement),
+    )}`;
+}
+
+export function useThemedSvgAsDataUrl(svgUrl: ThemedAssetUrl) {
+    const { theme } = useTheme();
+
+    const {
+        isDarkModeEnabled,
+        colors: { palette, useCases },
+    } = theme;
+
+    const [dataUrl, setDataUrl] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        let isActive = true;
+
+        (async () => {
+            let dataUrl: string;
+
+            try {
+                dataUrl = await getThemedSvgAsDataUrl({
+                    svgUrl,
+                    isDarkModeEnabled,
+                    palette,
+                    useCases,
+                });
+            } catch (error) {
+                console.warn(String(error));
+                return;
+            }
+
+            if (!isActive) {
+                return;
+            }
+
+            setDataUrl(dataUrl);
+        })();
+
+        return () => {
+            isActive = false;
+        };
+    }, [isDarkModeEnabled, palette, useCases, svgUrl]);
+
+    return dataUrl;
+}
