@@ -6,7 +6,7 @@ import * as mui from "@mui/material/styles";
 import type { PaletteBase, ColorUseCasesBase } from "./color";
 import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
 import { assert } from "tsafe/assert";
-import type { StatefulEvt } from "evt";
+import type { StatefulReadonlyEvt } from "evt";
 import { typeGuard } from "tsafe/typeGuard";
 import { memoize } from "../tools/memoize";
 import {
@@ -70,7 +70,7 @@ export function createOnyxiaUi<
 } & (IsScoped extends true
     ? {}
     : {
-          evtTheme: StatefulEvt<
+          evtTheme: StatefulReadonlyEvt<
               Theme<Palette, ColorUseCases, CustomTypographyVariantName> & {
                   setIsDarkModeEnabled: (isDarkModeEnabled: boolean) => void;
               }
