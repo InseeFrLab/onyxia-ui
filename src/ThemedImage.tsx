@@ -1,15 +1,18 @@
-import { ThemedSvg } from "./ThemedSvg";
+import { ThemedSvg, useThemedSvgAsBlobUrl } from "./ThemedSvg";
 import {
     type ThemedAssetUrl,
     useResolveThemedAssetUrl,
 } from "./lib/ThemedAssetUrl";
-import { getSafeUrl } from "./tools/getSafeUrl";
 
 type Props = {
     className?: string;
     url: ThemedAssetUrl;
     alt?: string;
 };
+
+function getIsSvg(url: string) {
+    return url.split("?")[0].endsWith(".svg");
+}
 
 export function ThemedImage(props: Props) {
     const { className, alt = "" } = props;
@@ -18,9 +21,26 @@ export function ThemedImage(props: Props) {
 
     const url = resolveThemedAssetUrl(props.url);
 
-    return url.split("?")[0].endsWith(".svg") ? (
+    return getIsSvg(url) ? (
         <ThemedSvg svgUrl={url} className={className} />
     ) : (
-        <img src={getSafeUrl(url)} alt={alt} className={className} />
+        <img src={url} alt={alt} className={className} />
     );
+}
+
+export function useThemedImageUrl(
+    themedAssetUrl: ThemedAssetUrl | undefined,
+): string | undefined {
+    const { resolveThemedAssetUrl } = useResolveThemedAssetUrl();
+
+    const url =
+        themedAssetUrl === undefined
+            ? undefined
+            : resolveThemedAssetUrl(themedAssetUrl);
+
+    const svgDataUrl = useThemedSvgAsBlobUrl(
+        url === undefined ? undefined : getIsSvg(url) ? url : undefined,
+    );
+
+    return url === undefined ? undefined : getIsSvg(url) ? svgDataUrl : url;
 }

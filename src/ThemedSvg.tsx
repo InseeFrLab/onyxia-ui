@@ -61,9 +61,9 @@ const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
             getClassesAndColors({
                 "palette": theme.colors.palette,
                 "useCases": theme.colors.useCases,
-            }).map(({ className, color }) => [
+            }).map(({ className, color, attributeName }) => [
                 ["&.", "& ."].map(prefix => `${prefix}${className}`).join(", "),
-                { "fill": color },
+                { [attributeName]: color },
             ]),
         ),
     },
@@ -72,7 +72,11 @@ const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
 function getClassesAndColors(params: {
     palette: PaletteBase;
     useCases: ColorUseCasesBase;
-}): { className: string; color: string }[] {
+}): {
+    className: string;
+    color: string;
+    attributeName: "fill" | "stroke";
+}[] {
     const { palette, useCases } = params;
 
     const generatePaletteObject = (
@@ -82,15 +86,19 @@ function getClassesAndColors(params: {
         const out: {
             className: string;
             color: string;
+            attributeName: "fill" | "stroke";
         }[] = [];
 
-        for (const key in colors) {
-            const colorGroup = colors[key];
-            for (const colorKey in colorGroup) {
-                out.push({
-                    "className": `onyxia-fill-${type}-${key}-${colorKey}`,
-                    "color": colorGroup[colorKey],
-                });
+        for (const attributeName of ["fill", "stroke"] as const) {
+            for (const key in colors) {
+                const colorGroup = colors[key];
+                for (const colorKey in colorGroup) {
+                    out.push({
+                        "className": `onyxia-${attributeName}-${type}-${key}-${colorKey}`,
+                        "color": colorGroup[colorKey],
+                        attributeName,
+                    });
+                }
             }
         }
 
@@ -103,12 +111,12 @@ function getClassesAndColors(params: {
     ];
 }
 
-export async function getThemedSvgAsDataUrl(params: {
+export async function getThemedSvgAsBlobUrl(params: {
     svgUrl: ThemedAssetUrl;
     isDarkModeEnabled: boolean;
     palette: PaletteBase;
     useCases: ColorUseCasesBase;
-}): Promise<`data:image/svg+xml,${string}`> {
+}): Promise<string> {
     const { svgUrl, isDarkModeEnabled, palette, useCases } = params;
 
     const resolvedUrl = resolveThemedAssetUrl({
@@ -126,9 +134,9 @@ export async function getThemedSvgAsDataUrl(params: {
         getClassesAndColors({
             palette,
             useCases,
-        }).forEach(({ className, color }) => {
+        }).forEach(({ className, color, attributeName }) => {
             if (element.getAttribute("class")?.includes(className)) {
-                element.setAttribute("fill", color);
+                element.setAttribute(attributeName, color);
             }
         });
 
@@ -137,12 +145,18 @@ export async function getThemedSvgAsDataUrl(params: {
         }
     })(svgElement);
 
-    return `data:image/svg+xml,${encodeURIComponent(
-        new XMLSerializer().serializeToString(svgElement),
-    )}`;
+    const svg = new XMLSerializer().serializeToString(svgElement);
+    const blob = new Blob([svg], { "type": "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+
+    if (url.length >= 65536) {
+        console.warn("Encoded SVG might be too long for a data URL.");
+    }
+
+    return url;
 }
 
-export function useThemedSvgAsDataUrl(svgUrl: ThemedAssetUrl) {
+export function useThemedSvgAsBlobUrl(svgUrl: ThemedAssetUrl | undefined) {
     const {
         theme: {
             isDarkModeEnabled,
@@ -153,13 +167,17 @@ export function useThemedSvgAsDataUrl(svgUrl: ThemedAssetUrl) {
     const [dataUrl, setDataUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
+        if (svgUrl === undefined) {
+            return;
+        }
+
         let isActive = true;
 
         (async () => {
-            let dataUrl: string;
+            let blobUrl: string;
 
             try {
-                dataUrl = await getThemedSvgAsDataUrl({
+                blobUrl = await getThemedSvgAsBlobUrl({
                     svgUrl,
                     isDarkModeEnabled,
                     palette,
@@ -174,7 +192,7 @@ export function useThemedSvgAsDataUrl(svgUrl: ThemedAssetUrl) {
                 return;
             }
 
-            setDataUrl(dataUrl);
+            setDataUrl(blobUrl);
         })();
 
         return () => {
