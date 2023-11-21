@@ -3,7 +3,6 @@ import React, { useEffect, useState, forwardRef, memo } from "react";
 import memoize from "memoizee";
 import { symToStr } from "tsafe/symToStr";
 import { capitalize } from "tsafe/capitalize";
-import domPurify from "dompurify";
 import { getSafeUrl } from "./getSafeUrl";
 
 export type LazySvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
@@ -134,9 +133,7 @@ export const fetchSvgAsHTMLElement = memoize(
             try {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(
-                    domPurify.sanitize(rawSvgString, {
-                        "USE_PROFILES": { "svg": true },
-                    }),
+                    rawSvgString,
                     "image/svg+xml",
                 );
                 svgElement = doc.querySelector("svg");
