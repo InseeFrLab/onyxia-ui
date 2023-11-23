@@ -137,6 +137,51 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
 
                 onArrowClickFactory(direction)();
             });
+
+            Evt.from(ctx, element, "wheel").attach(wheelEvent => {
+                wheelEvent.preventDefault();
+
+                const direction: "left" | "right" | undefined = (() => {
+                    // Determine the direction of the scroll
+                    const horizontalDirection =
+                        wheelEvent.deltaX < 0 ? "left" : "right";
+                    const verticalDirection =
+                        wheelEvent.deltaY < 0 ? "up" : "down";
+
+                    // Prioritize horizontal scrolling when both deltaX and deltaY are present
+                    if (wheelEvent.deltaX !== 0) {
+                        return horizontalDirection;
+                    } else if (wheelEvent.deltaY !== 0) {
+                        switch (verticalDirection) {
+                            case "up":
+                                return "left";
+                            case "down":
+                                return "right";
+                        }
+                    }
+                    return undefined;
+                })();
+
+                if (direction === undefined) {
+                    return;
+                }
+
+                // Execute actions based on the determined direction
+                switch (direction) {
+                    case "left":
+                        if (isLeftArrowDisabled) {
+                            return;
+                        }
+                        break;
+                    case "right":
+                        if (isRightArrowDisabled) {
+                            return;
+                        }
+                        break;
+                }
+
+                onArrowClickFactory(direction)();
+            });
         },
         [tabWrapperRef.current, firstTabIndex, offset],
     );
