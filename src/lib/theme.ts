@@ -157,6 +157,10 @@ export function createThemeFactory<
                                         "root": (() => {
                                             const set = new WeakSet<Function>();
 
+                                            const borderNone = {
+                                                "border": "none",
+                                            };
+
                                             return (params: {
                                                 ownerState?: {
                                                     getRowClassName?: (params: {
@@ -167,7 +171,7 @@ export function createThemeFactory<
                                                 const { ownerState } = params;
 
                                                 if (ownerState === undefined) {
-                                                    return {};
+                                                    return borderNone;
                                                 }
 
                                                 if (
@@ -209,18 +213,9 @@ export function createThemeFactory<
                                                     );
                                                 }
 
-                                                return {};
+                                                return borderNone;
                                             };
                                         })(),
-                                        "columnHeaders": {
-                                            "backgroundColor":
-                                                useCases.surfaces.surface2,
-                                            "&&": {
-                                                "borderColor": "red",
-                                                "borderPosition": "bottom",
-                                                "borderWidth": 2,
-                                            },
-                                        },
                                         "row": () => {
                                             const hoveredAndSelected = {
                                                 "&.Mui-hovered": {
@@ -262,6 +257,9 @@ export function createThemeFactory<
                                         },
                                         "columnSeparator": {
                                             "display": "none",
+                                        },
+                                        "withBorderColor": {
+                                            "borderColor": "transparent",
                                         },
                                     },
                                 },
