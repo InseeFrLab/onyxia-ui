@@ -27,6 +27,7 @@ import type { ComputedTypography } from "./typography";
 import type { IconSizeName } from "./icon";
 import { useContext, createContext } from "react";
 import { memoize } from "../tools/memoize";
+import { changeColorOpacity } from "../tools/changeColorOpacity";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -149,6 +150,125 @@ export function createThemeFactory<
                                 "underline": "hover",
                             },
                         },
+                        ...(() => {
+                            const nonTypedMuiComponents = {
+                                "MuiDataGrid": {
+                                    "styleOverrides": {
+                                        "root": (() => {
+                                            const set = new WeakSet<Function>();
+
+                                            return (params: {
+                                                ownerState?: {
+                                                    getRowClassName?: (params: {
+                                                        indexRelativeToCurrentPage: number;
+                                                    }) => string;
+                                                };
+                                            }) => {
+                                                const { ownerState } = params;
+
+                                                if (ownerState === undefined) {
+                                                    return {};
+                                                }
+
+                                                if (
+                                                    ownerState.getRowClassName ===
+                                                        undefined ||
+                                                    !set.has(
+                                                        ownerState.getRowClassName,
+                                                    )
+                                                ) {
+                                                    const originalGetRowClassName =
+                                                        ownerState.getRowClassName;
+
+                                                    ownerState.getRowClassName =
+                                                        params => {
+                                                            const {
+                                                                indexRelativeToCurrentPage,
+                                                            } = params;
+
+                                                            const parityClassName =
+                                                                indexRelativeToCurrentPage %
+                                                                    2 ===
+                                                                0
+                                                                    ? "even"
+                                                                    : "odd";
+
+                                                            const className =
+                                                                originalGetRowClassName?.(
+                                                                    params,
+                                                                );
+
+                                                            return className ===
+                                                                undefined
+                                                                ? parityClassName
+                                                                : `${parityClassName} ${className}`;
+                                                        };
+
+                                                    set.add(
+                                                        ownerState.getRowClassName,
+                                                    );
+                                                }
+
+                                                return {};
+                                            };
+                                        })(),
+                                        "columnHeaders": {
+                                            "backgroundColor":
+                                                useCases.surfaces.surface2,
+                                            "&&": {
+                                                "borderColor": "red",
+                                                "borderPosition": "bottom",
+                                                "borderWidth": 2,
+                                            },
+                                        },
+                                        "row": () => {
+                                            const hoveredAndSelected = {
+                                                "&.Mui-hovered": {
+                                                    "backgroundColor":
+                                                        changeColorOpacity({
+                                                            "color":
+                                                                useCases
+                                                                    .typography
+                                                                    .textFocus,
+                                                            "opacity": 0.6,
+                                                        }),
+                                                },
+                                                "&.Mui-selected": {
+                                                    "backgroundColor":
+                                                        changeColorOpacity({
+                                                            "color":
+                                                                useCases
+                                                                    .typography
+                                                                    .textFocus,
+                                                            "opacity": 0.2,
+                                                        }),
+                                                },
+                                            };
+
+                                            return {
+                                                "&.even": {
+                                                    "backgroundColor":
+                                                        useCases.surfaces
+                                                            .surface2,
+                                                    ...hoveredAndSelected,
+                                                },
+                                                "&.odd": {
+                                                    "backgroundColor":
+                                                        useCases.surfaces
+                                                            .background,
+                                                    ...hoveredAndSelected,
+                                                },
+                                            };
+                                        },
+                                        "columnSeparator": {
+                                            "display": "none",
+                                        },
+                                    },
+                                },
+                            };
+
+                            return nonTypedMuiComponents as any as {};
+                        })(),
                     },
                 });
 
