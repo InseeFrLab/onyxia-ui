@@ -17,7 +17,7 @@
         "format": "npm run _format -- --write",
         "format:check": "npm run _format -- --list-different",
         "storybook": "start-storybook -p 6006 --static-dir ./.storybook/static",
-        "link-in-web": "yarn build && ts-node --skipProject scripts/link-in-app.ts web",
+        "link-in-web": "bash scripts/link-in-web.sh",
         "start-test-app": "yarn build && ts-node --skipProject scripts/link-in-test-app.ts && cd test-app && rm -rf node_modules/.cache && yarn start"
     },
     "bin": {
