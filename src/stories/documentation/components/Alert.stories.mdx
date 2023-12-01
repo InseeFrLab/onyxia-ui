@@ -6,7 +6,7 @@ import { OnyxiaUi } from "../../theme";
 import { Text } from "../../../Text";
 import { Alert } from "../../../Alert";
 import { useDarkMode } from "storybook-dark-mode";
-import { useCss } from "../../tss";
+import { css } from "../../tss";
 
 <Meta
     title="Documentation/Components/Alert"
@@ -69,7 +69,7 @@ Used when there are several errors in a form, or fatal errors for the user to re
     <Story name="Error  Alert">
         {[false, true].map(darkMode => (
             <Fragment key={darkMode}>
-                <div className={useCss({ "margin": 20 })} />
+                <div className={css({ "margin": 20 })} />
                 <OnyxiaUi darkMode={darkMode}>
                     <Alert severity="error">
                         <Text typo="body 1">This is an error</Text>
@@ -94,7 +94,7 @@ Used to indicate to the user that an action or task has been completed successfu
     <Story name="Success Alert">
         {[false, true].map(darkMode => (
             <Fragment key={darkMode}>
-                <div className={useCss({ "margin": 20 })} />
+                <div className={css({ "margin": 20 })} />
                 <OnyxiaUi darkMode={darkMode}>
                     <Alert severity="success">
                         <Text typo="body 1">This is an success</Text>
@@ -122,7 +122,7 @@ Use to highlight important information
                 <Text typo="body 1">This is an info</Text>
             </Alert>
         </OnyxiaUi>
-        <div className={useCss({ "margin": 20 })} />
+        <div className={css({ "margin": 20 })} />
         <OnyxiaUi darkMode={true}>
             <Alert severity="info">
                 <Text typo="body 1">This is an info</Text>
@@ -148,7 +148,7 @@ Use to highlight important information
                 <Text typo="body 1">This is a warning</Text>
             </Alert>
         </OnyxiaUi>
-        <div className={useCss({ "margin": 20 })} />
+        <div className={css({ "margin": 20 })} />
         <OnyxiaUi darkMode={true}>
             <Alert severity="warning">
                 <Text typo="body 1">This is a warning</Text>

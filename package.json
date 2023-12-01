@@ -72,9 +72,9 @@
         "yazl": "^2.5.1"
     },
     "devDependencies": {
-        "@emotion/css": "^11.11.2",
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
+        "@emotion/cache": "^11.11.0",
         "@mui/material": "^5.14.6",
         "@storybook/addon-actions": "^6.5.9",
         "@storybook/addon-essentials": "^6.5.9",

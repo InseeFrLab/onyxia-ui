@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Meta, Story, Canvas } from "@storybook/addon-docs";
 import { useDarkMode } from "storybook-dark-mode";
 import { OnyxiaUi } from "../../theme";
-import { useCss } from "../../tss";
+import { css } from "../../tss";
 import { useTheme } from "../../../lib";
 
 <Meta
@@ -75,7 +75,7 @@ What matters is that the colors support the message you want to convey and that 
 <Canvas>
     <Story name="Onyxia brand colors">
         <div
-            className={useCss({
+            className={css({
                 "display": "grid",
                 "gridTemplateColumns": "repeat(3, 1fr)",
                 "gridAutoRows": 20,
@@ -84,7 +84,7 @@ What matters is that the colors support the message you want to convey and that 
             })}
         >
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.focus.main,
@@ -93,7 +93,7 @@ What matters is that the colors support the message you want to convey and that 
             <h4>Exeburant Orange (Focus)</h4>
             <p>#FF562C</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.dark.main,
@@ -102,7 +102,7 @@ What matters is that the colors support the message you want to convey and that 
             <h4>Midnight Blue (Dark)</h4>
             <p>#2C323F</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.light.main,
@@ -121,7 +121,7 @@ For functional applications, the color palette can be extended to include shade 
 <Canvas>
     <Story name="Orange Focus color">
         <div
-            className={useCss({
+            className={css({
                 "display": "grid",
                 "gridTemplateColumns": "repeat(3, 1fr)",
                 "gridAutoRows": 20,
@@ -130,148 +130,148 @@ For functional applications, the color palette can be extended to include shade 
             })}
         >
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.focus.main,
                 })}
             />
-            <h4 className={useCss({})}>Orange (Focus) - Main</h4>
-            <p className={useCss({})}>#FF562C</p>
+            <h4 className={css({})}>Orange (Focus) - Main</h4>
+            <p className={css({})}>#FF562C</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.focus.light,
                 })}
             />
-            <h4 className={useCss({})}>Orange (Focus) - Light</h4>
-            <p className={useCss({})}>#FFAD99</p>
+            <h4 className={css({})}>Orange (Focus) - Light</h4>
+            <p className={css({})}>#FFAD99</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.focus.light2,
                 })}
             />
-            <h4 className={useCss({})}>Orange (Focus) - Light 2</h4>
-            <p className={useCss({})}>#FF562C</p>
+            <h4 className={css({})}>Orange (Focus) - Light 2</h4>
+            <p className={css({})}>#FF562C</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.dark.main,
                 })}
             />
-            <h4 className={useCss({})}>Blue (Dark) - Main</h4>
-            <p className={useCss({})}>#2C323F</p>
+            <h4 className={css({})}>Blue (Dark) - Main</h4>
+            <p className={css({})}>#2C323F</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.dark.light,
                 })}
             />
-            <h4 className={useCss({})}>Blue (Dark) - Light</h4>
-            <p className={useCss({})}>#373E4F</p>
+            <h4 className={css({})}>Blue (Dark) - Light</h4>
+            <p className={css({})}>#373E4F</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.dark.greyVariant1,
                 })}
             />
-            <h4 className={useCss({})}>Blue (Dark) - Tones Variant 1</h4>
-            <p className={useCss({})}>#242C39</p>
+            <h4 className={css({})}>Blue (Dark) - Tones Variant 1</h4>
+            <p className={css({})}>#242C39</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.dark.greyVariant2,
                 })}
             />
-            <h4 className={useCss({})}>Blue (Dark) - Tones Variant 2</h4>
-            <p className={useCss({})}>#5A6270</p>
+            <h4 className={css({})}>Blue (Dark) - Tones Variant 2</h4>
+            <p className={css({})}>#5A6270</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.dark.greyVariant3,
                 })}
             />
-            <h4 className={useCss({})}>Blue (Dark) - Tones Variant 3</h4>
-            <p className={useCss({})}>#8A9099</p>
+            <h4 className={css({})}>Blue (Dark) - Tones Variant 3</h4>
+            <p className={css({})}>#8A9099</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.dark.greyVariant4,
                 })}
             />
-            <h4 className={useCss({})}>Blue (Dark) - Tones Variant 4</h4>
-            <p className={useCss({})}>#B8BABF</p>
+            <h4 className={css({})}>Blue (Dark) - Tones Variant 4</h4>
+            <p className={css({})}>#B8BABF</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.light.main,
                 })}
             />
-            <h4 className={useCss({})}>White (Light) - Main</h4>
-            <p className={useCss({})}>#F1F0EB</p>
+            <h4 className={css({})}>White (Light) - Main</h4>
+            <p className={css({})}>#F1F0EB</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor": useTheme().colors.palette.light.light,
                 })}
             />
-            <h4 className={useCss({})}>White (Light) - Light</h4>
-            <p className={useCss({})}>#FDFDFC</p>
+            <h4 className={css({})}>White (Light) - Light</h4>
+            <p className={css({})}>#FDFDFC</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.light.greyVariant1,
                 })}
             />
-            <h4 className={useCss({})}>White (Light) - Tones Variant 1</h4>
-            <p className={useCss({})}>#E6E6E6</p>
+            <h4 className={css({})}>White (Light) - Tones Variant 1</h4>
+            <p className={css({})}>#E6E6E6</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.light.greyVariant2,
                 })}
             />
-            <h4 className={useCss({})}>White (Light) - Tones Variant 2</h4>
-            <p className={useCss({})}>#C9C9C9</p>
+            <h4 className={css({})}>White (Light) - Tones Variant 2</h4>
+            <p className={css({})}>#C9C9C9</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.light.greyVariant3,
                 })}
             />
-            <h4 className={useCss({})}>White (Light) - Tones Variant 3</h4>
-            <p className={useCss({})}>#9E9E9E</p>
+            <h4 className={css({})}>White (Light) - Tones Variant 3</h4>
+            <p className={css({})}>#9E9E9E</p>
             <div
-                className={useCss({
+                className={css({
                     "height": 40,
                     "marginRight": 20,
                     "backgroundColor":
                         useTheme().colors.palette.light.greyVariant4,
                 })}
             />
-            <h4 className={useCss({})}>White (Light) - Tones Variant 4</h4>
-            <p className={useCss({})}>#747474</p>
+            <h4 className={css({})}>White (Light) - Tones Variant 4</h4>
+            <p className={css({})}>#747474</p>
         </div>
     </Story>
 </Canvas>

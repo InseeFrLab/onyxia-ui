@@ -1,7 +1,7 @@
 import { Tag } from "../Tag";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import { css } from "@emotion/css";
+import { css } from "./tss";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,

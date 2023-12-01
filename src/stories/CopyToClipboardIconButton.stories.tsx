@@ -1,7 +1,7 @@
 import { CopyToClipboardIconButton } from "../CopyToClipboardIconButton";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import { css } from "@emotion/css";
+import { css } from "./tss";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -13,7 +13,7 @@ export default meta;
 
 export const View = getStory({
     "className": css({
-        "margin": "30px !important",
+        "margin": "30px",
     }),
     "textToCopy": "Text to be copied",
     "copiedToClipboardText": "Copy to clipboard",

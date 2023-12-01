@@ -8,7 +8,7 @@ import { OnyxiaUi } from "../../theme";
 import { Text } from "../../../Text";
 import { Button } from "../../../Button";
 import { useDarkMode } from "storybook-dark-mode";
-import { useCss } from "../../tss";
+import { css } from "../../tss";
 import { useTheme } from "../../../lib";
 
 <Meta
@@ -67,7 +67,7 @@ The primary button is used for main actions such as submitting a form or redirec
 
 <Canvas>
     <Story name="Primary button">
-        <div className={useCss({ "margin": 20 })} />
+        <div className={css({ "margin": 20 })} />
             <Button href="#" variant="primary">
                 {" "}
                 Button text
@@ -94,7 +94,7 @@ such as canceling, rewinding or resetting values ​​on a form.
         {[false, true].map(dark => (
             <Fragment key={dark}>
                     <OnyxiaUi darkMode={dark}>
-                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                        <div className={css({ "padding": useTheme().spacing(4) })}>
                                 <Button href="#" variant="secondary">
                                     Button text
                                 </Button>
@@ -121,7 +121,7 @@ is used for external links or resetting values ​​on a form.
         {[false, true].map(dark => (
             <Fragment key={dark}>
                     <OnyxiaUi darkMode={dark}>
-                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                        <div className={css({ "padding": useTheme().spacing(4) })}>
                             <Button href="#" variant="ternary">
                                 Button text
                             </Button>
@@ -149,8 +149,8 @@ to the user that he must take an upstream action.
         {[false, true].map(dark => (
             <Fragment key={dark}>
                     <OnyxiaUi darkMode={dark}>
-                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
-                            <Button href="#" disabled="true">
+                        <div className={css({ "padding": useTheme().spacing(4) })}>
+                            <Button href="#" disabled>
                                 Button text
                             </Button>
                         </div>
@@ -161,7 +161,7 @@ to the user that he must take an upstream action.
 </Canvas>
 
 ```tsx
-<Button href="#" disabled="true">
+<Button href="#" disabled>
     Button text
 </Button>
 ```
@@ -182,7 +182,7 @@ Two variations are possible:
         {[false, true].map(dark => (
             <Fragment key={dark}>
                     <OnyxiaUi darkMode={dark}>
-                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                        <div className={css({ "padding": useTheme().spacing(4) })}>
                             <Button href="#" endIcon="help">
                                 Button text
                             </Button>
@@ -204,7 +204,7 @@ Two variations are possible:
         {[false, true].map(dark => (
             <Fragment key={dark}>
                     <OnyxiaUi darkMode={dark}>
-                        <div className={useCss({ "padding": useTheme().spacing(4) })}>
+                        <div className={css({ "padding": useTheme().spacing(4) })}>
                             <Button href="#" startIcon="help">
                                 Button text
                             </Button>

@@ -1,5 +1,7 @@
-import { createTss, type CSSInterpolation } from "tss-react";
+import { createTss } from "tss-react";
 import { useTheme } from "../lib";
+import { emotionCache } from "./emotionCache";
+import { createCssAndCx } from "tss-react/cssAndCx";
 
 /** NOTE: Used internally, do not export globally */
 export const { tss } = createTss({
@@ -13,7 +15,4 @@ export const { tss } = createTss({
 /** NOTE: Used internally, do not export globally */
 export const useStyles = tss.create({});
 
-export function useCss(cssObject: CSSInterpolation) {
-    const { css } = useStyles();
-    return css(cssObject);
-}
+export const { css, cx } = createCssAndCx({ "cache": emotionCache });
