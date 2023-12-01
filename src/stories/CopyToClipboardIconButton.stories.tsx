@@ -16,7 +16,7 @@ export const View = getStory({
         "margin": "30px",
     }),
     "textToCopy": "Text to be copied",
-    "copiedToClipboardText": "Copy to clipboard",
-    "copyToClipboardText": "Copied!!",
+    "copyToClipboardText": "Copy to clipboard",
+    "copiedToClipboardText": " Copied!",
     "disabled": false,
 });

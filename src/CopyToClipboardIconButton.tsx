@@ -19,8 +19,8 @@ export const CopyToClipboardIconButton = memo((props: Props) => {
     const {
         className,
         textToCopy,
-        copiedToClipboardText = "Copy to clipboard",
-        copyToClipboardText = "Copied!",
+        copiedToClipboardText = "Copied!",
+        copyToClipboardText = "Copy to clipboard",
         disabled = false,
     } = props;
 
@@ -49,7 +49,7 @@ export const CopyToClipboardIconButton = memo((props: Props) => {
     return (
         <Tooltip
             title={
-                isCopyFeedbackOn ? copyToClipboardText : copiedToClipboardText
+                isCopyFeedbackOn ? copiedToClipboardText : copyToClipboardText
             }
         >
             <IconButton
