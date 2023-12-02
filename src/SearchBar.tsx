@@ -1,4 +1,4 @@
-import { useRef, useState, forwardRef, memo } from "react";
+import { useRef, useState, forwardRef, useEffect, memo } from "react";
 import type { ChangeEventHandler } from "react";
 import { tss } from "./lib/tss";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -46,6 +46,12 @@ export const SearchBar = memo(
         assert<Equals<typeof rest, {}>>();
 
         const [isActive, setIsActive] = useState(search !== "");
+
+        useEffect(() => {
+            if (search !== "") {
+                setIsActive(true);
+            }
+        }, [search]);
 
         const onClearButtonClick = useConstCallback(() =>
             onInputKeyDown({ "key": "Escape" }),
