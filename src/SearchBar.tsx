@@ -18,26 +18,31 @@ export type SearchBarProps = {
     className?: string;
     search: string;
     onSearchChange: (search: string) => void;
-    onKeyPress?: (key: "Enter" | "Escape") => void;
     evtAction?: NonPostableEvtLike<"CLEAR SEARCH">;
     /** Default "Search" */
     placeholder?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
+
+    restorableSearch?: string;
 };
 
 export const SearchBar = memo(
     forwardRef<any, SearchBarProps>((props, forwardedRef) => {
         const {
             className,
-            onSearchChange,
-            onKeyPress,
+            onSearchChange: onSearchChange_params,
             search,
             placeholder = "Search",
             evtAction: evtActionLike,
+            restorableSearch,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             classes: props_classes,
             ...rest
         } = props;
+
+        console.log({ restorableSearch });
+
+        const onSearchChange = useConstCallback(onSearchChange_params);
 
         const evtAction = useNonPostableEvtLike(evtActionLike);
 
@@ -53,9 +58,16 @@ export const SearchBar = memo(
             }
         }, [search]);
 
-        const onClearButtonClick = useConstCallback(() =>
-            onInputKeyDown({ "key": "Escape" }),
-        );
+        const onClearButtonClick = useConstCallback(() => {
+            onSearchChange("");
+
+            if (restorableSearch === undefined) {
+                setIsActive(false);
+                inputRef.current?.blur();
+            } else {
+                inputRef.current?.focus();
+            }
+        });
         const onRootClick = useConstCallback(() => {
             if (!isActive) {
                 setIsActive(true);
@@ -91,8 +103,6 @@ export const SearchBar = memo(
                 return;
             }
 
-            onKeyPress?.(key);
-
             switch (key) {
                 case "Enter":
                     if (search === "") {
@@ -100,8 +110,13 @@ export const SearchBar = memo(
                     }
                     break;
                 case "Escape":
-                    onSearchChange("");
-                    setIsActive(false);
+                    if (restorableSearch === undefined) {
+                        onSearchChange("");
+                        setIsActive(false);
+                    } else {
+                        onSearchChange(restorableSearch);
+                    }
+
                     break;
             }
 
@@ -110,8 +125,14 @@ export const SearchBar = memo(
 
         const { ref: rootRefClickAway } = useClickAway({
             "onClickAway": () => {
-                if (search !== "") return;
-                setIsActive(false);
+                if (restorableSearch === undefined) {
+                    if (search !== "") {
+                        return;
+                    }
+                    setIsActive(false);
+                } else {
+                    onSearchChange(restorableSearch);
+                }
             },
         });
 
@@ -122,12 +143,18 @@ export const SearchBar = memo(
                 evtAction?.attach(
                     action => action === "CLEAR SEARCH",
                     ctx,
-                    () =>
-                        onInputKeyDown({
-                            "key": "Escape",
-                        }),
+                    () => {
+                        if (restorableSearch !== undefined) {
+                            onSearchChange(restorableSearch);
+                        } else {
+                            onSearchChange("");
+                            setIsActive(false);
+                        }
+
+                        inputRef.current?.blur();
+                    },
                 ),
-            [evtAction ?? Object],
+            [evtAction, restorableSearch],
         );
 
         const { classes, cx } = useStyles({
