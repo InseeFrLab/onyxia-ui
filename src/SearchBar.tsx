@@ -18,7 +18,7 @@ export type SearchBarProps = {
     className?: string;
     search: string;
     onSearchChange: (search: string) => void;
-    onKeyPress?: (key: "Enter" | "Escape") => void;
+    onKeyPress?: (key: "Enter" | "Escape", isSynthetic: boolean) => void;
     evtAction?: NonPostableEvtLike<"CLEAR SEARCH">;
     /** Default "Search" */
     placeholder?: string;
@@ -54,7 +54,7 @@ export const SearchBar = memo(
         }, [search]);
 
         const onClearButtonClick = useConstCallback(() =>
-            onInputKeyDown({ "key": "Escape" }),
+            onInputKeyDown({ "key": "Escape", "isSynthetic": true }),
         );
         const onRootClick = useConstCallback(() => {
             if (!isActive) {
@@ -76,37 +76,39 @@ export const SearchBar = memo(
 
         const inputRef = useRef<HTMLInputElement>(null);
 
-        const onInputKeyDown = useConstCallback((event: { key: string }) => {
-            const key = (() => {
-                switch (event.key) {
-                    case "Escape":
-                    case "Enter":
-                        return event.key;
-                    default:
-                        return "irrelevant";
-                }
-            })();
-
-            if (key === "irrelevant") {
-                return;
-            }
-
-            onKeyPress?.(key);
-
-            switch (key) {
-                case "Enter":
-                    if (search === "") {
-                        setIsActive(false);
+        const onInputKeyDown = useConstCallback(
+            (event: { key: string; isSynthetic?: true }) => {
+                const key = (() => {
+                    switch (event.key) {
+                        case "Escape":
+                        case "Enter":
+                            return event.key;
+                        default:
+                            return "irrelevant";
                     }
-                    break;
-                case "Escape":
-                    onSearchChange("");
-                    setIsActive(false);
-                    break;
-            }
+                })();
 
-            inputRef.current?.blur();
-        });
+                if (key === "irrelevant") {
+                    return;
+                }
+
+                onKeyPress?.(key, event.isSynthetic ?? false);
+
+                switch (key) {
+                    case "Enter":
+                        if (search === "") {
+                            setIsActive(false);
+                        }
+                        break;
+                    case "Escape":
+                        onSearchChange("");
+                        setIsActive(false);
+                        break;
+                }
+
+                inputRef.current?.blur();
+            },
+        );
 
         const { ref: rootRefClickAway } = useClickAway({
             "onClickAway": () => {
@@ -122,7 +124,11 @@ export const SearchBar = memo(
                 evtAction?.attach(
                     action => action === "CLEAR SEARCH",
                     ctx,
-                    () => onInputKeyDown({ "key": "Escape" }),
+                    () =>
+                        onInputKeyDown({
+                            "key": "Escape",
+                            "isSynthetic": true,
+                        }),
                 ),
             [evtAction ?? Object],
         );
