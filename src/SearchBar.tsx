@@ -13,6 +13,7 @@ import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SearchIcon from "@mui/icons-material/Search";
+import { useConst } from "powerhooks/useConst";
 
 export type SearchBarProps = {
     className?: string;
@@ -22,8 +23,8 @@ export type SearchBarProps = {
     /** Default "Search" */
     placeholder?: string;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
-
     restorableSearch?: string;
+    onKeyPress?: (key: "Enter" | "Escape") => void;
 };
 
 export const SearchBar = memo(
@@ -35,12 +36,17 @@ export const SearchBar = memo(
             placeholder = "Search",
             evtAction: evtActionLike,
             restorableSearch,
+            onKeyPress,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             classes: props_classes,
             ...rest
         } = props;
 
-        console.log({ restorableSearch });
+        const restorableSearchRef = useConst(() => ({
+            "current": restorableSearch,
+        }));
+
+        restorableSearchRef.current = restorableSearch;
 
         const onSearchChange = useConstCallback(onSearchChange_params);
 
@@ -88,6 +94,16 @@ export const SearchBar = memo(
 
         const inputRef = useRef<HTMLInputElement>(null);
 
+        const isComponentActiveRef = useConst(() => ({ "current": true }));
+
+        useEffect(() => {
+            isComponentActiveRef.current = true;
+
+            return () => {
+                isComponentActiveRef.current = false;
+            };
+        }, []);
+
         const onInputKeyDown = useConstCallback((event: { key: string }) => {
             const key = (() => {
                 switch (event.key) {
@@ -121,6 +137,16 @@ export const SearchBar = memo(
             }
 
             inputRef.current?.blur();
+
+            (async () => {
+                await new Promise(resolve => setTimeout(resolve, 50));
+
+                if (!isComponentActiveRef.current) {
+                    return;
+                }
+
+                onKeyPress?.(key);
+            })();
         });
 
         const { ref: rootRefClickAway } = useClickAway({
@@ -131,7 +157,17 @@ export const SearchBar = memo(
                     }
                     setIsActive(false);
                 } else {
-                    onSearchChange(restorableSearch);
+                    (async () => {
+                        await new Promise(resolve => setTimeout(resolve, 200));
+
+                        if (!isComponentActiveRef.current) {
+                            return;
+                        }
+
+                        assert(restorableSearchRef.current !== undefined);
+
+                        onSearchChange(restorableSearchRef.current);
+                    })();
                 }
             },
         });
@@ -144,8 +180,8 @@ export const SearchBar = memo(
                     action => action === "CLEAR SEARCH",
                     ctx,
                     () => {
-                        if (restorableSearch !== undefined) {
-                            onSearchChange(restorableSearch);
+                        if (restorableSearchRef.current !== undefined) {
+                            onSearchChange(restorableSearchRef.current);
                         } else {
                             onSearchChange("");
                             setIsActive(false);
@@ -154,7 +190,7 @@ export const SearchBar = memo(
                         inputRef.current?.blur();
                     },
                 ),
-            [evtAction, restorableSearch],
+            [evtAction],
         );
 
         const { classes, cx } = useStyles({
