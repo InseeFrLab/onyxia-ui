@@ -6,19 +6,35 @@ import { symToStr } from "tsafe/symToStr";
 
 export type ButtonBarProps<ButtonId extends string = never> = {
     className?: string;
-    buttons: readonly {
-        buttonId: ButtonId;
-        icon: string;
-        label: ReactNode;
-        isDisabled?: boolean;
-        link?: {
-            href: string;
-            onClick?: (event?: any) => void;
-            target?: "_blank";
-        };
-    }[];
+    buttons: ButtonBarProps.Button<ButtonId>[];
     onClick: (buttonId: ButtonId) => void;
 };
+
+export namespace ButtonBarProps {
+    export type Button<ButtonId extends string> =
+        | Button.Callback<ButtonId>
+        | Button.Link;
+
+    export namespace Button {
+        type Common = {
+            icon: string;
+            label: ReactNode;
+            isDisabled?: boolean;
+        };
+
+        export type Callback<ButtonId extends string> = Common & {
+            buttonId: ButtonId;
+        };
+
+        export type Link = Common & {
+            link: {
+                href: string;
+                onClick?: (event?: any) => void;
+                target?: "_blank";
+            };
+        };
+    }
+}
 
 function NonMemoizedButtonBar<ButtonId extends string>(
     props: ButtonBarProps<ButtonId>,
@@ -33,33 +49,26 @@ function NonMemoizedButtonBar<ButtonId extends string>(
 
     return (
         <div className={cx(classes.root, className)}>
-            {buttons.map(
-                ({ buttonId, icon, isDisabled = false, label, link }) => (
-                    <ButtonBarButton
-                        startIcon={icon}
-                        disabled={isDisabled}
-                        key={buttonId}
-                        {...(link === undefined
-                            ? {
-                                  "onClick": onClickFactory(buttonId),
-                              }
-                            : {
-                                  "href": link.href,
-                                  "onClick": event => {
-                                      const out = link.onClick?.(event);
-
-                                      onClickFactory(buttonId)();
-
-                                      return out;
-                                  },
-                                  "doOpenNewTabIfHref":
-                                      link.target === "_blank",
-                              })}
-                    >
-                        {label}
-                    </ButtonBarButton>
-                ),
-            )}
+            {buttons.map(button => (
+                <ButtonBarButton
+                    startIcon={button.icon}
+                    disabled={button.isDisabled ?? false}
+                    {...("link" in button
+                        ? {
+                              "key": button.link.href,
+                              "href": button.link.href,
+                              "onClick": button.link.onClick,
+                              "doOpenNewTabIfHref":
+                                  button.link.target === "_blank",
+                          }
+                        : {
+                              "key": button.buttonId,
+                              "onClick": onClickFactory(button.buttonId),
+                          })}
+                >
+                    {button.label}
+                </ButtonBarButton>
+            ))}
         </div>
     );
 }
