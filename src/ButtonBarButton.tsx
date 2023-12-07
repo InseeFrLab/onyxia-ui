@@ -13,7 +13,7 @@ export namespace ButtonBarButtonProps {
         className?: string;
         startIcon?: string;
         disabled?: boolean;
-        children: NonNullable<ReactNode>;
+        children: ReactNode;
     };
 
     export type Regular = Common & {

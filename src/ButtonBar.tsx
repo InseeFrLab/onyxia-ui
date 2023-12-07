@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, ReactNode } from "react";
 import { tss } from "./lib/tss";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { ButtonBarButton } from "./ButtonBarButton";
@@ -9,40 +9,68 @@ export type ButtonBarProps<ButtonId extends string = never> = {
     buttons: readonly {
         buttonId: ButtonId;
         icon: string;
-        label: string;
-        isDisabled: boolean;
+        label: ReactNode;
+        isDisabled?: boolean;
+        link?: {
+            href: string;
+            onClick?: (event?: any) => void;
+            target?: "_blank";
+        };
     }[];
-    onClick(buttonId: ButtonId): void;
+    onClick: (buttonId: ButtonId) => void;
 };
 
-export const ButtonBar = memo(
-    <ButtonId extends string>(props: ButtonBarProps<ButtonId>) => {
-        const { className, buttons, onClick } = props;
+function NonMemoizedButtonBar<ButtonId extends string>(
+    props: ButtonBarProps<ButtonId>,
+) {
+    const { className, buttons, onClick } = props;
 
-        const { classes, cx } = useStyles();
+    const { classes, cx } = useStyles();
 
-        const onClickFactory = useCallbackFactory(([buttonId]: [ButtonId]) =>
-            onClick(buttonId),
-        );
+    const onClickFactory = useCallbackFactory(([buttonId]: [ButtonId]) =>
+        onClick(buttonId),
+    );
 
-        return (
-            <div className={cx(classes.root, className)}>
-                {buttons.map(({ buttonId, icon, isDisabled, label }) => (
+    return (
+        <div className={cx(classes.root, className)}>
+            {buttons.map(
+                ({ buttonId, icon, isDisabled = false, label, link }) => (
                     <ButtonBarButton
                         startIcon={icon}
                         disabled={isDisabled}
                         key={buttonId}
-                        onClick={onClickFactory(buttonId)}
+                        {...(link === undefined
+                            ? {
+                                  "onClick": onClickFactory(buttonId),
+                              }
+                            : {
+                                  "href": link.href,
+                                  "onClick": event => {
+                                      const out = link.onClick?.(event);
+
+                                      onClickFactory(buttonId)();
+
+                                      return out;
+                                  },
+                                  "doOpenNewTabIfHref":
+                                      link.target === "_blank",
+                              })}
                     >
                         {label}
                     </ButtonBarButton>
-                ))}
-            </div>
-        );
-    },
-);
+                ),
+            )}
+        </div>
+    );
+}
 
-ButtonBar.displayName = symToStr({ ButtonBar });
+export const ButtonBar = memo(NonMemoizedButtonBar) as <
+    ButtonId extends string = never,
+>(
+    props: ButtonBarProps<ButtonId>,
+) => ReturnType<typeof NonMemoizedButtonBar>;
+
+(ButtonBar as any).displayName = symToStr({ ButtonBar });
 
 const useStyles = tss.withName({ ButtonBar }).create(({ theme }) => ({
     "root": {
