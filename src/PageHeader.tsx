@@ -188,7 +188,12 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                         </div>
                     )}
                     <div className={classes.helpMiddle}>
-                        <Text typo="navigation label">{helpTitle}</Text>
+                        <Text
+                            className={classes.helpTitle}
+                            typo="navigation label"
+                        >
+                            {helpTitle}
+                        </Text>
                         <Text typo="body 1">{helpContent}</Text>
                     </div>
                     <div>
@@ -233,6 +238,9 @@ const useStyles = tss
         },
         "helpMiddle": {
             "flex": 1,
+        },
+        "helpTitle": {
+            "marginBottom": theme.spacing(2),
         },
         "helpIcon": {
             "marginRight": theme.spacing(3),
