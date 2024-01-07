@@ -8,7 +8,6 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
 import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
-import { breakpointsValues } from "./lib/breakpoints";
 import { useStateRef } from "powerhooks/useStateRef";
 
 /** To make the dialog fit content: "maxWidth": "unset" */
@@ -28,6 +27,8 @@ export type DialogProps = {
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
     /** https://mui.com/material-ui/api/dialog/ */
     muiDialogClasses?: Partial<MuiDialogClasses>;
+    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false;
+    fullWidth?: boolean;
 };
 
 const labelledby = "alert-dialog-title";
@@ -45,6 +46,8 @@ export const Dialog = memo((props: DialogProps) => {
         onClose,
         doNotShowNextTimeText = "Don't show next time",
         muiDialogClasses,
+        maxWidth,
+        fullWidth,
     } = props;
 
     const { cx, classes } = useStyles({
@@ -81,6 +84,8 @@ export const Dialog = memo((props: DialogProps) => {
                             {children}
                         </div>
                     )}
+                    maxWidth={maxWidth}
+                    fullWidth={fullWidth}
                 >
                     {title !== undefined &&
                         (typeof title !== "string" ? (
@@ -148,7 +153,7 @@ const useStyles = tss.withName({ Dialog }).create(({ theme }) => ({
         "borderRadius": 5,
         "padding": theme.spacing(4),
         ...theme.spacing.rightLeft("margin", 4),
-        "maxWidth": breakpointsValues["sm"],
+        //"maxWidth": breakpointsValues["sm"],
     },
     "buttonWrapper": {
         "display": "flex",
