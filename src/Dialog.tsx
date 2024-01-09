@@ -114,10 +114,10 @@ export const Dialog = memo((props: DialogProps) => {
                         ))}
                     {body !== undefined &&
                         (typeof body !== "string" ? (
-                            body
+                            <div className={classes.body}>{body}</div>
                         ) : (
                             <Text
-                                className={classes.body}
+                                className={cx(classes.body, classes.textBody)}
                                 htmlComponent="div"
                                 typo="body 2"
                             >
@@ -172,7 +172,9 @@ const useStyles = tss.withName({ Dialog }).create(({ theme }) => ({
         "marginTop": theme.spacing(3),
     },
     "body": {
-        "marginTop": theme.spacing(2),
-        "color": theme.colors.useCases.typography.textSecondary,
+        "marginTop": theme.spacing(3),
+    },
+    "textBody": {
+        "color": theme.colors.useCases.typography.textPrimary,
     },
 }));
