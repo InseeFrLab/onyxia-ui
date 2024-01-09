@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@mui/material/Dialog";
+import Paper from "@mui/material/Paper";
 import { tss } from "./lib/tss";
 import { Text } from "./Text";
 import Checkbox from "@mui/material/Checkbox";
@@ -79,10 +80,21 @@ export const Dialog = memo((props: DialogProps) => {
                     onClose={onClose}
                     aria-labelledby={labelledby}
                     aria-describedby={describedby}
-                    PaperComponent={({ children }) => (
-                        <div className={cx(classes.root, className)}>
+                    PaperComponent={({
+                        children,
+                        className: muiClassName,
+                        ...rest
+                    }) => (
+                        <Paper
+                            className={cx(
+                                muiClassName,
+                                classes.root,
+                                className,
+                            )}
+                            {...rest}
+                        >
                             {children}
-                        </div>
+                        </Paper>
                     )}
                     maxWidth={maxWidth}
                     fullWidth={fullWidth}
@@ -150,10 +162,10 @@ export const Dialog = memo((props: DialogProps) => {
 const useStyles = tss.withName({ Dialog }).create(({ theme }) => ({
     "root": {
         "backgroundColor": theme.colors.useCases.surfaces.surface1,
+        "backgroundImage": "unset",
         "borderRadius": 5,
         "padding": theme.spacing(4),
         ...theme.spacing.rightLeft("margin", 4),
-        //"maxWidth": breakpointsValues["sm"],
     },
     "buttonWrapper": {
         "display": "flex",
