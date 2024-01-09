@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import MuiDialog from "@mui/material/Dialog";
-import Paper from "@mui/material/Paper";
 import { tss } from "./lib/tss";
 import { Text } from "./Text";
 import Checkbox from "@mui/material/Checkbox";
@@ -74,28 +73,19 @@ export const Dialog = memo((props: DialogProps) => {
             <div ref={mountPointRef} about="Dialog container" />
             {mountPointRef.current !== null && (
                 <MuiDialog
-                    classes={muiDialogClasses}
+                    classes={{
+                        ...muiDialogClasses,
+                        "paper": cx(
+                            muiDialogClasses?.paper,
+                            classes.root,
+                            className,
+                        ),
+                    }}
                     container={mountPointRef.current}
                     open={isOpen}
                     onClose={onClose}
                     aria-labelledby={labelledby}
                     aria-describedby={describedby}
-                    PaperComponent={({
-                        children,
-                        className: muiClassName,
-                        ...rest
-                    }) => (
-                        <Paper
-                            className={cx(
-                                muiClassName,
-                                classes.root,
-                                className,
-                            )}
-                            {...rest}
-                        >
-                            {children}
-                        </Paper>
-                    )}
                     maxWidth={maxWidth}
                     fullWidth={fullWidth}
                 >

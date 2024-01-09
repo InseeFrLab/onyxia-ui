@@ -14,6 +14,9 @@ import { id } from "tsafe/id";
 import { Icon } from "onyxia-ui/Icon";
 import { IconButton } from "onyxia-ui/IconButton";
 import { Button } from "onyxia-ui/Button";
+import { TextFormDialog, type TextFormDialogProps } from "./TextFormDialog";
+import { useConst } from "powerhooks/useConst";
+import { Evt } from "evt";
 
 export function MyComponent() {
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useDarkMode();
@@ -46,6 +49,10 @@ export function MyComponent() {
             // eslint-disable-next-line
         }, [isLoading]);
     }
+
+    const evtTextFormDialogOpen = useConst(() =>
+        Evt.create<TextFormDialogProps["evtOpen"]>(),
+    );
 
     const { classes, css } = useStyles();
 
@@ -92,6 +99,24 @@ export function MyComponent() {
                 icon={customIcons.fooSvgUrl}
                 href="http://example.com"
             />
+            <Button
+                onClick={() => {
+                    evtTextFormDialogOpen.post({
+                        "defaultText": "Hello World",
+                        "resolveText": ({ doProceed, text }) => {
+                            if (!doProceed) {
+                                alert("You cancelled the dialog");
+                                return;
+                            }
+
+                            alert(`You entered: ${text}`);
+                        },
+                    });
+                }}
+            >
+                Open Dialog
+            </Button>
+            <TextFormDialog evtOpen={evtTextFormDialogOpen} />
         </div>
     );
 }
