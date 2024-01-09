@@ -52,6 +52,7 @@ export const Dialog = memo((props: DialogProps) => {
 
     const { cx, classes } = useStyles({
         "classesOverrides": props.classes,
+        isOpen,
     });
 
     const [isChecked, setIsChecked] = useState(false);
@@ -149,32 +150,38 @@ export const Dialog = memo((props: DialogProps) => {
     );
 });
 
-const useStyles = tss.withName({ Dialog }).create(({ theme }) => ({
-    "root": {
-        "backgroundColor": theme.colors.useCases.surfaces.surface1,
-        "backgroundImage": "unset",
-        "borderRadius": 5,
-        "padding": theme.spacing(4),
-        ...theme.spacing.rightLeft("margin", 4),
-    },
-    "buttonWrapper": {
-        "display": "flex",
-        "marginTop": theme.spacing(4),
-        "& .MuiButton-root": {
-            "marginLeft": theme.spacing(2),
+const useStyles = tss
+    .withName({ Dialog })
+    .withParams<{
+        isOpen: boolean;
+    }>()
+    .create(({ theme, isOpen }) => ({
+        "root": {
+            "backgroundColor": theme.colors.useCases.surfaces.surface1,
+            "backgroundImage": "unset",
+            "borderRadius": 5,
+            "padding": theme.spacing(4),
+            ...theme.spacing.rightLeft("margin", 4),
+            "visibility": isOpen ? undefined : "hidden",
         },
-        "alignItems": "center",
-    },
-    "checkBoxWrapper": {
-        "flex": 1,
-    },
-    "subtitle": {
-        "marginTop": theme.spacing(3),
-    },
-    "body": {
-        "marginTop": theme.spacing(3),
-    },
-    "textBody": {
-        "color": theme.colors.useCases.typography.textPrimary,
-    },
-}));
+        "buttonWrapper": {
+            "display": "flex",
+            "marginTop": theme.spacing(4),
+            "& .MuiButton-root": {
+                "marginLeft": theme.spacing(2),
+            },
+            "alignItems": "center",
+        },
+        "checkBoxWrapper": {
+            "flex": 1,
+        },
+        "subtitle": {
+            "marginTop": theme.spacing(3),
+        },
+        "body": {
+            "marginTop": theme.spacing(3),
+        },
+        "textBody": {
+            "color": theme.colors.useCases.typography.textPrimary,
+        },
+    }));
