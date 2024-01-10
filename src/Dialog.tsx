@@ -8,7 +8,6 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
 import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
-import { useStateRef } from "powerhooks/useStateRef";
 
 /** To make the dialog fit content: "maxWidth": "unset" */
 export type DialogProps = {
@@ -67,87 +66,75 @@ export const Dialog = memo((props: DialogProps) => {
         onDoShowNextTimeValueChange(!isCheckedNewValue);
     });
 
-    const mountPointRef = useStateRef<HTMLDivElement>(null);
-
     return (
-        <>
-            <div ref={mountPointRef} about="Dialog container" />
-            {mountPointRef.current !== null && (
-                <MuiDialog
-                    classes={{
-                        ...muiDialogClasses,
-                        "paper": cx(
-                            muiDialogClasses?.paper,
-                            classes.root,
-                            className,
-                        ),
-                    }}
-                    container={mountPointRef.current}
-                    open={isOpen}
-                    onClose={onClose}
-                    aria-labelledby={labelledby}
-                    aria-describedby={describedby}
-                    maxWidth={maxWidth}
-                    fullWidth={fullWidth}
-                >
-                    {title !== undefined &&
-                        (typeof title !== "string" ? (
-                            <div className={classes.title}>{title}</div>
-                        ) : (
-                            <Text
-                                className={classes.title}
-                                typo="object heading"
-                                componentProps={{ "id": labelledby }}
-                            >
-                                {title}
-                            </Text>
-                        ))}
-                    {subtitle !== undefined &&
-                        (typeof subtitle !== "string" ? (
-                            <div className={classes.subtitle}>{subtitle}</div>
-                        ) : (
-                            <Text
-                                className={classes.subtitle}
-                                componentProps={{ "id": describedby }}
-                                typo="body 1"
-                            >
-                                {subtitle}
-                            </Text>
-                        ))}
-                    {body !== undefined &&
-                        (typeof body !== "string" ? (
-                            <div className={classes.body}>{body}</div>
-                        ) : (
-                            <Text
-                                className={classes.body}
-                                htmlComponent="div"
-                                typo="body 2"
-                            >
-                                {body}
-                            </Text>
-                        ))}
+        <MuiDialog
+            classes={{
+                ...muiDialogClasses,
+                "paper": cx(muiDialogClasses?.paper, classes.root, className),
+            }}
+            open={isOpen}
+            onClose={onClose}
+            aria-labelledby={labelledby}
+            aria-describedby={describedby}
+            maxWidth={maxWidth}
+            fullWidth={fullWidth}
+        >
+            {title !== undefined &&
+                (typeof title !== "string" ? (
+                    <div className={classes.title}>{title}</div>
+                ) : (
+                    <Text
+                        className={classes.title}
+                        typo="object heading"
+                        componentProps={{ "id": labelledby }}
+                    >
+                        {title}
+                    </Text>
+                ))}
+            {subtitle !== undefined &&
+                (typeof subtitle !== "string" ? (
+                    <div className={classes.subtitle}>{subtitle}</div>
+                ) : (
+                    <Text
+                        className={classes.subtitle}
+                        componentProps={{ "id": describedby }}
+                        typo="body 1"
+                    >
+                        {subtitle}
+                    </Text>
+                ))}
+            {body !== undefined &&
+                (typeof body !== "string" ? (
+                    <div className={classes.body}>{body}</div>
+                ) : (
+                    <Text
+                        className={classes.body}
+                        htmlComponent="div"
+                        typo="body 2"
+                    >
+                        {body}
+                    </Text>
+                ))}
 
-                    <div className={classes.buttons}>
-                        <div className={classes.showNextTimeCheckboxesWrapper}>
-                            {onDoShowNextTimeValueChange !== undefined && (
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={isChecked}
-                                            onChange={onChange}
-                                            name="checkedB"
-                                            color="primary"
-                                        />
-                                    }
-                                    label={doNotShowNextTimeText}
+            <div className={classes.buttons}>
+                <div className={classes.showNextTimeCheckboxesWrapper}>
+                    {onDoShowNextTimeValueChange !== undefined && (
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isChecked}
+                                    onChange={onChange}
+                                    name="checkedB"
+                                    color="primary"
                                 />
-                            )}
-                        </div>
-                        {buttons}
-                    </div>
-                </MuiDialog>
-            )}
-        </>
+                            }
+                            label={doNotShowNextTimeText}
+                        />
+                    )}
+                </div>
+                {buttons}
+            </div>
+        </MuiDialog>
     );
 });
 
