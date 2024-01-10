@@ -13,11 +13,11 @@ import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
 export type DialogProps = {
     className?: string;
     /** NOTE: If string, <Text typo="object heading" /> */
-    title?: NonNullable<ReactNode>;
+    title?: ReactNode;
     /** NOTE: If string, <Text typo="body 1" /> */
-    subtitle?: NonNullable<ReactNode>;
+    subtitle?: ReactNode;
     /** NOTE: If string, <Text typo="body 2" /> */
-    body?: NonNullable<ReactNode>;
+    body?: ReactNode;
     buttons: ReactNode;
     isOpen: boolean;
     onClose: () => void;
@@ -163,12 +163,13 @@ const useStyles = tss
         "showNextTimeCheckboxesWrapper": {
             "flex": 1,
         },
-        "title": {},
+        "title": {
+            "marginBottom": theme.spacing(3),
+        },
         "subtitle": {
-            "marginTop": theme.spacing(3),
+            "marginBottom": theme.spacing(3),
         },
         "body": {
-            "marginTop": theme.spacing(3),
             "color": theme.colors.useCases.typography.textPrimary,
             "overflow": "visible",
         },
