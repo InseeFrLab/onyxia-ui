@@ -92,9 +92,10 @@ export const Dialog = memo((props: DialogProps) => {
                 >
                     {title !== undefined &&
                         (typeof title !== "string" ? (
-                            title
+                            <div className={classes.title}>{title}</div>
                         ) : (
                             <Text
+                                className={classes.title}
                                 typo="object heading"
                                 componentProps={{ "id": labelledby }}
                             >
@@ -103,7 +104,7 @@ export const Dialog = memo((props: DialogProps) => {
                         ))}
                     {subtitle !== undefined &&
                         (typeof subtitle !== "string" ? (
-                            subtitle
+                            <div className={classes.subtitle}>{subtitle}</div>
                         ) : (
                             <Text
                                 className={classes.subtitle}
@@ -118,7 +119,7 @@ export const Dialog = memo((props: DialogProps) => {
                             <div className={classes.body}>{body}</div>
                         ) : (
                             <Text
-                                className={cx(classes.body, classes.textBody)}
+                                className={classes.body}
                                 htmlComponent="div"
                                 typo="body 2"
                             >
@@ -126,8 +127,8 @@ export const Dialog = memo((props: DialogProps) => {
                             </Text>
                         ))}
 
-                    <div className={classes.buttonWrapper}>
-                        <div className={classes.checkBoxWrapper}>
+                    <div className={classes.buttons}>
+                        <div className={classes.showNextTimeCheckboxesWrapper}>
                             {onDoShowNextTimeValueChange !== undefined && (
                                 <FormControlLabel
                                     control={
@@ -164,7 +165,7 @@ const useStyles = tss
             ...theme.spacing.rightLeft("margin", 4),
             "visibility": isOpen ? undefined : "hidden",
         },
-        "buttonWrapper": {
+        "buttons": {
             "display": "flex",
             "marginTop": theme.spacing(4),
             "& .MuiButton-root": {
@@ -172,16 +173,16 @@ const useStyles = tss
             },
             "alignItems": "center",
         },
-        "checkBoxWrapper": {
+        "showNextTimeCheckboxesWrapper": {
             "flex": 1,
         },
+        "title": {},
         "subtitle": {
             "marginTop": theme.spacing(3),
         },
         "body": {
             "marginTop": theme.spacing(3),
-        },
-        "textBody": {
             "color": theme.colors.useCases.typography.textPrimary,
+            "overflow": "visible",
         },
     }));
