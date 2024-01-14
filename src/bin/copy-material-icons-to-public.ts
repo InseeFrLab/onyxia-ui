@@ -131,7 +131,8 @@ export async function downloadMaterialIcons(params: { publicDirPath: string }) {
     const version = "5.14.15";
 
     await downloadAndUnzip({
-        "url": `https://github.com/mui/material-ui/archive/refs/tags/v${version}.zip`,
+        //"url": `https://github.com/mui/material-ui/archive/refs/tags/v${version}.zip`,
+        "url": `https://github.com/InseeFrLab/onyxia-ui/releases/download/v0.0.1/material-ui-${version}-icons-only.zip`,
         "destDirPath": materialIconsDirPath,
         "specificDirsToExtract": [
             `material-ui-${version}/packages/mui-icons-material/material-icons`,
