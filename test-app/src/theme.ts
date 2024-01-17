@@ -43,7 +43,7 @@ const { OnyxiaUi, ofTypeTheme } = createOnyxiaUi({
     "palette": {
         ...defaultPalette,
         "shinyPink": {
-            "main": "#3333",
+            "main": "#FF69B4",
         },
     },
     //We keep the default surceases colors except that we add
@@ -58,6 +58,7 @@ const { OnyxiaUi, ofTypeTheme } = createOnyxiaUi({
     "splashScreenParams": {
         "assetUrl": logoSvgUrl,
         "assetScaleFactor": 1,
+        "fadeOutDuration": 1000000,
     },
 });
 
