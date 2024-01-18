@@ -58,7 +58,6 @@ const { OnyxiaUi, ofTypeTheme } = createOnyxiaUi({
     "splashScreenParams": {
         "assetUrl": logoSvgUrl,
         "assetScaleFactor": 1,
-        "fadeOutDuration": 1000000,
     },
 });
 

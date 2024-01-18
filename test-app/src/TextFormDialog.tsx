@@ -67,6 +67,7 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
                     <>
                         <TextField
                             label="My text"
+                            selectAllTextOnFocus
                             defaultValue={openState.text}
                             onValueBeingTypedChange={({ value }) => {
                                 assert(openState !== undefined);

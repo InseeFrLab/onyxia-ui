@@ -77,6 +77,16 @@ export type TextFieldProps = {
     transformValueBeingTyped?: (value: string) => string;
     label?: ReactNode;
     helperText?: ReactNode;
+    /**
+     * This is an alternative way of displaying errors to getIsValidValue.
+     * This is to use when the input is controlled by a parent component.
+     * If you use this you want to set the value with defaultValue dynamically.
+     *
+     * If provided, this will overwrite the helper text.
+     * If is affected by doOnlyValidateInputAfterFistFocusLost
+     * If inputProps_aria-invalid is set to false, this will be ignored.
+     */
+    helperTextError?: ReactNode;
     questionMarkHelperText?: string | NonNullable<ReactNode>;
     doOnlyValidateInputAfterFistFocusLost?: boolean;
     /** Default false */
@@ -165,6 +175,7 @@ export const TextField = memo((props: TextFieldProps) => {
         type = "text",
         isCircularProgressShown = false,
         helperText,
+        helperTextError,
         id: htmlId,
         name,
         selectAllTextOnFocus,
@@ -376,8 +387,14 @@ export const TextField = memo((props: TextFieldProps) => {
         ],
     );
 
+    const [hasLostFocusAtLeastOnce, setHasLostFocusAtLeastOnce] =
+        useState(false);
+
     const onMuiTextfieldBlur = useConstCallback(() => {
-        if (!isValidationEnabled) enableValidation();
+        if (!isValidationEnabled) {
+            enableValidation();
+        }
+        setHasLostFocusAtLeastOnce(true);
         onBlur?.();
     });
     const onFocus = useConstCallback(
@@ -405,9 +422,44 @@ export const TextField = memo((props: TextFieldProps) => {
             typo="caption"
             htmlComponent="span"
         >
-            {isValidationEnabled && !getIsValidValueResult.isValidValue
-                ? getIsValidValueResult.message || helperText
-                : helperText}
+            {(() => {
+                error_helper_text_provided_as_prop: {
+                    if (helperTextError === undefined) {
+                        break error_helper_text_provided_as_prop;
+                    }
+
+                    if (
+                        doOnlyValidateInputAfterFistFocusLost &&
+                        !hasLostFocusAtLeastOnce
+                    ) {
+                        break error_helper_text_provided_as_prop;
+                    }
+
+                    if (inputProps_ariaInvalid === false) {
+                        break error_helper_text_provided_as_prop;
+                    }
+
+                    return helperTextError;
+                }
+
+                error_from_getIsValidValue: {
+                    if (!isValidationEnabled) {
+                        break error_from_getIsValidValue;
+                    }
+
+                    if (getIsValidValueResult.isValidValue) {
+                        break error_from_getIsValidValue;
+                    }
+
+                    if (!getIsValidValueResult.message) {
+                        break error_from_getIsValidValue;
+                    }
+
+                    return getIsValidValueResult.message;
+                }
+
+                return helperText;
+            })()}
             &nbsp;
             {questionMarkHelperText !== undefined && (
                 <Tooltip title={questionMarkHelperText}>
