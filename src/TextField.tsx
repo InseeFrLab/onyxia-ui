@@ -79,8 +79,10 @@ export type TextFieldProps = {
      *
      * If provided, this will overwrite the helper text.
      * If is affected by doOnlyShowErrorAfterFirstFocusLost
+     *
+     * If you want to just display the helperText in red you can set this to true
      */
-    helperTextError?: ReactNode;
+    helperTextError?: JSX.Element | string | boolean;
     questionMarkHelperText?: string | NonNullable<ReactNode>;
     doOnlyShowErrorAfterFirstFocusLost?: boolean;
     /** Default false */
@@ -258,7 +260,7 @@ export const TextField = memo((props: TextFieldProps) => {
             return false;
         }
 
-        if (helperTextError !== undefined) {
+        if (helperTextError !== undefined && helperTextError !== false) {
             return true;
         }
 
@@ -402,7 +404,8 @@ export const TextField = memo((props: TextFieldProps) => {
             }
 
             if (helperTextError !== undefined) {
-                return helperTextError;
+                assert(helperTextError !== false);
+                return helperTextError === true ? helperText : helperTextError;
             }
 
             assert(!getIsValidValueResult.isValidValue);
