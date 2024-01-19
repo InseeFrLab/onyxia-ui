@@ -10,7 +10,7 @@ export type TextProps = {
     //typo: TypographyVariantNameCustom | TypographyDesc.VariantNameBase;
     typo: TypographyDesc.VariantNameBase;
     color?: "primary" | "secondary" | "disabled" | "focus";
-    children: NonNullable<React.ReactNode>;
+    children: React.ReactNode;
     htmlComponent?: TypographyDesc.HtmlComponent;
     componentProps?: JSX.IntrinsicElements[TypographyDesc.HtmlComponent];
 

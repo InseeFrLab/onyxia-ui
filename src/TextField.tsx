@@ -413,17 +413,23 @@ export const TextField = memo((props: TextFieldProps) => {
             return getIsValidValueResult.message;
         })();
 
-        const questionMarkHelperNode =
-            questionMarkHelperText === undefined ? undefined : (
-                <Tooltip title={questionMarkHelperText}>
-                    <Icon icon={HelpIcon} className={classes.questionMark} />
-                </Tooltip>
-            );
+        const tooltipTitle = (() => {
+            if (questionMarkHelperText !== undefined) {
+                return questionMarkHelperText;
+            }
 
-        if (
-            helperTextOrError === undefined &&
-            questionMarkHelperNode === null
-        ) {
+            if (!isInputInErroredState) {
+                return undefined;
+            }
+
+            if (helperText === undefined || helperTextError === helperText) {
+                return undefined;
+            }
+
+            return helperText;
+        })();
+
+        if (helperTextOrError === undefined && tooltipTitle === undefined) {
             return undefined;
         }
 
@@ -434,8 +440,17 @@ export const TextField = memo((props: TextFieldProps) => {
                 htmlComponent="span"
             >
                 {helperTextOrError !== undefined && helperTextOrError}
-                &nbsp;
-                {questionMarkHelperNode !== undefined && questionMarkHelperNode}
+                {tooltipTitle !== undefined && (
+                    <>
+                        &nbsp;
+                        <Tooltip title={tooltipTitle}>
+                            <Icon
+                                icon={HelpIcon}
+                                className={classes.questionMark}
+                            />
+                        </Tooltip>
+                    </>
+                )}
             </Text>
         );
     })();
@@ -561,8 +576,11 @@ const useStyles = tss
         },
         "questionMark": {
             "fontSize": "inherit",
+            "position": "relative",
+            "top": 1,
+            "left": 2,
             ...(() => {
-                const factor = 1.5;
+                const factor = 1.3;
 
                 return {
                     "width": `${factor}em`,

@@ -5,7 +5,7 @@ import { tss } from "./lib/tss";
 import { Text } from "./Text";
 
 export type TooltipProps = {
-    title: NonNullable<ReactNode> | undefined;
+    title: ReactNode;
     children: ReactElement;
     enterDelay?: number;
 };
