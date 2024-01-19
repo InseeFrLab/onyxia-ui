@@ -537,7 +537,7 @@ const useStyles = tss
             "& .MuiFormLabel-root": {
                 "color": isInputInErroredState
                     ? theme.colors.useCases.alertSeverity.error.main
-                    : theme.colors.useCases.typography.textSecondary,
+                    : undefined,
             },
             "&:focus": {
                 "outline": "unset",
@@ -571,7 +571,7 @@ const useStyles = tss
         "helperText": {
             "color": isInputInErroredState
                 ? theme.colors.useCases.alertSeverity.error.main
-                : theme.colors.useCases.typography.textDisabled,
+                : theme.colors.useCases.typography.textSecondary,
             "whiteSpace": "nowrap",
         },
         "questionMark": {
