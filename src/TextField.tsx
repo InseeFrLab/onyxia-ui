@@ -37,11 +37,6 @@ export type TextFieldProps = {
     inputProps_spellCheck?: boolean;
     inputProps_autoFocus?: boolean;
     doIndentOnTab?: boolean;
-    /**
-     * If true, it sets the helper text in red.
-     * Will be set automatically if getIsValidValue is provided
-     * */
-    "inputProps_aria-invalid"?: boolean;
     InputProps_endAdornment?: ReactNode;
     /** Only use when getIsValidValue isn't used */
     disabled?: boolean;
@@ -83,12 +78,11 @@ export type TextFieldProps = {
      * If you use this you want to set the value with defaultValue dynamically.
      *
      * If provided, this will overwrite the helper text.
-     * If is affected by doOnlyValidateInputAfterFistFocusLost
-     * If inputProps_aria-invalid is set to false, this will be ignored.
+     * If is affected by doOnlyShowErrorAfterFirstFocusLost
      */
     helperTextError?: ReactNode;
     questionMarkHelperText?: string | NonNullable<ReactNode>;
-    doOnlyValidateInputAfterFistFocusLost?: boolean;
+    doOnlyShowErrorAfterFirstFocusLost?: boolean;
     /** Default false */
     isCircularProgressShown?: boolean;
     selectAllTextOnFocus?: boolean;
@@ -164,7 +158,7 @@ export const TextField = memo((props: TextFieldProps) => {
         transformValueBeingTyped,
         defaultValue = "",
         getIsValidValue,
-        doOnlyValidateInputAfterFistFocusLost = true,
+        doOnlyShowErrorAfterFirstFocusLost = true,
         onValueBeingTypedChange,
         onBlur,
         evtAction: evtActionLike,
@@ -185,7 +179,6 @@ export const TextField = memo((props: TextFieldProps) => {
         inputProps_tabIndex,
         inputProps_spellCheck,
         inputProps_autoFocus,
-        "inputProps_aria-invalid": inputProps_ariaInvalid,
         InputProps_endAdornment,
         questionMarkHelperText,
         doRenderAsTextArea = false,
@@ -201,16 +194,9 @@ export const TextField = memo((props: TextFieldProps) => {
     const { value, transformAndSetValue } = (function useClosure() {
         const [value, setValue] = useState(defaultValue);
 
-        const transformAndSetValue = useConstCallback((value: string) => {
-            if (
-                !isValidationEnabled &&
-                !doOnlyValidateInputAfterFistFocusLost
-            ) {
-                enableValidation();
-            }
-
-            setValue(transformValueBeingTyped?.(value) ?? value);
-        });
+        const transformAndSetValue = useConstCallback((value: string) =>
+            setValue(transformValueBeingTyped?.(value) ?? value),
+        );
 
         return { value, transformAndSetValue };
     })();
@@ -231,14 +217,12 @@ export const TextField = memo((props: TextFieldProps) => {
         value,
         getIsValidValueResult.isValidValue,
         getIsValidValueResult.isValidValue
-            ? Object
+            ? undefined
             : getIsValidValueResult.message,
     ]);
 
-    const [isValidationEnabled, enableValidation] = useReducer(
-        () => true,
-        false,
-    );
+    const [shouldDisplayErrorIfAny, setShouldDisplayErrorIfAnyToTrue] =
+        useReducer(() => true, !doOnlyShowErrorAfterFirstFocusLost);
 
     useEvt(
         ctx =>
@@ -269,9 +253,17 @@ export const TextField = memo((props: TextFieldProps) => {
         ],
     );
 
-    const hasError =
-        inputProps_ariaInvalid ??
-        (isValidationEnabled ? !getIsValidValueResult.isValidValue : false);
+    const isInputInErroredState = (() => {
+        if (!shouldDisplayErrorIfAny) {
+            return false;
+        }
+
+        if (helperTextError !== undefined) {
+            return true;
+        }
+
+        return !getIsValidValueResult.isValidValue;
+    })();
 
     const {
         domRect: { height: rootHeight },
@@ -279,7 +271,7 @@ export const TextField = memo((props: TextFieldProps) => {
     } = useDomRect();
 
     const { classes, cx } = useStyles({
-        hasError,
+        isInputInErroredState,
         rootHeight,
     });
 
@@ -368,33 +360,20 @@ export const TextField = memo((props: TextFieldProps) => {
             "tabIndex": inputProps_tabIndex,
             "spellCheck": inputProps_spellCheck,
             "autoFocus": inputProps_autoFocus,
-            ...(inputProps_ariaInvalid !== undefined
-                ? {
-                      "aria-invalid": inputProps_ariaInvalid,
-                  }
-                : hasError
-                ? { "aria-invalid": true }
-                : {}),
+            ...(!isInputInErroredState ? undefined : { "aria-invalid": true }),
         }),
         [
-            inputProps_ref ?? Object,
-            inputProps_ariaLabel ?? Object,
-            inputProps_tabIndex ?? Object,
-            inputProps_spellCheck ?? Object,
-            inputProps_autoFocus ?? Object,
-            inputProps_ariaInvalid ?? Object,
-            hasError,
+            inputProps_ref,
+            inputProps_ariaLabel,
+            inputProps_tabIndex,
+            inputProps_spellCheck,
+            inputProps_autoFocus,
+            isInputInErroredState,
         ],
     );
 
-    const [hasLostFocusAtLeastOnce, setHasLostFocusAtLeastOnce] =
-        useState(false);
-
     const onMuiTextfieldBlur = useConstCallback(() => {
-        if (!isValidationEnabled) {
-            enableValidation();
-        }
-        setHasLostFocusAtLeastOnce(true);
+        setShouldDisplayErrorIfAnyToTrue();
         onBlur?.();
     });
     const onFocus = useConstCallback(
@@ -416,58 +395,47 @@ export const TextField = memo((props: TextFieldProps) => {
             transformAndSetValue(target.value),
     );
 
-    const helperTextNode = (
-        <Text
-            className={classes.helperText}
-            typo="caption"
-            htmlComponent="span"
-        >
-            {(() => {
-                error_helper_text_provided_as_prop: {
-                    if (helperTextError === undefined) {
-                        break error_helper_text_provided_as_prop;
-                    }
-
-                    if (
-                        doOnlyValidateInputAfterFistFocusLost &&
-                        !hasLostFocusAtLeastOnce
-                    ) {
-                        break error_helper_text_provided_as_prop;
-                    }
-
-                    if (inputProps_ariaInvalid === false) {
-                        break error_helper_text_provided_as_prop;
-                    }
-
-                    return helperTextError;
-                }
-
-                error_from_getIsValidValue: {
-                    if (!isValidationEnabled) {
-                        break error_from_getIsValidValue;
-                    }
-
-                    if (getIsValidValueResult.isValidValue) {
-                        break error_from_getIsValidValue;
-                    }
-
-                    if (!getIsValidValueResult.message) {
-                        break error_from_getIsValidValue;
-                    }
-
-                    return getIsValidValueResult.message;
-                }
-
+    const helperTextNode = (() => {
+        const helperTextOrError = (() => {
+            if (!isInputInErroredState) {
                 return helperText;
-            })()}
-            &nbsp;
-            {questionMarkHelperText !== undefined && (
+            }
+
+            if (helperTextError !== undefined) {
+                return helperTextError;
+            }
+
+            assert(!getIsValidValueResult.isValidValue);
+
+            return getIsValidValueResult.message;
+        })();
+
+        const questionMarkHelperNode =
+            questionMarkHelperText === undefined ? undefined : (
                 <Tooltip title={questionMarkHelperText}>
                     <Icon icon={HelpIcon} className={classes.questionMark} />
                 </Tooltip>
-            )}
-        </Text>
-    );
+            );
+
+        if (
+            helperTextOrError === undefined &&
+            questionMarkHelperNode === null
+        ) {
+            return undefined;
+        }
+
+        return (
+            <Text
+                className={classes.helperText}
+                typo="caption"
+                htmlComponent="span"
+            >
+                {helperTextOrError !== undefined && helperTextOrError}
+                &nbsp;
+                {questionMarkHelperNode !== undefined && questionMarkHelperNode}
+            </Text>
+        );
+    })();
 
     if (options !== undefined) {
         assert(type === "text");
@@ -487,7 +455,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         multiline={doRenderAsTextArea}
                         ref={ref}
                         variant="standard"
-                        error={hasError}
+                        error={isInputInErroredState}
                         helperText={helperTextNode}
                         InputProps={{ ...params.InputProps, ...InputProps }}
                         onBlur={onMuiTextfieldBlur}
@@ -517,7 +485,7 @@ export const TextField = memo((props: TextFieldProps) => {
                     : "password"
             }
             value={value}
-            error={hasError}
+            error={isInputInErroredState}
             helperText={helperTextNode}
             InputProps={InputProps}
             onBlur={onMuiTextfieldBlur}
@@ -534,11 +502,11 @@ export const TextField = memo((props: TextFieldProps) => {
 
 const useStyles = tss
     .withParams<{
-        hasError: boolean;
+        isInputInErroredState: boolean;
         rootHeight: number;
     }>()
     .withName({ TextField })
-    .create(({ theme, hasError, rootHeight }) => ({
+    .create(({ theme, isInputInErroredState, rootHeight }) => ({
         "muiAutocomplete": {
             "minWidth": 145,
         },
@@ -549,7 +517,7 @@ const useStyles = tss
                 "visibility": rootHeight === 0 ? "hidden" : undefined,
             },
             "& .MuiFormLabel-root": {
-                "color": hasError
+                "color": isInputInErroredState
                     ? theme.colors.useCases.alertSeverity.error.main
                     : theme.colors.useCases.typography.textSecondary,
             },
@@ -583,7 +551,7 @@ const useStyles = tss
             },
         },
         "helperText": {
-            "color": hasError
+            "color": isInputInErroredState
                 ? theme.colors.useCases.alertSeverity.error.main
                 : theme.colors.useCases.typography.textDisabled,
             "whiteSpace": "nowrap",
