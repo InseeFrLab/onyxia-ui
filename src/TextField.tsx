@@ -31,6 +31,9 @@ export type TextFieldProps = {
      * Default text
      * sensitive is not a real input type, what will actually be applied is "text"
      * It is to use when you have a field that should be hidden like a password but you don't want the browser to remember it.
+     *
+     * The method for hiding the characters without actually using the "password" input type that triggers the browser to
+     * remember the password only works with chrome and safari. On other browsers like Firefox we will use the type "password";
      * */
     type?: "text" | "password" | "email" | "sensitive";
     /** Will overwrite value when updated */
@@ -172,7 +175,7 @@ export const TextField = memo((props: TextFieldProps) => {
         onEscapeKeyDown,
         onEnterKeyDown,
         className,
-        type = "text",
+        type: type_props = "text",
         isCircularProgressShown = false,
         helperText,
         helperTextError,
@@ -194,6 +197,25 @@ export const TextField = memo((props: TextFieldProps) => {
         freeSolo = false,
         ...completedPropsRest
     } = props;
+
+    const type = useMemo(() => {
+        sensitive: {
+            if (type_props !== "sensitive") {
+                break sensitive;
+            }
+
+            switch (getBrowser()) {
+                case "chrome":
+                case "safari":
+                    // NOTE: -webkit-text-security only work on chrome and safari
+                    return "sensitive";
+                default:
+                    return "password";
+            }
+        }
+
+        return type_props;
+    }, [type_props]);
 
     const evtAction = useNonPostableEvtLike(evtActionLike);
 
@@ -276,15 +298,16 @@ export const TextField = memo((props: TextFieldProps) => {
         ref,
     } = useDomRect();
 
+    const [isInputValueHidden, toggleIsInputValueHidden] = useReducer(
+        (v: boolean) => !v,
+        true,
+    );
+
     const { classes, cx } = useStyles({
         isInputInErroredState,
         rootHeight,
+        "shouldInputValueBeHidden": type === "sensitive" && isInputValueHidden,
     });
-
-    const [isPasswordShown, toggleIsPasswordShown] = useReducer(
-        (v: boolean) => !v,
-        false,
-    );
 
     const onKeyDown = useConstCallback(
         (
@@ -347,11 +370,11 @@ export const TextField = memo((props: TextFieldProps) => {
                         <InputAdornment position="end">
                             <IconButton
                                 icon={
-                                    isPasswordShown
-                                        ? VisibilityOffIcon
-                                        : VisibilityIcon
+                                    isInputValueHidden
+                                        ? VisibilityIcon
+                                        : VisibilityOffIcon
                                 }
-                                onClick={toggleIsPasswordShown}
+                                onClick={toggleIsInputValueHidden}
                             />
                         </InputAdornment>
                     );
@@ -361,7 +384,7 @@ export const TextField = memo((props: TextFieldProps) => {
             })(),
         }),
         [
-            isPasswordShown,
+            isInputValueHidden,
             type,
             InputProps_endAdornment,
             isCircularProgressShown,
@@ -375,6 +398,7 @@ export const TextField = memo((props: TextFieldProps) => {
             "tabIndex": inputProps_tabIndex,
             "spellCheck": inputProps_spellCheck,
             "autoFocus": inputProps_autoFocus,
+            "className": classes.baseInput,
             ...(!isInputInErroredState ? undefined : { "aria-invalid": true }),
         }),
         [
@@ -384,6 +408,7 @@ export const TextField = memo((props: TextFieldProps) => {
             inputProps_spellCheck,
             inputProps_autoFocus,
             isInputInErroredState,
+            classes.baseInput,
         ],
     );
 
@@ -511,23 +536,14 @@ export const TextField = memo((props: TextFieldProps) => {
             type={(() => {
                 switch (type) {
                     case "password":
-                        return isPasswordShown ? "text" : "password";
+                        return isInputValueHidden ? "password" : "text";
                     case "sensitive":
                         return "text";
                     default:
                         return type;
                 }
             })()}
-            value={(() => {
-                if (type === "sensitive" && !isPasswordShown) {
-                    return value
-                        .split("")
-                        .map(() => "●")
-                        .join("");
-                }
-
-                return value;
-            })()}
+            value={value}
             error={isInputInErroredState}
             helperText={helperTextNode}
             InputProps={InputProps}
@@ -547,70 +563,87 @@ const useStyles = tss
     .withParams<{
         isInputInErroredState: boolean;
         rootHeight: number;
+        shouldInputValueBeHidden: boolean;
     }>()
     .withName({ TextField })
-    .create(({ theme, isInputInErroredState, rootHeight }) => ({
-        "muiAutocomplete": {
-            "minWidth": 145,
-        },
-        "muiTextField": {
-            "& .MuiFormHelperText-root": {
-                "position": "absolute",
-                "top": rootHeight,
-                "visibility": rootHeight === 0 ? "hidden" : undefined,
+    .create(
+        ({
+            theme,
+            isInputInErroredState,
+            rootHeight,
+            shouldInputValueBeHidden,
+        }) => ({
+            "baseInput": {
+                ...(!shouldInputValueBeHidden
+                    ? undefined
+                    : {
+                          //"fontFamily": "monospace",
+                          "-webkit-text-security": "disc",
+                          //"letterSpacing": '-5px',
+                      }),
+                "&:-webkit-autofill": {
+                    ...(() => {
+                        switch (getBrowser()) {
+                            case "chrome":
+                            case "safari":
+                                return {
+                                    "WebkitTextFillColor":
+                                        theme.colors.useCases.typography[
+                                            theme.isDarkModeEnabled
+                                                ? "textPrimary"
+                                                : "textSecondary"
+                                        ],
+                                    "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
+                                };
+                            default:
+                                return {};
+                        }
+                    })(),
+                },
             },
-            "& .MuiFormLabel-root": {
+            "muiAutocomplete": {
+                "minWidth": 145,
+            },
+            "muiTextField": {
+                "& .MuiFormHelperText-root": {
+                    "position": "absolute",
+                    "top": rootHeight,
+                    "visibility": rootHeight === 0 ? "hidden" : undefined,
+                },
+                "& .MuiFormLabel-root": {
+                    "color": isInputInErroredState
+                        ? theme.colors.useCases.alertSeverity.error.main
+                        : undefined,
+                },
+                "&:focus": {
+                    "outline": "unset",
+                },
+                "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                    "borderBottomWidth": 1,
+                },
+                "& .MuiInput-underline:after": {
+                    "borderBottomWidth": 1,
+                },
+            },
+            "helperText": {
                 "color": isInputInErroredState
                     ? theme.colors.useCases.alertSeverity.error.main
-                    : undefined,
+                    : theme.colors.useCases.typography.textSecondary,
+                "whiteSpace": "nowrap",
             },
-            "&:focus": {
-                "outline": "unset",
-            },
-            "& input:-webkit-autofill": {
+            "questionMark": {
+                "fontSize": "inherit",
+                "position": "relative",
+                "top": 1,
+                "left": 2,
                 ...(() => {
-                    switch (getBrowser()) {
-                        case "chrome":
-                        case "safari":
-                            return {
-                                "WebkitTextFillColor":
-                                    theme.colors.useCases.typography[
-                                        theme.isDarkModeEnabled
-                                            ? "textPrimary"
-                                            : "textSecondary"
-                                    ],
-                                "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
-                            };
-                        default:
-                            return {};
-                    }
+                    const factor = 1.3;
+
+                    return {
+                        "width": `${factor}em`,
+                        "height": `${factor}em`,
+                    };
                 })(),
             },
-            "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                "borderBottomWidth": 1,
-            },
-            "& .MuiInput-underline:after": {
-                "borderBottomWidth": 1,
-            },
-        },
-        "helperText": {
-            "color": isInputInErroredState
-                ? theme.colors.useCases.alertSeverity.error.main
-                : theme.colors.useCases.typography.textSecondary,
-            "whiteSpace": "nowrap",
-        },
-        "questionMark": {
-            "fontSize": "inherit",
-            "position": "relative",
-            "top": 1,
-            "left": 2,
-            ...(() => {
-                const factor = 1.3;
-
-                return {
-                    "width": `${factor}em`,
-                    "height": `${factor}em`,
-                };
-            })(),
-        },
-    }));
+        }),
+    );
