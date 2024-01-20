@@ -577,9 +577,7 @@ const useStyles = tss
                 ...(!shouldInputValueBeHidden
                     ? undefined
                     : {
-                          //"fontFamily": "monospace",
-                          "-webkit-text-security": "disc",
-                          //"letterSpacing": '-5px',
+                          "WebkitTextSecurity": "disc",
                       }),
                 "&:-webkit-autofill": {
                     ...(() => {
