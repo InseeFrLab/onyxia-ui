@@ -74,6 +74,18 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
                                 setOpenState({ ...openState, "text": value });
                             }}
                         />
+                        <br />
+                        <br />
+                        <TextField
+                            label="Sensitive test"
+                            type="sensitive"
+                            selectAllTextOnFocus
+                            defaultValue={openState.text}
+                            onValueBeingTypedChange={({ value }) => {
+                                assert(openState !== undefined);
+                                setOpenState({ ...openState, "text": value });
+                            }}
+                        />
 
                         {/*
                             new Array(10).fill(null).map((_, index) => (

@@ -27,8 +27,12 @@ export type TextFieldProps = {
     className?: string;
     id?: string;
     name?: string;
-    /** Default text */
-    type?: "text" | "password" | "email";
+    /**
+     * Default text
+     * sensitive is not a real input type, what will actually be applied is "text"
+     * It is to use when you have a field that should be hidden like a password but you don't want the browser to remember it.
+     * */
+    type?: "text" | "password" | "email" | "sensitive";
     /** Will overwrite value when updated */
     defaultValue?: string;
     inputProps_ref?: RefObject<HTMLInputElement>;
@@ -329,23 +333,32 @@ export const TextField = memo((props: TextFieldProps) => {
 
     const InputProps = useMemo(
         () => ({
-            "endAdornment":
-                InputProps_endAdornment ?? isCircularProgressShown ? (
-                    <InputAdornment position="end">
-                        <CircularProgress color="textPrimary" size={10} />
-                    </InputAdornment>
-                ) : type === "password" ? (
-                    <InputAdornment position="end">
-                        <IconButton
-                            icon={
-                                isPasswordShown
-                                    ? VisibilityOffIcon
-                                    : VisibilityIcon
-                            }
-                            onClick={toggleIsPasswordShown}
-                        />
-                    </InputAdornment>
-                ) : undefined,
+            "endAdornment": (() => {
+                if (InputProps_endAdornment ?? isCircularProgressShown) {
+                    return (
+                        <InputAdornment position="end">
+                            <CircularProgress color="textPrimary" size={10} />
+                        </InputAdornment>
+                    );
+                }
+
+                if (type === "password" || type === "sensitive") {
+                    return (
+                        <InputAdornment position="end">
+                            <IconButton
+                                icon={
+                                    isPasswordShown
+                                        ? VisibilityOffIcon
+                                        : VisibilityIcon
+                                }
+                                onClick={toggleIsPasswordShown}
+                            />
+                        </InputAdornment>
+                    );
+                }
+
+                return undefined;
+            })(),
         }),
         [
             isPasswordShown,
@@ -495,14 +508,26 @@ export const TextField = memo((props: TextFieldProps) => {
             rows={!doRenderAsTextArea ? undefined : rows}
             ref={ref}
             variant="standard"
-            type={
-                type !== "password"
-                    ? type
-                    : isPasswordShown
-                    ? "text"
-                    : "password"
-            }
-            value={value}
+            type={(() => {
+                switch (type) {
+                    case "password":
+                        return isPasswordShown ? "text" : "password";
+                    case "sensitive":
+                        return "text";
+                    default:
+                        return type;
+                }
+            })()}
+            value={(() => {
+                if (type === "sensitive" && !isPasswordShown) {
+                    return value
+                        .split("")
+                        .map(() => "●")
+                        .join("");
+                }
+
+                return value;
+            })()}
             error={isInputInErroredState}
             helperText={helperTextNode}
             InputProps={InputProps}
