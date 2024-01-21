@@ -18,11 +18,14 @@ const { OnyxiaUi: OnyxiaUiWithoutEmotionCache } = createOnyxiaUi({
     "BASE_URL": process.env.NODE_ENV === "development" ? "" : "/onyxia-ui",
 });
 
-export function OnyxiaUi(props: { children: React.ReactNode }) {
-    const { children } = props;
+export function OnyxiaUi(props: {
+    darkMode?: boolean;
+    children: React.ReactNode;
+}) {
+    const { darkMode, children } = props;
     return (
         <CacheProvider value={emotionCache}>
-            <OnyxiaUiWithoutEmotionCache>
+            <OnyxiaUiWithoutEmotionCache darkMode={darkMode}>
                 {children}
             </OnyxiaUiWithoutEmotionCache>
         </CacheProvider>
