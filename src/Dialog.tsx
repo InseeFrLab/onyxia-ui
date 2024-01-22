@@ -117,8 +117,8 @@ export const Dialog = memo((props: DialogProps) => {
                 ))}
 
             <div className={classes.buttons}>
-                <div className={classes.showNextTimeCheckboxesWrapper}>
-                    {onDoShowNextTimeValueChange !== undefined && (
+                {onDoShowNextTimeValueChange !== undefined && (
+                    <div className={classes.showNextTimeCheckboxesWrapper}>
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -130,8 +130,8 @@ export const Dialog = memo((props: DialogProps) => {
                             }
                             label={doNotShowNextTimeText}
                         />
-                    )}
-                </div>
+                    </div>
+                )}
                 {buttons}
             </div>
         </MuiDialog>
