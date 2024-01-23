@@ -78,6 +78,10 @@ export type TextFieldProps = {
     ) => void;
     transformValueBeingTyped?: (value: string) => string;
     label?: ReactNode;
+    /**
+     * Not to use in conjunction with helperTextError and questionMarkHelperTextError
+     */
+    isErrored?: boolean;
     helperText?: ReactNode;
     /**
      * This is an alternative way of displaying errors to getIsValidValue.
@@ -87,10 +91,12 @@ export type TextFieldProps = {
      * If provided, this will overwrite the helper text.
      * If is affected by doOnlyShowErrorAfterFirstFocusLost
      *
-     * If you want to just display the helperText in red you can set this to true
+     * If you want to just display the helperText and question mark in red you
+     * can set isErrored to true.
      */
-    helperTextError?: JSX.Element | string | boolean;
-    questionMarkHelperText?: string | NonNullable<ReactNode>;
+    helperTextError?: ReactNode;
+    questionMarkHelperText?: ReactNode;
+    questionMarkHelperTextError?: ReactNode;
     doOnlyShowErrorAfterFirstFocusLost?: boolean;
     /** Default false */
     isCircularProgressShown?: boolean;
@@ -177,8 +183,11 @@ export const TextField = memo((props: TextFieldProps) => {
         className,
         type: type_props = "text",
         isCircularProgressShown = false,
+        isErrored,
         helperText,
         helperTextError,
+        questionMarkHelperText,
+        questionMarkHelperTextError,
         id: htmlId,
         name,
         selectAllTextOnFocus,
@@ -190,7 +199,6 @@ export const TextField = memo((props: TextFieldProps) => {
         inputProps_spellCheck,
         inputProps_autoFocus,
         InputProps_endAdornment,
-        questionMarkHelperText,
         doRenderAsTextArea = false,
         rows,
         doIndentOnTab = false,
@@ -299,7 +307,14 @@ export const TextField = memo((props: TextFieldProps) => {
             return false;
         }
 
-        if (helperTextError !== undefined && helperTextError !== false) {
+        if (isErrored === true) {
+            return true;
+        }
+
+        if (
+            helperTextError !== undefined ||
+            questionMarkHelperTextError !== undefined
+        ) {
             return true;
         }
 
@@ -450,34 +465,37 @@ export const TextField = memo((props: TextFieldProps) => {
 
     const helperTextNode = (() => {
         const helperTextOrError = (() => {
-            if (!isInputInErroredState) {
-                return helperText;
-            }
+            if (isInputInErroredState) {
+                if (helperTextError !== undefined) {
+                    return helperTextError;
+                }
 
-            if (helperTextError !== undefined) {
-                assert(helperTextError !== false);
-                return helperTextError === true ? helperText : helperTextError;
-            }
-
-            assert(!getIsValidValueResult.isValidValue);
-
-            return getIsValidValueResult.message;
-        })();
-
-        const tooltipTitle = (() => {
-            if (questionMarkHelperText !== undefined) {
-                return questionMarkHelperText;
-            }
-
-            if (!isInputInErroredState) {
-                return undefined;
-            }
-
-            if (helperText === undefined || helperTextError === helperText) {
-                return undefined;
+                if (!getIsValidValueResult.isValidValue) {
+                    return getIsValidValueResult.message;
+                }
             }
 
             return helperText;
+        })();
+
+        const tooltipTitle = (() => {
+            if (isInputInErroredState) {
+                if (questionMarkHelperTextError !== undefined) {
+                    return questionMarkHelperTextError;
+                }
+
+                // NOTE: If We have an error message and no question mark helper at all
+                // We display the helper text as question mark helper so the information about
+                // the field can still be accessed.
+                if (
+                    questionMarkHelperText === undefined &&
+                    helperTextOrError !== helperText
+                ) {
+                    return helperText;
+                }
+            }
+
+            return questionMarkHelperText;
         })();
 
         if (helperTextOrError === undefined && tooltipTitle === undefined) {
