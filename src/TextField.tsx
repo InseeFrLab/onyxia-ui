@@ -12,8 +12,7 @@ import type { ReturnType } from "tsafe";
 import { CircularProgress } from "./CircularProgress";
 import { Tooltip } from "./Tooltip";
 import { useDomRect } from "powerhooks/useDomRect";
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
+import { assert, type Equals } from "tsafe/assert";
 import Autocomplete from "@mui/material/Autocomplete";
 import type { NonPostableEvtLike } from "evt";
 import { useNonPostableEvtLike } from "./tools/useNonPostableEvtLike";
@@ -40,6 +39,7 @@ export type TextFieldProps = {
     defaultValue?: string;
     inputProps_ref?: RefObject<HTMLInputElement>;
     "inputProps_aria-label"?: string;
+    inputProps_className?: string;
     inputProps_tabIndex?: number;
     inputProps_spellCheck?: boolean;
     inputProps_autoFocus?: boolean;
@@ -185,6 +185,7 @@ export const TextField = memo((props: TextFieldProps) => {
         isSubmitAllowed = true,
         inputProps_ref,
         "inputProps_aria-label": inputProps_ariaLabel,
+        inputProps_className,
         inputProps_tabIndex,
         inputProps_spellCheck,
         inputProps_autoFocus,
@@ -195,8 +196,20 @@ export const TextField = memo((props: TextFieldProps) => {
         doIndentOnTab = false,
         options,
         freeSolo = false,
-        ...completedPropsRest
+        disabled,
+        label,
+        autoComplete,
+        ...rest
     } = props;
+
+    assert<Equals<typeof rest, {}>>();
+
+    const otherMuiComponentProps = {
+        disabled,
+        label,
+        autoComplete,
+        ...rest,
+    };
 
     const type = useMemo(() => {
         sensitive: {
@@ -398,7 +411,7 @@ export const TextField = memo((props: TextFieldProps) => {
             "tabIndex": inputProps_tabIndex,
             "spellCheck": inputProps_spellCheck,
             "autoFocus": inputProps_autoFocus,
-            "className": classes.baseInput,
+            "className": inputProps_className,
             ...(!isInputInErroredState ? undefined : { "aria-invalid": true }),
         }),
         [
@@ -408,7 +421,7 @@ export const TextField = memo((props: TextFieldProps) => {
             inputProps_spellCheck,
             inputProps_autoFocus,
             isInputInErroredState,
-            classes.baseInput,
+            inputProps_className,
         ],
     );
 
@@ -518,8 +531,15 @@ export const TextField = memo((props: TextFieldProps) => {
                         onKeyDown={onKeyDown}
                         onFocus={onFocus}
                         name={name}
-                        inputProps={{ ...inputProps, ...params.inputProps }}
-                        {...completedPropsRest}
+                        inputProps={{
+                            ...inputProps,
+                            ...params.inputProps,
+                            "className": cx(
+                                params.inputProps?.className,
+                                inputProps.className,
+                            ),
+                        }}
+                        {...otherMuiComponentProps}
                     />
                 )}
             />
@@ -554,7 +574,7 @@ export const TextField = memo((props: TextFieldProps) => {
             id={htmlId}
             name={name}
             inputProps={inputProps}
-            {...completedPropsRest}
+            {...otherMuiComponentProps}
         />
     );
 });
@@ -573,32 +593,6 @@ const useStyles = tss
             rootHeight,
             shouldInputValueBeHidden,
         }) => ({
-            "baseInput": {
-                ...(!shouldInputValueBeHidden
-                    ? undefined
-                    : {
-                          "WebkitTextSecurity": "disc",
-                      }),
-                "&:-webkit-autofill": {
-                    ...(() => {
-                        switch (getBrowser()) {
-                            case "chrome":
-                            case "safari":
-                                return {
-                                    "WebkitTextFillColor":
-                                        theme.colors.useCases.typography[
-                                            theme.isDarkModeEnabled
-                                                ? "textPrimary"
-                                                : "textSecondary"
-                                        ],
-                                    "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
-                                };
-                            default:
-                                return {};
-                        }
-                    })(),
-                },
-            },
             "muiAutocomplete": {
                 "minWidth": 145,
             },
@@ -621,6 +615,32 @@ const useStyles = tss
                 },
                 "& .MuiInput-underline:after": {
                     "borderBottomWidth": 1,
+                },
+                "& input:-webkit-autofill": {
+                    ...(() => {
+                        switch (getBrowser()) {
+                            case "chrome":
+                            case "safari":
+                                return {
+                                    "WebkitTextFillColor":
+                                        theme.colors.useCases.typography[
+                                            theme.isDarkModeEnabled
+                                                ? "textPrimary"
+                                                : "textSecondary"
+                                        ],
+                                    "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
+                                };
+                            default:
+                                return {};
+                        }
+                    })(),
+                    "& input": {
+                        ...(!shouldInputValueBeHidden
+                            ? undefined
+                            : {
+                                  "WebkitTextSecurity": "disc",
+                              }),
+                    },
                 },
             },
             "helperText": {
