@@ -652,13 +652,13 @@ const useStyles = tss
                                 return {};
                         }
                     })(),
-                    "& input": {
-                        ...(!shouldInputValueBeHidden
-                            ? undefined
-                            : {
-                                  "WebkitTextSecurity": "disc",
-                              }),
-                    },
+                },
+                "& input": {
+                    ...(!shouldInputValueBeHidden
+                        ? undefined
+                        : {
+                              "WebkitTextSecurity": "disc",
+                          }),
                 },
             },
             "helperText": {
