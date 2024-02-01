@@ -4,7 +4,7 @@ export function getSafeUrl(url: string) {
 
     if (url.startsWith("/")) {
         unsafeUrl = `${window.location.origin}${url}`;
-    } else if (!/^[^a-zA-Z0-9]+:\/\//.test(url)) {
+    } else if (!/^[a-zA-Z0-9]+:\/\//.test(url)) {
         unsafeUrl = `https://${url}`;
         toReturn = unsafeUrl;
     }
