@@ -13,9 +13,9 @@ export function getSafeUrl(url: string) {
         toReturn = unsafeUrl;
     }
 
-    try{
+    try {
         new URL(unsafeUrl).href;
-    }catch{
+    } catch {
         throw new Error(`The url ${url} is not valid`);
     }
 
