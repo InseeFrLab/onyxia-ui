@@ -13,8 +13,11 @@ export function getSafeUrl(url: string) {
         toReturn = unsafeUrl;
     }
 
-    //Trow if unsafeUrl is not a valid url
-    new URL(unsafeUrl).href;
+    try{
+        new URL(unsafeUrl).href;
+    }catch{
+        throw new Error(`The url ${url} is not valid`);
+    }
 
     return toReturn;
 }
