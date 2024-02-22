@@ -3,6 +3,10 @@ export function getSafeUrl(url: string) {
         return url;
     }
 
+    if (url.startsWith("data:")) {
+        return url;
+    }
+
     let unsafeUrl = url;
     let toReturn = url;
 
