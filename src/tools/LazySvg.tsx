@@ -141,8 +141,6 @@ export const fetchSvgAsHTMLElement = memoize(
                 .catch(() => undefined);
         })();
 
-        console.log({ rawSvgString });
-
         if (rawSvgString === undefined) {
             return undefined;
         }
