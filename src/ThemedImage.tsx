@@ -11,7 +11,9 @@ type Props = {
 };
 
 function getIsSvg(url: string) {
-    return url.split("?")[0].endsWith(".svg");
+    return (
+        url.split("?")[0].endsWith(".svg") || url.startsWith("data:image/svg")
+    );
 }
 
 export function ThemedImage(props: Props) {

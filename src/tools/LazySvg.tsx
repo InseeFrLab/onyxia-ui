@@ -119,9 +119,29 @@ export const createLazySvg = memoize((svgUrl: string) => {
 
 export const fetchSvgAsHTMLElement = memoize(
     async (svgUrl: string) => {
-        const rawSvgString = await fetch(getSafeUrl(svgUrl))
-            .then(response => response.text())
-            .catch(() => undefined);
+        const rawSvgString = await (async () => {
+            const safeUrl = getSafeUrl(svgUrl);
+
+            if (safeUrl.startsWith("data:image/svg")) {
+                const [meta, ...rest] = safeUrl.split(",");
+
+                const data = rest.join(",");
+
+                const [, encoding] = meta.split(";");
+
+                if (encoding?.toLowerCase() === "base64") {
+                    return atob(data);
+                }
+
+                return decodeURIComponent(data);
+            }
+
+            return fetch(getSafeUrl(svgUrl))
+                .then(response => response.text())
+                .catch(() => undefined);
+        })();
+
+        console.log({ rawSvgString });
 
         if (rawSvgString === undefined) {
             return undefined;

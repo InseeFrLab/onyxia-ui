@@ -34,6 +34,7 @@ import { useViteStyleBaseUrl } from "./lib/baseUrl";
  * SVG url:
  * Example: icon="https://example.com/myCustomIcon.svg"
  * It's important that the string ends with ".svg".
+ * It can also be a data url like: "data:image/svg+xml..." in this case it doesn't need to end with ".svg".
  *
  * ======== Size:
  *
@@ -109,7 +110,8 @@ export const Icon = memo(
             if (
                 icon.startsWith("http") ||
                 icon.startsWith("/") ||
-                icon.endsWith(".svg")
+                icon.endsWith(".svg") ||
+                icon.startsWith("data:image/svg")
             ) {
                 return createLazySvg(icon);
             }
