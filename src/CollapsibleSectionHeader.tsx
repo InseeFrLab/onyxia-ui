@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, type ReactNode } from "react";
 import { tss } from "./lib/tss";
 import { Text } from "./Text";
 import MuiLink from "@mui/material/Link";
@@ -11,7 +11,7 @@ export type CollapsibleSectionHeaderProps = {
     className?: string;
     isCollapsed: boolean;
     onToggleIsCollapsed(): void;
-    title: string;
+    title: ReactNode;
     total?: number;
     /** Default "Show all", provide your own string for internationalization. */
     showAllStr?: string;

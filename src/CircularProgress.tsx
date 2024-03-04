@@ -4,7 +4,7 @@ import MuiCircularProgress from "@mui/material/CircularProgress";
 
 export type CircularProgressProps = {
     className?: string;
-    size?: number;
+    size?: string | number;
     color?: "primary" | "textPrimary";
 };
 
