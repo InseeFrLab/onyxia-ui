@@ -159,6 +159,7 @@ const useStyles = tss
                 "marginLeft": theme.spacing(2),
             },
             "alignItems": "center",
+            "justifyContent": "end",
         },
         "showNextTimeCheckboxesWrapper": {
             "flex": 1,

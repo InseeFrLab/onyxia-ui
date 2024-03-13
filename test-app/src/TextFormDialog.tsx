@@ -62,6 +62,8 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
             subtitle="My subtitle"
             isOpen={openState !== undefined}
             onClose={onCancel}
+            //fullWidth
+            //maxWidth="lg"
             body={
                 openState !== undefined && (
                     <>
@@ -117,6 +119,8 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
                     </Button>
                 </>
             }
+            //doNotShowNextTimeText="Do not show next time"
+            //onDoShowNextTimeValueChange={()=> {}}
         />
     );
 });
