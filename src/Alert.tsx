@@ -1,4 +1,4 @@
-import { useReducer, memo } from "react";
+import { useReducer, memo, forwardRef } from "react";
 import type { ReactNode } from "react";
 import MuiAlert from "@mui/material/Alert";
 import { Text } from "./Text";
@@ -34,61 +34,64 @@ export namespace AlertProps {
     };
 }
 
-export const Alert = memo((props: AlertProps) => {
-    const { severity, children, className, ...rest } = props;
+export const Alert = memo(
+    forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
+        const { severity, children, className, ...rest } = props;
 
-    const { classes, cx } = useStyles({
-        severity,
-        "classesOverrides": props.classes,
-    });
+        const { classes, cx } = useStyles({
+            severity,
+            "classesOverrides": props.classes,
+        });
 
-    const { isClosed, uncontrolledClose } = (function useClosure() {
-        const [isClosed, uncontrolledClose] = useReducer(() => true, false);
+        const { isClosed, uncontrolledClose } = (function useClosure() {
+            const [isClosed, uncontrolledClose] = useReducer(() => true, false);
 
-        return {
-            "isClosed": "isClosed" in rest ? rest.isClosed : isClosed,
-            uncontrolledClose,
-        };
-    })();
+            return {
+                "isClosed": "isClosed" in rest ? rest.isClosed : isClosed,
+                uncontrolledClose,
+            };
+        })();
 
-    if (isClosed) {
-        return null;
-    }
+        if (isClosed) {
+            return null;
+        }
 
-    return (
-        <MuiAlert
-            className={cx(classes.root, className)}
-            severity={severity}
-            classes={{
-                "action": classes.action,
-                "icon": classes.icon,
-            }}
-            action={
-                "doDisplayCross" in rest &&
-                rest.doDisplayCross && (
-                    <IconButton
-                        icon={CloseSharpIcon}
-                        aria-label="close"
-                        onClick={
-                            "isClosed" in rest
-                                ? rest.onClose
-                                : () => {
-                                      rest.onClose?.();
-                                      uncontrolledClose();
-                                  }
-                        }
-                    />
-                )
-            }
-        >
-            {typeof children === "string" ? (
-                <Text typo="label 2">{children}</Text>
-            ) : (
-                children
-            )}
-        </MuiAlert>
-    );
-});
+        return (
+            <MuiAlert
+                className={cx(classes.root, className)}
+                ref={ref}
+                severity={severity}
+                classes={{
+                    "action": classes.action,
+                    "icon": classes.icon,
+                }}
+                action={
+                    "doDisplayCross" in rest &&
+                    rest.doDisplayCross && (
+                        <IconButton
+                            icon={CloseSharpIcon}
+                            aria-label="close"
+                            onClick={
+                                "isClosed" in rest
+                                    ? rest.onClose
+                                    : () => {
+                                          rest.onClose?.();
+                                          uncontrolledClose();
+                                      }
+                            }
+                        />
+                    )
+                }
+            >
+                {typeof children === "string" ? (
+                    <Text typo="label 2">{children}</Text>
+                ) : (
+                    children
+                )}
+            </MuiAlert>
+        );
+    }),
+);
 
 Alert.displayName = symToStr({ Alert });
 
