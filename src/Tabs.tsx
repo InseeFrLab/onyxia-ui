@@ -58,7 +58,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
             tabs.length > maxTabCount
                 ? (rootWidth - 2 * leftArrowWidth) / maxTabCount
                 : rootWidth / tabs.length,
-        [rootWidth, leftArrowWidth, maxTabCount],
+        [rootWidth, leftArrowWidth, maxTabCount, tabs.length],
     );
 
     const tabsWrapperWidth = useMemo(
