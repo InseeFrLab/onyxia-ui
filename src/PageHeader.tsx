@@ -14,7 +14,7 @@ export type PageHeaderProps = {
     mainIcon?: IconProps.Icon;
     title: string;
     helpIcon?: IconProps.Icon;
-    helpTitle: NonNullable<React.ReactNode>;
+    helpTitle?: NonNullable<React.ReactNode>;
     helpContent: NonNullable<React.ReactNode>;
     className?: string;
     titleCollapseParams?: CollapseParams;
@@ -188,12 +188,14 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                         </div>
                     )}
                     <div className={classes.helpMiddle}>
-                        <Text
-                            className={classes.helpTitle}
-                            typo="navigation label"
-                        >
-                            {helpTitle}
-                        </Text>
+                        {helpTitle !== undefined && (
+                            <Text
+                                className={classes.helpTitle}
+                                typo="navigation label"
+                            >
+                                {helpTitle}
+                            </Text>
+                        )}
                         <Text typo="body 1">{helpContent}</Text>
                     </div>
                     <div>
