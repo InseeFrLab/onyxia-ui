@@ -67,7 +67,7 @@
         "powerhooks": "^1.0.3",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.6.5",
-        "tss-react": "^4.9.3",
+        "tss-react": "^4.9.11",
         "yauzl": "^2.10.0",
         "yazl": "^2.5.1"
     },
