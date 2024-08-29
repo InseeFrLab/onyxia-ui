@@ -7,6 +7,7 @@ import { assert } from "tsafe/assert";
 import { getProjectRoot } from "./tools/getProjectRoot";
 import type { Equals } from "tsafe";
 import { downloadAndUnzip } from "./tools/downloadAndUnzip";
+import { transformCodebase } from "./tools/transformCodebase";
 
 const projectDirPath = process.cwd();
 
@@ -123,6 +124,10 @@ export async function downloadMaterialIcons(params: { publicDirPath: string }) {
     if (fs.existsSync(materialIconsDirPath)) {
         fs.rmSync(materialIconsDirPath, { "recursive": true, "force": true });
         fs.mkdirSync(materialIconsDirPath);
+        fs.writeFileSync(
+            pathJoin(materialIconsDirPath, ".gitignore"),
+            Buffer.from("*", "utf8"),
+        );
         console.log(
             "NOTE: Download of material icons takes a while if it's the first time you run this script",
         );
@@ -139,6 +144,16 @@ export async function downloadMaterialIcons(params: { publicDirPath: string }) {
         ],
         "doUseCache": true,
         projectDirPath,
+    });
+
+    transformCodebase({
+        "srcDirPath": pathJoin(
+            getProjectRoot(),
+            "src",
+            "assets",
+            "extra-icons",
+        ),
+        "destDirPath": materialIconsDirPath,
     });
 }
 
