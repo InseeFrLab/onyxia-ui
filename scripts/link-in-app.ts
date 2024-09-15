@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import { join as pathJoin, relative as pathRelative } from "path";
 import * as fs from "fs";
+import { transformCodebase } from "../src/bin/tools/transformCodebase";
 
 const singletonDependencies: string[] = ["react", "@types/react"];
 
@@ -57,6 +58,11 @@ fs.writeFileSync(
         "utf8",
     ),
 );
+
+transformCodebase({
+    "srcDirPath": pathJoin(rootDirPath, "src"),
+    "destDirPath": pathJoin(rootDirPath, "dist", "src"),
+});
 
 const commonThirdPartyDeps = (() => {
     // For example [ "@emotion" ] it's more convenient than

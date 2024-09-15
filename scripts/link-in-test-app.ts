@@ -3,6 +3,7 @@
 import { execSync } from "child_process";
 import { join as pathJoin, relative as pathRelative } from "path";
 import * as fs from "fs";
+import { transformCodebase } from "../src/bin/tools/transformCodebase";
 
 const projectDirPath = pathJoin(__dirname, "..");
 
@@ -57,6 +58,11 @@ fs.writeFileSync(
         "utf8",
     ),
 );
+
+transformCodebase({
+    "srcDirPath": pathJoin(projectDirPath, "src"),
+    "destDirPath": pathJoin(projectDirPath, "dist", "src"),
+});
 
 const commonThirdPartyDeps = (() => {
     const namespaceModuleNames: string[] = ["@emotion", "@mui"];
