@@ -15,18 +15,21 @@ import { useViteStyleBaseUrl } from "./lib/baseUrl";
 
 /**
  *
- * ======== iconId:
+ * ======== icon:
  *
- * This can be either a MUI Icon component name, a custom icon id or an url pointing to an SVG file.
+ * This can be either a MUI Icon component name or an url pointing to an SVG file.
  *
  * MUI Icons:
  * Find the icon you want to use here: https://mui.com/material-ui/material-icons/
  * If, for example you'd like to use this one: https://mui.com/material-ui/material-icons/?selected=AddHomeWork
- * use: iconId: "AddHomeWork"
- * This parameter is not typed because there's too much many MUI icons, it would slow down the ide too much.
+ * use: icon: "AddHomeWork"
+ * This parameter is not typed because there's too many MUI icons, it would slow down the ide too much.
+ * If you want type safety you can do:
+ * ```ts
  * import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName"
  * import { id } from "tsafe/id"
  * icon={id<MuiIconComponentName>("AddHomeWork")}
+ * ```
  * You can also pass the mui component directly:
  * import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
  * icon={AddHomeWorkIcon}
