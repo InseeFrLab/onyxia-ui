@@ -23,12 +23,12 @@ any [MUI component](https://mui.com/) they will be automatically styled to fit t
 -   Built in support for the dark mode.
 -   If you want to diverge from the Onyxia Design system, the theme is customizable, you can for example change the fonts and the colors.
 -   Provide splash screen that hide the screen when needed.
--   Icons are downloaded at runtime. [The full catalog of mui icons](https://mui.com/material-ui/material-icons/) is
-    is available **at runtime**. (No hard import required)
+-   Perfect for building white label Web APP: The theme and assets, icons can be configured at runtime.
 
-Disclaimer: `onyxia-ui` is specifically designed to build SPA and is not SSR compatible.
+Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) and is not SSR compatible (Not compatible with Next).
 
-A note about the integration of [Onyxia](https://onyxia.sh) and Onyxia-UI can be found [here](https://docs.onyxia.sh/contributing/onyxia/dependencies#onyxia-ui).
+> [!NOTE]  
+> There's an extention of Onyxia UI for creating Landing pages: [gitlanding](https://github.com/thieryw/gitlanding)
 
 # Showcase
 
@@ -36,40 +36,26 @@ A note about the integration of [Onyxia](https://onyxia.sh) and Onyxia-UI can be
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/6702424/136545513-f623d8c7-260d-4d93-a01e-2dc5af6ad473.gif"/>
-  <img src="https://user-images.githubusercontent.com/6702424/121828699-a8a36600-ccc0-11eb-903c-1cd4b6cbb0ff.png"/>
-  <img src="https://user-images.githubusercontent.com/6702424/121828696-a80acf80-ccc0-11eb-86fb-c7d0bca55d4f.png"/>
-  <img src="https://user-images.githubusercontent.com/6702424/121828700-a93bfc80-ccc0-11eb-8149-f6c85c06cffd.png" />
-  <img src="https://user-images.githubusercontent.com/6702424/121828695-a5a87580-ccc0-11eb-9e86-295fdac6c497.png"/>
-  <img src="https://user-images.githubusercontent.com/6702424/126612946-c9e0a0ce-3390-4d83-87e1-cdcb6ba623a5.gif">
-  <img src="https://user-images.githubusercontent.com/6702424/126614698-183e797f-a1e3-4e03-98c3-82d4b1c09bc3.gif">
 </p>
 
-## [datalab.sspcloud.fr with "France" palette](https://datalab.sspcloud.fr/?palette=france&title=Etalab)
+## [datalab.sspcloud.fr with "France" palette](https://datalab.sspcloud.fr/?FONT=%7B%20%0A%20%20fontFamily%3A%20%22Marianne%22%2C%20%0A%20%20dirUrl%3A%20%22%25PUBLIC_URL%25%2Ffonts%2FMarianne%22%2C%20%0A%20%20%22400%22%3A%20%22Marianne-Regular.woff2%22%2C%0A%20%20%22400-italic%22%3A%20%22Marianne-Regular_Italic.woff2%22%2C%0A%20%20%22500%22%3A%20%22Marianne-Medium.woff2%22%2C%0A%20%20%22700%22%3A%20%22Marianne-Bold.woff2%22%2C%0A%20%20%22700-italic%22%3A%20%22Marianne-Bold_Italic.woff2%22%0A%7D%0A&PALETTE_OVERRIDE=%7B%0A%20%20focus%3A%20%7B%0A%20%20%20%20main%3A%20%22%23000091%22%2C%0A%20%20%20%20light%3A%20%22%239A9AFF%22%2C%0A%20%20%20%20light2%3A%20%22%23E5E5F4%22%0A%20%20%7D%2C%0A%20%20dark%3A%20%7B%0A%20%20%20%20main%3A%20%22%232A2A2A%22%2C%0A%20%20%20%20light%3A%20%22%23383838%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23161616%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%239C9C9C%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%23CECECE%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23E5E5E5%22%0A%20%20%7D%2C%0A%20%20light%3A%20%7B%0A%20%20%20%20main%3A%20%22%23F1F0EB%22%2C%0A%20%20%20%20light%3A%20%22%23FDFDFC%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23E6E6E6%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23C9C9C9%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%239E9E9E%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23747474%22%0A%20%20%7D%0A%7D%0A)
 
 <p align="center">
     <img src="https://user-images.githubusercontent.com/6702424/139843650-8907ac5b-9fde-41ce-9c7d-9df9e10ce3e1.png" />
     <img src="https://user-images.githubusercontent.com/6702424/139843848-8fe5d132-5cd2-4840-8719-e6d5929b07d3.png" />
 </p>
 
-## [datalab.sspcloud.fr with "Ultraviolet" palette](https://datalab.sspcloud.fr/?palette=ultraviolet&title=AUS)
+## [datalab.sspcloud.fr with "Ultraviolet" palette](https://datalab.sspcloud.fr/?FONT=%7B%20%0A%20%20fontFamily%3A%20%22Geist%22%2C%20%0A%20%20dirUrl%3A%20%22%25PUBLIC_URL%25%2Ffonts%2FGeist%22%2C%20%0A%20%20%22400%22%3A%20%22Geist-Regular.woff2%22%2C%0A%20%20%22500%22%3A%20%22Geist-Medium.woff2%22%2C%0A%20%20%22600%22%3A%20%22Geist-SemiBold.woff2%22%2C%0A%20%20%22700%22%3A%20%22Geist-Bold.woff2%22%0A%7D%0A&PALETTE_OVERRIDE=%7B%0A%20%20focus%3A%20%7B%0A%20%20%20%20main%3A%20%22%23067A76%22%2C%0A%20%20%20%20light%3A%20%22%230AD6CF%22%2C%0A%20%20%20%20light2%3A%20%22%23AEE4E3%22%0A%20%20%7D%2C%0A%20%20dark%3A%20%7B%0A%20%20%20%20main%3A%20%22%232D1C3A%22%2C%0A%20%20%20%20light%3A%20%22%234A3957%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%2322122E%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23493E51%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%23918A98%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23C0B8C6%22%0A%20%20%7D%2C%0A%20%20light%3A%20%7B%0A%20%20%20%20main%3A%20%22%23F7F5F4%22%2C%0A%20%20%20%20light%3A%20%22%23FDFDFC%22%2C%0A%20%20%20%20greyVariant1%3A%20%22%23E6E6E6%22%2C%0A%20%20%20%20greyVariant2%3A%20%22%23C9C9C9%22%2C%0A%20%20%20%20greyVariant3%3A%20%22%239E9E9E%22%2C%0A%20%20%20%20greyVariant4%3A%20%22%23747474%22%0A%20%20%7D%0A%7D%0A)
 
 <p align="center">
     <img src="https://user-images.githubusercontent.com/6702424/139844196-0079858c-6778-4569-a7f8-409f1ce9652d.png" />
     <img src="https://user-images.githubusercontent.com/6702424/139844260-b4948b34-eca1-4d5b-a5c9-e856500fe921.png" />
 </p>
 
-## [www.sspcloud.fr](https://www.sspcloud.fr)
-
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/6702424/136541663-bc1672c7-d4e2-4b65-ae6e-7a222d7ef71d.png" />
-    <img src="https://user-images.githubusercontent.com/6702424/136541792-3e267d15-3e56-4f27-9b62-57500f69bbaa.png" />
-    <img src="https://user-images.githubusercontent.com/6702424/136541968-a3c718ae-1a1a-48aa-823f-afcecb475e55.png" />
-</p>
-
-# Quick start
+# Installing
 
 ```bash
-yarn add onyxia-ui @mui/material @emotion/react @emotion/styled
+yarn add onyxia-ui @mui/material@5.16.7 @emotion/react @emotion/styled
 ```
 
 ## Icons
@@ -83,15 +69,6 @@ If you know what icon you'll need ahead of time, implement this approach:
 
 ```bash
 yarn add @mui/icons-material
-```
-
-`src/theme.ts`
-
-```ts
-const { ThemeProvider } = createThemeProvider({
-    // ...
-    publicUrl: undefined,
-});
 ```
 
 Now if you want to use [AccessAlarms](https://mui.com/material-ui/material-icons/?selected=AccessAlarms)
@@ -151,24 +128,4 @@ import myIconSvgUrl from "./assets/my-icon.svg";
 
 <Icon icon={myIconSvgUrl} />
 <Icon icon="https://example.com/foo/my-icon.svg" />
-```
-
-## Documentation
-
-The documentation is under the form of a very simple [demo project](https://github.com/garronej/onyxia-ui/tree/main/src/test).  
-The actual theme configuration [happens here](https://github.com/garronej/onyxia-ui/blob/main/src/test/src/theme.ts).  
-If you want to experiment with it you can run the demo app with:
-
-NOTE for [Storybook](https://storybook.js.org) users: As of writing this lines storybook still uses by default emotion 10.  
-mui and TSS runs emotion 11 so there is [some changes](https://github.com/garronej/onyxia-ui/blob/324de62248074582b227e584c53fb2e123f5325f/.storybook/main.js#L31-L32)
-to be made to your `.storybook/main.js` to make it uses emotion 11.
-
-[Launch dev environment](https://datalab.sspcloud.fr/launcher/inseefrlab-helm-charts-datascience/vscode?autoLaunch=true&onyxia.friendlyName=«Onyxia-ui»&onyxia.share=true&s3.enabled=false&kubernetes.role=«admin»&security.allowlist.enabled=false&git.repository=«https%3A%2F%2Fgithub.com%2FInseeFrLab%2Fonyxia-ui»&init.personalInit=«https%3A%2F%2Fraw.githubusercontent.com%2FInseeFrLab%2Fonyxia-ui%2Fmain%2Fonyxia-init.sh»)
-
-```bash
-git clone https://github.com/garronej/onyxia-ui
-cd onyxia-ui
-yarn
-yarn build
-yarn start
 ```
