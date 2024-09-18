@@ -95,8 +95,6 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
                         ? window.scrollY
                         : (event.target as HTMLElement).scrollTop;
 
-                console.log("scrollTop", scrollTop);
-
                 isCollapsedIfDependsOfScrollRef.current =
                     isCollapsedIfDependsOfScrollRef.current
                         ? scrollTop + childrenWrapperHeight * 1.3 >
