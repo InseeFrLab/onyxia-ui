@@ -1,5 +1,5 @@
 import { changeColorOpacity } from "../tools/changeColorOpacity";
-export * from "../tools/changeColorOpacity";
+export { changeColorOpacity } from "../tools/changeColorOpacity";
 
 import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles/createPalette";
 import type { Param0 } from "tsafe";

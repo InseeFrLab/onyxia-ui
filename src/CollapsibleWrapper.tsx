@@ -2,10 +2,8 @@ import { useEffect, useReducer, useRef, memo } from "react";
 import type { RefObject } from "react";
 import { useDomRect } from "powerhooks/useDomRect";
 import type { ReactNode } from "react";
-import { Evt } from "evt";
-import { useEvt } from "evt/hooks";
 import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
-import { useStateRef } from "powerhooks/useStateRef";
+import { assert } from "tsafe/assert";
 import { useStyles } from "tss-react";
 
 export type CollapseParams =
@@ -25,7 +23,8 @@ export namespace CollapseParams {
     export type CollapsesOnScroll = Common & {
         behavior: "collapses on scroll";
         scrollTopThreshold: number;
-        scrollableElementRef: RefObject<any>;
+        // NOTE: If not provided assume window (body)
+        scrollableElementRef?: RefObject<any>;
         onIsCollapsedValueChange?: (isCollapsed: boolean) => void;
     };
 }
@@ -53,8 +52,8 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         isCollapsedIfDependsOfScrollRef.current = false;
     }, [
         rest.behavior === "collapses on scroll"
-            ? rest.scrollableElementRef.current ?? Object
-            : Object,
+            ? rest.scrollableElementRef?.current
+            : undefined,
     ]);
 
     useEffect(() => {
@@ -67,54 +66,62 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         );
     }, [isCollapsedIfDependsOfScrollRef.current]);
 
-    const dummyRef = useStateRef<HTMLDivElement>(null);
-
     {
         const ref =
             rest.behavior !== "collapses on scroll"
-                ? dummyRef
-                : rest.scrollableElementRef;
+                ? undefined
+                : rest.scrollableElementRef ?? { current: window };
 
         const [, forceUpdate] = useReducer(counter => counter + 1, 0);
 
-        useEvt(
-            ctx => {
-                const element = ref.current;
+        useEffect(() => {
+            if (ref === undefined) {
+                return;
+            }
 
-                if (!element) {
-                    return;
-                }
+            assert(rest.behavior === "collapses on scroll");
 
-                if (rest.behavior !== "collapses on scroll") {
-                    return;
-                }
+            const element = ref.current;
 
-                const { scrollTopThreshold } = rest;
+            if (!element) {
+                return;
+            }
 
-                Evt.from(ctx, element, "scroll")
-                    .pipe(event => [(event as any).target.scrollTop as number])
-                    .toStateful(element.scrollTop)
-                    .attach(scrollTop => {
-                        isCollapsedIfDependsOfScrollRef.current =
-                            isCollapsedIfDependsOfScrollRef.current
-                                ? scrollTop + childrenWrapperHeight * 1.3 >
-                                  scrollTopThreshold
-                                : scrollTop > scrollTopThreshold;
+            const { scrollTopThreshold } = rest;
 
-                        forceUpdate();
-                    });
-            },
-            [
-                rest.behavior,
-                ...(rest.behavior !== "collapses on scroll"
-                    ? [null, null, null]
-                    : [
-                          rest.scrollTopThreshold,
-                          rest.scrollableElementRef,
-                          childrenWrapperHeight,
-                      ]),
-            ],
-        );
+            const onScroll = (event: Event) => {
+                const scrollTop =
+                    element === window
+                        ? window.scrollY
+                        : (event.target as HTMLElement).scrollTop;
+
+                console.log("scrollTop", scrollTop);
+
+                isCollapsedIfDependsOfScrollRef.current =
+                    isCollapsedIfDependsOfScrollRef.current
+                        ? scrollTop + childrenWrapperHeight * 1.3 >
+                          scrollTopThreshold
+                        : scrollTop > scrollTopThreshold;
+
+                forceUpdate();
+            };
+
+            element.addEventListener("scroll", onScroll);
+
+            return () => {
+                element.removeEventListener("scroll", onScroll);
+            };
+        }, [
+            rest.behavior,
+            ref?.current ?? undefined,
+            ...(rest.behavior !== "collapses on scroll"
+                ? [null, null, null]
+                : [
+                      rest.scrollTopThreshold,
+                      rest.scrollableElementRef,
+                      childrenWrapperHeight,
+                  ]),
+        ]);
     }
 
     const isCollapsed = (() => {
