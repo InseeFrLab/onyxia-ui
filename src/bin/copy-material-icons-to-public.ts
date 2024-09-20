@@ -123,15 +123,15 @@ export async function downloadMaterialIcons(params: { publicDirPath: string }) {
 
     if (fs.existsSync(materialIconsDirPath)) {
         fs.rmSync(materialIconsDirPath, { "recursive": true, "force": true });
-        fs.mkdirSync(materialIconsDirPath);
-        fs.writeFileSync(
-            pathJoin(materialIconsDirPath, ".gitignore"),
-            Buffer.from("*", "utf8"),
-        );
-        console.log(
-            "NOTE: Download of material icons takes a while if it's the first time you run this script",
-        );
     }
+    fs.mkdirSync(materialIconsDirPath, { "recursive": true });
+    fs.writeFileSync(
+        pathJoin(materialIconsDirPath, ".gitignore"),
+        Buffer.from("*", "utf8"),
+    );
+    console.log(
+        "NOTE: Download of material icons takes a while if it's the first time you run this script",
+    );
 
     const version = "5.14.15";
 
