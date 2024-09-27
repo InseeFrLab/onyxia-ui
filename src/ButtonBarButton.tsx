@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { memo } from "react";
+import { forwardRef, memo } from "react";
 import { tss } from "./lib/tss";
 import { Button } from "./Button";
 import { symToStr } from "tsafe/symToStr";
@@ -28,23 +28,26 @@ export namespace ButtonBarButtonProps {
     };
 }
 
-export const ButtonBarButton = memo((props: ButtonBarButtonProps) => {
-    const { className, startIcon, disabled, children, ...rest } = props;
+export const ButtonBarButton = memo(
+    forwardRef<HTMLButtonElement, ButtonBarButtonProps>((props, ref) => {
+        const { className, startIcon, disabled, children, ...rest } = props;
 
-    const { classes, cx } = useStyles();
+        const { classes, cx } = useStyles();
 
-    return (
-        <Button
-            className={cx(classes.root, className)}
-            variant="secondary"
-            startIcon={startIcon}
-            disabled={disabled}
-            {...rest}
-        >
-            {children}
-        </Button>
-    );
-});
+        return (
+            <Button
+                ref={ref} // Forwarding the ref to the Button component
+                className={cx(classes.root, className)}
+                variant="secondary"
+                startIcon={startIcon}
+                disabled={disabled}
+                {...rest}
+            >
+                {children}
+            </Button>
+        );
+    }),
+);
 
 ButtonBarButton.displayName = symToStr({ ButtonBarButton });
 

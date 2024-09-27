@@ -1,8 +1,8 @@
 import { memo, ReactNode } from "react";
-import { tss } from "./lib/tss";
 import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { ButtonBarButton } from "./ButtonBarButton";
 import { symToStr } from "tsafe/symToStr";
+import { BaseBar } from "./BaseBar";
 
 export type ButtonBarProps<ButtonId extends string = never> = {
     className?: string;
@@ -41,14 +41,12 @@ function NonMemoizedButtonBar<ButtonId extends string>(
 ) {
     const { className, buttons, onClick } = props;
 
-    const { classes, cx } = useStyles();
-
     const onClickFactory = useCallbackFactory(([buttonId]: [ButtonId]) =>
         onClick(buttonId),
     );
 
     return (
-        <div className={cx(classes.root, className)}>
+        <BaseBar className={className}>
             {buttons.map(button => (
                 <ButtonBarButton
                     startIcon={button.icon}
@@ -69,7 +67,7 @@ function NonMemoizedButtonBar<ButtonId extends string>(
                     {button.label}
                 </ButtonBarButton>
             ))}
-        </div>
+        </BaseBar>
     );
 }
 
@@ -80,12 +78,3 @@ export const ButtonBar = memo(NonMemoizedButtonBar) as <
 ) => ReturnType<typeof NonMemoizedButtonBar>;
 
 (ButtonBar as any).displayName = symToStr({ ButtonBar });
-
-const useStyles = tss.withName({ ButtonBar }).create(({ theme }) => ({
-    "root": {
-        "backgroundColor": theme.colors.useCases.surfaces.surface1,
-        "boxShadow": theme.shadows[1],
-        "borderRadius": 8,
-        "overflow": "hidden",
-    },
-}));

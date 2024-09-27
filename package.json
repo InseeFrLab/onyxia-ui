@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "5.3.6",
+    "version": "5.3.7-rc.0",
     "description": "The Onyxia UI toolkit",
     "repository": {
         "type": "git",
