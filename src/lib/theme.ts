@@ -255,9 +255,6 @@ export function createThemeFactory<
                                                 },
                                             };
                                         },
-                                        "columnSeparator": {
-                                            "display": "none",
-                                        },
                                         "withBorderColor": {
                                             "borderColor": "transparent",
                                         },
