@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "5.3.7-rc.0",
+    "version": "5.3.7",
     "description": "The Onyxia UI toolkit",
     "repository": {
         "type": "git",
@@ -65,10 +65,10 @@
         "memoizee": "^0.4.17",
         "@types/memoizee": "^0.4.11",
         "minimal-polyfills": "^2.2.3",
-        "powerhooks": "^1.0.12",
+        "powerhooks": "^1.0.13",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.7.2",
-        "tss-react": "^4.9.12",
+        "tss-react": "^4.9.13",
         "yauzl": "^2.10.0",
         "yazl": "^2.5.1",
         "react-markdown": "^5.0.3"
