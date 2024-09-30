@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "5.3.8",
+    "version": "5.3.9",
     "description": "The Onyxia UI toolkit",
     "repository": {
         "type": "git",
@@ -67,7 +67,7 @@
         "minimal-polyfills": "^2.2.3",
         "powerhooks": "^1.0.13",
         "run-exclusive": "^2.2.19",
-        "tsafe": "^1.7.2",
+        "tsafe": "^1.7.4",
         "tss-react": "^4.9.13",
         "yauzl": "^2.10.0",
         "yazl": "^2.5.1",
