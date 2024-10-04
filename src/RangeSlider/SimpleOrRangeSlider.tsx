@@ -6,7 +6,6 @@ import { is } from "tsafe/is";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { tss } from "../lib/tss";
 import { Text } from "../Text";
-import type { ReactNode } from "react";
 import { symToStr } from "tsafe/symToStr";
 import { capitalize } from "tsafe/capitalize";
 import { useWithProps } from "powerhooks/useWithProps";
@@ -19,7 +18,7 @@ export type SimpleOrRangeSliderProps = {
     className?: string;
 
     inputId?: string;
-    label: NonNullable<ReactNode>;
+    label: JSX.Element | string | undefined;
     min: number;
     max: number;
     step: number;
@@ -140,22 +139,24 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
 
     return (
         <div className={className} ref={ref}>
-            <Text
-                className={classes.label}
-                typo="label 2"
-                componentProps={textComponentProps}
-            >
-                {label}
-                {extraInfo !== undefined && (
-                    <Tooltip title={extraInfo}>
-                        <Icon
-                            icon={HelpIcon}
-                            size="extra small"
-                            className={classes.helpIcon}
-                        />
-                    </Tooltip>
-                )}
-            </Text>
+            {label !== undefined && (
+                <Text
+                    className={classes.label}
+                    typo="label 2"
+                    componentProps={textComponentProps}
+                >
+                    {label}
+                    {extraInfo !== undefined && (
+                        <Tooltip title={extraInfo}>
+                            <Icon
+                                icon={HelpIcon}
+                                size="extra small"
+                                className={classes.helpIcon}
+                            />
+                        </Tooltip>
+                    )}
+                </Text>
+            )}
             <div className={classes.wrapper}>
                 {valueLow !== undefined && (
                     <ValueDisplayWp
