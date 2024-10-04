@@ -18,6 +18,7 @@ import HelpIcon from "@mui/icons-material/Help";
 export type SimpleOrRangeSliderProps = {
     className?: string;
 
+    inputId?: string;
     label: NonNullable<ReactNode>;
     min: number;
     max: number;
@@ -59,6 +60,7 @@ const useStyles = tss
 export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
     const {
         className,
+        inputId,
         label,
         min,
         max,
@@ -162,6 +164,7 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
                     />
                 )}
                 <Slider
+                    id={inputId}
                     className={classes.slider}
                     value={muiSliderValue}
                     onChange={onChange}
