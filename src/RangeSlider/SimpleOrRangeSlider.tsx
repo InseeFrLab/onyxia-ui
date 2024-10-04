@@ -18,13 +18,13 @@ export type SimpleOrRangeSliderProps = {
     className?: string;
 
     inputId?: string;
-    label: JSX.Element | string | undefined;
     min: number;
     max: number;
     step: number;
     unit: string;
     lowExtremitySemantic?: string | JSX.Element;
     highExtremitySemantic?: string | JSX.Element;
+    label?: JSX.Element | string;
     extraInfo?: string;
 
     valueLow?: number;
