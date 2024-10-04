@@ -24,8 +24,8 @@ export type SimpleOrRangeSliderProps = {
     max: number;
     step: number;
     unit: string;
-    lowExtremitySemantic?: string;
-    highExtremitySemantic?: string;
+    lowExtremitySemantic?: string | JSX.Element;
+    highExtremitySemantic?: string | JSX.Element;
     extraInfo?: string;
 
     valueLow?: number;
@@ -187,7 +187,7 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
 const { ValueDisplay } = (() => {
     type Props = {
         unit: string;
-        semantic: string | undefined;
+        semantic: string | JSX.Element | undefined;
         value: number;
         maxValue: number;
     };
@@ -205,7 +205,9 @@ const { ValueDisplay } = (() => {
                     </Text>
                     {semantic !== undefined && (
                         <Text className={classes.caption} typo="caption">
-                            {capitalize(semantic)}
+                            {typeof semantic === "string"
+                                ? capitalize(semantic)
+                                : semantic}
                         </Text>
                     )}
                 </div>
