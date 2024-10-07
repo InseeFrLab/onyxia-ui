@@ -6,7 +6,7 @@ import { symToStr } from "tsafe/symToStr";
 import type { TypographyDesc } from "./lib/typography";
 
 export type TextProps = {
-    className?: string | null;
+    className?: string;
     //typo: TypographyVariantNameCustom | TypographyDesc.VariantNameBase;
     typo: TypographyDesc.VariantNameBase;
     color?: "primary" | "secondary" | "disabled" | "focus";
