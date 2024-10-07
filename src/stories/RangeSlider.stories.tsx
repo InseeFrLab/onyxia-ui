@@ -14,15 +14,9 @@ function Component(
     const [valueHigh, setValueHigh] = useState(props.max);
 
     const onValueChange = useConstCallback<RangeSliderProps["onValueChange"]>(
-        ({ extremity, value }) => {
-            switch (extremity) {
-                case "low":
-                    setValueLow(value);
-                    break;
-                case "high":
-                    setValueHigh(value);
-                    break;
-            }
+        ({ valueLow, valueHigh }) => {
+            setValueLow(valueLow);
+            setValueHigh(valueHigh);
         },
     );
 

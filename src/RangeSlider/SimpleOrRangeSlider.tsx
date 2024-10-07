@@ -27,34 +27,10 @@ export type SimpleOrRangeSliderProps = {
     label?: JSX.Element | string;
     extraInfo?: string;
 
-    valueLow?: number;
+    valueLow: number;
     valueHigh: number;
-    onValueChange(params: { extremity: "low" | "high"; value: number }): void;
+    onValueChange: (params: { valueLow: number; valueHigh: number }) => void;
 };
-
-const useStyles = tss
-    .withParams<{ isRange: boolean }>()
-    .create(({ theme, isRange }) => ({
-        "label": {
-            "marginBottom": theme.spacing(3),
-        },
-        "helpIcon": {
-            "marginLeft": theme.spacing(2),
-            "color": theme.colors.useCases.typography.textSecondary,
-            "verticalAlign": "text-bottom",
-        },
-        "wrapper": {
-            "display": "flex",
-            "alignItems": "center",
-        },
-        "slider": {
-            "flex": 1,
-            //"margin": theme.spacing(0, 4),
-            "margin": theme.spacing({ "topBottom": 0, "rightLeft": 4 }),
-            "marginLeft": isRange ? undefined : 0,
-            "minWidth": 150,
-        },
-    }));
 
 export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
     const {
@@ -73,10 +49,12 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
         onValueChange,
     } = props;
 
-    const { classes } = useStyles({ "isRange": valueLow !== undefined });
+    const isRange = !isNaN(valueLow);
+
+    const { classes } = useStyles({ isRange });
 
     const muiSliderValue = useMemo(() => {
-        if (valueLow === undefined) {
+        if (!isRange) {
             return valueHigh;
         }
 
@@ -88,28 +66,20 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
         );
 
         return [valueLow, valueHigh];
-    }, [valueLow ?? Object, valueHigh]);
+    }, [valueLow, valueHigh]);
 
     const onChange = useConstCallback<SliderProps["onChange"]>(
         (...[, value]: any[]) => {
-            const [newValueLow, newValueHigh] = (() => {
-                if (valueLow === undefined) {
-                    assert(is<number>(value));
+            if (isRange) {
+                assert(is<[number, number]>(value));
 
-                    return [undefined, value] as const;
-                } else {
-                    assert(is<[number, number]>(value));
+                const [valueLow, valueHigh] = value;
 
-                    return value;
-                }
-            })();
+                onValueChange({ valueLow, valueHigh });
+            } else {
+                assert(is<number>(value));
 
-            if (newValueLow !== undefined && newValueLow !== valueLow) {
-                onValueChange({ "extremity": "low", "value": newValueLow });
-            }
-
-            if (newValueHigh !== valueHigh) {
-                onValueChange({ "extremity": "high", "value": newValueHigh });
+                onValueChange({ "valueLow": NaN, "valueHigh": value });
             }
         },
     );
@@ -158,7 +128,7 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
                 </Text>
             )}
             <div className={classes.wrapper}>
-                {valueLow !== undefined && (
+                {isRange && (
                     <ValueDisplayWp
                         semantic={lowExtremitySemantic}
                         value={valueLow}
@@ -184,6 +154,31 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
         </div>
     );
 });
+
+const useStyles = tss
+    .withName({ SimpleOrRangeSlider })
+    .withParams<{ isRange: boolean }>()
+    .create(({ theme, isRange }) => ({
+        "label": {
+            "marginBottom": theme.spacing(3),
+        },
+        "helpIcon": {
+            "marginLeft": theme.spacing(2),
+            "color": theme.colors.useCases.typography.textSecondary,
+            "verticalAlign": "text-bottom",
+        },
+        "wrapper": {
+            "display": "flex",
+            "alignItems": "center",
+        },
+        "slider": {
+            "flex": 1,
+            //"margin": theme.spacing(0, 4),
+            "margin": theme.spacing({ "topBottom": 0, "rightLeft": 4 }),
+            "marginLeft": isRange ? undefined : 0,
+            "minWidth": 150,
+        },
+    }));
 
 const { ValueDisplay } = (() => {
     type Props = {

@@ -21,14 +21,23 @@ export const Slider = memo((props: SliderProps) => {
 
     const onSimpleOrRangeSliderValueChange = useConstCallback<
         SimpleOrRangeSliderProps["onValueChange"]
-    >(({ value }) => onValueChange(value));
+    >(({ valueHigh }) => onValueChange(valueHigh));
 
     return (
         <SimpleOrRangeSlider
+            className={rest.className}
+            inputId={rest.inputId}
+            min={rest.min}
+            max={rest.max}
+            step={rest.step}
+            unit={rest.unit}
+            lowExtremitySemantic={undefined}
             highExtremitySemantic={semantic}
+            label={rest.label}
+            extraInfo={rest.extraInfo}
+            valueLow={NaN}
             valueHigh={value}
             onValueChange={onSimpleOrRangeSliderValueChange}
-            {...rest}
         />
     );
 });
