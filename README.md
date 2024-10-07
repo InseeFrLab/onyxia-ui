@@ -52,11 +52,15 @@ Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) an
     <img src="https://user-images.githubusercontent.com/6702424/139844260-b4948b34-eca1-4d5b-a5c9-e856500fe921.png" />
 </p>
 
-# Installing
+# Installation
 
-```bash
-yarn add onyxia-ui @mui/material@5.16.7 @emotion/react @emotion/styled
-```
+yarn add onyxia-ui @mui/material@5.16.7 @emotion/react @emotion/styled gitlanding tss-react
+
+# Usage
+
+The easyer way to get started is to checkout this demo repository: [onyxia-ui + gilanding starter](https://github.com/garronej/gitlanding-demo).
+
+You can see more advanced examples here: [test app of this repo](https://github.com/InseeFrLab/onyxia-ui/tree/main/test-app).
 
 ## Icons
 
@@ -68,7 +72,7 @@ Or to provide your own icon as SVG urls.
 If you know what icon you'll need ahead of time, implement this approach:
 
 ```bash
-yarn add @mui/icons-material
+yarn add @mui/icons-material@5.16.7
 ```
 
 Now if you want to use [AccessAlarms](https://mui.com/material-ui/material-icons/?selected=AccessAlarms)
