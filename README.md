@@ -54,7 +54,7 @@ Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) an
 
 # Installation
 
-yarn add onyxia-ui @mui/material@5.16.7 @emotion/react @emotion/styled gitlanding tss-react
+`yarn add onyxia-ui @mui/material@5.16.7 @emotion/react @emotion/styled tss-react`
 
 # Usage
 
