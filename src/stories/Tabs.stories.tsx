@@ -28,7 +28,7 @@ function Component(
     );
     type TabId = (typeof tabs)[number]["id"];
 
-    const [activeTabId, setActiveTabId] = useState<TabId>("tab5");
+    const [activeTabId, setActiveTabId] = useState<TabId>("tab1");
 
     const onRequestChangeActiveTab = useConstCallback<
         TabProps<TabId>["onRequestChangeActiveTab"]
@@ -70,4 +70,16 @@ export const VueAllTabsVisible = getStory({
     "size": "big",
     "maxTabCount": 10,
     "tabCount": 5,
+});
+
+export const NoArrowNeeded = getStory({
+    "size": "big",
+    "maxTabCount": 4,
+    "tabCount": 4,
+});
+
+export const OnlyTwoTabs = getStory({
+    "size": "big",
+    "maxTabCount": 4,
+    "tabCount": 2,
 });

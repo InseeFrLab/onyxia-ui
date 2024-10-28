@@ -66,16 +66,16 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
         [tabWidth, tabs.length],
     );
 
+    const areArrowsVisible = tabs.length > maxTabCount;
+
     const { classes, cx, css } = useStyles({
         tabsWrapperWidth,
-        leftArrowWidth,
+        "leftArrowWidth": areArrowsVisible ? leftArrowWidth : 0,
         leftArrowHeight,
         offset,
         tabWidth,
         "classesOverrides": props.classes,
     });
-
-    const areArrowsVisible = tabs.length > maxTabCount;
 
     const [firstTabIndex, setFirstTabIndex] = useState(0);
 
