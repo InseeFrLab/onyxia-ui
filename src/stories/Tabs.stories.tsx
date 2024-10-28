@@ -28,7 +28,7 @@ function Component(
     );
     type TabId = (typeof tabs)[number]["id"];
 
-    const [activeTabId, setActiveTabId] = useState<TabId>("tab1");
+    const [activeTabId, setActiveTabId] = useState<TabId>("tab0");
 
     const onRequestChangeActiveTab = useConstCallback<
         TabProps<TabId>["onRequestChangeActiveTab"]
@@ -82,4 +82,10 @@ export const OnlyTwoTabs = getStory({
     "size": "big",
     "maxTabCount": 4,
     "tabCount": 2,
+});
+
+export const OnlyOneTab = getStory({
+    "size": "big",
+    "maxTabCount": 4,
+    "tabCount": 1,
 });
