@@ -1,6 +1,5 @@
 import { Evt } from "evt";
 import { onlyIfChanged } from "evt/operators/onlyIfChanged";
-import { assert } from "tsafe/assert";
 import { memoize } from "./memoize";
 
 export const getEvtRootFontSizePx = memoize(() => {
@@ -31,7 +30,9 @@ export const getEvtRootFontSizePx = memoize(() => {
 
             const match = value.match(/(\d+)px/);
 
-            assert(match !== null);
+            if (match === null) {
+                return [16];
+            }
 
             const rootFontSizePx = parseFloat(match[1]);
 
