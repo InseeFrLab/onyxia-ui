@@ -6,7 +6,7 @@ import {
     createContext,
     type ReactNode,
 } from "react";
-import Color from "color";
+import { alpha } from "@mui/material/styles";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import { useConstCallback } from "powerhooks/useConstCallback";
@@ -357,17 +357,11 @@ export function createSplashScreen(params: SplashScreenParams) {
                     "left": 0,
                     "zIndex": 10,
                     "backgroundColor": (() => {
-                        const color = new Color(
-                            theme.colors.useCases.surfaces.background,
-                        ).rgb();
+                        const color = theme.colors.useCases.surfaces.background;
 
-                        return color
-                            .alpha(
-                                isTransparencyEnabled
-                                    ? 0.6
-                                    : (color as any).valpha,
-                            )
-                            .string();
+                        return isTransparencyEnabled
+                            ? alpha(color, 0.6)
+                            : color;
                     })(),
                     "backdropFilter": isTransparencyEnabled
                         ? "blur(10px)"

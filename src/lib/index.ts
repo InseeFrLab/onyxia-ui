@@ -10,7 +10,6 @@ export {
     ultravioletPalette,
     verdantPalette,
     createDefaultColorUseCases,
-    changeColorOpacity,
 } from "./color";
 
 export type {

@@ -27,7 +27,7 @@ import type { ComputedTypography } from "./typography";
 import type { IconSizeName } from "./icon";
 import { useContext, createContext } from "react";
 import { memoize } from "../tools/memoize";
-import { changeColorOpacity } from "../tools/changeColorOpacity";
+import { alpha } from "@mui/material/styles";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -219,24 +219,18 @@ export function createThemeFactory<
                                         "row": () => {
                                             const hoveredAndSelected = {
                                                 "&.Mui-hovered": {
-                                                    "backgroundColor":
-                                                        changeColorOpacity({
-                                                            "color":
-                                                                useCases
-                                                                    .typography
-                                                                    .textFocus,
-                                                            "opacity": 0.6,
-                                                        }),
+                                                    "backgroundColor": alpha(
+                                                        useCases.typography
+                                                            .textFocus,
+                                                        0.6,
+                                                    ),
                                                 },
                                                 "&.Mui-selected": {
-                                                    "backgroundColor":
-                                                        changeColorOpacity({
-                                                            "color":
-                                                                useCases
-                                                                    .typography
-                                                                    .textFocus,
-                                                            "opacity": 0.2,
-                                                        }),
+                                                    "backgroundColor": alpha(
+                                                        useCases.typography
+                                                            .textFocus,
+                                                        0.2,
+                                                    ),
                                                 },
                                             };
 

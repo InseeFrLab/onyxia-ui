@@ -1,6 +1,4 @@
-import { changeColorOpacity } from "../tools/changeColorOpacity";
-export { changeColorOpacity } from "../tools/changeColorOpacity";
-
+import { alpha } from "@mui/material/styles";
 import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles/createPalette";
 import type { Param0 } from "tsafe";
 
@@ -186,37 +184,25 @@ export function createDefaultColorUseCases(
             "error": {
                 "main": palette.redError.main,
                 "background": isDarkModeEnabled
-                    ? changeColorOpacity({
-                          "color": palette.redError.main,
-                          "opacity": 0.2,
-                      })
+                    ? alpha(palette.redError.main, 0.2)
                     : palette.redError.light,
             },
             "success": {
                 "main": palette.greenSuccess.main,
                 "background": isDarkModeEnabled
-                    ? changeColorOpacity({
-                          "color": palette.greenSuccess.main,
-                          "opacity": 0.2,
-                      })
+                    ? alpha(palette.greenSuccess.main, 0.2)
                     : palette.greenSuccess.light,
             },
             "warning": {
                 "main": palette.orangeWarning.main,
                 "background": isDarkModeEnabled
-                    ? changeColorOpacity({
-                          "color": palette.orangeWarning.main,
-                          "opacity": 0.2,
-                      })
+                    ? alpha(palette.orangeWarning.main, 0.2)
                     : palette.orangeWarning.light,
             },
             "info": {
                 "main": palette.blueInfo.main,
                 "background": isDarkModeEnabled
-                    ? changeColorOpacity({
-                          "color": palette.blueInfo.main,
-                          "opacity": 0.2,
-                      })
+                    ? alpha(palette.blueInfo.main, 0.2)
                     : palette.blueInfo.light,
             },
         },
