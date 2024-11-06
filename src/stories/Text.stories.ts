@@ -33,11 +33,11 @@ const variantNameBase = [
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { Text },
-    "argTypes": {
-        "typo": {
-            "options": variantNameBase,
-            "control": { "type": "radio" },
+    wrappedComponent: { Text },
+    argTypes: {
+        typo: {
+            options: variantNameBase,
+            control: { type: "radio" },
         },
     },
 });
@@ -45,6 +45,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Vue1 = getStory({
-    "typo": "body 1",
-    "children": "Lorem ipsum dolor sit amet",
+    typo: "body 1",
+    children: "Lorem ipsum dolor sit amet",
 });

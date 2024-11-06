@@ -21,8 +21,8 @@ function Component(
         new Array(tabCount).fill("").map(
             (...[, i]) =>
                 ({
-                    "id": `tab${i}`,
-                    "title": `Tab ${i}`,
+                    id: `tab${i}`,
+                    title: `Tab ${i}`,
                 } as const),
         ),
     );
@@ -48,44 +48,44 @@ function Component(
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "defaultWidth": 700,
-    "wrappedComponent": { [symToStr({ Tabs })]: Component },
+    defaultWidth: 700,
+    wrappedComponent: { [symToStr({ Tabs })]: Component },
 });
 
 export default meta;
 
 export const VueSmall = getStory({
-    "size": "small",
-    "maxTabCount": 4,
-    "tabCount": 9,
+    size: "small",
+    maxTabCount: 4,
+    tabCount: 9,
 });
 
 export const VueLarge = getStory({
-    "size": "big",
-    "maxTabCount": 4,
-    "tabCount": 9,
+    size: "big",
+    maxTabCount: 4,
+    tabCount: 9,
 });
 
 export const VueAllTabsVisible = getStory({
-    "size": "big",
-    "maxTabCount": 10,
-    "tabCount": 5,
+    size: "big",
+    maxTabCount: 10,
+    tabCount: 5,
 });
 
 export const NoArrowNeeded = getStory({
-    "size": "big",
-    "maxTabCount": 4,
-    "tabCount": 4,
+    size: "big",
+    maxTabCount: 4,
+    tabCount: 4,
 });
 
 export const OnlyTwoTabs = getStory({
-    "size": "big",
-    "maxTabCount": 4,
-    "tabCount": 2,
+    size: "big",
+    maxTabCount: 4,
+    tabCount: 2,
 });
 
 export const OnlyOneTab = getStory({
-    "size": "big",
-    "maxTabCount": 4,
-    "tabCount": 1,
+    size: "big",
+    maxTabCount: 4,
+    tabCount: 1,
 });

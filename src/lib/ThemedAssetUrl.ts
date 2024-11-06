@@ -52,6 +52,6 @@ export function useResolveThemedAssetUrl() {
     );
 
     return {
-        "resolveThemedAssetUrl": f,
+        resolveThemedAssetUrl: f,
     };
 }

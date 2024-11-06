@@ -79,21 +79,21 @@ export const SimpleOrRangeSlider = memo((props: SimpleOrRangeSliderProps) => {
             } else {
                 assert(is<number>(value));
 
-                onValueChange({ "valueLow": NaN, "valueHigh": value });
+                onValueChange({ valueLow: NaN, valueHigh: value });
             }
         },
     );
 
     const textComponentProps = useMemo(
         () => ({
-            "id": `text-${~~(Math.random() * 1000000)}`,
+            id: `text-${~~(Math.random() * 1000000)}`,
         }),
         [],
     );
 
     const ValueDisplayWp = useWithProps(ValueDisplay, {
         unit,
-        "maxValue": max,
+        maxValue: max,
     });
 
     const {
@@ -159,24 +159,24 @@ const useStyles = tss
     .withName({ SimpleOrRangeSlider })
     .withParams<{ isRange: boolean }>()
     .create(({ theme, isRange }) => ({
-        "label": {
-            "marginBottom": theme.spacing(3),
+        label: {
+            marginBottom: theme.spacing(3),
         },
-        "helpIcon": {
-            "marginLeft": theme.spacing(2),
-            "color": theme.colors.useCases.typography.textSecondary,
-            "verticalAlign": "text-bottom",
+        helpIcon: {
+            marginLeft: theme.spacing(2),
+            color: theme.colors.useCases.typography.textSecondary,
+            verticalAlign: "text-bottom",
         },
-        "wrapper": {
-            "display": "flex",
-            "alignItems": "center",
+        wrapper: {
+            display: "flex",
+            alignItems: "center",
         },
-        "slider": {
-            "flex": 1,
+        slider: {
+            flex: 1,
             //"margin": theme.spacing(0, 4),
-            "margin": theme.spacing({ "topBottom": 0, "rightLeft": 4 }),
-            "marginLeft": isRange ? undefined : 0,
-            "minWidth": 150,
+            margin: theme.spacing({ topBottom: 0, rightLeft: 4 }),
+            marginLeft: isRange ? undefined : 0,
+            minWidth: 150,
         },
     }));
 
@@ -191,7 +191,7 @@ const { ValueDisplay } = (() => {
     const ValueDisplay = memo((props: Props) => {
         const { value, maxValue, unit, semantic } = props;
 
-        const { classes } = useStyles({ "maxText": `${maxValue} ${unit}` });
+        const { classes } = useStyles({ maxText: `${maxValue} ${unit}` });
 
         return (
             <div className={classes.root}>
@@ -215,27 +215,27 @@ const { ValueDisplay } = (() => {
         .withName({ ValueDisplay })
         .withParams<{ maxText: string }>()
         .create(({ theme, maxText }) => ({
-            "root": {
-                "display": "flex",
-                "alignItems": "center",
+            root: {
+                display: "flex",
+                alignItems: "center",
             },
-            "caption": {
-                "color": theme.colors.useCases.typography.textSecondary,
+            caption: {
+                color: theme.colors.useCases.typography.textSecondary,
             },
-            "label": {
-                "display": "inline-flex",
-                "flexDirection": "column",
-                "justifyContent": "space-between",
-                "alignItems": "flex-start",
+            label: {
+                display: "inline-flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
                 "&::after": {
-                    "content": `"${maxText}_"`,
-                    "height": 0,
-                    "visibility": "hidden",
-                    "overflow": "hidden",
-                    "userSelect": "none",
-                    "pointerEvents": "none",
+                    content: `"${maxText}_"`,
+                    height: 0,
+                    visibility: "hidden",
+                    overflow: "hidden",
+                    userSelect: "none",
+                    pointerEvents: "none",
                     "@media speech": {
-                        "display": "none",
+                        display: "none",
                     },
                 },
             },

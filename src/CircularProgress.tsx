@@ -26,8 +26,8 @@ const useStyles = tss
     .withName({ CircularProgress })
     .withParams<Pick<Required<CircularProgressProps>, "color">>()
     .create(({ theme, color }) => ({
-        "root": {
-            "color":
+        root: {
+            color:
                 color !== "textPrimary"
                     ? undefined
                     : theme.colors.useCases.typography.textPrimary,

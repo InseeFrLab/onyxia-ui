@@ -16,7 +16,7 @@ import { useTranslation } from "./i18n";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ GitHubPicker })]: Component },
+    wrappedComponent: { [symToStr({ GitHubPicker })]: Component },
 });
 
 export default meta;
@@ -73,10 +73,10 @@ function Component() {
         );
     });
 
-    const { t } = useTranslation({ "Picker": null });
+    const { t } = useTranslation({ Picker: null });
 
     return (
-        <div style={{ "minHeight": 400 }}>
+        <div style={{ minHeight: 400 }}>
             {selectedTags.map(tag => (
                 <span key={tag}>{tag}&nbsp;</span>
             ))}
@@ -85,8 +85,8 @@ function Component() {
                 ref={buttonRef}
                 onClick={() =>
                     evtGitHubPickerAction.post({
-                        "action": "open",
-                        "anchorEl":
+                        action: "open",
+                        anchorEl:
                             (assert(buttonRef.current !== null),
                             buttonRef.current),
                     })
@@ -101,10 +101,10 @@ function Component() {
                 evtAction={evtGitHubPickerAction}
                 getTagColor={getTagColor}
                 texts={{
-                    "label": t("github picker label"),
+                    label: t("github picker label"),
                     "create tag": ({ tag }) =>
                         t("github picker create tag", { tag }),
-                    "done": t("github picker done"),
+                    done: t("github picker done"),
                 }}
             />
         </div>

@@ -29,7 +29,7 @@ export const Markdown = memo((props: MarkdownProps) => {
         children,
         getLinkProps = id<MarkdownProps.GetLinkProps>(({ href }) => ({
             href,
-            ...(!href.startsWith("/") ? { "target": "blank" } : {}),
+            ...(!href.startsWith("/") ? { target: "blank" } : {}),
         })),
         inline: isInline = false,
         allowHtml: doAllowHtml = false,
@@ -38,14 +38,14 @@ export const Markdown = memo((props: MarkdownProps) => {
 
     const renderers = useMemo(
         () => ({
-            "link": ({
+            link: ({
                 href,
                 children,
             }: {
                 children: React.ReactNode;
                 href: string;
             }) => <MuiLink {...getLinkProps({ href })}>{children}</MuiLink>,
-            "paragraph": ({ children }: { children: React.ReactNode }) =>
+            paragraph: ({ children }: { children: React.ReactNode }) =>
                 createElement(isInline ? "span" : "p", { children }),
         }),
         [getLinkProps, isInline],
@@ -55,7 +55,7 @@ export const Markdown = memo((props: MarkdownProps) => {
 
     return createElement(
         isInline ? "span" : "div",
-        { "lang": lang, "className": cx(classes.root, className) },
+        { lang: lang, className: cx(classes.root, className) },
         <ReactMarkdown allowDangerousHtml={doAllowHtml} renderers={renderers}>
             {children}
         </ReactMarkdown>,
@@ -65,7 +65,7 @@ export const Markdown = memo((props: MarkdownProps) => {
 Markdown.displayName = symToStr({ Markdown });
 
 const useStyles = tss.withName("Markdown").create({
-    "root": {},
+    root: {},
 });
 
 export function createMarkdown(params: {
@@ -90,5 +90,5 @@ export function createMarkdown(params: {
 
     MarkdownWithLinkRenderer.displayName = Markdown.displayName;
 
-    return { "Markdown": MarkdownWithLinkRenderer };
+    return { Markdown: MarkdownWithLinkRenderer };
 }

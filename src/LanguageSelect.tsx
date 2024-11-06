@@ -101,8 +101,8 @@ export function LanguageSelect<Language extends string>(
                             }
                         })()}
                         className={css({
-                            "marginLeft": theme.spacing(2),
-                            "textTransform": "capitalize",
+                            marginLeft: theme.spacing(2),
+                            textTransform: "capitalize",
                         })}
                     >
                         {languagesPrettyPrint[language]}
@@ -147,8 +147,8 @@ const useStyles = tss
     }>()
     .withName({ LanguageSelect })
     .create(({ theme, buttonWidth, variant }) => ({
-        "button": {
-            "padding": (() => {
+        button: {
+            padding: (() => {
                 switch (variant) {
                     case "big":
                         return undefined;
@@ -157,13 +157,13 @@ const useStyles = tss
                 }
             })(),
         },
-        "menu": {
+        menu: {
             "& .Mui-selected": {
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+                backgroundColor: theme.colors.useCases.surfaces.surface1,
             },
             "& .MuiPaper-root": {
-                "backgroundColor": theme.colors.useCases.surfaces.background,
-                "width": (() => {
+                backgroundColor: theme.colors.useCases.surfaces.background,
+                width: (() => {
                     switch (variant) {
                         case "big":
                             return buttonWidth;
@@ -173,10 +173,10 @@ const useStyles = tss
                 })(),
             },
             "& a": {
-                "color": theme.colors.useCases.typography.textPrimary,
+                color: theme.colors.useCases.typography.textPrimary,
             },
         },
-        "icon": {
-            "color": theme.colors.useCases.typography.textPrimary,
+        icon: {
+            color: theme.colors.useCases.typography.textPrimary,
         },
     }));

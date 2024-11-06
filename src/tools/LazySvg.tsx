@@ -98,7 +98,7 @@ export const LazySvg = memo(
                 className={[class_svgRootAttrs, svgComponentProps.className]
                     .filter(className => !!className)
                     .join(" ")}
-                dangerouslySetInnerHTML={{ "__html": svgInnerHtml }}
+                dangerouslySetInnerHTML={{ __html: svgInnerHtml }}
             />
         );
     }),
@@ -170,5 +170,5 @@ export const fetchSvgAsHTMLElement = memoize(
 
         return svgElement;
     },
-    { "promise": true },
+    { promise: true },
 );

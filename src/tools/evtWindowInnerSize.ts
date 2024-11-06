@@ -7,8 +7,8 @@ export const getEvtWindowInnerSize = memoize(() => {
         .toStateful()
         .pipe(() => [
             {
-                "windowInnerWidth": window.innerWidth,
-                "windowInnerHeight": window.innerHeight,
+                windowInnerWidth: window.innerWidth,
+                windowInnerHeight: window.innerHeight,
             },
         ])
         .pipe(onlyIfChanged());

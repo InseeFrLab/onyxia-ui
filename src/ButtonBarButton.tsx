@@ -52,27 +52,27 @@ export const ButtonBarButton = memo(
 ButtonBarButton.displayName = symToStr({ ButtonBarButton });
 
 const useStyles = tss.withName({ ButtonBarButton }).create(({ theme }) => ({
-    "root": {
-        "backgroundColor": "transparent",
-        "borderRadius": "unset",
-        "borderColor": "transparent",
-        "transition": "none",
+    root: {
+        backgroundColor: "transparent",
+        borderRadius: "unset",
+        borderColor: "transparent",
+        transition: "none",
         "& > *": {
-            "transition": "none",
+            transition: "none",
         },
         "&:hover.MuiButton-text": {
-            "color": theme.colors.useCases.typography.textPrimary,
-            "borderBottomColor": theme.colors.useCases.buttons.actionActive,
-            "boxSizing": "border-box",
-            "backgroundColor": "unset",
+            color: theme.colors.useCases.typography.textPrimary,
+            borderBottomColor: theme.colors.useCases.buttons.actionActive,
+            boxSizing: "border-box",
+            backgroundColor: "unset",
             "& .MuiSvgIcon-root": {
-                "color": theme.colors.useCases.typography.textPrimary,
+                color: theme.colors.useCases.typography.textPrimary,
             },
         },
         "&:active.MuiButton-text": {
-            "color": theme.colors.useCases.typography.textFocus,
+            color: theme.colors.useCases.typography.textFocus,
             "& .MuiSvgIcon-root": {
-                "color": theme.colors.useCases.typography.textFocus,
+                color: theme.colors.useCases.typography.textFocus,
             },
         },
     },

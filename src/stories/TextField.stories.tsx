@@ -4,11 +4,11 @@ import { getStoryFactory, logCallbacks } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { TextField },
-    "argTypes": {
+    wrappedComponent: { TextField },
+    argTypes: {
         "inputProps_aria-invalid": {
-            "control": {
-                "type": "boolean",
+            control: {
+                type: "boolean",
             },
         },
     },
@@ -17,19 +17,19 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const VueDefault = getStory({
-    "defaultValue": "",
+    defaultValue: "",
     "inputProps_aria-label": "the aria label",
-    "label": "This is the label",
-    "getIsValidValue": value => {
+    label: "This is the label",
+    getIsValidValue: value => {
         console.log("getIsValidValue invoked: ", value);
 
         if (value.includes(" ")) {
-            return { "isValidValue": false, "message": "Can't include spaces" };
+            return { isValidValue: false, message: "Can't include spaces" };
         }
 
-        return { "isValidValue": true };
+        return { isValidValue: true };
     },
-    "transformValueBeingTyped": value => {
+    transformValueBeingTyped: value => {
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
@@ -43,20 +43,20 @@ export const VueDefault = getStory({
 });
 
 export const VuePassword = getStory({
-    "defaultValue": "",
+    defaultValue: "",
     "inputProps_aria-label": "password",
-    "label": "Password",
-    "type": "password",
-    "getIsValidValue": value => {
+    label: "Password",
+    type: "password",
+    getIsValidValue: value => {
         console.log("getIsValidValue invoked: ", value);
 
         if (value.includes(" ")) {
-            return { "isValidValue": false, "message": "Can't include spaces" };
+            return { isValidValue: false, message: "Can't include spaces" };
         }
 
-        return { "isValidValue": true };
+        return { isValidValue: true };
     },
-    "transformValueBeingTyped": value => {
+    transformValueBeingTyped: value => {
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
@@ -70,21 +70,21 @@ export const VuePassword = getStory({
 });
 
 export const VueWithHint = getStory({
-    "helperText": "This is an helper text",
-    "defaultValue": "",
+    helperText: "This is an helper text",
+    defaultValue: "",
     "inputProps_aria-label": "input with hint",
-    "label": "Foo bar",
-    "type": "text",
-    "getIsValidValue": value => {
+    label: "Foo bar",
+    type: "text",
+    getIsValidValue: value => {
         console.log("getIsValidValue invoked: ", value);
 
         if (value.includes(" ")) {
-            return { "isValidValue": false, "message": "Can't include spaces" };
+            return { isValidValue: false, message: "Can't include spaces" };
         }
 
-        return { "isValidValue": true };
+        return { isValidValue: true };
     },
-    "transformValueBeingTyped": value => {
+    transformValueBeingTyped: value => {
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
@@ -98,22 +98,22 @@ export const VueWithHint = getStory({
 });
 
 export const VueWithHintAndQuestionMark = getStory({
-    "helperText": "This is an helper text",
-    "questionMarkHelperText": "This is an extra helper text",
-    "defaultValue": "",
+    helperText: "This is an helper text",
+    questionMarkHelperText: "This is an extra helper text",
+    defaultValue: "",
     "inputProps_aria-label": "input with hint",
-    "label": "Foo bar",
-    "type": "text",
-    "getIsValidValue": value => {
+    label: "Foo bar",
+    type: "text",
+    getIsValidValue: value => {
         console.log("getIsValidValue invoked: ", value);
 
         if (value.includes(" ")) {
-            return { "isValidValue": false, "message": "Can't include spaces" };
+            return { isValidValue: false, message: "Can't include spaces" };
         }
 
-        return { "isValidValue": true };
+        return { isValidValue: true };
     },
-    "transformValueBeingTyped": value => {
+    transformValueBeingTyped: value => {
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
@@ -127,20 +127,20 @@ export const VueWithHintAndQuestionMark = getStory({
 });
 
 export const VueTextArea = getStory({
-    "doRenderAsTextArea": true,
-    "defaultValue": "First line\nSecond line",
+    doRenderAsTextArea: true,
+    defaultValue: "First line\nSecond line",
     "inputProps_aria-label": "the aria label",
-    "label": "This is the label",
-    "getIsValidValue": value => {
+    label: "This is the label",
+    getIsValidValue: value => {
         console.log("getIsValidValue invoked: ", value);
 
         if (value.includes(" ")) {
-            return { "isValidValue": false, "message": "Can't include spaces" };
+            return { isValidValue: false, message: "Can't include spaces" };
         }
 
-        return { "isValidValue": true };
+        return { isValidValue: true };
     },
-    "transformValueBeingTyped": value => {
+    transformValueBeingTyped: value => {
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
@@ -154,24 +154,24 @@ export const VueTextArea = getStory({
 });
 
 export const VueWithSuggestions = getStory({
-    "defaultValue": "",
-    "freeSolo": true,
+    defaultValue: "",
+    freeSolo: true,
     "inputProps_aria-label": "the aria label",
-    "label": "This is the label",
-    "getIsValidValue": value => {
+    label: "This is the label",
+    getIsValidValue: value => {
         console.log("getIsValidValue invoked: ", value);
 
         if (value.includes(" ")) {
-            return { "isValidValue": false, "message": "Can't include spaces" };
+            return { isValidValue: false, message: "Can't include spaces" };
         }
 
-        return { "isValidValue": true };
+        return { isValidValue: true };
     },
-    "transformValueBeingTyped": value => {
+    transformValueBeingTyped: value => {
         console.log("transformValueBeingTyped invoked: ", value);
         return value;
     },
-    "options": ["first", "second", "third"],
+    options: ["first", "second", "third"],
     ...logCallbacks([
         "onEscapeKeyDown",
         "onEnterKeyDown",

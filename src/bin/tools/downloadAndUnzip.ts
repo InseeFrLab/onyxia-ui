@@ -115,7 +115,7 @@ function readNpmConfig(): Promise<string> {
 
         try {
             stdout = await exec("npm config get", {
-                "encoding": "utf8",
+                encoding: "utf8",
                 cwd,
             }).then(({ stdout }) => stdout);
         } catch (error) {
@@ -217,12 +217,12 @@ export async function downloadAndUnzip(
 
     const zipFileBasename = generateFileNameFromURL({
         url,
-        "preCacheTransform":
+        preCacheTransform:
             preCacheTransform === undefined
                 ? undefined
                 : {
-                      "actionCacheId": preCacheTransform.actionCacheId,
-                      "actionFootprint": preCacheTransform.action.toString(),
+                      actionCacheId: preCacheTransform.actionCacheId,
+                      actionFootprint: preCacheTransform.action.toString(),
                   },
     });
 
@@ -239,7 +239,7 @@ export async function downloadAndUnzip(
     if (!(await exists(zipFilePath))) {
         const opts = await getFetchOptions();
         const response = await fetch(url, opts);
-        await mkdir(pathDirname(zipFilePath), { "recursive": true });
+        await mkdir(pathDirname(zipFilePath), { recursive: true });
         /**
          * The correct way to fix this is to upgrade node-fetch beyond 3.2.5
          * (see https://github.com/node-fetch/node-fetch/issues/1295#issuecomment-1144061991.)
@@ -258,27 +258,27 @@ export async function downloadAndUnzip(
             await unzip(zipFilePath, extractDirPath, specificDirsToExtract);
 
             await preCacheTransform?.action({
-                "destDirPath": extractDirPath,
+                destDirPath: extractDirPath,
             });
 
             await unlink(zipFilePath);
 
             await zip(extractDirPath, zipFilePath);
 
-            await rm(extractDirPath, { "recursive": true });
+            await rm(extractDirPath, { recursive: true });
         }
     }
 
     await unzip(zipFilePath, extractDirPath);
 
     transformCodebase({
-        "srcDirPath": extractDirPath,
-        "destDirPath": destDirPath,
+        srcDirPath: extractDirPath,
+        destDirPath: destDirPath,
     });
 
     if (!rest.doUseCache) {
-        await rm(cacheRoot, { "recursive": true });
+        await rm(cacheRoot, { recursive: true });
     } else {
-        await rm(extractDirPath, { "recursive": true });
+        await rm(extractDirPath, { recursive: true });
     }
 }

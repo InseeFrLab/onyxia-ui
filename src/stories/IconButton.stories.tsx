@@ -14,11 +14,11 @@ const icons = [
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { IconButton },
-    "argTypes": {
-        "icon": {
-            "options": icons,
-            "control": { "type": "radio" },
+    wrappedComponent: { IconButton },
+    argTypes: {
+        icon: {
+            options: icons,
+            control: { type: "radio" },
         },
     },
 });
@@ -26,6 +26,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Vue = getStory({
-    "icon": icons[0],
+    icon: icons[0],
     ...logCallbacks(["onClick"]),
 });

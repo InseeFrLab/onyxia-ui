@@ -5,21 +5,21 @@ import { css } from "./tss";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { Tag },
+    wrappedComponent: { Tag },
 });
 
 export default meta;
 
 export const VueDefault = getStory({
-    "text": "Machine learning",
+    text: "Machine learning",
 });
 
 export const VueCustom = getStory({
-    "className": css({
-        "backgroundColor": "pink",
+    className: css({
+        backgroundColor: "pink",
         "& > p": {
-            "color": "black",
+            color: "black",
         },
     }),
-    "text": "Machine learning",
+    text: "Machine learning",
 });

@@ -40,7 +40,7 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
         ctx => {
             evtOpen.attach(ctx, ({ defaultText, resolveText }) =>
                 setOpenState({
-                    "text": defaultText,
+                    text: defaultText,
                     resolveText,
                 }),
             );
@@ -51,7 +51,7 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
     const onCancel = () => {
         assert(openState !== undefined);
 
-        openState.resolveText({ "doProceed": false });
+        openState.resolveText({ doProceed: false });
 
         setOpenState(undefined);
     };
@@ -74,7 +74,7 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
                             defaultValue={openState.text}
                             onValueBeingTypedChange={({ value }) => {
                                 assert(openState !== undefined);
-                                setOpenState({ ...openState, "text": value });
+                                setOpenState({ ...openState, text: value });
                             }}
                         />
 
@@ -108,8 +108,8 @@ export const TextFormDialog = memo((props: TextFormDialogProps) => {
                             assert(openState !== undefined);
 
                             openState.resolveText({
-                                "doProceed": true,
-                                "text": openState.text,
+                                doProceed: true,
+                                text: openState.text,
                             });
 
                             setOpenState(undefined);

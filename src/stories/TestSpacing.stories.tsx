@@ -13,14 +13,14 @@ function TestSpacing() {
                     <div
                         key={factor}
                         style={{
-                            "fontSize": theme.spacing(factor),
-                            "width": "1em",
-                            "height": "1em",
-                            "backgroundColor":
+                            fontSize: theme.spacing(factor),
+                            width: "1em",
+                            height: "1em",
+                            backgroundColor:
                                 Number.isInteger(factor) && factor <= 6
                                     ? "blue"
                                     : "lightblue",
-                            "margin": 20,
+                            margin: 20,
                         }}
                     />
                 ),
@@ -31,7 +31,7 @@ function TestSpacing() {
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { TestSpacing },
+    wrappedComponent: { TestSpacing },
 });
 
 export default meta;

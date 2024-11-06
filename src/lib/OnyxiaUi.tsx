@@ -131,7 +131,7 @@ export function createOnyxiaUi<
 
                 return theme;
             },
-            { "max": 1 },
+            { max: 1 },
         );
 
         return { memoizedCreateTheme };
@@ -215,7 +215,7 @@ export function createOnyxiaUi<
               return (
                   <isDarkModeEnabledContext.Provider
                       value={{
-                          "isDarkModeEnabled": evtIsDarkModeEnabled.state,
+                          isDarkModeEnabled: evtIsDarkModeEnabled.state,
                           setIsDarkModeEnabled,
                       }}
                   >
@@ -271,11 +271,11 @@ export function createOnyxiaUi<
                   "Can't use splash screen on a scoped theme provider",
               ),
               createSplashScreen({
-                  "assetUrl": splashScreenParams.assetUrl,
-                  "fadeOutDuration": splashScreenParams.fadeOutDuration,
-                  "minimumDisplayDuration":
+                  assetUrl: splashScreenParams.assetUrl,
+                  fadeOutDuration: splashScreenParams.fadeOutDuration,
+                  minimumDisplayDuration:
                       splashScreenParams.minimumDisplayDuration,
-                  "assetScaleFactor": splashScreenParams.assetScaleFactor,
+                  assetScaleFactor: splashScreenParams.assetScaleFactor,
               }).SplashScreen);
 
     function OnyxiaUi(props: { children: ReactNode; darkMode?: boolean }) {
@@ -316,7 +316,7 @@ export function createOnyxiaUi<
                           evtWindowInnerSize.state.windowInnerWidth,
                           evtRootFontSizePx.state,
                       ),
-                      "setIsDarkModeEnabled": (isDarkModeEnabled: boolean) => {
+                      setIsDarkModeEnabled: (isDarkModeEnabled: boolean) => {
                           evtIsDarkModeEnabled.state = isDarkModeEnabled;
                       },
                   },
@@ -325,6 +325,6 @@ export function createOnyxiaUi<
     return {
         OnyxiaUi,
         ofTypeTheme: null as any,
-        "evtTheme": evtTheme as any,
+        evtTheme: evtTheme as any,
     };
 }

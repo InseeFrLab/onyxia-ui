@@ -130,7 +130,7 @@ export const Button = memo(
                     return {
                         onClick,
                         href,
-                        "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                        target: doOpenNewTabIfHref ? "_blank" : undefined,
                         ...restRest,
                     };
                 })()}
@@ -181,7 +181,7 @@ const useStyles = tss
         const hoverTextColor = (() => {
             if (variant !== "primary") {
                 return theme.colors.getUseCases({
-                    "isDarkModeEnabled": !theme.isDarkModeEnabled,
+                    isDarkModeEnabled: !theme.isDarkModeEnabled,
                 }).typography.textPrimary;
             }
 
@@ -195,8 +195,8 @@ const useStyles = tss
             );
 
             const contrastRatioPref = getContrastRatio({
-                "backgroundHex": hoverBackgroundColor,
-                "textHex": textColorInDarkMode,
+                backgroundHex: hoverBackgroundColor,
+                textHex: textColorInDarkMode,
             });
 
             if (contrastRatioPref > 2.6) {
@@ -204,8 +204,8 @@ const useStyles = tss
             }
 
             const contrastRatioAlt = getContrastRatio({
-                "backgroundHex": hoverBackgroundColor,
-                "textHex": textColorInLightMode,
+                backgroundHex: hoverBackgroundColor,
+                textHex: textColorInLightMode,
             });
 
             return contrastRatioAlt > contrastRatioPref
@@ -214,7 +214,7 @@ const useStyles = tss
         })();
 
         return {
-            "root": (() => {
+            root: (() => {
                 const paddingSpacingTopBottom = 2;
 
                 const borderWidth = (() => {
@@ -236,8 +236,8 @@ const useStyles = tss
                     );
 
                 return {
-                    "textTransform": "unset" as const,
-                    "backgroundColor": disabled
+                    textTransform: "unset" as const,
+                    backgroundColor: disabled
                         ? theme.colors.useCases.buttons.actionDisabledBackground
                         : (() => {
                               switch (variant) {
@@ -249,10 +249,10 @@ const useStyles = tss
                                           .background;
                               }
                           })(),
-                    "borderRadius": approxHeight / 2,
+                    borderRadius: approxHeight / 2,
                     borderWidth,
-                    "borderStyle": "solid",
-                    "borderColor": disabled
+                    borderStyle: "solid",
+                    borderColor: disabled
                         ? "transparent"
                         : hoverBackgroundColor,
                     ...theme.spacing.topBottom(
@@ -272,22 +272,22 @@ const useStyles = tss
                         })(),
                     ),
                     "&.MuiButton-text": {
-                        "color": textColor,
+                        color: textColor,
                     },
 
                     "&:hover": {
-                        "backgroundColor": hoverBackgroundColor,
+                        backgroundColor: hoverBackgroundColor,
                         "& .MuiSvgIcon-root": {
-                            "color": hoverTextColor,
+                            color: hoverTextColor,
                         },
                         "&.MuiButton-text": {
-                            "color": hoverTextColor,
+                            color: hoverTextColor,
                         },
                     },
                 } as const;
             })(),
-            "icon": {
-                "color": textColor,
+            icon: {
+                color: textColor,
             },
         };
     });

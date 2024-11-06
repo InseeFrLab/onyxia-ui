@@ -33,20 +33,20 @@ export function createUseIsDarkModeEnabledGlobalState(params: {
     const { defaultIsDarkModeEnabled } = params;
 
     const { $isDarkModeEnabled } = createUseGlobalState({
-        "name": "isDarkModeEnabled",
-        "initialState": defaultIsDarkModeEnabled,
-        "doPersistAcrossReloads": true,
+        name: "isDarkModeEnabled",
+        initialState: defaultIsDarkModeEnabled,
+        doPersistAcrossReloads: true,
     });
 
     const evtIsDarkModeEnabled: StatefulEvt<boolean> =
         statefulObservableToStatefulEvt({
-            "statefulObservable": $isDarkModeEnabled,
+            statefulObservable: $isDarkModeEnabled,
         });
 
     (() => {
         const result = retrieveParamFromUrl({
-            "url": window.location.href,
-            "name": "theme",
+            url: window.location.href,
+            name: "theme",
         });
 
         if (!result.wasPresent) {

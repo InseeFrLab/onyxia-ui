@@ -32,17 +32,17 @@ function Component(
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ RangeSlider })]: Component },
+    wrappedComponent: { [symToStr({ RangeSlider })]: Component },
 });
 
 export default meta;
 
 export const Vue1 = getStory({
-    "label": "Random-access memory (RAM)",
-    "lowExtremitySemantic": "guaranteed",
-    "highExtremitySemantic": "maximum",
-    "unit": "Mi",
-    "min": 900,
-    "max": 1100,
-    "step": 1,
+    label: "Random-access memory (RAM)",
+    lowExtremitySemantic: "guaranteed",
+    highExtremitySemantic: "maximum",
+    unit: "Mi",
+    min: 900,
+    max: 1100,
+    step: 1,
 });

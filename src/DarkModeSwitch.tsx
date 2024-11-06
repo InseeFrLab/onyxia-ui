@@ -39,9 +39,9 @@ export const DarkModeSwitch = memo((props: DarkModeSwitchProps) => {
 DarkModeSwitch.displayName = symToStr({ DarkModeSwitch });
 
 const useStyles = tss.withName({ DarkModeSwitch }).create(({ theme }) => ({
-    "root": {
-        "transition": "transform 500ms",
-        "transform": `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,
-        "transitionTimingFunction": "cubic-bezier(.34,1.27,1,1)",
+    root: {
+        transition: "transform 500ms",
+        transform: `rotate(${theme.isDarkModeEnabled ? 180 : 0}deg)`,
+        transitionTimingFunction: "cubic-bezier(.34,1.27,1,1)",
     },
 }));

@@ -70,11 +70,11 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
 
     const { classes, cx, css } = useStyles({
         tabsWrapperWidth,
-        "leftArrowWidth": areArrowsVisible ? leftArrowWidth : 0,
+        leftArrowWidth: areArrowsVisible ? leftArrowWidth : 0,
         leftArrowHeight,
         offset,
         tabWidth,
-        "classesOverrides": props.classes,
+        classesOverrides: props.classes,
     });
 
     const [firstTabIndex, setFirstTabIndex] = useState(0);
@@ -214,7 +214,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                         {tabs
                             .map(({ id, ...rest }) => ({
                                 id,
-                                "isSelected": id === activeTabId,
+                                isSelected: id === activeTabId,
                                 ...rest,
                             }))
                             .map(({ id, title, isSelected }, i) => (
@@ -227,7 +227,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
                                     className={cx(
                                         classes.tab,
                                         css({
-                                            "zIndex": isSelected
+                                            zIndex: isSelected
                                                 ? maxTabCount + 1
                                                 : maxTabCount - i,
                                         }),
@@ -261,7 +261,7 @@ export function Tabs<TabId extends string = string>(props: TabProps<TabId>) {
             </div>
             {renderLeftArrow(
                 leftArrowRef,
-                css({ "position": "fixed", "visibility": "hidden" }),
+                css({ position: "fixed", visibility: "hidden" }),
             )}
         </>
     );
@@ -293,7 +293,7 @@ const { CustomButton } = (() => {
                 CustomButtonProps,
                 "isSelected" | "isFirst" | "size" | "isDisabled" | "isVisible"
             > & {
-                "arrowDirection": undefined | "left" | "right";
+                arrowDirection: undefined | "left" | "right";
             }
         >()
         .create(
@@ -306,12 +306,12 @@ const { CustomButton } = (() => {
                 arrowDirection,
                 isVisible,
             }) => ({
-                "root": {
-                    "backgroundColor":
+                root: {
+                    backgroundColor:
                         theme.colors.useCases.surfaces[
                             isSelected ? "surface1" : "surface2"
                         ],
-                    "boxShadow":
+                    boxShadow:
                         arrowDirection === undefined && isVisible
                             ? [
                                   theme.shadows[4],
@@ -327,22 +327,22 @@ const { CustomButton } = (() => {
                                           return `inset ${theme.shadows[5]}`;
                                   }
                               })(),
-                    "padding": theme.spacing(
+                    padding: theme.spacing(
                         (() => {
                             switch (size) {
                                 case "big":
-                                    return { "topBottom": 3, "rightLeft": 4 };
+                                    return { topBottom: 3, rightLeft: 4 };
                                 case "small":
-                                    return { "topBottom": 2, "rightLeft": 3 };
+                                    return { topBottom: 2, rightLeft: 3 };
                             }
                         })(),
                     ),
-                    "display": "flex",
-                    "alignItems": "center",
-                    "cursor": !isDisabled ? "pointer" : "default",
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: !isDisabled ? "pointer" : "default",
                 },
-                "typo": {
-                    "fontWeight": isSelected ? 600 : undefined,
+                typo: {
+                    fontWeight: isSelected ? 600 : undefined,
                 },
             }),
         );
@@ -395,7 +395,7 @@ const { CustomButton } = (() => {
                 isFirst,
                 size,
                 isDisabled,
-                "arrowDirection":
+                arrowDirection:
                     props.type !== "arrow" ? undefined : props.direction,
                 isVisible,
             });
@@ -419,7 +419,7 @@ const { CustomButton } = (() => {
                                                 switch (props.direction) {
                                                     case "right":
                                                         return css({
-                                                            "transform":
+                                                            transform:
                                                                 "rotate(180deg)",
                                                         });
                                                     case "left":
@@ -427,7 +427,7 @@ const { CustomButton } = (() => {
                                                 }
                                             })(),
                                             css({
-                                                "color": isDisabled
+                                                color: isDisabled
                                                     ? theme.colors.useCases
                                                           .typography
                                                           .textDisabled
@@ -484,44 +484,44 @@ const useStyles = tss
             tabWidth,
         }) => {
             const arrows = {
-                "top": 0,
-                "zIndex": 1,
-                "position": "absolute",
+                top: 0,
+                zIndex: 1,
+                position: "absolute",
             } as const;
 
             return {
-                "root": {
-                    "backgroundColor": theme.colors.useCases.surfaces.surface1,
-                    "visibility": tabWidth === 0 ? "hidden" : "visible",
+                root: {
+                    backgroundColor: theme.colors.useCases.surfaces.surface1,
+                    visibility: tabWidth === 0 ? "hidden" : "visible",
                 },
-                "top": {
-                    "overflow": "hidden",
-                    "position": "relative",
+                top: {
+                    overflow: "hidden",
+                    position: "relative",
                 },
-                "leftArrow": {
+                leftArrow: {
                     ...arrows,
-                    "left": 0,
+                    left: 0,
                 },
-                "rightArrow": {
+                rightArrow: {
                     ...arrows,
-                    "right": 0,
+                    right: 0,
                 },
-                "tabsWrapper": {
-                    "transition": "left 250ms",
-                    "transitionTimingFunction": "ease",
-                    "position": "relative",
-                    "left": offset * tabWidth,
-                    "transform": `translateX(${leftArrowWidth}px)`,
-                    "zIndex": 0,
-                    "width": tabsWrapperWidth,
-                    "display": "flex",
+                tabsWrapper: {
+                    transition: "left 250ms",
+                    transitionTimingFunction: "ease",
+                    position: "relative",
+                    left: offset * tabWidth,
+                    transform: `translateX(${leftArrowWidth}px)`,
+                    zIndex: 0,
+                    width: tabsWrapperWidth,
+                    display: "flex",
                 },
-                "tab": {
-                    "flex": 1,
-                    "height": leftArrowHeight || undefined,
+                tab: {
+                    flex: 1,
+                    height: leftArrowHeight || undefined,
                 },
-                "content": {
-                    "padding": theme.spacing(4),
+                content: {
+                    padding: theme.spacing(4),
                 },
             };
         },

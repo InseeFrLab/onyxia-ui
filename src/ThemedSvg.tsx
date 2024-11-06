@@ -56,11 +56,11 @@ export const createThemedSvg = memoize((svgUrl: string) => {
 });
 
 const useStyles = tss.withName({ ThemedSvg }).create(({ theme }) => ({
-    "root": {
+    root: {
         ...Object.fromEntries(
             getClassesAndColors({
-                "palette": theme.colors.palette,
-                "useCases": theme.colors.useCases,
+                palette: theme.colors.palette,
+                useCases: theme.colors.useCases,
             }).map(({ className, color, attributeName }) => [
                 ["&.", "& ."].map(prefix => `${prefix}${className}`).join(", "),
                 { [attributeName]: color },
@@ -94,8 +94,8 @@ function getClassesAndColors(params: {
                 const colorGroup = colors[key];
                 for (const colorKey in colorGroup) {
                     out.push({
-                        "className": `onyxia-${attributeName}-${type}-${key}-${colorKey}`,
-                        "color": colorGroup[colorKey],
+                        className: `onyxia-${attributeName}-${type}-${key}-${colorKey}`,
+                        color: colorGroup[colorKey],
                         attributeName,
                     });
                 }
@@ -120,7 +120,7 @@ export async function getThemedSvgAsBlobUrl(params: {
     const { svgUrl, isDarkModeEnabled, palette, useCases } = params;
 
     const resolvedUrl = resolveThemedAssetUrl({
-        "themedAssetUrl": svgUrl,
+        themedAssetUrl: svgUrl,
         isDarkModeEnabled,
     });
 
@@ -146,7 +146,7 @@ export async function getThemedSvgAsBlobUrl(params: {
     })(svgElement);
 
     const svg = new XMLSerializer().serializeToString(svgElement);
-    const blob = new Blob([svg], { "type": "image/svg+xml" });
+    const blob = new Blob([svg], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
 
     if (url.length >= 65536) {

@@ -40,14 +40,14 @@ export const Alert = memo(
 
         const { classes, cx } = useStyles({
             severity,
-            "classesOverrides": props.classes,
+            classesOverrides: props.classes,
         });
 
         const { isClosed, uncontrolledClose } = (function useClosure() {
             const [isClosed, uncontrolledClose] = useReducer(() => true, false);
 
             return {
-                "isClosed": "isClosed" in rest ? rest.isClosed : isClosed,
+                isClosed: "isClosed" in rest ? rest.isClosed : isClosed,
                 uncontrolledClose,
             };
         })();
@@ -62,8 +62,8 @@ export const Alert = memo(
                 ref={ref}
                 severity={severity}
                 classes={{
-                    "action": classes.action,
-                    "icon": classes.icon,
+                    action: classes.action,
+                    icon: classes.icon,
                 }}
                 action={
                     "doDisplayCross" in rest &&
@@ -101,19 +101,19 @@ const useStyles = tss
         severity: AlertProps["severity"];
     }>()
     .create(({ theme, severity }) => ({
-        "root": {
-            "alignItems": "center",
-            "color": theme.colors.useCases.typography.textPrimary,
-            "backgroundColor":
+        root: {
+            alignItems: "center",
+            color: theme.colors.useCases.typography.textPrimary,
+            backgroundColor:
                 theme.colors.useCases.alertSeverity[severity].background,
         },
-        "icon": {
+        icon: {
             "& svg": {
-                "color": theme.colors.useCases.alertSeverity[severity].main,
+                color: theme.colors.useCases.alertSeverity[severity].main,
             },
         },
-        "action": {
-            "alignItems": "center",
-            "padding": 0,
+        action: {
+            alignItems: "center",
+            padding: 0,
         },
     }));

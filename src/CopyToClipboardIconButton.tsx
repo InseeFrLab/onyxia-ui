@@ -67,9 +67,9 @@ const useStyles = tss
     .withName({ CopyToClipboardIconButton })
     .withParams<{ isCopyFeedbackOn: boolean }>()
     .create(({ theme, isCopyFeedbackOn }) => ({
-        "root": {
+        root: {
             "&& svg": {
-                "color": isCopyFeedbackOn
+                color: isCopyFeedbackOn
                     ? theme.colors.useCases.alertSeverity.success.main
                     : undefined,
             },

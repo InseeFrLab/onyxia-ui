@@ -135,14 +135,14 @@ export const CollapsibleWrapper = memo((props: CollapsibleWrapperProps) => {
         <div
             className={cx(
                 css({
-                    "height": isCollapsed
+                    height: isCollapsed
                         ? 0
                         : childrenWrapperHeight || undefined,
-                    "opacity": isCollapsed ? 0 : 1,
-                    "transition": ["height", "padding", "margin", "opacity"]
+                    opacity: isCollapsed ? 0 : 1,
+                    transition: ["height", "padding", "margin", "opacity"]
                         .map(prop => `${prop} ${transitionDuration}ms`)
                         .join(", "),
-                    "overflow": "hidden",
+                    overflow: "hidden",
                 }),
                 className,
             )}

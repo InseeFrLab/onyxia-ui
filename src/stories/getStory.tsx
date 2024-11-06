@@ -78,21 +78,21 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
             <>
                 <GlobalStyles
                     styles={{
-                        "body": {
-                            "padding": `0 !important`,
-                            "backgroundColor": `${theme.colors.useCases.surfaces.surface1} !important`,
+                        body: {
+                            padding: `0 !important`,
+                            backgroundColor: `${theme.colors.useCases.surfaces.surface1} !important`,
                         },
                         ".MuiScopedCssBaseline-root": {
-                            "padding": theme.spacing(4),
+                            padding: theme.spacing(4),
                         },
                     }}
                 />
                 <ScreenSize />
                 <div
                     style={{
-                        "width": width || undefined,
-                        "border": `1px dashed ${theme.colors.useCases.typography.textTertiary}`,
-                        "display": "inline-block",
+                        width: width || undefined,
+                        border: `1px dashed ${theme.colors.useCases.typography.textTertiary}`,
+                        display: "inline-block",
                     }}
                 >
                     <Component {...props} />
@@ -105,8 +105,8 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         const out = Template.bind({});
 
         out.args = {
-            "darkMode": getIsDarkModeEnabledOsDefault(),
-            "width": defaultWidth ?? 0,
+            darkMode: getIsDarkModeEnabledOsDefault(),
+            width: defaultWidth ?? 0,
             ...props,
         };
 
@@ -114,16 +114,16 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
     }
 
     return {
-        "meta": id<Meta>({
-            "title": `${sectionName}/${symToStr(wrappedComponent)}`,
-            "component": Component,
-            "argTypes": {
-                "width": {
-                    "control": {
-                        "type": "range",
-                        "min": 0,
-                        "max": 1920,
-                        "step": 1,
+        meta: id<Meta>({
+            title: `${sectionName}/${symToStr(wrappedComponent)}`,
+            component: Component,
+            argTypes: {
+                width: {
+                    control: {
+                        type: "range",
+                        min: 0,
+                        max: 1920,
+                        step: 1,
                     },
                 },
                 ...argTypes,

@@ -27,22 +27,22 @@ let minimumDisplayDuration = 1000;
 
 const { useSplashScreen, useSplashScreenStatus } = (() => {
     const evtDisplayState = Evt.create({
-        "count": 1,
-        "isTransparencyEnabled": false,
-        "prevTime": 0,
-        "onHiddens": id<(() => void)[]>([]),
+        count: 1,
+        isTransparencyEnabled: false,
+        prevTime: 0,
+        onHiddens: id<(() => void)[]>([]),
     });
 
     const { globalHideSplashScreen } = (() => {
         const { getDoUseDelay } = (() => {
             const { $lastDelayedTime } = createUseGlobalState({
-                "name": "lastDelayedTime",
-                "initialState": 0,
-                "doPersistAcrossReloads": true,
+                name: "lastDelayedTime",
+                initialState: 0,
+                doPersistAcrossReloads: true,
             });
 
             const evtLastDelayedTime = statefulObservableToStatefulEvt<number>({
-                "statefulObservable": $lastDelayedTime,
+                statefulObservable: $lastDelayedTime,
             });
 
             function getDoUseDelay() {
@@ -68,7 +68,7 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 
             evtDisplayState.state = {
                 ...evtDisplayState.state,
-                "prevTime": Date.now(),
+                prevTime: Date.now(),
             };
         });
 
@@ -90,10 +90,10 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
 
     function globalShowSplashScreen(params: { enableTransparency: boolean }) {
         evtDisplayState.state = {
-            "count": evtDisplayState.state.count + 1,
-            "isTransparencyEnabled": params.enableTransparency,
-            "prevTime": Date.now(),
-            "onHiddens": [],
+            count: evtDisplayState.state.count + 1,
+            isTransparencyEnabled: params.enableTransparency,
+            prevTime: Date.now(),
+            onHiddens: [],
         };
     }
 
@@ -103,8 +103,8 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
         const { isSplashScreenShown, isTransparencyEnabled } =
             useGuaranteedMemo(
                 () => ({
-                    "isSplashScreenShown": evtDisplayState.state.count > 0,
-                    "isTransparencyEnabled":
+                    isSplashScreenShown: evtDisplayState.state.count > 0,
+                    isTransparencyEnabled:
                         evtDisplayState.state.isTransparencyEnabled,
                 }),
                 [evtDisplayState.state],
@@ -178,7 +178,7 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
         return {
             isSplashScreenShown,
             isTransparencyEnabled,
-            "hideRootSplashScreen": globalHideSplashScreen,
+            hideRootSplashScreen: globalHideSplashScreen,
             showSplashScreen,
             hideSplashScreen,
         };
@@ -349,34 +349,34 @@ export function createSplashScreen(params: SplashScreenParams) {
                 assetScaleFactor,
                 classes,
             }) => ({
-                "root": {
-                    "width": "100%",
-                    "height": window.innerHeight,
-                    "position": "fixed",
-                    "top": 0,
-                    "left": 0,
-                    "zIndex": 10,
-                    "backgroundColor": (() => {
+                root: {
+                    width: "100%",
+                    height: window.innerHeight,
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    zIndex: 10,
+                    backgroundColor: (() => {
                         const color = theme.colors.useCases.surfaces.background;
 
                         return isTransparencyEnabled
                             ? alpha(color, 0.6)
                             : color;
                     })(),
-                    "backdropFilter": isTransparencyEnabled
+                    backdropFilter: isTransparencyEnabled
                         ? "blur(10px)"
                         : undefined,
-                    "display": "flex",
-                    "alignItems": "center",
-                    "justifyContent": "center",
-                    "visibility": isVisible ? "visible" : "hidden",
-                    "opacity": isFadingOut ? 0 : 1,
-                    "transition": `opacity ease-in-out ${fadeOutDuration}ms`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    visibility: isVisible ? "visible" : "hidden",
+                    opacity: isFadingOut ? 0 : 1,
+                    transition: `opacity ease-in-out ${fadeOutDuration}ms`,
                     [`& svg.${classes.themedImage}`]: {
                         "&.splashscreen-animation": {
-                            "opacity": 0,
-                            "animation": getAnimation("3s"),
-                            "animationDelay": "0.3s",
+                            opacity: 0,
+                            animation: getAnimation("3s"),
+                            animationDelay: "0.3s",
                         },
                         ...Object.fromEntries(
                             [".3s", ".7s", "1.1s"].map(
@@ -385,8 +385,8 @@ export function createSplashScreen(params: SplashScreenParams) {
                                         index + 1
                                     }`,
                                     {
-                                        "opacity": 0,
-                                        "animation": getAnimation("3.5s"),
+                                        opacity: 0,
+                                        animation: getAnimation("3.5s"),
                                         animationDelay,
                                     },
                                 ],
@@ -394,13 +394,13 @@ export function createSplashScreen(params: SplashScreenParams) {
                         ),
                     },
                     [`& img.${classes.themedImage}`]: {
-                        "opacity": 0,
-                        "animation": getAnimation("3s"),
-                        "animationDelay": "0.3s",
+                        opacity: 0,
+                        animation: getAnimation("3s"),
+                        animationDelay: "0.3s",
                     },
                 },
-                "themedImage": {
-                    "height": `${assetScaleFactor * 15}%`,
+                themedImage: {
+                    height: `${assetScaleFactor * 15}%`,
                 },
             }),
         );

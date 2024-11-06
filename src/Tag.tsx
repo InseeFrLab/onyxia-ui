@@ -14,7 +14,7 @@ export const Tag = memo((props: TagProps) => {
     const { text, className, onClick } = props;
 
     const { classes, cx } = useStyles({
-        "classesOverrides": props.classes,
+        classesOverrides: props.classes,
     });
 
     return (
@@ -31,18 +31,17 @@ export const Tag = memo((props: TagProps) => {
 });
 
 const useStyles = tss.withName({ Tag }).create(({ theme }) => ({
-    "root": {
-        "backgroundColor":
+    root: {
+        backgroundColor:
             theme.colors.palette[theme.isDarkModeEnabled ? "light" : "dark"]
                 .main,
-        "padding": theme.spacing({ "topBottom": 1, "rightLeft": 2 }),
-        "borderRadius": theme.spacing(3),
-        "display": "inline-block",
-        "cursor": "pointer",
+        padding: theme.spacing({ topBottom: 1, rightLeft: 2 }),
+        borderRadius: theme.spacing(3),
+        display: "inline-block",
+        cursor: "pointer",
     },
-    "text": {
-        "color":
-            theme.colors.palette[theme.isDarkModeEnabled ? "dark" : "light"]
-                .main,
+    text: {
+        color: theme.colors.palette[theme.isDarkModeEnabled ? "dark" : "light"]
+            .main,
     },
 }));

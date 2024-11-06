@@ -50,7 +50,7 @@ export const Dialog = memo((props: DialogProps) => {
     } = props;
 
     const { cx, classes } = useStyles({
-        "classesOverrides": props.classes,
+        classesOverrides: props.classes,
         isOpen,
     });
 
@@ -70,7 +70,7 @@ export const Dialog = memo((props: DialogProps) => {
         <MuiDialog
             classes={{
                 ...muiDialogClasses,
-                "paper": cx(muiDialogClasses?.paper, classes.root, className),
+                paper: cx(muiDialogClasses?.paper, classes.root, className),
             }}
             open={isOpen}
             onClose={onClose}
@@ -86,7 +86,7 @@ export const Dialog = memo((props: DialogProps) => {
                     <Text
                         className={classes.title}
                         typo="object heading"
-                        componentProps={{ "id": labelledby }}
+                        componentProps={{ id: labelledby }}
                     >
                         {title}
                     </Text>
@@ -97,7 +97,7 @@ export const Dialog = memo((props: DialogProps) => {
                 ) : (
                     <Text
                         className={classes.subtitle}
-                        componentProps={{ "id": describedby }}
+                        componentProps={{ id: describedby }}
                         typo="body 1"
                     >
                         {subtitle}
@@ -144,34 +144,34 @@ const useStyles = tss
         isOpen: boolean;
     }>()
     .create(({ theme, isOpen }) => ({
-        "root": {
-            "backgroundColor": theme.colors.useCases.surfaces.surface1,
-            "backgroundImage": "unset",
-            "borderRadius": 5,
-            "padding": theme.spacing(4),
+        root: {
+            backgroundColor: theme.colors.useCases.surfaces.surface1,
+            backgroundImage: "unset",
+            borderRadius: 5,
+            padding: theme.spacing(4),
             ...theme.spacing.rightLeft("margin", 4),
-            "visibility": isOpen ? undefined : "hidden",
+            visibility: isOpen ? undefined : "hidden",
         },
-        "buttons": {
-            "display": "flex",
-            "marginTop": theme.spacing(4),
+        buttons: {
+            display: "flex",
+            marginTop: theme.spacing(4),
             "& .MuiButton-root": {
-                "marginLeft": theme.spacing(2),
+                marginLeft: theme.spacing(2),
             },
-            "alignItems": "center",
-            "justifyContent": "end",
+            alignItems: "center",
+            justifyContent: "end",
         },
-        "showNextTimeCheckboxesWrapper": {
-            "flex": 1,
+        showNextTimeCheckboxesWrapper: {
+            flex: 1,
         },
-        "title": {
-            "marginBottom": theme.spacing(3),
+        title: {
+            marginBottom: theme.spacing(3),
         },
-        "subtitle": {
-            "marginBottom": theme.spacing(3),
+        subtitle: {
+            marginBottom: theme.spacing(3),
         },
-        "body": {
-            "color": theme.colors.useCases.typography.textPrimary,
-            "overflow": "visible",
+        body: {
+            color: theme.colors.useCases.typography.textPrimary,
+            overflow: "visible",
         },
     }));

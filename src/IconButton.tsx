@@ -98,7 +98,7 @@ export const IconButton = memo(
 
                         return {
                             href,
-                            "target": doOpenNewTabIfHref ? "_blank" : undefined,
+                            target: doOpenNewTabIfHref ? "_blank" : undefined,
                             ...restRest,
                         };
                     }
@@ -132,19 +132,18 @@ const useStyles = tss
     .withName({ IconButton })
     .withParams<{ disabled: boolean }>()
     .create(({ theme, disabled }) => ({
-        "root": {
-            "padding": theme.spacing(2),
+        root: {
+            padding: theme.spacing(2),
             "&:hover": {
-                "backgroundColor": "unset",
+                backgroundColor: "unset",
                 "& svg": {
-                    "color": theme.colors.useCases.buttons.actionHoverPrimary,
+                    color: theme.colors.useCases.buttons.actionHoverPrimary,
                 },
             },
         },
-        "icon": {
-            "color":
-                theme.colors.useCases.typography[
-                    disabled ? "textDisabled" : "textPrimary"
-                ],
+        icon: {
+            color: theme.colors.useCases.typography[
+                disabled ? "textDisabled" : "textPrimary"
+            ],
         },
     }));

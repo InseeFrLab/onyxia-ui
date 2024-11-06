@@ -43,7 +43,7 @@ export const SearchBar = memo(
         } = props;
 
         const restorableSearchRef = useConst(() => ({
-            "current": restorableSearch,
+            current: restorableSearch,
         }));
 
         restorableSearchRef.current = restorableSearch;
@@ -94,7 +94,7 @@ export const SearchBar = memo(
 
         const inputRef = useRef<HTMLInputElement>(null);
 
-        const isComponentActiveRef = useConst(() => ({ "current": true }));
+        const isComponentActiveRef = useConst(() => ({ current: true }));
 
         useEffect(() => {
             isComponentActiveRef.current = true;
@@ -150,7 +150,7 @@ export const SearchBar = memo(
         });
 
         const { ref: rootRefClickAway } = useClickAway({
-            "onClickAway": () => {
+            onClickAway: () => {
                 if (restorableSearch === undefined) {
                     if (search !== "") {
                         return;
@@ -195,7 +195,7 @@ export const SearchBar = memo(
 
         const { classes, cx } = useStyles({
             isActive,
-            "classesOverrides": props_classes,
+            classesOverrides: props_classes,
         });
 
         return (
@@ -245,47 +245,47 @@ const useStyles = tss
     .withName({ SearchBar })
     .withParams<{ isActive: boolean }>()
     .create(({ theme, isActive }) => ({
-        "root": {
-            "borderRadius": 8,
-            "overflow": "hidden",
-            "boxShadow": theme.shadows[1],
+        root: {
+            borderRadius: 8,
+            overflow: "hidden",
+            boxShadow: theme.shadows[1],
             "& > div": {
-                "display": "flex",
-                "alignItems": "center",
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
-                "cursor": isActive ? undefined : "pointer",
-                "overflow": "hidden",
-                "border": "solid 2px transparent",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: theme.colors.useCases.surfaces.surface1,
+                cursor: isActive ? undefined : "pointer",
+                overflow: "hidden",
+                border: "solid 2px transparent",
                 "&:hover": {
-                    "borderBottomColor":
+                    borderBottomColor:
                         theme.colors.useCases.buttons.actionActive,
                 },
             },
         },
-        "input": {
-            "flex": 1,
-            "caretColor": theme.colors.useCases.typography.textFocus,
+        input: {
+            flex: 1,
+            caretColor: theme.colors.useCases.typography.textFocus,
             ...theme.typography.variants["body 1"].style,
-            "outline": "none",
-            "borderWidth": 0,
-            "border": "none",
-            "backgroundColor": "transparent",
-            "color": theme.colors.useCases.typography.textPrimary,
+            outline: "none",
+            borderWidth: 0,
+            border: "none",
+            backgroundColor: "transparent",
+            color: theme.colors.useCases.typography.textPrimary,
             "&::placeholder": {
-                "color": theme.colors.useCases.typography.textDisabled,
-                "opacity": 1,
+                color: theme.colors.useCases.typography.textDisabled,
+                opacity: 1,
             },
         },
-        "icon": {
-            "margin": `${theme.spacing(2) - 2}px ${theme.spacing(3) - 2}px`,
-            "color": isActive
+        icon: {
+            margin: `${theme.spacing(2) - 2}px ${theme.spacing(3) - 2}px`,
+            color: isActive
                 ? theme.colors.useCases.typography.textFocus
                 : undefined,
         },
-        "searchLabel": {
+        searchLabel: {
             ...(theme.muiTheme.typography.button as any),
-            "display": "block",
-            "flex": 1,
-            "color": theme.colors.useCases.typography.textPrimary,
+            display: "block",
+            flex: 1,
+            color: theme.colors.useCases.typography.textPrimary,
         },
     }));

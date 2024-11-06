@@ -24,18 +24,18 @@ export function transformCodebase(params: {
         srcDirPath,
         destDirPath,
         transformSourceCode = id<TransformSourceCode>(({ sourceCode }) => ({
-            "modifiedSourceCode": sourceCode,
+            modifiedSourceCode: sourceCode,
         })),
     } = params;
 
     for (const fileRelativePath of crawl({
-        "dirPath": srcDirPath,
-        "returnedPathsType": "relative to dirPath",
+        dirPath: srcDirPath,
+        returnedPathsType: "relative to dirPath",
     })) {
         const filePath = path.join(srcDirPath, fileRelativePath);
 
         const transformSourceCodeResult = transformSourceCode({
-            "sourceCode": fs.readFileSync(filePath),
+            sourceCode: fs.readFileSync(filePath),
             filePath,
             fileRelativePath,
         });
@@ -45,7 +45,7 @@ export function transformCodebase(params: {
         }
 
         fs.mkdirSync(path.dirname(path.join(destDirPath, fileRelativePath)), {
-            "recursive": true,
+            recursive: true,
         });
 
         const { newFileName, modifiedSourceCode } = transformSourceCodeResult;

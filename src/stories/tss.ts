@@ -5,7 +5,7 @@ import { createCssAndCx } from "tss-react/cssAndCx";
 
 /** NOTE: Used internally, do not export globally */
 export const { tss } = createTss({
-    "useContext": function useTssContext() {
+    useContext: function useTssContext() {
         const theme = useTheme();
 
         return { theme };
@@ -15,4 +15,4 @@ export const { tss } = createTss({
 /** NOTE: Used internally, do not export globally */
 export const useStyles = tss.create({});
 
-export const { css, cx } = createCssAndCx({ "cache": emotionCache });
+export const { css, cx } = createCssAndCx({ cache: emotionCache });

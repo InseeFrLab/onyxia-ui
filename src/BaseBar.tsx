@@ -18,10 +18,10 @@ export function BaseBar(props: BaseBarProps) {
 BaseBar.displayName = symToStr({ BaseBar });
 
 const useStyles = tss.withName({ BaseBar }).create(({ theme }) => ({
-    "root": {
-        "backgroundColor": theme.colors.useCases.surfaces.surface1,
-        "boxShadow": theme.shadows[1],
-        "borderRadius": 8,
-        "overflow": "hidden",
+    root: {
+        backgroundColor: theme.colors.useCases.surfaces.surface1,
+        boxShadow: theme.shadows[1],
+        borderRadius: 8,
+        overflow: "hidden",
     },
 }));

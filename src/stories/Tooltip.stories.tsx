@@ -8,12 +8,12 @@ import { id } from "tsafe/id";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { Tooltip },
+    wrappedComponent: { Tooltip },
 });
 
 export default meta;
 
 export const Vue1 = getStory({
-    "children": <Icon icon={id<MuiIconComponentName>("Help")} />,
-    "title": "This is the title",
+    children: <Icon icon={id<MuiIconComponentName>("Help")} />,
+    title: "This is the title",
 });

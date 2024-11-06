@@ -14,15 +14,15 @@ const icons = [
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { Icon },
-    "argTypes": {
-        "icon": {
-            "options": icons,
-            "control": { "type": "radio" },
+    wrappedComponent: { Icon },
+    argTypes: {
+        icon: {
+            options: icons,
+            control: { type: "radio" },
         },
-        "size": {
-            "options": ["extra small", "small", "default", "medium", "large"],
-            "control": { "type": "radio" },
+        size: {
+            options: ["extra small", "small", "default", "medium", "large"],
+            control: { type: "radio" },
         },
     },
 });
@@ -30,6 +30,6 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const Home = getStory({
-    "icon": icons[0],
-    "size": "default",
+    icon: icons[0],
+    size: "default",
 });

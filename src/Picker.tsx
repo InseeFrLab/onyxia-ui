@@ -55,10 +55,10 @@ export type PickerProps = {
           }
     >;
     texts?: {
-        "label"?: NonNullable<ReactNode>;
+        label?: NonNullable<ReactNode>;
         /**Undefined when we don't want to allow tags to be created*/
         "create option"?: (params: { optionLabel: string }) => ReactNode;
-        "done"?: ReactNode;
+        done?: ReactNode;
     };
 };
 
@@ -106,7 +106,7 @@ export const Picker = memo((props: PickerProps) => {
         onClose_props?.();
     });
 
-    const { ref } = useClickAway({ "onClickAway": onClose });
+    const { ref } = useClickAway({ onClickAway: onClose });
 
     const evtInputValue = useConst(() => Evt.create(""));
 
@@ -142,8 +142,8 @@ export const Picker = memo((props: PickerProps) => {
                                 }
                             }}
                             value={selectedOptionIds.map(optionId => ({
-                                "id": optionId,
-                                "label": (() => {
+                                id: optionId,
+                                label: (() => {
                                     const option = options.find(
                                         ({ id }) => id === optionId,
                                     );
@@ -152,7 +152,7 @@ export const Picker = memo((props: PickerProps) => {
 
                                     return option.label;
                                 })(),
-                                "color": getOptionColor?.(optionId),
+                                color: getOptionColor?.(optionId),
                             }))}
                             onChange={(event, newValue, reason) => {
                                 if (
@@ -177,13 +177,13 @@ export const Picker = memo((props: PickerProps) => {
                                 onSelectedOption(
                                     newlySelectedId !== undefined
                                         ? {
-                                              "isSelect": true,
-                                              "isNewOption": false,
-                                              "optionId": newlySelectedId,
+                                              isSelect: true,
+                                              isNewOption: false,
+                                              optionId: newlySelectedId,
                                           }
                                         : {
-                                              "isSelect": false,
-                                              "optionId": removed[0],
+                                              isSelect: false,
+                                              optionId: removed[0],
                                           },
                                 );
                             }}
@@ -217,13 +217,13 @@ export const Picker = memo((props: PickerProps) => {
                                     <Box
                                         component={createSpecificIcon(DoneIcon)}
                                         sx={{
-                                            "width": 17,
-                                            "height": 17,
-                                            "mr": "5px",
-                                            "ml": "-2px",
+                                            width: 17,
+                                            height: 17,
+                                            mr: "5px",
+                                            ml: "-2px",
                                         }}
                                         style={{
-                                            "visibility": selected
+                                            visibility: selected
                                                 ? "visible"
                                                 : "hidden",
                                         }}
@@ -263,12 +263,12 @@ export const Picker = memo((props: PickerProps) => {
                                             CloseIcon,
                                         )}
                                         sx={{
-                                            "opacity": 0.6,
-                                            "width": 18,
-                                            "height": 18,
+                                            opacity: 0.6,
+                                            width: 18,
+                                            height: 18,
                                         }}
                                         style={{
-                                            "visibility": selected
+                                            visibility: selected
                                                 ? "visible"
                                                 : "hidden",
                                         }}
@@ -295,7 +295,7 @@ export const Picker = memo((props: PickerProps) => {
                                 .map(({ id, label }) => ({
                                     id,
                                     label,
-                                    "color": getOptionColor?.(id),
+                                    color: getOptionColor?.(id),
                                 }))}
                             getOptionLabel={option => option.label}
                             renderInput={({
@@ -307,7 +307,7 @@ export const Picker = memo((props: PickerProps) => {
                                     ref={params.InputProps.ref}
                                     inputProps={{
                                         ...inputProps,
-                                        "onChange": (...args) => {
+                                        onChange: (...args) => {
                                             evtInputValue.state = (
                                                 args[0] as React.ChangeEvent<HTMLInputElement>
                                             ).target.value;
@@ -329,9 +329,9 @@ export const Picker = memo((props: PickerProps) => {
                                     )}
                                     onClick={inputValue =>
                                         onSelectedOption({
-                                            "isSelect": true,
-                                            "isNewOption": true,
-                                            "optionLabel": inputValue,
+                                            isSelect: true,
+                                            isNewOption: true,
+                                            optionLabel: inputValue,
                                         })
                                     }
                                     texts={texts}
@@ -354,64 +354,63 @@ export const Picker = memo((props: PickerProps) => {
 });
 
 const useStyles = tss.withName("Picker").create(({ theme }) => ({
-    "root": {
-        "border": `1px solid ${
+    root: {
+        border: `1px solid ${
             theme.muiTheme.palette.mode === "light" ? "#e1e4e8" : "#30363d"
         }`,
-        "boxShadow": `0 8px 24px ${
+        boxShadow: `0 8px 24px ${
             theme.muiTheme.palette.mode === "light"
                 ? "rgba(149, 157, 165, 0.2)"
                 : "rgb(1, 4, 9)"
         }`,
-        "borderRadius": 6,
-        "width": 300,
-        "zIndex": theme.muiTheme.zIndex.modal,
-        "fontSize": 13,
-        "color":
-            theme.muiTheme.palette.mode === "light" ? "#24292e" : "#c9d1d9",
-        "backgroundColor":
+        borderRadius: 6,
+        width: 300,
+        zIndex: theme.muiTheme.zIndex.modal,
+        fontSize: 13,
+        color: theme.muiTheme.palette.mode === "light" ? "#24292e" : "#c9d1d9",
+        backgroundColor:
             theme.muiTheme.palette.mode === "light" ? "#fff" : "#1c2128",
     },
-    "labelWrapper": {
-        "borderBottom": `1px solid ${
+    labelWrapper: {
+        borderBottom: `1px solid ${
             theme.muiTheme.palette.mode === "light" ? "#eaecef" : "#30363d"
         }`,
-        "padding": "8px 10px",
+        padding: "8px 10px",
     },
-    "autocompletePopperComponent": {
+    autocompletePopperComponent: {
         [`& .${autocompleteClasses.paper}`]: {
-            "boxShadow": "none",
-            "margin": 0,
-            "color": "inherit",
-            "fontSize": 13,
+            boxShadow: "none",
+            margin: 0,
+            color: "inherit",
+            fontSize: 13,
         },
         [`& .${autocompleteClasses.listbox}`]: {
-            "backgroundColor":
+            backgroundColor:
                 theme.muiTheme.palette.mode === "light" ? "#fff" : "#1c2128",
-            "padding": 0,
+            padding: 0,
             [`& .${autocompleteClasses.option}`]: {
-                "minHeight": "auto",
-                "alignItems": "flex-start",
-                "padding": 8,
-                "borderBottom": `1px solid  ${
+                minHeight: "auto",
+                alignItems: "flex-start",
+                padding: 8,
+                borderBottom: `1px solid  ${
                     theme.muiTheme.palette.mode === "light"
                         ? " #eaecef"
                         : "#30363d"
                 }`,
                 '&[aria-selected="true"]': {
-                    "backgroundColor": "transparent",
+                    backgroundColor: "transparent",
                 },
                 [`&.${autocompleteClasses.focused}, &.${autocompleteClasses.focused}[aria-selected="true"]`]:
                     {
-                        "backgroundColor": theme.muiTheme.palette.action.hover,
+                        backgroundColor: theme.muiTheme.palette.action.hover,
                     },
             },
         },
         [`&.${autocompleteClasses.popperDisablePortal}`]: {
-            "position": "relative",
+            position: "relative",
         },
     },
-    "input": {
+    input: {
         padding: 10,
         width: "100%",
         borderBottom: `1px solid ${
@@ -443,13 +442,13 @@ const useStyles = tss.withName("Picker").create(({ theme }) => ({
             },
         },
     },
-    "doneButtonWrapper": {
-        "display": "flex",
-        "justifyContent": "space-between",
-        "alignItems": "center",
+    doneButtonWrapper: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
-    "doneButton": {
-        "margin": theme.spacing(2),
+    doneButton: {
+        margin: theme.spacing(2),
     },
 }));
 
@@ -487,15 +486,15 @@ const { NoOptionText } = (() => {
                 className={classes.root}
                 onClick={() => onClick(inputValue)}
             >
-                {texts["create option"]({ "optionLabel": inputValue })}
+                {texts["create option"]({ optionLabel: inputValue })}
             </MuiLink>
         );
     });
 
     const useStyles = tss.withName({ NoOptionText }).create(({ theme }) => ({
-        "root": {
-            "cursor": "pointer",
-            "paddingLeft": theme.spacing(3),
+        root: {
+            cursor: "pointer",
+            paddingLeft: theme.spacing(3),
         },
     }));
 

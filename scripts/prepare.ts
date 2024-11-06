@@ -21,7 +21,7 @@ const rootDirPath = pathJoin(__dirname, "..");
         .filter(name => name.endsWith(".svg"));
 
     const muiComponentNames = iconFileNames.map(fileName =>
-        myDestRewriter({ "base": fileName }).replace(/\.js$/, ""),
+        myDestRewriter({ base: fileName }).replace(/\.js$/, ""),
     );
 
     muiComponentNames.forEach((muiComponentName, i) => {

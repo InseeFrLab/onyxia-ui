@@ -10,8 +10,8 @@ import Avatar from "@mui/material/Avatar";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { DirectoryHeader },
-    "defaultWidth": 600,
+    wrappedComponent: { DirectoryHeader },
+    defaultWidth: 600,
 });
 
 export default meta;
@@ -22,36 +22,32 @@ const ImageSvg = memo(() => {
     return (
         <ServicesSvg
             className={css({
-                "fill": theme.colors.useCases.typography.textPrimary,
-                "height": "100%",
-                "width": "unset",
+                fill: theme.colors.useCases.typography.textPrimary,
+                height: "100%",
+                width: "unset",
             })}
         ></ServicesSvg>
     );
 });
 
 export const VueDefaultSvg = getStory({
-    "image": <ImageSvg />,
-    "title": "This is the title",
-    "subtitle": "This is the subtitle",
+    image: <ImageSvg />,
+    title: "This is the title",
+    subtitle: "This is the subtitle",
     ...logCallbacks(["onGoBack"]),
 });
 
 export const VueWithoutSubtitle = getStory({
-    "image": <ImageSvg />,
-    "title": "This is the title",
+    image: <ImageSvg />,
+    title: "This is the title",
     ...logCallbacks(["onGoBack"]),
 });
 
 export const VueImg = getStory({
-    "image": (
-        <Avatar
-            style={{ "height": "100%", "width": "100%" }}
-            src={imgUrl}
-            alt=""
-        />
+    image: (
+        <Avatar style={{ height: "100%", width: "100%" }} src={imgUrl} alt="" />
     ),
-    "title": "This is the title",
-    "subtitle": "This is the subtitle",
+    title: "This is the title",
+    subtitle: "This is the subtitle",
     ...logCallbacks(["onGoBack"]),
 });

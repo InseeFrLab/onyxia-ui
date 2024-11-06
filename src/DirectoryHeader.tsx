@@ -41,7 +41,7 @@ export const DirectoryHeader = memo((props: Props) => {
     const { className, image, title, subtitle, onGoBack } = props;
 
     const { classes, cx } = useStyles({
-        "classesOverrides": props.classes,
+        classesOverrides: props.classes,
     });
 
     return (
@@ -67,14 +67,14 @@ export const DirectoryHeader = memo((props: Props) => {
 });
 
 const useStyles = tss.withName({ DirectoryHeader }).create(({ theme }) => ({
-    "root": {
-        "display": "flex",
-        "alignItems": "center",
-        "borderBottom": `1px solid ${theme.colors.useCases.typography.textTertiary}`,
+    root: {
+        display: "flex",
+        alignItems: "center",
+        borderBottom: `1px solid ${theme.colors.useCases.typography.textTertiary}`,
     },
-    "imageWrapper": {
-        "margin": theme.spacing({ "topBottom": 4, "rightLeft": 3 }),
-        "marginLeft": theme.spacing(1),
+    imageWrapper: {
+        margin: theme.spacing({ topBottom: 4, rightLeft: 3 }),
+        marginLeft: theme.spacing(1),
         ...(() => {
             const height =
                 pxToNumber(
@@ -87,17 +87,17 @@ const useStyles = tss.withName({ DirectoryHeader }).create(({ theme }) => ({
                 theme.spacing(2);
 
             return {
-                "width": height,
+                width: height,
                 height,
             };
         })(),
-        "display": "flex",
-        "justifyContent": "center",
-        "alignItems": "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
-    "subtitle": {
-        "marginTop": theme.spacing(2),
-        "color": theme.colors.useCases.typography.textSecondary,
-        "textTransform": "capitalize",
+    subtitle: {
+        marginTop: theme.spacing(2),
+        color: theme.colors.useCases.typography.textSecondary,
+        textTransform: "capitalize",
     },
 }));

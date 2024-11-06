@@ -5,18 +5,18 @@ import { css } from "./tss";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { CopyToClipboardIconButton },
-    "defaultWidth": 600,
+    wrappedComponent: { CopyToClipboardIconButton },
+    defaultWidth: 600,
 });
 
 export default meta;
 
 export const View = getStory({
-    "className": css({
-        "margin": "30px",
+    className: css({
+        margin: "30px",
     }),
-    "textToCopy": "Text to be copied",
-    "copyToClipboardText": "Copy to clipboard",
-    "copiedToClipboardText": " Copied!",
-    "disabled": false,
+    textToCopy: "Text to be copied",
+    copyToClipboardText: "Copy to clipboard",
+    copiedToClipboardText: " Copied!",
+    disabled: false,
 });

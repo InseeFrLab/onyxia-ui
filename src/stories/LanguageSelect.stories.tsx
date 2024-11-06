@@ -7,8 +7,8 @@ import { symToStr } from "tsafe/symToStr";
 import { id } from "tsafe/id";
 
 const languagesPrettyPrint = {
-    "en": "English",
-    "fr": "Français",
+    en: "English",
+    fr: "Français",
 };
 
 type Language = keyof typeof languagesPrettyPrint;
@@ -33,14 +33,14 @@ function Component(
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ LanguageSelect })]: Component },
-    "argTypes": {
-        "variant": {
-            "options": id<LanguageSelectProps<Language>["variant"][]>([
+    wrappedComponent: { [symToStr({ LanguageSelect })]: Component },
+    argTypes: {
+        variant: {
+            options: id<LanguageSelectProps<Language>["variant"][]>([
                 "big",
                 "small",
             ]),
-            "control": { "type": "radio" },
+            control: { type: "radio" },
         },
     },
 });
@@ -48,7 +48,7 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const VueNoTitle = getStory({
-    "doShowIcon": true,
-    "changeLanguageText": "Change language",
-    "variant": "big",
+    doShowIcon: true,
+    changeLanguageText: "Change language",
+    variant: "big",
 });

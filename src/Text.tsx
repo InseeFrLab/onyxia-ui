@@ -45,14 +45,14 @@ export const Text = memo(
             fixedSize_enabled,
             fixedSize_content,
             fixedSize_fontWeight,
-            "children":
+            children:
                 typeof children === "string" ? (children as string) : undefined,
         });
 
         return createElement(
             htmlComponent ?? theme.typography.variants[typo].htmlComponent,
             {
-                "className": cx(classes.root, className),
+                className: cx(classes.root, className),
                 ref,
                 ...componentProps,
                 ...rest,
@@ -88,45 +88,44 @@ const useStyles = tss
             fixedSize_content,
             children,
         }) => ({
-            "root": {
+            root: {
                 ...theme.typography.variants[typo].style,
-                "color":
-                    theme.colors.useCases.typography[
-                        (() => {
-                            switch (color) {
-                                case "primary":
-                                    return "textPrimary";
-                                case "secondary":
-                                    return "textSecondary";
-                                case "disabled":
-                                    return "textDisabled";
-                                case "focus":
-                                    return "textFocus";
-                            }
-                        })()
-                    ],
-                "padding": 0,
-                "margin": 0,
+                color: theme.colors.useCases.typography[
+                    (() => {
+                        switch (color) {
+                            case "primary":
+                                return "textPrimary";
+                            case "secondary":
+                                return "textSecondary";
+                            case "disabled":
+                                return "textDisabled";
+                            case "focus":
+                                return "textFocus";
+                        }
+                    })()
+                ],
+                padding: 0,
+                margin: 0,
                 ...(!fixedSize_enabled
                     ? {}
                     : {
-                          "display": "inline-flex",
-                          "flexDirection": "column",
-                          "alignItems": "center",
-                          "justifyContent": "space-between",
+                          display: "inline-flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "space-between",
                           "&::after": {
-                              "content": fixedSize_content
+                              content: fixedSize_content
                                   ? `"${fixedSize_content}"`
                                   : (assert(children !== undefined),
                                     `"${children}_"`),
-                              "height": 0,
-                              "visibility": "hidden",
-                              "overflow": "hidden",
-                              "userSelect": "none",
-                              "pointerEvents": "none",
-                              "fontWeight": fixedSize_fontWeight,
+                              height: 0,
+                              visibility: "hidden",
+                              overflow: "hidden",
+                              userSelect: "none",
+                              pointerEvents: "none",
+                              fontWeight: fixedSize_fontWeight,
                               "@media speech": {
-                                  "display": "none",
+                                  display: "none",
                               },
                           },
                       }),
@@ -146,7 +145,7 @@ export function createTextWithCustomTypos<T extends Theme<any, any, any>>() {
     type TypographyVariantNameCustom = ExtractCustomTypographyVariantName<T>;
 
     return {
-        "Text": Text as any as React.MemoExoticComponent<
+        Text: Text as any as React.MemoExoticComponent<
             React.ForwardRefExoticComponent<
                 (Omit<TextProps, "typo"> & {
                     typo:

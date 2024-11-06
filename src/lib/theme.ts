@@ -112,17 +112,17 @@ export function createThemeFactory<
             spacingConfig({
                 factorOrExplicitNumberOfPx,
                 windowInnerWidth,
-                "rootFontSizePx": typographyDesc.rootFontSizePx,
+                rootFontSizePx: typographyDesc.rootFontSizePx,
             });
 
         return {
-            "colors": {
+            colors: {
                 palette,
                 useCases,
-                "getUseCases": ({ isDarkModeEnabled }) =>
+                getUseCases: ({ isDarkModeEnabled }) =>
                     getUseCases_memoized(isDarkModeEnabled),
             },
-            "typography": getComputedTypography({ typographyDesc }),
+            typography: getComputedTypography({ typographyDesc }),
             isDarkModeEnabled,
             shadows,
             ...(() => {
@@ -132,33 +132,33 @@ export function createThemeFactory<
                         : createMuiTheme
                 )({
                     // https://material-ui.com/customization/palette/#using-a-color-object
-                    "typography": createMuiTypographyOptions({
+                    typography: createMuiTypographyOptions({
                         typographyDesc,
                     }),
-                    "palette": createMuiPaletteOptions({
+                    palette: createMuiPaletteOptions({
                         isDarkModeEnabled,
                         palette,
                         useCases,
                     }),
                     spacing,
-                    "breakpoints": {
-                        "values": { "xs": 0, ...breakpointsValues },
+                    breakpoints: {
+                        values: { xs: 0, ...breakpointsValues },
                     },
-                    "components": {
-                        "MuiLink": {
-                            "defaultProps": {
-                                "underline": "hover",
+                    components: {
+                        MuiLink: {
+                            defaultProps: {
+                                underline: "hover",
                             },
                         },
                         ...(() => {
                             const nonTypedMuiComponents = {
-                                "MuiDataGrid": {
-                                    "styleOverrides": {
-                                        "root": (() => {
+                                MuiDataGrid: {
+                                    styleOverrides: {
+                                        root: (() => {
                                             const set = new WeakSet<Function>();
 
                                             const borderNone = {
-                                                "border": "none",
+                                                border: "none",
                                             };
 
                                             return (params: {
@@ -216,17 +216,17 @@ export function createThemeFactory<
                                                 return borderNone;
                                             };
                                         })(),
-                                        "row": () => {
+                                        row: () => {
                                             const hoveredAndSelected = {
                                                 "&.Mui-hovered": {
-                                                    "backgroundColor": alpha(
+                                                    backgroundColor: alpha(
                                                         useCases.typography
                                                             .textFocus,
                                                         0.6,
                                                     ),
                                                 },
                                                 "&.Mui-selected": {
-                                                    "backgroundColor": alpha(
+                                                    backgroundColor: alpha(
                                                         useCases.typography
                                                             .textFocus,
                                                         0.2,
@@ -236,21 +236,21 @@ export function createThemeFactory<
 
                                             return {
                                                 "&.even": {
-                                                    "backgroundColor":
+                                                    backgroundColor:
                                                         useCases.surfaces
                                                             .surface2,
                                                     ...hoveredAndSelected,
                                                 },
                                                 "&.odd": {
-                                                    "backgroundColor":
+                                                    backgroundColor:
                                                         useCases.surfaces
                                                             .background,
                                                     ...hoveredAndSelected,
                                                 },
                                             };
                                         },
-                                        "withBorderColor": {
-                                            "borderColor": "transparent",
+                                        withBorderColor: {
+                                            borderColor: "transparent",
                                         },
                                     },
                                 },
@@ -262,7 +262,7 @@ export function createThemeFactory<
                 });
 
                 return {
-                    "spacing": (() => {
+                    spacing: (() => {
                         const toFinalValue = (value: number | string) =>
                             typeof value === "number"
                                 ? `${spacing(value)}px`
@@ -315,19 +315,19 @@ export function createThemeFactory<
                         };
 
                         out.rightLeft = (kind, value) =>
-                            f({ "axis": "horizontal", kind, value });
+                            f({ axis: "horizontal", kind, value });
                         out.topBottom = (kind, value) =>
-                            f({ "axis": "vertical", kind, value });
+                            f({ axis: "vertical", kind, value });
 
                         return out;
                     })(),
                     muiTheme,
                 };
             })(),
-            "iconSizesInPxByName": getIconSizesInPxByName({
+            iconSizesInPxByName: getIconSizesInPxByName({
                 getIconSizeInPx,
                 windowInnerWidth,
-                "rootFontSizePx": typographyDesc.rootFontSizePx,
+                rootFontSizePx: typographyDesc.rootFontSizePx,
             }),
             windowInnerWidth,
         };
@@ -361,7 +361,7 @@ export function useTheme<T = Theme>(): T {
 
 const getAllRedTheme = memoize(() => {
     const { createTheme } = createThemeFactory({
-        "palette": JSON.parse(
+        palette: JSON.parse(
             JSON.stringify(defaultPalette).replace(
                 /"#[^"]"/g,
                 `"${defaultPalette.redError.main}"`,
@@ -370,9 +370,9 @@ const getAllRedTheme = memoize(() => {
     });
 
     const theme = createTheme({
-        "isDarkModeEnabled": false,
-        "windowInnerWidth": window.innerWidth,
-        "rootFontSizePx": 16,
+        isDarkModeEnabled: false,
+        windowInnerWidth: window.innerWidth,
+        rootFontSizePx: 16,
     });
 
     return theme;

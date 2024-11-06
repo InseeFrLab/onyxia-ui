@@ -34,7 +34,7 @@ export const Tooltip = memo((props: TooltipProps) => {
 });
 
 const useStyles = tss.withName({ Tooltip }).create(({ theme }) => ({
-    "root": {
-        "color": theme.colors.palette.light.light,
+    root: {
+        color: theme.colors.palette.light.light,
     },
 }));

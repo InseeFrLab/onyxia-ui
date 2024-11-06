@@ -256,7 +256,7 @@ export const TextField = memo((props: TextFieldProps) => {
     );
 
     const getIsValidValueResult = useMemo(
-        () => getIsValidValue?.(value) ?? { "isValidValue": true as const },
+        () => getIsValidValue?.(value) ?? { isValidValue: true as const },
         [value, getIsValidValue ?? Object],
     );
 
@@ -334,7 +334,7 @@ export const TextField = memo((props: TextFieldProps) => {
     const { classes, cx } = useStyles({
         isInputInErroredState,
         rootHeight,
-        "shouldInputValueBeHidden": type === "sensitive" && isInputValueHidden,
+        shouldInputValueBeHidden: type === "sensitive" && isInputValueHidden,
     });
 
     const onKeyDown = useConstCallback(
@@ -384,7 +384,7 @@ export const TextField = memo((props: TextFieldProps) => {
 
     const InputProps = useMemo(
         () => ({
-            "endAdornment": (() => {
+            endAdornment: (() => {
                 if (InputProps_endAdornment ?? isCircularProgressShown) {
                     return (
                         <InputAdornment position="end">
@@ -421,12 +421,12 @@ export const TextField = memo((props: TextFieldProps) => {
 
     const inputProps = useMemo(
         () => ({
-            "ref": inputProps_ref,
+            ref: inputProps_ref,
             "aria-label": inputProps_ariaLabel,
-            "tabIndex": inputProps_tabIndex,
-            "spellCheck": inputProps_spellCheck,
-            "autoFocus": inputProps_autoFocus,
-            "className": inputProps_className,
+            tabIndex: inputProps_tabIndex,
+            spellCheck: inputProps_spellCheck,
+            autoFocus: inputProps_autoFocus,
+            className: inputProps_className,
             ...(!isInputInErroredState ? undefined : { "aria-invalid": true }),
         }),
         [
@@ -552,7 +552,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         inputProps={{
                             ...inputProps,
                             ...params.inputProps,
-                            "className": cx(
+                            className: cx(
                                 params.inputProps?.className,
                                 inputProps.className,
                             ),
@@ -611,28 +611,28 @@ const useStyles = tss
             rootHeight,
             shouldInputValueBeHidden,
         }) => ({
-            "muiAutocomplete": {
-                "minWidth": 145,
+            muiAutocomplete: {
+                minWidth: 145,
             },
-            "muiTextField": {
+            muiTextField: {
                 "& .MuiFormHelperText-root": {
-                    "position": "absolute",
-                    "top": rootHeight,
-                    "visibility": rootHeight === 0 ? "hidden" : undefined,
+                    position: "absolute",
+                    top: rootHeight,
+                    visibility: rootHeight === 0 ? "hidden" : undefined,
                 },
                 "& .MuiFormLabel-root": {
-                    "color": isInputInErroredState
+                    color: isInputInErroredState
                         ? theme.colors.useCases.alertSeverity.error.main
                         : undefined,
                 },
                 "&:focus": {
-                    "outline": "unset",
+                    outline: "unset",
                 },
                 "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                    "borderBottomWidth": 1,
+                    borderBottomWidth: 1,
                 },
                 "& .MuiInput-underline:after": {
-                    "borderBottomWidth": 1,
+                    borderBottomWidth: 1,
                 },
                 "& input:-webkit-autofill": {
                     ...(() => {
@@ -640,13 +640,13 @@ const useStyles = tss
                             case "chrome":
                             case "safari":
                                 return {
-                                    "WebkitTextFillColor":
+                                    WebkitTextFillColor:
                                         theme.colors.useCases.typography[
                                             theme.isDarkModeEnabled
                                                 ? "textPrimary"
                                                 : "textSecondary"
                                         ],
-                                    "WebkitBoxShadow": `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
+                                    WebkitBoxShadow: `0 0 0 1000px ${theme.colors.useCases.surfaces.surface1} inset`,
                                 };
                             default:
                                 return {};
@@ -657,27 +657,27 @@ const useStyles = tss
                     ...(!shouldInputValueBeHidden
                         ? undefined
                         : {
-                              "WebkitTextSecurity": "disc",
+                              WebkitTextSecurity: "disc",
                           }),
                 },
             },
-            "helperText": {
-                "color": isInputInErroredState
+            helperText: {
+                color: isInputInErroredState
                     ? theme.colors.useCases.alertSeverity.error.main
                     : theme.colors.useCases.typography.textSecondary,
-                "whiteSpace": "nowrap",
+                whiteSpace: "nowrap",
             },
-            "questionMark": {
-                "fontSize": "inherit",
-                "position": "relative",
-                "top": 1,
-                "left": 2,
+            questionMark: {
+                fontSize: "inherit",
+                position: "relative",
+                top: 1,
+                left: 2,
                 ...(() => {
                     const factor = 1.3;
 
                     return {
-                        "width": `${factor}em`,
-                        "height": `${factor}em`,
+                        width: `${factor}em`,
+                        height: `${factor}em`,
                     };
                 })(),
             },

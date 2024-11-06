@@ -148,15 +148,15 @@ const useStyles = tss
         size: IconSizeName;
     }>()
     .create(({ theme, size }) => ({
-        "root": {
-            "color": "inherit",
+        root: {
+            color: "inherit",
             // https://stackoverflow.com/a/24626986/3731798
             //"verticalAlign": "top",
             //"display": "inline-block"
-            "verticalAlign": "top",
-            "fontSize": theme.iconSizesInPxByName[size],
-            "width": "1em",
-            "height": "1em",
+            verticalAlign: "top",
+            fontSize: theme.iconSizesInPxByName[size],
+            width: "1em",
+            height: "1em",
         },
     }));
 

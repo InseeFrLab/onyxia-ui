@@ -35,8 +35,8 @@ function Component(
 
     useEffectOnValueChange(() => {
         evtAction.post({
-            "action": "DISPLAY COPY FEEDBACK",
-            "basename": "foo.svg",
+            action: "DISPLAY COPY FEEDBACK",
+            basename: "foo.svg",
         });
     }, [evtAction, index]);
 
@@ -54,11 +54,11 @@ function Component(
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ Breadcrumb })]: Component },
-    "argTypes": {
-        "tick": {
-            "control": {
-                "type": "boolean",
+    wrappedComponent: { [symToStr({ Breadcrumb })]: Component },
+    argTypes: {
+        tick: {
+            control: {
+                type: "boolean",
             },
         },
     },
@@ -67,43 +67,43 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const VueDefault = getStory({
-    "path": ["aaa", "bbb", "cccc", "dddd"],
-    "isNavigationDisabled": false,
-    "minDepth": 0,
-    "tick": true,
+    path: ["aaa", "bbb", "cccc", "dddd"],
+    isNavigationDisabled: false,
+    minDepth: 0,
+    tick: true,
     ...logCallbacks(["onNavigate"]),
 });
 
 export const VueOtherSeparator = getStory({
-    "path": ["aaa", "bbb", "cccc", "dddd"],
-    "separatorChar": "/",
-    "isNavigationDisabled": false,
-    "minDepth": 0,
-    "tick": true,
+    path: ["aaa", "bbb", "cccc", "dddd"],
+    separatorChar: "/",
+    isNavigationDisabled: false,
+    minDepth: 0,
+    tick: true,
     ...logCallbacks(["onNavigate"]),
 });
 
 export const VueMinDepth2 = getStory({
-    "path": ["aaa", "bbb", "cccc", "dddd"],
-    "separatorChar": "/",
-    "isNavigationDisabled": false,
-    "minDepth": 2,
-    "tick": true,
+    path: ["aaa", "bbb", "cccc", "dddd"],
+    separatorChar: "/",
+    isNavigationDisabled: false,
+    minDepth: 2,
+    tick: true,
     ...logCallbacks(["onNavigate"]),
 });
 
 export const VueFromRoot = getStory({
-    "path": ["", "aaa", "bbb", "cccc", "dddd"],
-    "isNavigationDisabled": false,
-    "minDepth": 0,
-    "tick": true,
+    path: ["", "aaa", "bbb", "cccc", "dddd"],
+    isNavigationDisabled: false,
+    minDepth: 0,
+    tick: true,
     ...logCallbacks(["onNavigate"]),
 });
 
 export const VueStartFromCwd = getStory({
-    "path": [".", "aaa", "bbb", "cccc", "dddd"],
-    "isNavigationDisabled": false,
-    "minDepth": 0,
-    "tick": true,
+    path: [".", "aaa", "bbb", "cccc", "dddd"],
+    isNavigationDisabled: false,
+    minDepth: 0,
+    tick: true,
     ...logCallbacks(["onNavigate"]),
 });

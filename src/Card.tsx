@@ -38,26 +38,26 @@ export const Card = memo(
 );
 
 const useStyles = tss.withName({ Card }).create(({ theme }) => ({
-    "root": {
-        "borderRadius": 8,
-        "boxShadow": theme.shadows[1],
-        "backgroundColor": theme.colors.useCases.surfaces.surface1,
+    root: {
+        borderRadius: 8,
+        boxShadow: theme.shadows[1],
+        backgroundColor: theme.colors.useCases.surfaces.surface1,
         "&:hover": {
-            "boxShadow": theme.shadows[6],
+            boxShadow: theme.shadows[6],
         },
-        "display": "flex",
-        "flexDirection": "column",
+        display: "flex",
+        flexDirection: "column",
     },
-    "aboveDivider": {
-        "padding": theme.spacing({ "topBottom": 3, "rightLeft": 4 }),
-        "borderBottom": `1px solid ${theme.colors.useCases.typography.textTertiary}`,
-        "boxSizing": "border-box",
+    aboveDivider: {
+        padding: theme.spacing({ topBottom: 3, rightLeft: 4 }),
+        borderBottom: `1px solid ${theme.colors.useCases.typography.textTertiary}`,
+        boxSizing: "border-box",
     },
-    "belowDivider": {
-        "padding": theme.spacing(4),
-        "paddingTop": theme.spacing(3),
-        "flex": 1,
-        "display": "flex",
-        "flexDirection": "column",
+    belowDivider: {
+        padding: theme.spacing(4),
+        paddingTop: theme.spacing(3),
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
     },
 }));

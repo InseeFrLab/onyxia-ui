@@ -8,14 +8,14 @@ import tourSvgUrl from "./assets/svg/Tour.svg";
 import servicesSvgUrl from "./assets/svg/Services.svg";
 
 const { OnyxiaUi: OnyxiaUiWithoutEmotionCache } = createOnyxiaUi({
-    "isScoped": true,
-    "isReactStrictModeEnabled": false,
-    "getTypographyDesc": params => ({
+    isScoped: true,
+    isReactStrictModeEnabled: false,
+    getTypographyDesc: params => ({
         ...defaultGetTypographyDesc(params),
-        "fontFamily": '"Work Sans", sans-serif',
+        fontFamily: '"Work Sans", sans-serif',
         //"fontFamily": "Marianne, sans-serif",
     }),
-    "BASE_URL": process.env.NODE_ENV === "development" ? "" : "/onyxia-ui",
+    BASE_URL: process.env.NODE_ENV === "development" ? "" : "/onyxia-ui",
 });
 
 export function OnyxiaUi(props: {

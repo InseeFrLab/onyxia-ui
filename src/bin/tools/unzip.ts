@@ -92,7 +92,7 @@ export async function unzip(
                     }
 
                     await fsp.mkdir(path.dirname(target), {
-                        "recursive": true,
+                        recursive: true,
                     });
 
                     await pipeline(readStream, fs.createWriteStream(target));

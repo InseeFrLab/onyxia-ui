@@ -103,8 +103,8 @@ export const Breadcrumb = memo((props: BreadcrumbProps) => {
             !isClickable
                 ? assert(false)
                 : onNavigate({
-                      "path": partialPath,
-                      "upCount": path.length - partialPath.length,
+                      path: partialPath,
+                      upCount: path.length - partialPath.length,
                   }),
     );
 
@@ -139,9 +139,9 @@ function getPartialPaths(params: {
         const isLast = i === path.length - 1;
 
         return {
-            "partialPath": [...path].splice(0, i + 1),
+            partialPath: [...path].splice(0, i + 1),
             isLast,
-            "isClickable": isNavigationDisabled
+            isClickable: isNavigationDisabled
                 ? false
                 : !isLast && i >= minDepth,
         };
@@ -182,7 +182,7 @@ const { Section } = (() => {
                 typo="body 1"
                 className={classes.root}
                 componentProps={{
-                    "onClick": isClickable ? onClick : undefined,
+                    onClick: isClickable ? onClick : undefined,
                 }}
                 fixedSize_enabled={true}
                 fixedSize_fontWeight={hoverFontWeight}
@@ -196,29 +196,27 @@ const { Section } = (() => {
         .withName(`${symToStr({ Breadcrumb })}${symToStr({ Section })}`)
         .withParams<Pick<Props, "isClickable" | "isFocused" | "isLast">>()
         .create(({ theme, isClickable, isFocused, isLast }) => ({
-            "root": {
+            root: {
                 ...(!isClickable
                     ? {}
                     : {
-                          "cursor": "pointer",
+                          cursor: "pointer",
                           "&:hover, &:focus": {
-                              "fontWeight": hoverFontWeight,
-                              "color":
-                                  theme.colors.useCases.typography.textPrimary,
+                              fontWeight: hoverFontWeight,
+                              color: theme.colors.useCases.typography
+                                  .textPrimary,
                           },
                           "&:active": {
-                              "color":
-                                  theme.colors.useCases.typography.textFocus,
+                              color: theme.colors.useCases.typography.textFocus,
                           },
                       }),
-                "color":
-                    theme.colors.useCases.typography[
-                        isFocused
-                            ? "textFocus"
-                            : isLast
-                            ? "textPrimary"
-                            : "textSecondary"
-                    ],
+                color: theme.colors.useCases.typography[
+                    isFocused
+                        ? "textFocus"
+                        : isLast
+                        ? "textPrimary"
+                        : "textSecondary"
+                ],
             },
         }));
 

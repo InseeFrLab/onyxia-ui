@@ -39,7 +39,7 @@ export const CollapsibleSectionHeader = memo(
                     onClick={onToggleIsCollapsed}
                 />
                 <Text typo="section heading"> {title} </Text>
-                <div style={{ "flex": "1" }} />
+                <div style={{ flex: "1" }} />
                 {isCollapsed && (
                     <MuiLink
                         underline="hover"
@@ -61,25 +61,25 @@ const useStyles = tss
     .withName({ CollapsibleSectionHeader })
     .withParams<{ isCollapsed: boolean }>()
     .create(({ theme, isCollapsed }) => ({
-        "root": {
-            "display": "flex",
-            "alignItems": "center",
+        root: {
+            display: "flex",
+            alignItems: "center",
         },
-        "chevron": {
-            "paddingLeft": 0,
+        chevron: {
+            paddingLeft: 0,
             ...(!isCollapsed
                 ? {}
                 : {
-                      "width": 0,
-                      "paddingLeft": 0,
-                      "paddingRight": 0,
-                      "visibility": "hidden",
+                      width: 0,
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      visibility: "hidden",
                   }),
         },
-        "link": {
-            "cursor": "pointer",
+        link: {
+            cursor: "pointer",
             //Ugly solution to vertically align with text
-            "paddingTop":
+            paddingTop:
                 0.183 *
                 pxToNumber(
                     theme.typography.variants["section heading"].style

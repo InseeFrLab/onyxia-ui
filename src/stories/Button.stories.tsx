@@ -6,40 +6,40 @@ import { id } from "tsafe/id";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "argTypes": {
-        "variant": {
-            "options": ["primary", "secondary", "ternary"],
-            "control": { "type": "radio" },
+    argTypes: {
+        variant: {
+            options: ["primary", "secondary", "ternary"],
+            control: { type: "radio" },
         },
     },
-    "wrappedComponent": { Button },
+    wrappedComponent: { Button },
 });
 
 export default meta;
 
 export const VueNoIcon = getStory({
-    "children": "Default",
-    "variant": "primary",
+    children: "Default",
+    variant: "primary",
     ...logCallbacks(["onClick"]),
 });
 
 export const VueWithStartIcon = getStory({
-    "children": "Foo bar",
-    "startIcon": "help",
-    "variant": "primary",
+    children: "Foo bar",
+    startIcon: "help",
+    variant: "primary",
     ...logCallbacks(["onClick"]),
 });
 
 export const WithLazilyDownloadedIcon = getStory({
-    "children": "Foo bar",
-    "startIcon": id<MuiIconComponentName>("AccountCircle"),
-    "variant": "primary",
+    children: "Foo bar",
+    startIcon: id<MuiIconComponentName>("AccountCircle"),
+    variant: "primary",
     ...logCallbacks(["onClick"]),
 });
 
 export const WithManuallyAddedIcons = getStory({
-    "children": "Foo bar",
-    "startIcon": id<MuiIconComponentName>("Google"),
-    "variant": "primary",
+    children: "Foo bar",
+    startIcon: id<MuiIconComponentName>("Google"),
+    variant: "primary",
     ...logCallbacks(["onClick"]),
 });

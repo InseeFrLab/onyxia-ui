@@ -6,16 +6,16 @@ import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { Card },
+    wrappedComponent: { Card },
 });
 
 export default meta;
 
 export const VueNoTitle = getStory({
-    "children": <Text typo="body 1">I am the body</Text>,
+    children: <Text typo="body 1">I am the body</Text>,
 });
 
 export const VueWithDivider = getStory({
-    "aboveDivider": <Text typo="object heading">This is the title</Text>,
-    "children": <Text typo="body 1">I am the body</Text>,
+    aboveDivider: <Text typo="object heading">This is the title</Text>,
+    children: <Text typo="body 1">I am the body</Text>,
 });

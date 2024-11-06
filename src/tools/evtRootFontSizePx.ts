@@ -13,8 +13,8 @@ export const getEvtRootFontSizePx = memoize(() => {
 
             [document.body, document.documentElement].forEach(element =>
                 observer.observe(element, {
-                    "attributes": true,
-                    "attributeFilter": ["style"],
+                    attributes: true,
+                    attributeFilter: ["style"],
                 }),
             );
 

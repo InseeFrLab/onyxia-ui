@@ -16,7 +16,7 @@ import { useTranslation } from "./i18n";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ Picker })]: Component },
+    wrappedComponent: { [symToStr({ Picker })]: Component },
 });
 
 export default meta;
@@ -49,8 +49,8 @@ function Component() {
 
     const [options, setOptions] = useState(
         ["oauth", "sso", "datascience", "office", "docker"].map(tag => ({
-            "id": tag,
-            "label": tag,
+            id: tag,
+            label: tag,
         })),
     );
 
@@ -71,8 +71,8 @@ function Component() {
                 setOptions([
                     ...options,
                     {
-                        "id": params.optionLabel,
-                        "label": params.optionLabel,
+                        id: params.optionLabel,
+                        label: params.optionLabel,
                     },
                 ]);
             }
@@ -102,8 +102,8 @@ function Component() {
                 ref={buttonRef}
                 onClick={() =>
                     evtGitHubPickerAction.post({
-                        "action": "open",
-                        "anchorEl":
+                        action: "open",
+                        anchorEl:
                             (assert(buttonRef.current !== null),
                             buttonRef.current),
                     })
@@ -118,10 +118,10 @@ function Component() {
                 evtAction={evtGitHubPickerAction}
                 getOptionColor={getTagColor}
                 texts={{
-                    "label": t("github picker label"),
+                    label: t("github picker label"),
                     "create option": ({ optionLabel }) =>
-                        t("github picker create tag", { "tag": optionLabel }),
-                    "done": t("github picker done"),
+                        t("github picker create tag", { tag: optionLabel }),
+                    done: t("github picker done"),
                 }}
             />
         </div>

@@ -4,14 +4,14 @@ import { getStoryFactory, logCallbacks } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { ButtonBarButton },
+    wrappedComponent: { ButtonBarButton },
 });
 
 export default meta;
 
 export const VueDefault = getStory({
-    "children": "Click me",
-    "disabled": false,
-    "startIcon": "services",
+    children: "Click me",
+    disabled: false,
+    startIcon: "services",
     ...logCallbacks(["onClick"]),
 });

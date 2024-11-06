@@ -43,17 +43,17 @@ function Component(props: {
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ Checkbox })]: Component },
+    wrappedComponent: { [symToStr({ Checkbox })]: Component },
 });
 
 export default meta;
 
 export const VueControlled = getStory({
-    "mode": "controlled",
-    "defaultIsChecked": false,
+    mode: "controlled",
+    defaultIsChecked: false,
 });
 
 export const VueUncontrolled = getStory({
-    "mode": "uncontrolled",
-    "defaultIsChecked": false,
+    mode: "uncontrolled",
+    defaultIsChecked: false,
 });

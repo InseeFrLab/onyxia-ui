@@ -14,8 +14,8 @@ function Component(props: Omit<SearchBarProps, "search" | "onSearchChange">) {
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ SearchBar })]: Component },
-    "defaultWidth": 700,
+    wrappedComponent: { [symToStr({ SearchBar })]: Component },
+    defaultWidth: 700,
 });
 
 export default meta;

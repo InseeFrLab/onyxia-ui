@@ -24,9 +24,9 @@ export type PageHeaderProps = {
 };
 
 const { usePageHeaderClosedHelpers } = createUseGlobalState({
-    "name": "pageHeaderClosedHelpers",
-    "initialState": id<string[]>([]),
-    "doPersistAcrossReloads": false,
+    name: "pageHeaderClosedHelpers",
+    initialState: id<string[]>([]),
+    doPersistAcrossReloads: false,
 });
 
 export const PageHeader = memo((props: PageHeaderProps) => {
@@ -72,7 +72,7 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                 {
                     const isCollapsed = false;
                     titleCollapseParams = id<CollapseParams>({
-                        "behavior": "controlled",
+                        behavior: "controlled",
                         isCollapsed,
                     });
                     isTitleCollapsed = isCollapsed;
@@ -134,7 +134,7 @@ export const PageHeader = memo((props: PageHeaderProps) => {
                 {
                     const isCollapsed = false;
                     helpCollapseParams = id<CollapseParams>({
-                        "behavior": "controlled",
+                        behavior: "controlled",
                         isCollapsed,
                     });
                     isHelpCollapsed = isCollapsed;
@@ -144,10 +144,10 @@ export const PageHeader = memo((props: PageHeaderProps) => {
 
         return {
             isHelpCollapsed,
-            "helpCollapseParams": isHelpClosed
+            helpCollapseParams: isHelpClosed
                 ? {
-                      "behavior": "controlled" as const,
-                      "isCollapsed": true,
+                      behavior: "controlled" as const,
+                      isCollapsed: true,
                   }
                 : helpCollapseParams,
         };
@@ -156,8 +156,8 @@ export const PageHeader = memo((props: PageHeaderProps) => {
     const { classes, cx } = useStyles({
         helperHeight,
         isTitleCollapsed,
-        "isHelpCollapsed": isHelpCollapsed || isHelpClosed,
-        "classesOverrides": props.classes,
+        isHelpCollapsed: isHelpCollapsed || isHelpClosed,
+        classesOverrides: props.classes,
     });
 
     return (
@@ -219,40 +219,40 @@ const useStyles = tss
         isHelpCollapsed: boolean;
     }>()
     .create(({ theme, helperHeight, isTitleCollapsed, isHelpCollapsed }) => ({
-        "root": {
-            "backgroundColor": "inherit",
-            "marginBottom":
+        root: {
+            backgroundColor: "inherit",
+            marginBottom:
                 !isTitleCollapsed || !isHelpCollapsed ? theme.spacing(3) : 0,
         },
-        "title": {
-            "display": "flex",
-            "alignItems": "center",
+        title: {
+            display: "flex",
+            alignItems: "center",
         },
-        "titleIcon": {
-            "marginRight": theme.spacing(3),
+        titleIcon: {
+            marginRight: theme.spacing(3),
         },
-        "help": {
-            "display": "flex",
-            "backgroundColor": theme.colors.useCases.surfaces.surface2,
-            "alignItems": "start",
-            "padding": theme.spacing(3),
-            "borderRadius": helperHeight * 0.15,
+        help: {
+            display: "flex",
+            backgroundColor: theme.colors.useCases.surfaces.surface2,
+            alignItems: "start",
+            padding: theme.spacing(3),
+            borderRadius: helperHeight * 0.15,
         },
-        "helpMiddle": {
-            "flex": 1,
+        helpMiddle: {
+            flex: 1,
         },
-        "helpTitle": {
-            "marginBottom": theme.spacing(2),
+        helpTitle: {
+            marginBottom: theme.spacing(2),
         },
-        "helpIcon": {
-            "marginRight": theme.spacing(3),
-            "color": theme.colors.useCases.typography.textFocus,
+        helpIcon: {
+            marginRight: theme.spacing(3),
+            color: theme.colors.useCases.typography.textFocus,
         },
-        "closeButton": {
-            "padding": 0,
-            "marginLeft": theme.spacing(3),
+        closeButton: {
+            padding: 0,
+            marginLeft: theme.spacing(3),
         },
-        "helpCollapsibleWrapper": {
-            "marginTop": isHelpCollapsed ? 0 : theme.spacing(3),
+        helpCollapsibleWrapper: {
+            marginTop: isHelpCollapsed ? 0 : theme.spacing(3),
         },
     }));

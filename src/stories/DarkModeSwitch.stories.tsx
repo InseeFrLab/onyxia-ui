@@ -4,11 +4,11 @@ import { getStoryFactory } from "./getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { DarkModeSwitch },
-    "argTypes": {
-        "size": {
-            "options": ["extra small", "small", "default", "medium", "large"],
-            "control": { "type": "radio" },
+    wrappedComponent: { DarkModeSwitch },
+    argTypes: {
+        size: {
+            options: ["extra small", "small", "default", "medium", "large"],
+            control: { type: "radio" },
         },
     },
 });
@@ -16,5 +16,5 @@ const { meta, getStory } = getStoryFactory({
 export default meta;
 
 export const VueDefault = getStory({
-    "size": "default",
+    size: "default",
 });

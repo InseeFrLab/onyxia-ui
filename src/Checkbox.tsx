@@ -29,12 +29,12 @@ export const Checkbox = memo((props: CheckboxProps) => {
             {...rest}
             {...(rest.checked !== undefined
                 ? {
-                      "value": rest.checked ? "on" : "off",
+                      value: rest.checked ? "on" : "off",
                   }
                 : {
-                      "checked": isChecked,
+                      checked: isChecked,
                       onChange,
-                      "value": isChecked ? "on" : "off",
+                      value: isChecked ? "on" : "off",
                   })}
         />
     );

@@ -93,294 +93,294 @@ export const defaultGetTypographyDesc: GetTypographyDesc<never> = ({
     windowInnerWidth,
     rootFontSizePx,
 }) => ({
-    "fontFamily": "sans-serif",
-    "rootFontSizePx": rootFontSizePx,
-    "variants": {
+    fontFamily: "sans-serif",
+    rootFontSizePx: rootFontSizePx,
+    variants: {
         "display heading": {
-            "htmlComponent": "h1",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("bold"),
+            htmlComponent: "h1",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("bold"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 2.8,
-                        "lineHeightRem": 3.25,
+                        fontSizeRem: 2.8,
+                        lineHeightRem: 3.25,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 2.25,
-                        "lineHeightRem": 2.5,
+                        fontSizeRem: 2.25,
+                        lineHeightRem: 2.5,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 1.75,
-                    "lineHeightRem": 2.5,
+                    fontSizeRem: 1.75,
+                    lineHeightRem: 2.5,
                 };
             })(),
         },
         "page heading": {
-            "htmlComponent": "h2",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("bold"),
+            htmlComponent: "h2",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("bold"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 2.25,
-                        "lineHeightRem": 2.5,
+                        fontSizeRem: 2.25,
+                        lineHeightRem: 2.5,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1.75,
-                        "lineHeightRem": 2.25,
+                        fontSizeRem: 1.75,
+                        lineHeightRem: 2.25,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 1.125,
-                    "lineHeightRem": 1.25,
+                    fontSizeRem: 1.125,
+                    lineHeightRem: 1.25,
                 };
             })(),
         },
-        "subtitle": {
-            "htmlComponent": "h3",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("normal"),
+        subtitle: {
+            htmlComponent: "h3",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("normal"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1.75,
-                        "lineHeightRem": 2.25,
+                        fontSizeRem: 1.75,
+                        lineHeightRem: 2.25,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1.5,
-                        "lineHeightRem": 2,
+                        fontSizeRem: 1.5,
+                        lineHeightRem: 2,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 1,
-                    "lineHeightRem": 1.475,
+                    fontSizeRem: 1,
+                    lineHeightRem: 1.475,
                 };
             })(),
         },
         "section heading": {
-            "htmlComponent": "h4",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("bold"),
+            htmlComponent: "h4",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("bold"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1.5,
-                        "lineHeightRem": 2,
+                        fontSizeRem: 1.5,
+                        lineHeightRem: 2,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1.25,
-                        "lineHeightRem": 1.7,
+                        fontSizeRem: 1.25,
+                        lineHeightRem: 1.7,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.875,
-                    "lineHeightRem": 1.28,
+                    fontSizeRem: 0.875,
+                    lineHeightRem: 1.28,
                 };
             })(),
         },
         "object heading": {
-            "htmlComponent": "h5",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>(600),
+            htmlComponent: "h5",
+            fontWeight: id<TypographyDesc.FontWeightProperty>(600),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1.25,
-                        "lineHeightRem": 1.7,
+                        fontSizeRem: 1.25,
+                        lineHeightRem: 1.7,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1.125,
-                        "lineHeightRem": 1.25,
+                        fontSizeRem: 1.125,
+                        lineHeightRem: 1.25,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.875,
-                    "lineHeightRem": 1.28,
+                    fontSizeRem: 0.875,
+                    lineHeightRem: 1.28,
                 };
             })(),
         },
         "navigation label": {
-            "htmlComponent": "h5",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>(500),
+            htmlComponent: "h5",
+            fontWeight: id<TypographyDesc.FontWeightProperty>(500),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1.25,
-                        "lineHeightRem": 1.7,
+                        fontSizeRem: 1.25,
+                        lineHeightRem: 1.7,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 1.125,
-                        "lineHeightRem": 1.25,
+                        fontSizeRem: 1.125,
+                        lineHeightRem: 1.25,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.875,
-                    "lineHeightRem": 1.28,
+                    fontSizeRem: 0.875,
+                    lineHeightRem: 1.28,
                 };
             })(),
         },
         "label 1": {
-            "htmlComponent": "h6",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>(500),
+            htmlComponent: "h6",
+            fontWeight: id<TypographyDesc.FontWeightProperty>(500),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1,
-                        "lineHeightRem": 1.475,
+                        fontSizeRem: 1,
+                        lineHeightRem: 1.475,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 0.875,
-                        "lineHeightRem": 1.28,
+                        fontSizeRem: 0.875,
+                        lineHeightRem: 1.28,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.75,
-                    "lineHeightRem": 1,
+                    fontSizeRem: 0.75,
+                    lineHeightRem: 1,
                 };
             })(),
         },
         "label 2": {
-            "htmlComponent": "h6",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>(500),
+            htmlComponent: "h6",
+            fontWeight: id<TypographyDesc.FontWeightProperty>(500),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 0.875,
-                        "lineHeightRem": 1.28,
+                        fontSizeRem: 0.875,
+                        lineHeightRem: 1.28,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 0.75,
-                        "lineHeightRem": 1,
+                        fontSizeRem: 0.75,
+                        lineHeightRem: 1,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.625,
-                    "lineHeightRem": 0.69,
+                    fontSizeRem: 0.625,
+                    lineHeightRem: 0.69,
                 };
             })(),
         },
         "body 1": {
-            "htmlComponent": "p",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("normal"),
+            htmlComponent: "p",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("normal"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 1,
-                        "lineHeightRem": 1.475,
+                        fontSizeRem: 1,
+                        lineHeightRem: 1.475,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 0.875,
-                        "lineHeightRem": 1.28,
+                        fontSizeRem: 0.875,
+                        lineHeightRem: 1.28,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.75,
-                    "lineHeightRem": 1,
+                    fontSizeRem: 0.75,
+                    lineHeightRem: 1,
                 };
             })(),
         },
         "body 2": {
-            "htmlComponent": "p",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("normal"),
+            htmlComponent: "p",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("normal"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 0.875,
-                        "lineHeightRem": 1.28,
+                        fontSizeRem: 0.875,
+                        lineHeightRem: 1.28,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 0.75,
-                        "lineHeightRem": 1,
+                        fontSizeRem: 0.75,
+                        lineHeightRem: 1,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.625,
-                    "lineHeightRem": 0.69,
+                    fontSizeRem: 0.625,
+                    lineHeightRem: 0.69,
                 };
             })(),
         },
         "body 3": {
-            "htmlComponent": "p",
-            "fontWeight": "normal",
+            htmlComponent: "p",
+            fontWeight: "normal",
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 0.875,
-                        "lineHeightRem": 1.28,
+                        fontSizeRem: 0.875,
+                        lineHeightRem: 1.28,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 0.75,
-                        "lineHeightRem": 1,
+                        fontSizeRem: 0.75,
+                        lineHeightRem: 1,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.625,
-                    "lineHeightRem": 0.69,
+                    fontSizeRem: 0.625,
+                    lineHeightRem: 0.69,
                 };
             })(),
         },
-        "caption": {
-            "htmlComponent": "p",
-            "fontWeight": id<TypographyDesc.FontWeightProperty>("normal"),
+        caption: {
+            htmlComponent: "p",
+            fontWeight: id<TypographyDesc.FontWeightProperty>("normal"),
             ...(() => {
                 if (windowInnerWidth >= breakpointsValues.xl) {
                     return {
-                        "fontSizeRem": 0.75,
-                        "lineHeightRem": 1,
+                        fontSizeRem: 0.75,
+                        lineHeightRem: 1,
                     };
                 }
 
                 if (windowInnerWidth >= breakpointsValues.lg) {
                     return {
-                        "fontSizeRem": 0.625,
-                        "lineHeightRem": 0.69,
+                        fontSizeRem: 0.625,
+                        lineHeightRem: 0.69,
                     };
                 }
 
                 return {
-                    "fontSizeRem": 0.45,
-                    "lineHeightRem": 0.75,
+                    fontSizeRem: 0.45,
+                    lineHeightRem: 0.75,
                 };
             })(),
         },
@@ -423,11 +423,11 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
             } = variants[variantName];
 
             return {
-                "fontFamily": variantFontFamily ?? fontFamily,
+                fontFamily: variantFontFamily ?? fontFamily,
                 fontWeight,
                 //NOTE: We put as any because we use TS 4.2.2 for Storybook but with newer version is not necessary.
-                "fontSize": `${fontSizeRem * rootFontSizePx}px` as any,
-                "lineHeight": `${lineHeightRem * rootFontSizePx}px` as any,
+                fontSize: `${fontSizeRem * rootFontSizePx}px` as any,
+                lineHeight: `${lineHeightRem * rootFontSizePx}px` as any,
             };
         }
 
@@ -444,16 +444,16 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
         });
 
         const computedTypography: ComputedTypography<CustomVariantName> = {
-            "rootFontSizePx": typographyDesc.rootFontSizePx,
-            "fontFamily": typographyDesc.fontFamily,
-            "variants": {} as any,
+            rootFontSizePx: typographyDesc.rootFontSizePx,
+            fontFamily: typographyDesc.fontFamily,
+            variants: {} as any,
         };
 
         objectKeys(typographyDesc.variants).forEach(
             variantName =>
                 (computedTypography.variants[variantName] = {
-                    "style": getTypographyVariantStyle({ variantName }),
-                    "htmlComponent":
+                    style: getTypographyVariantStyle({ variantName }),
+                    htmlComponent:
                         typographyDesc.variants[variantName].htmlComponent,
                 }),
         );
@@ -471,32 +471,32 @@ export const { createMuiTypographyOptions, getComputedTypography } = (() => {
         });
 
         return {
-            "fontFamily": typographyDesc.fontFamily,
-            "fontWeightRegular": "normal",
-            "fontWeightMedium": 500,
-            "h1": getTypographyVariantStyle({
-                "variantName": "display heading",
+            fontFamily: typographyDesc.fontFamily,
+            fontWeightRegular: "normal",
+            fontWeightMedium: 500,
+            h1: getTypographyVariantStyle({
+                variantName: "display heading",
             }),
-            "h2": getTypographyVariantStyle({ "variantName": "page heading" }),
-            "h3": getTypographyVariantStyle({ "variantName": "subtitle" }),
-            "h4": getTypographyVariantStyle({
-                "variantName": "section heading",
+            h2: getTypographyVariantStyle({ variantName: "page heading" }),
+            h3: getTypographyVariantStyle({ variantName: "subtitle" }),
+            h4: getTypographyVariantStyle({
+                variantName: "section heading",
             }),
-            "h5": getTypographyVariantStyle({
-                "variantName": "object heading",
+            h5: getTypographyVariantStyle({
+                variantName: "object heading",
             }),
-            "h6": getTypographyVariantStyle({
-                "variantName": "navigation label",
+            h6: getTypographyVariantStyle({
+                variantName: "navigation label",
             }),
-            "subtitle1": getTypographyVariantStyle({
-                "variantName": "label 1",
+            subtitle1: getTypographyVariantStyle({
+                variantName: "label 1",
             }),
-            "subtitle2": getTypographyVariantStyle({ "variantName": "body 2" }),
-            "body1": getTypographyVariantStyle({ "variantName": "body 1" }),
-            "body2": getTypographyVariantStyle({ "variantName": "body 2" }),
-            "caption": getTypographyVariantStyle({ "variantName": "caption" }),
-            "button": getTypographyVariantStyle({
-                "variantName": variantNameUsedForMuiButton,
+            subtitle2: getTypographyVariantStyle({ variantName: "body 2" }),
+            body1: getTypographyVariantStyle({ variantName: "body 1" }),
+            body2: getTypographyVariantStyle({ variantName: "body 2" }),
+            caption: getTypographyVariantStyle({ variantName: "caption" }),
+            button: getTypographyVariantStyle({
+                variantName: variantNameUsedForMuiButton,
             }),
         };
     }

@@ -43,7 +43,7 @@ export function MyComponent() {
 
         useEffect(() => {
             if (isLoading) {
-                showSplashScreen({ "enableTransparency": true });
+                showSplashScreen({ enableTransparency: true });
             } else {
                 hideSplashScreen();
             }
@@ -64,12 +64,12 @@ export function MyComponent() {
                 <Icon
                     icon={id<MuiIconComponentName>("EmojiPeople")}
                     className={css({
-                        "fontSize": "inherit",
+                        fontSize: "inherit",
                         ...(() => {
                             const factor = 0.92;
                             return {
-                                "width": `${factor}em`,
-                                "height": `${factor}em`,
+                                width: `${factor}em`,
+                                height: `${factor}em`,
                             };
                         })(),
                     })}
@@ -103,8 +103,8 @@ export function MyComponent() {
             <Button
                 onClick={() => {
                     evtTextFormDialogOpen.post({
-                        "defaultText": "Hello World",
-                        "resolveText": ({ doProceed, text }) => {
+                        defaultText: "Hello World",
+                        resolveText: ({ doProceed, text }) => {
                             if (!doProceed) {
                                 alert("You cancelled the dialog");
                                 return;
@@ -128,20 +128,20 @@ export function MyComponent() {
 
 //See: https://github.com/garronej/tss-react
 const useStyles = tss.withName({ MyComponent }).create(({ theme }) => ({
-    "root": {
-        "backgroundColor": theme.colors.useCases.surfaces.background,
+    root: {
+        backgroundColor: theme.colors.useCases.surfaces.background,
         /*
             theme.colors.palette.shinyPink.main <- your custom color
             theme.colors.useCases.flashes.cute  <- your custom use case
             theme.muiTheme                      <- the theme object as defined by @mui/material
             */
     },
-    "themedImageData": {
-        "filter": "drop-shadow(0px 4px 4px rgba(44, 50, 63, 0.2))",
-        "fill": "currentColor",
-        "color": theme.colors.useCases.typography.textFocus,
-        "display": "block",
-        "width": 60,
-        "marginTop": theme.spacing(2),
+    themedImageData: {
+        filter: "drop-shadow(0px 4px 4px rgba(44, 50, 63, 0.2))",
+        fill: "currentColor",
+        color: theme.colors.useCases.typography.textFocus,
+        display: "block",
+        width: 60,
+        marginTop: theme.spacing(2),
     },
 }));

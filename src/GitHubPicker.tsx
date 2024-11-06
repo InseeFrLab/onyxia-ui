@@ -49,10 +49,10 @@ export type GitHubPickerProps = {
           }
     >;
     texts?: {
-        "label"?: NonNullable<ReactNode>;
+        label?: NonNullable<ReactNode>;
         /**Undefined when we don't want to allow tags to be created*/
         "create tag"?: (params: { tag: string }) => ReactNode;
-        "done"?: ReactNode;
+        done?: ReactNode;
     };
 };
 
@@ -102,7 +102,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
         onClose_props?.();
     });
 
-    const { ref } = useClickAway({ "onClickAway": onClose });
+    const { ref } = useClickAway({ onClickAway: onClose });
 
     const evtInputValue = useConst(() => Evt.create(""));
 
@@ -139,7 +139,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                             }}
                             value={selectedTags.map(tag => ({
                                 tag,
-                                "color": getTagColor(tag),
+                                color: getTagColor(tag),
                             }))}
                             onChange={(event, newValue, reason) => {
                                 if (
@@ -164,14 +164,14 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                 onSelectedTags(
                                     newTag !== undefined
                                         ? {
-                                              "tag": newTag,
-                                              "isNewTag":
+                                              tag: newTag,
+                                              isNewTag:
                                                   tags.indexOf(newTag) === -1,
-                                              "isSelect": true,
+                                              isSelect: true,
                                           }
                                         : {
-                                              "tag": removed[0],
-                                              "isSelect": false,
+                                              tag: removed[0],
+                                              isSelect: false,
                                           },
                                 );
                             }}
@@ -205,13 +205,13 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                     <Box
                                         component={createSpecificIcon(DoneIcon)}
                                         sx={{
-                                            "width": 17,
-                                            "height": 17,
-                                            "mr": "5px",
-                                            "ml": "-2px",
+                                            width: 17,
+                                            height: 17,
+                                            mr: "5px",
+                                            ml: "-2px",
                                         }}
                                         style={{
-                                            "visibility": selected
+                                            visibility: selected
                                                 ? "visible"
                                                 : "hidden",
                                         }}
@@ -249,12 +249,12 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                             CloseIcon,
                                         )}
                                         sx={{
-                                            "opacity": 0.6,
-                                            "width": 18,
-                                            "height": 18,
+                                            opacity: 0.6,
+                                            width: 18,
+                                            height: 18,
                                         }}
                                         style={{
-                                            "visibility": selected
+                                            visibility: selected
                                                 ? "visible"
                                                 : "hidden",
                                         }}
@@ -277,7 +277,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                 })
                                 .map(tag => ({
                                     tag,
-                                    "color": getTagColor(tag),
+                                    color: getTagColor(tag),
                                 }))}
                             getOptionLabel={option => option.tag}
                             renderInput={({
@@ -289,7 +289,7 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                     ref={params.InputProps.ref}
                                     inputProps={{
                                         ...inputProps,
-                                        "onChange": (...args) => {
+                                        onChange: (...args) => {
                                             evtInputValue.state = (
                                                 args[0] as React.ChangeEvent<HTMLInputElement>
                                             ).target.value;
@@ -309,9 +309,9 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
                                     tags={tags}
                                     onClick={inputValue =>
                                         onSelectedTags({
-                                            "tag": inputValue,
-                                            "isSelect": true,
-                                            "isNewTag": true,
+                                            tag: inputValue,
+                                            isSelect: true,
+                                            isNewTag: true,
                                         })
                                     }
                                     texts={texts}
@@ -334,64 +334,63 @@ export const GitHubPicker = memo((props: GitHubPickerProps) => {
 });
 
 const useStyles = tss.withName({ GitHubPicker }).create(({ theme }) => ({
-    "root": {
-        "border": `1px solid ${
+    root: {
+        border: `1px solid ${
             theme.muiTheme.palette.mode === "light" ? "#e1e4e8" : "#30363d"
         }`,
-        "boxShadow": `0 8px 24px ${
+        boxShadow: `0 8px 24px ${
             theme.muiTheme.palette.mode === "light"
                 ? "rgba(149, 157, 165, 0.2)"
                 : "rgb(1, 4, 9)"
         }`,
-        "borderRadius": 6,
-        "width": 300,
-        "zIndex": theme.muiTheme.zIndex.modal,
-        "fontSize": 13,
-        "color":
-            theme.muiTheme.palette.mode === "light" ? "#24292e" : "#c9d1d9",
-        "backgroundColor":
+        borderRadius: 6,
+        width: 300,
+        zIndex: theme.muiTheme.zIndex.modal,
+        fontSize: 13,
+        color: theme.muiTheme.palette.mode === "light" ? "#24292e" : "#c9d1d9",
+        backgroundColor:
             theme.muiTheme.palette.mode === "light" ? "#fff" : "#1c2128",
     },
-    "labelWrapper": {
-        "borderBottom": `1px solid ${
+    labelWrapper: {
+        borderBottom: `1px solid ${
             theme.muiTheme.palette.mode === "light" ? "#eaecef" : "#30363d"
         }`,
-        "padding": "8px 10px",
+        padding: "8px 10px",
     },
-    "autocompletePopperComponent": {
+    autocompletePopperComponent: {
         [`& .${autocompleteClasses.paper}`]: {
-            "boxShadow": "none",
-            "margin": 0,
-            "color": "inherit",
-            "fontSize": 13,
+            boxShadow: "none",
+            margin: 0,
+            color: "inherit",
+            fontSize: 13,
         },
         [`& .${autocompleteClasses.listbox}`]: {
-            "backgroundColor":
+            backgroundColor:
                 theme.muiTheme.palette.mode === "light" ? "#fff" : "#1c2128",
-            "padding": 0,
+            padding: 0,
             [`& .${autocompleteClasses.option}`]: {
-                "minHeight": "auto",
-                "alignItems": "flex-start",
-                "padding": 8,
-                "borderBottom": `1px solid  ${
+                minHeight: "auto",
+                alignItems: "flex-start",
+                padding: 8,
+                borderBottom: `1px solid  ${
                     theme.muiTheme.palette.mode === "light"
                         ? " #eaecef"
                         : "#30363d"
                 }`,
                 '&[aria-selected="true"]': {
-                    "backgroundColor": "transparent",
+                    backgroundColor: "transparent",
                 },
                 [`&.${autocompleteClasses.focused}, &.${autocompleteClasses.focused}[aria-selected="true"]`]:
                     {
-                        "backgroundColor": theme.muiTheme.palette.action.hover,
+                        backgroundColor: theme.muiTheme.palette.action.hover,
                     },
             },
         },
         [`&.${autocompleteClasses.popperDisablePortal}`]: {
-            "position": "relative",
+            position: "relative",
         },
     },
-    "input": {
+    input: {
         padding: 10,
         width: "100%",
         borderBottom: `1px solid ${
@@ -423,13 +422,13 @@ const useStyles = tss.withName({ GitHubPicker }).create(({ theme }) => ({
             },
         },
     },
-    "doneButtonWrapper": {
-        "display": "flex",
-        "justifyContent": "space-between",
-        "alignItems": "center",
+    doneButtonWrapper: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
-    "doneButton": {
-        "margin": theme.spacing(2),
+    doneButton: {
+        margin: theme.spacing(2),
     },
 }));
 
@@ -467,15 +466,15 @@ const { NoOptionText } = (() => {
                 className={classes.root}
                 onClick={() => onClick(inputValue)}
             >
-                {texts["create tag"]({ "tag": inputValue })}
+                {texts["create tag"]({ tag: inputValue })}
             </MuiLink>
         );
     });
 
     const useStyles = tss.withName({ NoOptionText }).create(({ theme }) => ({
-        "root": {
-            "cursor": "pointer",
-            "paddingLeft": theme.spacing(3),
+        root: {
+            cursor: "pointer",
+            paddingLeft: theme.spacing(3),
         },
     }));
 

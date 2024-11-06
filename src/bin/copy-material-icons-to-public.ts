@@ -110,7 +110,7 @@ async function readPublicDirPath() {
             process.exit(-1);
         }
 
-        fs.mkdirSync(publicDirPath, { "recursive": true });
+        fs.mkdirSync(publicDirPath, { recursive: true });
     }
 
     return publicDirPath;
@@ -122,9 +122,9 @@ export async function downloadMaterialIcons(params: { publicDirPath: string }) {
     const materialIconsDirPath = pathJoin(publicDirPath, "material-icons");
 
     if (fs.existsSync(materialIconsDirPath)) {
-        fs.rmSync(materialIconsDirPath, { "recursive": true, "force": true });
+        fs.rmSync(materialIconsDirPath, { recursive: true, force: true });
     }
-    fs.mkdirSync(materialIconsDirPath, { "recursive": true });
+    fs.mkdirSync(materialIconsDirPath, { recursive: true });
     fs.writeFileSync(
         pathJoin(materialIconsDirPath, ".gitignore"),
         Buffer.from("*", "utf8"),
@@ -137,23 +137,18 @@ export async function downloadMaterialIcons(params: { publicDirPath: string }) {
 
     await downloadAndUnzip({
         //"url": `https://github.com/mui/material-ui/archive/refs/tags/v${version}.zip`,
-        "url": `https://github.com/InseeFrLab/onyxia-ui/releases/download/v0.0.1/material-ui-${version}-icons-only.zip`,
-        "destDirPath": materialIconsDirPath,
-        "specificDirsToExtract": [
+        url: `https://github.com/InseeFrLab/onyxia-ui/releases/download/v0.0.1/material-ui-${version}-icons-only.zip`,
+        destDirPath: materialIconsDirPath,
+        specificDirsToExtract: [
             `material-ui-${version}/packages/mui-icons-material/material-icons`,
         ],
-        "doUseCache": true,
+        doUseCache: true,
         projectDirPath,
     });
 
     transformCodebase({
-        "srcDirPath": pathJoin(
-            getProjectRoot(),
-            "src",
-            "assets",
-            "extra-icons",
-        ),
-        "destDirPath": materialIconsDirPath,
+        srcDirPath: pathJoin(getProjectRoot(), "src", "assets", "extra-icons"),
+        destDirPath: materialIconsDirPath,
     });
 }
 
@@ -173,7 +168,7 @@ function getRepoIssueUrl() {
 if (require.main === module) {
     (async () => {
         await downloadMaterialIcons({
-            "publicDirPath": await readPublicDirPath(),
+            publicDirPath: await readPublicDirPath(),
         });
     })();
 }

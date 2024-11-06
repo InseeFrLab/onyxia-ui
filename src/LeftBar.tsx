@@ -72,9 +72,9 @@ function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
 
     if (useIsCollapsed === undefined) {
         useIsCollapsed = createUseGlobalState({
-            "name": "isCollapsed",
-            "initialState": !defaultIsPanelOpen,
-            "doPersistAcrossReloads": doPersistIsPanelOpen,
+            name: "isCollapsed",
+            initialState: !defaultIsPanelOpen,
+            doPersistAcrossReloads: doPersistIsPanelOpen,
         }).useIsCollapsed;
     }
 
@@ -87,8 +87,8 @@ function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
     const toggleIsCollapsedLink = useMemo(
         () =>
             id<LeftBarProps.Item["link"]>({
-                "href": "#",
-                "onClick": event => {
+                href: "#",
+                onClick: event => {
                     event.preventDefault();
                     setAreTransitionEnabled(true);
                     setIsCollapsed(isCollapsed => !isCollapsed);
@@ -106,12 +106,12 @@ function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
     const [areTransitionEnabled, setAreTransitionEnabled] = useState(false);
 
     const { classes, cx } = useStyles({
-        "rootWidth": isCollapsed ? collapsedWidth : wrapperWidth,
+        rootWidth: isCollapsed ? collapsedWidth : wrapperWidth,
         ...(() => {
             const paddingTopBottomFactor = 3;
             return {
                 paddingTopBottomFactor,
-                "rootHeight":
+                rootHeight:
                     wrapperHeight + theme.spacing(paddingTopBottomFactor) * 2,
             };
         })(),
@@ -169,25 +169,25 @@ const useStyles = tss
             paddingTopBottomFactor,
             areTransitionEnabled,
         }) => ({
-            "root": {
-                "borderRadius": 16,
-                "boxShadow": theme.shadows[3],
-                "overflow": "auto",
-                "backgroundColor": theme.colors.useCases.surfaces.surface1,
+            root: {
+                borderRadius: 16,
+                boxShadow: theme.shadows[3],
+                overflow: "auto",
+                backgroundColor: theme.colors.useCases.surfaces.surface1,
             },
-            "nav": {
-                "width": rootWidth,
-                "height": rootHeight,
+            nav: {
+                width: rootWidth,
+                height: rootHeight,
                 ...theme.spacing.topBottom("padding", paddingTopBottomFactor),
-                "transition": areTransitionEnabled ? "width 250ms" : undefined,
-                "position": "relative",
-                "overflow": "hidden",
+                transition: areTransitionEnabled ? "width 250ms" : undefined,
+                position: "relative",
+                overflow: "hidden",
             },
-            "wrapper": {
-                "position": "absolute",
+            wrapper: {
+                position: "absolute",
             },
-            "button": {
-                "marginTop": theme.spacing(2),
+            button: {
+                marginTop: theme.spacing(2),
             },
         }),
     );
@@ -221,12 +221,12 @@ const { CustomButton } = (() => {
         } = useDomRect();
 
         const { classes, cx } = useStyles({
-            "collapsedWidth":
+            collapsedWidth:
                 collapsedWidth ?? 2 * theme.iconSizesInPxByName[iconSize],
             isCollapsed,
             isCurrent,
             width,
-            "isDisabled": availability === "greyed",
+            isDisabled: availability === "greyed",
         });
 
         if (availability === "not visible") {
@@ -285,92 +285,91 @@ const { CustomButton } = (() => {
                 isDisabled,
                 classes,
             }) => ({
-                "root": {
-                    ...(isDisabled ? { "pointerEvents": "none" } : {}),
-                    "color": theme.colors.useCases.typography.textPrimary,
-                    "textDecoration": "none",
-                    "display": "flex",
-                    "cursor": "pointer",
+                root: {
+                    ...(isDisabled ? { pointerEvents: "none" } : {}),
+                    color: theme.colors.useCases.typography.textPrimary,
+                    textDecoration: "none",
+                    display: "flex",
+                    cursor: "pointer",
                     [`&:hover .${classes.iconHoverBox}`]: {
-                        "backgroundColor":
+                        backgroundColor:
                             theme.colors.useCases.surfaces.background,
                     },
                     [`&:hover .${classes.typoWrapper}`]: {
-                        "backgroundColor": !isCollapsed
+                        backgroundColor: !isCollapsed
                             ? theme.colors.useCases.surfaces.background
                             : undefined,
                     },
                     [[".MuiSvgIcon-root", "h6"]
                         .map(name => `&${isCurrent ? "" : ":active"} ${name}`)
                         .join(", ")]: {
-                        "color": theme.colors.useCases.typography.textFocus,
+                        color: theme.colors.useCases.typography.textFocus,
                     },
                 },
-                "iconWrapper": {
-                    "width": collapsedWidth,
-                    "textAlign": "center",
-                    "position": "relative",
-                    "color": isDisabled
+                iconWrapper: {
+                    width: collapsedWidth,
+                    textAlign: "center",
+                    position: "relative",
+                    color: isDisabled
                         ? theme.colors.useCases.typography.textDisabled
                         : undefined,
                 },
 
-                "icon": {
-                    "position": "relative",
-                    "zIndex": 2,
+                icon: {
+                    position: "relative",
+                    zIndex: 2,
                     ...theme.spacing.topBottom("margin", 2),
                     ...(isCurrent !== undefined
                         ? {}
                         : {
-                              "transform": isCollapsed
+                              transform: isCollapsed
                                   ? "rotate(-180deg)"
                                   : "rotate(0)",
                           }),
-                    "transition": `transform 250ms`,
+                    transition: `transform 250ms`,
                 },
-                "iconHoverBox": {
-                    "display": "inline-block",
-                    "position": "absolute",
-                    "height": "100%",
+                iconHoverBox: {
+                    display: "inline-block",
+                    position: "absolute",
+                    height: "100%",
                     ...(() => {
                         const offset = collapsedWidth / 8;
 
                         return {
-                            "left": offset,
-                            "right": isCollapsed ? offset : 0,
+                            left: offset,
+                            right: isCollapsed ? offset : 0,
                         };
                     })(),
-                    "zIndex": 1,
-                    "borderRadius": `10px ${
+                    zIndex: 1,
+                    borderRadius: `10px ${
                         isCollapsed ? "10px 10px" : "0 0"
                     } 10px`,
                 },
 
-                "typoWrapper": {
-                    "paddingRight": theme.spacing(2),
-                    "flex": 1,
-                    "borderRadius": "0 10px 10px 0",
-                    "display": "flex",
-                    "alignItems": "center",
-                    "marginRight": theme.spacing(5),
+                typoWrapper: {
+                    paddingRight: theme.spacing(2),
+                    flex: 1,
+                    borderRadius: "0 10px 10px 0",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: theme.spacing(5),
                 },
 
-                "typo": {
-                    "color": isDisabled
+                typo: {
+                    color: isDisabled
                         ? theme.colors.useCases.typography.textDisabled
                         : undefined,
-                    "whiteSpace": "nowrap",
-                    "marginRight": theme.spacing(2),
+                    whiteSpace: "nowrap",
+                    marginRight: theme.spacing(2),
                 },
-                "divider": {
-                    "marginTop": theme.spacing(2),
-                    "borderColor":
-                        theme.colors.useCases.typography.textTertiary,
-                    "width":
+                divider: {
+                    marginTop: theme.spacing(2),
+                    borderColor: theme.colors.useCases.typography.textTertiary,
+                    width:
                         (isCollapsed ? collapsedWidth : width) -
                         2 * theme.spacing(2),
-                    "marginLeft": theme.spacing(2),
-                    "transition": "width 250ms",
+                    marginLeft: theme.spacing(2),
+                    transition: "width 250ms",
                 },
             }),
         );

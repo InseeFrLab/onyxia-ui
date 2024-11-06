@@ -6,16 +6,16 @@ const { i18n } = declareComponentKeys<
     | { K: "github picker create tag"; P: { tag: string } }
     | { K: "github picker done"; R: JSX.Element }
     | "something else"
->()({ "Picker": null });
+>()({ Picker: null });
 
 export const { useTranslation } = createI18nApi<typeof i18n>()(
     {
-        "languages": ["en", "fr"],
-        "fallbackLanguage": "en",
+        languages: ["en", "fr"],
+        fallbackLanguage: "en",
     },
     {
-        "en": {
-            "Picker": {
+        en: {
+            Picker: {
                 "github picker label": "Pick tag",
                 "github picker create tag": ({ tag }) =>
                     `Create the "${tag}" tag`,
@@ -23,8 +23,8 @@ export const { useTranslation } = createI18nApi<typeof i18n>()(
                 "something else": "ok",
             },
         },
-        "fr": {
-            "Picker": {
+        fr: {
+            Picker: {
                 "github picker label": undefined,
                 "github picker create tag": undefined,
                 "github picker done": undefined,
