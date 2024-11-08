@@ -1,9 +1,9 @@
 import { LeftBar } from "../LeftBar";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
-import { id } from "tsafe/id";
-import type { MuiIconComponentName } from "../MuiIconComponentName";
 import { customIcons } from "./theme";
+import HelpIcon from "@mui/icons-material/Help";
+import HomeIcon from "@mui/icons-material/Home";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -33,7 +33,7 @@ export const VueNoTitle = getStory({
             },
         },
         item3: {
-            icon: id<MuiIconComponentName>("Help"),
+            icon: HelpIcon,
             label: "Item three",
             belowDivider: true,
             link: {
@@ -42,7 +42,7 @@ export const VueNoTitle = getStory({
             availability: "greyed",
         },
         item4: {
-            icon: id<MuiIconComponentName>("Home"),
+            icon: HomeIcon,
             label: "The fourth item",
             link: {
                 href: "#",

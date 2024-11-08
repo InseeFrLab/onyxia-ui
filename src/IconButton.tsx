@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { tss } from "./lib/tss";
 import { forwardRef, memo } from "react";
 import MuiIconButton from "@mui/material/IconButton";

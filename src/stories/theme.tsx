@@ -15,7 +15,6 @@ const { OnyxiaUi: OnyxiaUiWithoutEmotionCache } = createOnyxiaUi({
         fontFamily: '"Work Sans", sans-serif',
         //"fontFamily": "Marianne, sans-serif",
     }),
-    BASE_URL: process.env.NODE_ENV === "development" ? "" : "/onyxia-ui",
 });
 
 export function OnyxiaUi(props: {

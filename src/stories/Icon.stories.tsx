@@ -2,12 +2,13 @@ import { Icon } from "../Icon";
 import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { customIcons } from "./theme";
-import type { MuiIconComponentName } from "../MuiIconComponentName";
+import HomeIcon from "@mui/icons-material/Home";
+import HelpIcon from "@mui/icons-material/Help";
 import { id } from "tsafe/id";
 
 const icons = [
-    id<MuiIconComponentName>("Home"),
-    id<MuiIconComponentName>("Help"),
+    HomeIcon,
+    HelpIcon,
     customIcons.tourSvgUrl,
     customIcons.servicesSvgUrl,
 ] as const;

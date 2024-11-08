@@ -364,12 +364,10 @@ const { CustomButton } = (() => {
             const rest = (() => {
                 switch (restTmp.type) {
                     case "arrow": {
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         const { type, direction, ...out } = restTmp;
                         return out;
                     }
                     case "tab": {
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         const { type, text, ...out } = restTmp;
                         return out;
                     }
@@ -387,7 +385,6 @@ const { CustomButton } = (() => {
             );
 
             //For the forwarding, rest should be empty (typewise),
-            // eslint-disable-next-line @typescript-eslint/ban-types
             assert<Equals<typeof rest, {}>>();
 
             const { classes, cx, css, theme } = useStyles({

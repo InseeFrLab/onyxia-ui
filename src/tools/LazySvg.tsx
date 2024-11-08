@@ -11,7 +11,6 @@ export type LazySvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
 
 export const LazySvg = memo(
     forwardRef<SVGSVGElement, LazySvgProps>((props, ref) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { svgUrl, children: _, ...svgComponentProps } = props;
 
         const [state, setState] = useState<

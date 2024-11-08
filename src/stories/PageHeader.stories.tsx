@@ -4,8 +4,8 @@ import { sectionName } from "./sectionName";
 import { getStoryFactory } from "./getStory";
 import { symToStr } from "tsafe/symToStr";
 import { useStateRef } from "powerhooks/useStateRef";
-import type { MuiIconComponentName } from "../MuiIconComponentName";
-import { id } from "tsafe/id";
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
+import HomeIcon from "@mui/icons-material/Home";
 import accountSvgUrl from "./assets/svg/account_v1.svg";
 
 function Component(
@@ -80,9 +80,9 @@ export default meta;
 
 export const VueDefault = getStory({
     helpContent: "This is the content of the help",
-    helpIcon: id<MuiIconComponentName>("SentimentSatisfied"),
+    helpIcon: SentimentSatisfiedIcon,
     helpTitle: "This is the help title",
-    mainIcon: id<MuiIconComponentName>("Home"),
+    mainIcon: HomeIcon,
     title: "This is the title",
     transitionDuration: 250,
 });

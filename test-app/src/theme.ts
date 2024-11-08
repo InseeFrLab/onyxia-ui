@@ -14,7 +14,6 @@ import fooSvgUrl from "./assets/foo.svg";
 import barSvgUrl from "./assets/bar.svg";
 
 const { OnyxiaUi, ofTypeTheme } = createOnyxiaUi({
-    BASE_URL: process.env.PUBLIC_URL,
     getTypographyDesc: params => {
         const typographyDesc = defaultGetTypographyDesc(params);
 

@@ -15,16 +15,15 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-scripts": "5.0.1",
-        "typescript": "^4.7.4"
+        "typescript": "^4.7.4",
+        "mui-icons-material-lazy": "^1.0.1"
     },
     "scripts": {
+        "postinstall": "mui-icons-material-lazy postinstall",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "copy-material-icons-to-public": "node node_modules/onyxia-ui/bin/copy-material-icons-to-public.js",
-        "prestart": "yarn copy-material-icons-to-public",
-        "prebuild": "yarn copy-material-icons-to-public"
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
         "extends": [

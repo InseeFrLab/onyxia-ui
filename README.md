@@ -27,8 +27,13 @@ any [MUI component](https://mui.com/) they will be automatically styled to fit t
 
 Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) and is not SSR compatible (Not compatible with Next).
 
-> [!NOTE]  
-> There's an extention of Onyxia UI for creating Landing pages: [gitlanding](https://github.com/thieryw/gitlanding)
+# Eco-system
+
+-   [tss-react](https://tss-react.dev): Mandatory, the styling solution used by `onyxia-ui`.
+-   [@mui/material](https://mui.com/): Mandatory, onyxia-ui is built on top of MUI.
+-   [gitlanding](https://github.com/thieryw/gitlanding): Optional, a component library to create landing pages with `onyxia-ui`.
+-   [mui-icons-material-lazy](https://github.com/InseeFrLab/mui-icons-material-lazy): Optional, Enable lazy loading of Material icons (if you don't know at build time which icons you will need).
+-   [screen-scaler](https://github.com/garronej/screen-scaler): Optional, if you don't have time to make your app responsive.
 
 # Showcase
 
@@ -61,75 +66,3 @@ Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) an
 The easyer way to get started is to checkout this demo repository: [onyxia-ui + gilanding starter](https://github.com/garronej/gitlanding-demo).
 
 You can see more advanced examples here: [test app of this repo](https://github.com/InseeFrLab/onyxia-ui/tree/main/test-app).
-
-## Icons
-
-Onyxia-ui enables you to use icons from [the Material Design Library](https://mui.com/material-ui/material-icons/).  
-Or to provide your own icon as SVG urls.
-
-### Using Material Icons: With hard import
-
-If you know what icon you'll need ahead of time, implement this approach:
-
-```bash
-yarn add @mui/icons-material@5.16.7
-```
-
-Now if you want to use [AccessAlarms](https://mui.com/material-ui/material-icons/?selected=AccessAlarms)
-
-```tsx
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
-
-<Icon icon={AccessAlarmIcon} />;
-```
-
-### Using Material Icons: With lazy loading
-
-If you don't know ahead of time what icon you will need. This is the case if your app
-renders user generated content that might include icons then you can opt for downloading the
-icons dynamically.  
-Be aware that this involves including a 35MB directory of icons in your `public/` directory
-which will end up impacting your docker image size.
-
-```diff
-"scripts": {
-    "prepare": "copy-material-icons-to-public"
-}
-```
-
-OPTIONAL: Use cache in your Workflow to speed up your CI pipeline
-
-```yarn
-    - uses: bahmutov/npm-install@v1
-      env:
-        XDG_CACHE_HOME: "/home/runner/.cache/yarn"
-```
-
-This will enable you to do this:
-
-```tsx
-import { Icon } from "onyxia-ui/Icon";
-
-// https://mui.com/material-ui/material-icons/?selected=AccessAlarms
-<Icon icon="AccessAlarms" />;
-```
-
-Or, if you want type safety:
-
-```tsx
-import { Icon } from "onyxia-ui/Icon";
-import { id } from "tsafe/id";
-import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName";
-
-// https://mui.com/material-ui/material-icons/?selected=AccessAlarms
-<Icon icon={id<MuiIconComponentName>("AccessAlarms")} />;
-```
-
-### Using custom SVGs as icons
-
-```tsx
-import myIconSvgUrl from "./assets/my-icon.svg";
-
-<Icon icon={myIconSvgUrl} />
-<Icon icon="https://example.com/foo/my-icon.svg" />
-```

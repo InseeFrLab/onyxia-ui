@@ -21,7 +21,6 @@ export const Card = memo(
         } = props;
 
         //For the forwarding, rest should be empty (typewise),
-        // eslint-disable-next-line @typescript-eslint/ban-types
         assert<Equals<typeof rest, {}>>();
 
         const { classes, cx } = useStyles();

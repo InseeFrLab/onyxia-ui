@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ReactNode } from "react";
 import { useState, memo } from "react";
 import Popper from "@mui/material/Popper";
@@ -188,7 +187,6 @@ export const Picker = memo((props: PickerProps) => {
                                 );
                             }}
                             disableCloseOnSelect
-                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
                             PopperComponent={({
                                 className,
                                 disablePortal,

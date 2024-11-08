@@ -22,7 +22,6 @@ import {
 import { useRerenderOnStateChange } from "evt/hooks/useRerenderOnStateChange";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
-import { baseUrlContext } from "./baseUrl";
 import { getEvtRootFontSizePx } from "../tools/evtRootFontSizePx";
 import { getEvtWindowInnerSize } from "../tools/evtWindowInnerSize";
 import { Evt } from "evt";
@@ -58,7 +57,7 @@ export function createOnyxiaUi<
         isScoped?: IsScoped;
         splashScreenParams?: SplashScreenParams;
         defaultIsDarkModeEnabled?: boolean;
-        BASE_URL: string;
+        getIconUrl?: (iconName: string) => string;
     },
 ): {
     OnyxiaUi: (props: {
@@ -80,7 +79,11 @@ export function createOnyxiaUi<
         isScoped = false,
         splashScreenParams,
         defaultIsDarkModeEnabled = getIsDarkModeEnabledOsDefault(),
-        BASE_URL,
+        getIconUrl = () => {
+            throw new Error(
+                "No dynamic icon resolver have been configured. Checkout @onyxia-ui/icons",
+            );
+        },
         ...paramsOfCreateTheme
     } = params;
 
@@ -110,7 +113,6 @@ export function createOnyxiaUi<
                     document.documentElement.style.backgroundColor =
                         backgroundColor;
 
-                    // eslint-disable-next-line no-constant-condition
                     while (true) {
                         const element = document.querySelector(
                             "meta[name=theme-color]",
@@ -284,13 +286,9 @@ export function createOnyxiaUi<
             <DarkModeProvider darkMode={darkMode}>
                 <ThemeProvider>
                     <MuiThemeProvider>
-                        <baseUrlContext.Provider value={BASE_URL}>
-                            <CssGlobalBaselineOrScopedBaseline>
-                                <MaybeSplashScreen>
-                                    {children}
-                                </MaybeSplashScreen>
-                            </CssGlobalBaselineOrScopedBaseline>
-                        </baseUrlContext.Provider>
+                        <CssGlobalBaselineOrScopedBaseline>
+                            <MaybeSplashScreen>{children}</MaybeSplashScreen>
+                        </CssGlobalBaselineOrScopedBaseline>
                     </MuiThemeProvider>
                 </ThemeProvider>
             </DarkModeProvider>

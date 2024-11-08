@@ -3,36 +3,27 @@ import type { MouseEventHandler } from "react";
 import { tss } from "./lib/tss";
 import SvgIcon from "@mui/material/SvgIcon";
 import type { Equals } from "tsafe";
-import { type IconSizeName, muiComponentNameToFileName } from "./lib/icon";
+import type { IconSizeName } from "./lib/icon";
 import { createLazySvg } from "./tools/LazySvg";
 import { symToStr } from "tsafe/symToStr";
 import memoize from "memoizee";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
 import type { SvgIconTypeMap } from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
-import { capitalize } from "tsafe/capitalize";
-import { useViteStyleBaseUrl } from "./lib/baseUrl";
 
 /**
  *
  * ======== icon:
  *
- * This can be either a MUI Icon component name or an url pointing to an SVG file.
+ * This can be either a MUI Icon Component or an url pointing to an SVG file.
  *
- * MUI Icons:
+ * MUI Icons Component:
  * Find the icon you want to use here: https://mui.com/material-ui/material-icons/
  * If, for example you'd like to use this one: https://mui.com/material-ui/material-icons/?selected=AddHomeWork
- * use: icon: "AddHomeWork"
- * This parameter is not typed because there's too many MUI icons, it would slow down the ide too much.
- * If you want type safety you can do:
  * ```ts
- * import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName"
- * import { id } from "tsafe/id"
- * icon={id<MuiIconComponentName>("AddHomeWork")}
- * ```
- * You can also pass the mui component directly:
  * import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
- * icon={AddHomeWorkIcon}
+ * <Icon icon={AddHomeWorkIcon} />
+ * ```
  *
  * SVG url:
  * Example: icon="https://example.com/myCustomIcon.svg"
@@ -94,8 +85,6 @@ export const Icon = memo(
 
         const { classes, cx } = useStyles({ size });
 
-        const { BASE_URL } = useViteStyleBaseUrl();
-
         if (typeof icon !== "string") {
             const MuiIconComponent = icon;
 
@@ -119,13 +108,7 @@ export const Icon = memo(
                 return createLazySvg(icon);
             }
 
-            return createLazySvg(
-                `${BASE_URL}material-icons/${muiComponentNameToFileName(
-                    // NOTE: Capitalize because all the Mui component name are capitalized.
-                    // and we want to be resilient if the user got confused and passed a lowercased name.
-                    capitalize(icon),
-                )}`,
-            );
+            throw new Error(`${icon} is not an url`);
         })();
 
         return (
@@ -170,9 +153,3 @@ export const createSpecificIcon = memoize((icon: IconProps.Icon) => {
 
     return SpecificIcon;
 });
-
-/*
-NOTES:
-https://github.com/mui-org/material-ui/blob/e724d98eba018e55e1a684236a2037e24bcf050c/packages/material-ui/src/styles/createTypography.js#L45
-https://github.com/mui-org/material-ui/blob/53a1655143aa4ec36c29a6063ccdf89c48a74bfd/packages/material-ui/src/Icon/Icon.js#L12
-*/

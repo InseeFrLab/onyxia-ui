@@ -37,7 +37,6 @@ export const SearchBar = memo(
             evtAction: evtActionLike,
             restorableSearch,
             onKeyPress,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             classes: props_classes,
             ...rest
         } = props;
@@ -53,7 +52,6 @@ export const SearchBar = memo(
         const evtAction = useNonPostableEvtLike(evtActionLike);
 
         //For the forwarding, rest should be empty (typewise),
-        // eslint-disable-next-line @typescript-eslint/ban-types
         assert<Equals<typeof rest, {}>>();
 
         const [isActive, setIsActive] = useState(search !== "");

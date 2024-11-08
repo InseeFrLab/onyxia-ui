@@ -1,8 +1,8 @@
 import { Button } from "../Button";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
-import type { MuiIconComponentName } from "../MuiIconComponentName";
-import { id } from "tsafe/id";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -32,14 +32,14 @@ export const VueWithStartIcon = getStory({
 
 export const WithLazilyDownloadedIcon = getStory({
     children: "Foo bar",
-    startIcon: id<MuiIconComponentName>("AccountCircle"),
+    startIcon: AccountCircleIcon,
     variant: "primary",
     ...logCallbacks(["onClick"]),
 });
 
 export const WithManuallyAddedIcons = getStory({
     children: "Foo bar",
-    startIcon: id<MuiIconComponentName>("Google"),
+    startIcon: GoogleIcon,
     variant: "primary",
     ...logCallbacks(["onClick"]),
 });

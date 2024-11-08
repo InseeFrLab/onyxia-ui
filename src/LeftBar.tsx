@@ -79,7 +79,6 @@ function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
     }
 
     //For the forwarding, rest should be empty (typewise),
-    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Equals<typeof rest, {}>>();
 
     const { isCollapsed, setIsCollapsed } = useIsCollapsed();

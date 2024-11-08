@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  test_lint:
+  test_format:
     runs-on: ubuntu-latest
     if: ${{ !github.event.created && github.repository != 'garronej/ts-ci' }}
     steps:
@@ -22,7 +22,7 @@ jobs:
       run: yarn format:check
   test:
     runs-on: ${{ matrix.os }}
-    needs: test_lint
+    needs: test_format
     strategy:
       matrix:
         node: [ '18' ]
