@@ -8,6 +8,7 @@ import { createTextWithCustomTypos } from "onyxia-ui/Text";
 import "onyxia-ui/assets/fonts/WorkSans/font.css";
 import "onyxia-ui/assets/fonts/Marianne/font.css";
 import logoSvgUrl from "onyxia-ui/assets/logo.svg";
+import { createGetIconUrl } from "mui-icons-material-lazy";
 
 //Import your custom icons
 import fooSvgUrl from "./assets/foo.svg";
@@ -70,3 +71,7 @@ export const customIcons = {
     fooSvgUrl,
     barSvgUrl,
 };
+
+export const { getIconUrl, getIconUrlByName } = createGetIconUrl({
+    BASE_URL: process.env.PUBLIC_URL,
+});

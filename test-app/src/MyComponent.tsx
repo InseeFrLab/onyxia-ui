@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { tss } from "./tss";
-import { Text, customIcons } from "./theme";
+import { Text, customIcons, getIconUrlByName } from "./theme";
 //Cherry pick the custom components you wish to import.
 import { Alert } from "onyxia-ui/Alert";
 
@@ -9,8 +9,6 @@ import { Alert } from "onyxia-ui/Alert";
 //Yo can import and use Materia-UI components, they will blend in nicely.
 import Switch from "@mui/material/Switch";
 import { useSplashScreen, useDarkMode } from "onyxia-ui";
-import type { MuiIconComponentName } from "onyxia-ui/MuiIconComponentName";
-import { id } from "tsafe/id";
 import { Icon } from "onyxia-ui/Icon";
 import { IconButton } from "onyxia-ui/IconButton";
 import { Button } from "onyxia-ui/Button";
@@ -62,7 +60,7 @@ export function MyComponent() {
             <Alert severity="success">Onyxia UI successfully setup!</Alert>
             <Text typo="my hero">
                 <Icon
-                    icon={id<MuiIconComponentName>("EmojiPeople")}
+                    icon={getIconUrlByName("EmojiPeople")}
                     className={css({
                         fontSize: "inherit",
                         ...(() => {
