@@ -49,7 +49,7 @@
         }
     },
     "dependencies": {
-        "@mui/icons-material": "^5.14.18",
+        "@mui/icons-material": "^6.1.7",
         "evt": "^2.5.7",
         "memoizee": "^0.4.17",
         "@types/memoizee": "^0.4.11",
