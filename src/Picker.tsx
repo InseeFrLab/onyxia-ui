@@ -219,8 +219,6 @@ export const Picker = memo((props: PickerProps) => {
                                             height: 17,
                                             mr: "5px",
                                             ml: "-2px",
-                                        }}
-                                        style={{
                                             visibility: selected
                                                 ? "visible"
                                                 : "hidden",
@@ -264,8 +262,6 @@ export const Picker = memo((props: PickerProps) => {
                                             opacity: 0.6,
                                             width: 18,
                                             height: 18,
-                                        }}
-                                        style={{
                                             visibility: selected
                                                 ? "visible"
                                                 : "hidden",

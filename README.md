@@ -57,11 +57,9 @@ Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) an
     <img src="https://user-images.githubusercontent.com/6702424/139844260-b4948b34-eca1-4d5b-a5c9-e856500fe921.png" />
 </p>
 
-# Installation
-
-`yarn add onyxia-ui @mui/material@5.16.7 @emotion/react @emotion/styled tss-react`
-
 # Usage
+
+`yarn add onyxia-ui @mui/material @emotion/react @emotion/styled tss-react`
 
 The easyer way to get started is to checkout this demo repository: [onyxia-ui + gilanding starter](https://github.com/garronej/gitlanding-demo).
 
