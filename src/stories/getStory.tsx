@@ -11,6 +11,8 @@ import type { ReactComponent } from "../tools/ReactComponent";
 import { OnyxiaUi } from "./theme";
 import { Text } from "../Text";
 import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
+import { assert, type Equals } from "tsafe/assert";
+import { is } from "tsafe/is";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
@@ -60,18 +62,42 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         );
     }
 
-    const Template: Story<
-        Props & {
-            darkMode: boolean;
-            width: number;
-        }
-    > = props => (
-        <OnyxiaUi darkMode={props.darkMode}>
-            <ContextualizedTemplate {...props} />
-        </OnyxiaUi>
-    );
+    type ReservedProps = {
+        darkMode: boolean;
+        width: number;
+    };
 
-    const ContextualizedTemplate: typeof Template = ({ width, ...props }) => {
+    const reservedPropsName = ["darkMode", "width"] as const;
+
+    assert<Equals<keyof ReservedProps, (typeof reservedPropsName)[number]>>();
+
+    const Template: Story<Props & ReservedProps> = props => {
+        const { darkMode, width, ...componentProps } = props;
+
+        assert(
+            Object.keys(componentProps).every(
+                key => !id<readonly string[]>(reservedPropsName).includes(key),
+            ),
+        );
+        assert(is<Props>(componentProps));
+
+        return (
+            <OnyxiaUi darkMode={darkMode}>
+                <ContextualizedTemplate
+                    width={width}
+                    componentProps={componentProps}
+                />
+            </OnyxiaUi>
+        );
+    };
+
+    const ContextualizedTemplate = ({
+        width,
+        componentProps,
+    }: {
+        componentProps: Props;
+        width: number;
+    }) => {
         const theme = useTheme();
 
         return (
@@ -95,7 +121,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                         display: "inline-block",
                     }}
                 >
-                    <Component {...props} />
+                    <Component {...componentProps} />
                 </div>
             </>
         );
