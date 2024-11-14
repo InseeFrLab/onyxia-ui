@@ -7,6 +7,8 @@ import { CacheProvider } from "@emotion/react";
 import tourSvgUrl from "./assets/svg/Tour.svg";
 import servicesSvgUrl from "./assets/svg/Services.svg";
 
+console.log(tourSvgUrl, servicesSvgUrl);
+
 const { OnyxiaUi: OnyxiaUiWithoutEmotionCache } = createOnyxiaUi({
     isScoped: true,
     isReactStrictModeEnabled: false,
@@ -32,6 +34,6 @@ export function OnyxiaUi(props: {
 }
 
 export const customIcons = {
-    tourSvgUrl,
-    servicesSvgUrl,
+    tourSvgUrl: tourSvgUrl.replace(/^\/?/, "/"),
+    servicesSvgUrl: servicesSvgUrl.replace(/^\/?/, "/"),
 };

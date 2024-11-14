@@ -3,6 +3,7 @@ import { forwardRef, memo } from "react";
 import { tss } from "./lib/tss";
 import { Button } from "./Button";
 import { symToStr } from "tsafe/symToStr";
+import type { IconProps } from "./Icon";
 
 export type ButtonBarButtonProps =
     | ButtonBarButtonProps.Regular
@@ -11,7 +12,7 @@ export type ButtonBarButtonProps =
 export namespace ButtonBarButtonProps {
     type Common = {
         className?: string;
-        startIcon?: string;
+        startIcon?: IconProps.Icon;
         disabled?: boolean;
         children: ReactNode;
     };

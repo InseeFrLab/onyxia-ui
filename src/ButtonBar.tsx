@@ -3,10 +3,11 @@ import { useCallbackFactory } from "powerhooks/useCallbackFactory";
 import { ButtonBarButton } from "./ButtonBarButton";
 import { symToStr } from "tsafe/symToStr";
 import { BaseBar } from "./BaseBar";
+import type { IconProps } from "./Icon";
 
 export type ButtonBarProps<ButtonId extends string = never> = {
     className?: string;
-    buttons: ButtonBarProps.Button<ButtonId>[];
+    buttons: Readonly<ButtonBarProps.Button<ButtonId>[]>;
     onClick: (buttonId: ButtonId) => void;
 };
 
@@ -17,7 +18,7 @@ export namespace ButtonBarProps {
 
     export namespace Button {
         type Common = {
-            icon: string;
+            icon: IconProps.Icon;
             label: ReactNode;
             isDisabled?: boolean;
         };

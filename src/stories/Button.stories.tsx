@@ -1,8 +1,8 @@
 import { Button } from "../Button";
 import { sectionName } from "./sectionName";
 import { getStoryFactory, logCallbacks } from "./getStory";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GoogleIcon from "@mui/icons-material/Google";
+import HelpIcon from "@mui/icons-material/Help";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
@@ -25,14 +25,7 @@ export const VueNoIcon = getStory({
 
 export const VueWithStartIcon = getStory({
     children: "Foo bar",
-    startIcon: "help",
-    variant: "primary",
-    ...logCallbacks(["onClick"]),
-});
-
-export const WithLazilyDownloadedIcon = getStory({
-    children: "Foo bar",
-    startIcon: AccountCircleIcon,
+    startIcon: HelpIcon,
     variant: "primary",
     ...logCallbacks(["onClick"]),
 });
