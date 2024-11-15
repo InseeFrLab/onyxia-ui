@@ -10,8 +10,13 @@ const { meta, getStory } = getStoryFactory({
 
 export default meta;
 
-export const VueNoTitle = getStory({
+export const DefaultView = getStory({
     children: `# This is a title  
 This is a paragraph with [a link](https://www.example.com)  
 `,
+});
+
+export const InlineView = getStory({
+    inline: true,
+    children: `Hello [with a link](https://www.example.com) world`,
 });

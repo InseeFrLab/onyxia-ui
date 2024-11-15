@@ -58,7 +58,7 @@
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.7.5",
         "tss-react": "^4.9.13",
-        "react-markdown": "^5.0.3"
+        "react-markdown": "^9.0.1"
     },
     "devDependencies": {
         "@emotion/react": "^11.11.1",

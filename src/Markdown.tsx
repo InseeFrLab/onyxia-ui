@@ -10,8 +10,6 @@ export type MarkdownProps = {
     children: string;
     getLinkProps?: MarkdownProps.GetLinkProps;
     /** Default: false */
-    allowHtml?: boolean;
-    /** Default: false */
     inline?: boolean;
     /** For accessibility only */
     lang?: string;
@@ -32,31 +30,25 @@ export const Markdown = memo((props: MarkdownProps) => {
             ...(!href.startsWith("/") ? { target: "blank" } : {}),
         })),
         inline: isInline = false,
-        allowHtml: doAllowHtml = false,
         lang = undefined,
     } = props;
-
-    const renderers = useMemo(
-        () => ({
-            link: ({
-                href,
-                children,
-            }: {
-                children: React.ReactNode;
-                href: string;
-            }) => <MuiLink {...getLinkProps({ href })}>{children}</MuiLink>,
-            paragraph: ({ children }: { children: React.ReactNode }) =>
-                createElement(isInline ? "span" : "p", { children }),
-        }),
-        [getLinkProps, isInline],
-    );
 
     const { classes, cx } = useStyles();
 
     return createElement(
         isInline ? "span" : "div",
         { lang: lang, className: cx(classes.root, className) },
-        <ReactMarkdown allowDangerousHtml={doAllowHtml} renderers={renderers}>
+        <ReactMarkdown
+            components={{
+                a: ({ href, children }) => {
+                    const linkProps =
+                        href === undefined ? {} : getLinkProps({ href });
+                    return <MuiLink {...linkProps}>{children}</MuiLink>;
+                },
+                p: ({ children }) =>
+                    createElement(isInline ? "span" : "p", { children }),
+            }}
+        >
             {children}
         </ReactMarkdown>,
     );
