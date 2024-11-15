@@ -10,6 +10,7 @@ import memoize from "memoizee";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
 import type { SvgIconTypeMap } from "@mui/material/SvgIcon";
 import { assert } from "tsafe/assert";
+import CropSquareIcon from "@mui/icons-material/CropSquare";
 
 /**
  *
@@ -108,7 +109,9 @@ export const Icon = memo(
                 return createLazySvg(icon);
             }
 
-            throw new Error(`${icon} is not an url`);
+            console.warn(`'${icon}' is not an url`);
+
+            return CropSquareIcon;
         })();
 
         return (
