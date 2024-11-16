@@ -52,16 +52,15 @@ function NonMemoizedButtonBar<ButtonId extends string>(
                 <ButtonBarButton
                     startIcon={button.icon}
                     disabled={button.isDisabled ?? false}
+                    key={"link" in button ? button.link.href : button.buttonId}
                     {...("link" in button
                         ? {
-                              key: button.link.href,
                               href: button.link.href,
                               onClick: button.link.onClick,
                               doOpenNewTabIfHref:
                                   button.link.target === "_blank",
                           }
                         : {
-                              key: button.buttonId,
                               onClick: onClickFactory(button.buttonId),
                           })}
                 >
