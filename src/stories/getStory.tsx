@@ -11,8 +11,7 @@ import type { ReactComponent } from "../tools/ReactComponent";
 import { OnyxiaUi } from "./theme";
 import { Text } from "../Text";
 import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
-import { assert, type Equals } from "tsafe/assert";
-import { is } from "tsafe/is";
+import { assert, type Equals, is } from "tsafe/assert";
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;

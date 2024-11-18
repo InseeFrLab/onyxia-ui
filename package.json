@@ -50,13 +50,13 @@
     },
     "dependencies": {
         "@mui/icons-material": "^6.1.7",
-        "evt": "^2.5.7",
+        "evt": "^2.5.8",
         "memoizee": "^0.4.17",
         "@types/memoizee": "^0.4.11",
         "minimal-polyfills": "^2.2.3",
-        "powerhooks": "^1.0.15",
+        "powerhooks": "^1.0.19",
         "run-exclusive": "^2.2.19",
-        "tsafe": "^1.7.5",
+        "tsafe": "^1.8.5",
         "tss-react": "^4.9.13",
         "react-markdown": "^9.0.1"
     },

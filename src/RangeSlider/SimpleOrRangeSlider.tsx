@@ -1,8 +1,7 @@
 import { useMemo, memo } from "react";
 import Slider from "@mui/material/Slider";
 import type { SliderProps } from "@mui/material/Slider";
-import { assert } from "tsafe/assert";
-import { is } from "tsafe/is";
+import { assert, is } from "tsafe/assert";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { tss } from "../lib/tss";
 import { Text } from "../Text";
