@@ -1,17 +1,9 @@
-import {
-    useMemo,
-    useState,
-    forwardRef,
-    memo,
-    type ForwardedRef,
-    type ReactNode,
-} from "react";
+import { useMemo, useState, forwardRef, memo, type ReactNode } from "react";
 import { tss, useStyles as useTheme } from "./lib/tss";
 import { Text } from "./Text";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
 import Divider from "@mui/material/Divider";
 import { id } from "tsafe/id";
-import { objectKeys } from "tsafe/objectKeys";
 import { useDomRect } from "powerhooks/useDomRect";
 import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
@@ -19,26 +11,31 @@ import type { Equals } from "tsafe";
 import type { UseNamedStateReturnType } from "powerhooks/useNamedState";
 import { Icon, type IconProps } from "./Icon";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { exclude } from "tsafe/exclude";
 
-export type LeftBarProps<ItemId extends string> = {
+export type LeftBarProps = {
     className?: string;
     defaultIsPanelOpen: boolean;
     doPersistIsPanelOpen: boolean;
     collapsedWidth?: number;
-    currentItemId: ItemId | null;
-    items: Record<ItemId, LeftBarProps.Item>;
+    currentItemId: string | null;
+    items: (LeftBarProps.Item | LeftBarProps.Divider)[];
     /** Default reduce */
     reduceText?: string;
 };
 
 export namespace LeftBarProps {
+    export type Divider = {
+        groupId: string;
+        about?: string;
+    };
+
     export type Item = {
+        itemId: string;
         icon: IconProps.Icon;
         label: NonNullable<ReactNode>;
         /** Defaults to available */
         availability?: "available" | "greyed" | "not visible";
-        /** Default: false (no divider). A string can be provided, is will be used as "about" for a11y  */
-        belowDivider?: string | boolean;
         link: {
             href: string;
             onClick?: (event: { preventDefault: () => void }) => void;
@@ -53,102 +50,130 @@ let useIsCollapsed:
 
 const iconSize = "large";
 
-function NonMemoizedNonForwardedLeftBar<ItemId extends string>(
-    props: LeftBarProps<ItemId>,
-    ref: React.LegacyRef<HTMLDivElement>,
-) {
-    const { theme } = useTheme();
+export const LeftBar = memo(
+    forwardRef<HTMLDivElement, LeftBarProps>((props, ref) => {
+        const { theme } = useTheme();
 
-    const {
-        className,
-        defaultIsPanelOpen,
-        doPersistIsPanelOpen,
-        collapsedWidth = 2 * theme.iconSizesInPxByName[iconSize],
-        currentItemId,
-        items,
-        reduceText = "reduce",
-        ...rest
-    } = props;
+        const {
+            className,
+            defaultIsPanelOpen,
+            doPersistIsPanelOpen,
+            collapsedWidth = 2 * theme.iconSizesInPxByName[iconSize],
+            currentItemId,
+            items,
+            reduceText = "reduce",
+            ...rest
+        } = props;
 
-    if (useIsCollapsed === undefined) {
-        useIsCollapsed = createUseGlobalState({
-            name: "isCollapsed",
-            initialState: !defaultIsPanelOpen,
-            doPersistAcrossReloads: doPersistIsPanelOpen,
-        }).useIsCollapsed;
-    }
+        if (useIsCollapsed === undefined) {
+            useIsCollapsed = createUseGlobalState({
+                name: "isCollapsed",
+                initialState: !defaultIsPanelOpen,
+                doPersistAcrossReloads: doPersistIsPanelOpen,
+            }).useIsCollapsed;
+        }
 
-    //For the forwarding, rest should be empty (typewise),
-    assert<Equals<typeof rest, {}>>();
+        //For the forwarding, rest should be empty (typewise),
+        assert<Equals<typeof rest, {}>>;
 
-    const { isCollapsed, setIsCollapsed } = useIsCollapsed();
+        const { isCollapsed, setIsCollapsed } = useIsCollapsed();
 
-    const toggleIsCollapsedLink = useMemo(
-        () =>
-            id<LeftBarProps.Item["link"]>({
-                href: "#",
-                onClick: event => {
-                    event.preventDefault();
-                    setAreTransitionEnabled(true);
-                    setIsCollapsed(isCollapsed => !isCollapsed);
-                },
-            }),
-        [],
-    );
+        const toggleIsCollapsedLink = useMemo(
+            () =>
+                id<LeftBarProps.Item["link"]>({
+                    href: "#",
+                    onClick: event => {
+                        event.preventDefault();
+                        setAreTransitionEnabled(true);
+                        setIsCollapsed(isCollapsed => !isCollapsed);
+                    },
+                }),
+            [],
+        );
 
-    const {
-        ref: wrapperRef,
-        domRect: { width: wrapperWidth, height: wrapperHeight },
-    } = useDomRect();
+        const {
+            ref: wrapperRef,
+            domRect: { width: wrapperWidth, height: wrapperHeight },
+        } = useDomRect();
 
-    //We don't want animations to trigger on first render.
-    const [areTransitionEnabled, setAreTransitionEnabled] = useState(false);
+        //We don't want animations to trigger on first render.
+        const [areTransitionEnabled, setAreTransitionEnabled] = useState(false);
 
-    const { classes, cx } = useStyles({
-        rootWidth: isCollapsed ? collapsedWidth : wrapperWidth,
-        ...(() => {
-            const paddingTopBottomFactor = 3;
-            return {
-                paddingTopBottomFactor,
-                rootHeight:
-                    wrapperHeight + theme.spacing(paddingTopBottomFactor) * 2,
-            };
-        })(),
-        areTransitionEnabled,
-    });
+        const { classes, cx, css } = useStyles({
+            rootWidth: isCollapsed ? collapsedWidth : wrapperWidth,
+            ...(() => {
+                const paddingTopBottomFactor = 3;
+                return {
+                    paddingTopBottomFactor,
+                    rootHeight:
+                        wrapperHeight +
+                        theme.spacing(paddingTopBottomFactor) * 2,
+                };
+            })(),
+            areTransitionEnabled,
+        });
 
-    return (
-        <div ref={ref} {...rest} className={cx(classes.root, className)}>
-            <nav className={classes.nav}>
-                <div ref={wrapperRef} className={classes.wrapper}>
-                    <CustomButton
-                        key={"toggleIsCollapsed"}
-                        isCollapsed={isCollapsed}
-                        collapsedWidth={collapsedWidth}
-                        isCurrent={undefined}
-                        icon={ChevronLeftIcon}
-                        label={reduceText}
-                        link={toggleIsCollapsedLink}
-                    />
-                    {objectKeys(items).map(itemId => (
+        return (
+            <div ref={ref} {...rest} className={cx(classes.root, className)}>
+                <nav className={classes.nav}>
+                    <div ref={wrapperRef} className={classes.wrapper}>
                         <CustomButton
-                            className={classes.button}
-                            key={itemId}
                             isCollapsed={isCollapsed}
                             collapsedWidth={collapsedWidth}
-                            isCurrent={itemId === currentItemId}
-                            {...items[itemId]}
+                            isCurrent={undefined}
+                            item={{
+                                itemId: "toggleIsCollapsed",
+                                icon: ChevronLeftIcon,
+                                label: reduceText,
+                                link: toggleIsCollapsedLink,
+                            }}
                         />
-                    ))}
-                </div>
-            </nav>
-        </div>
-    );
-}
+                        {items
+                            .map((item, i) => {
+                                if ("groupId" in item) {
+                                    if (i === items.length - 1) {
+                                        return undefined;
+                                    }
 
-/* prettier-ignore */
-export const LeftBar = memo(forwardRef(NonMemoizedNonForwardedLeftBar)) as
-    <ItemId extends string>(props: LeftBarProps<ItemId> & { ref?: ForwardedRef<HTMLDivElement>; }) => ReturnType<typeof NonMemoizedNonForwardedLeftBar>;
+                                    return (
+                                        <Divider
+                                            key={item.groupId}
+                                            className={cx(
+                                                classes.divider,
+                                                css({
+                                                    width:
+                                                        (isCollapsed
+                                                            ? collapsedWidth
+                                                            : wrapperWidth) -
+                                                        2 * theme.spacing(2),
+                                                }),
+                                            )}
+                                            id={item.groupId}
+                                            variant="fullWidth"
+                                            about={item.about}
+                                        />
+                                    );
+                                }
+
+                                return (
+                                    <CustomButton
+                                        key={item.itemId}
+                                        isCollapsed={isCollapsed}
+                                        collapsedWidth={collapsedWidth}
+                                        isCurrent={
+                                            item.itemId === currentItemId
+                                        }
+                                        item={item}
+                                    />
+                                );
+                            })
+                            .filter(exclude(undefined))}
+                    </div>
+                </nav>
+            </div>
+        );
+    }),
+);
 
 (LeftBar as any).displayName = symToStr({ LeftBar });
 
@@ -188,6 +213,12 @@ const useStyles = tss
             button: {
                 marginTop: theme.spacing(2),
             },
+            divider: {
+                ...theme.spacing.topBottom("margin", 2),
+                borderColor: theme.colors.useCases.typography.textTertiary,
+                marginLeft: theme.spacing(2),
+                transition: "width 250ms",
+            },
         }),
     );
 
@@ -197,7 +228,8 @@ const { CustomButton } = (() => {
         isCollapsed: boolean;
         collapsedWidth: number;
         isCurrent: boolean | undefined;
-    } & LeftBarProps.Item;
+        item: LeftBarProps.Item;
+    };
 
     const CustomButton = memo((props: Props) => {
         const {
@@ -205,11 +237,7 @@ const { CustomButton } = (() => {
             isCollapsed,
             collapsedWidth,
             isCurrent,
-            icon,
-            label,
-            link,
-            belowDivider = false,
-            availability = "available",
+            item: { itemId, icon, label, link, availability = "available" },
         } = props;
 
         const { theme } = useTheme();
@@ -233,34 +261,26 @@ const { CustomButton } = (() => {
         }
 
         return (
-            <>
-                <a ref={ref} className={cx(classes.root, className)} {...link}>
-                    <div className={classes.iconWrapper}>
-                        <div className={classes.iconHoverBox} />
-                        <Icon
-                            icon={icon}
-                            className={classes.icon}
-                            size={iconSize}
-                        />
-                    </div>
-                    <div className={classes.typoWrapper}>
-                        <Text typo="label 1" className={classes.typo}>
-                            {label}
-                        </Text>
-                    </div>
-                </a>
-                {belowDivider !== false && (
-                    <Divider
-                        className={classes.divider}
-                        variant="fullWidth"
-                        about={
-                            typeof belowDivider !== "string"
-                                ? undefined
-                                : belowDivider
-                        }
+            <a
+                id={itemId}
+                ref={ref}
+                className={cx(classes.root, className)}
+                {...link}
+            >
+                <div className={classes.iconWrapper}>
+                    <div className={classes.iconHoverBox} />
+                    <Icon
+                        icon={icon}
+                        className={classes.icon}
+                        size={iconSize}
                     />
-                )}
-            </>
+                </div>
+                <div className={classes.typoWrapper}>
+                    <Text typo="label 1" className={classes.typo}>
+                        {label}
+                    </Text>
+                </div>
+            </a>
         );
     });
 
@@ -269,7 +289,6 @@ const { CustomButton } = (() => {
             collapsedWidth: number;
             isCollapsed: boolean;
             isCurrent: boolean | undefined;
-            width: number;
             isDisabled: boolean;
         }>()
         .withNestedSelectors<"iconHoverBox" | "typoWrapper">()
@@ -280,7 +299,6 @@ const { CustomButton } = (() => {
                 collapsedWidth,
                 isCollapsed,
                 isCurrent,
-                width,
                 isDisabled,
                 classes,
             }) => ({
@@ -360,15 +378,6 @@ const { CustomButton } = (() => {
                         : undefined,
                     whiteSpace: "nowrap",
                     marginRight: theme.spacing(2),
-                },
-                divider: {
-                    marginTop: theme.spacing(2),
-                    borderColor: theme.colors.useCases.typography.textTertiary,
-                    width:
-                        (isCollapsed ? collapsedWidth : width) -
-                        2 * theme.spacing(2),
-                    marginLeft: theme.spacing(2),
-                    transition: "width 250ms",
                 },
             }),
         );

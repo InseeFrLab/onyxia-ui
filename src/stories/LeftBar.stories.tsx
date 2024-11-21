@@ -16,15 +16,20 @@ export const VueNoTitle = getStory({
     defaultIsPanelOpen: true,
     doPersistIsPanelOpen: false,
     currentItemId: "item2",
-    items: {
-        item1: {
+    items: [
+        {
+            itemId: "item1",
             icon: customIcons.tourSvgUrl,
             label: "Item 1",
             link: {
                 href: "https://example.com",
             },
         },
-        item2: {
+        {
+            groupId: "group1",
+        },
+        {
+            itemId: "item2",
             icon: customIcons.servicesSvgUrl,
             label: "Item two",
             link: {
@@ -32,21 +37,25 @@ export const VueNoTitle = getStory({
                 onClick: () => console.log("click item 2"),
             },
         },
-        item3: {
+        {
+            itemId: "item3",
             icon: HelpIcon,
             label: "Item three",
-            belowDivider: true,
             link: {
                 href: "#",
             },
             availability: "greyed",
         },
-        item4: {
+        {
+            itemId: "item4",
             icon: HomeIcon,
             label: "The fourth item",
             link: {
                 href: "#",
             },
         },
-    },
+        {
+            groupId: "group2",
+        },
+    ],
 });
