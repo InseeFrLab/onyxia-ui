@@ -130,9 +130,21 @@ export const LeftBar = memo(
                         />
                         {items
                             .map((item, i) => {
-                                if ("groupId" in item) {
-                                    if (i === items.length - 1) {
-                                        return undefined;
+                                const getIsDivider = (
+                                    item_i: typeof item,
+                                ): item_i is LeftBarProps.Divider =>
+                                    "groupId" in item_i;
+
+                                if (getIsDivider(item)) {
+                                    {
+                                        const nextItem = items[i + 1];
+
+                                        if (
+                                            nextItem === undefined ||
+                                            getIsDivider(nextItem)
+                                        ) {
+                                            return undefined;
+                                        }
                                     }
 
                                     return (
