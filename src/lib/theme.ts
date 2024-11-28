@@ -2,6 +2,8 @@ import {
     createTheme as createMuiTheme,
     unstable_createMuiStrictModeTheme,
 } from "@mui/material/styles";
+// cf https://mui.com/x/react-data-grid/getting-started/#typescript
+import type {} from "@mui/x-data-grid/themeAugmentation";
 import type {
     PaletteBase,
     ColorUseCasesBase,
@@ -28,6 +30,7 @@ import type { IconSizeName } from "./icon";
 import { useContext, createContext } from "react";
 import { memoize } from "../tools/memoize";
 import { alpha } from "@mui/material/styles";
+import { type GridRowClassNameParams } from "@mui/x-data-grid";
 
 export type Theme<
     Palette extends PaletteBase = PaletteBase,
@@ -150,114 +153,109 @@ export function createThemeFactory<
                                 underline: "hover",
                             },
                         },
-                        ...(() => {
-                            const nonTypedMuiComponents = {
-                                MuiDataGrid: {
-                                    styleOverrides: {
-                                        root: (() => {
-                                            const set = new WeakSet<Function>();
+                        MuiDataGrid: {
+                            styleOverrides: {
+                                root: (() => {
+                                    const set = new WeakSet<
+                                        (
+                                            params: GridRowClassNameParams,
+                                        ) => string
+                                    >();
 
-                                            const borderNone = {
-                                                border: "none",
-                                            };
+                                    const borderNone = {
+                                        border: "none",
+                                        "--DataGrid-rowBorderColor":
+                                            "transparent",
+                                    };
 
-                                            return (params: {
-                                                ownerState?: {
-                                                    getRowClassName?: (params: {
-                                                        indexRelativeToCurrentPage: number;
-                                                    }) => string;
+                                    return (params: {
+                                        ownerState?: {
+                                            getRowClassName?: (
+                                                params: GridRowClassNameParams,
+                                            ) => string;
+                                        };
+                                    }) => {
+                                        const { ownerState } = params;
+
+                                        if (ownerState === undefined) {
+                                            return borderNone;
+                                        }
+
+                                        if (
+                                            ownerState.getRowClassName ===
+                                                undefined ||
+                                            !set.has(ownerState.getRowClassName)
+                                        ) {
+                                            const originalGetRowClassName =
+                                                ownerState.getRowClassName;
+
+                                            ownerState.getRowClassName =
+                                                params => {
+                                                    const {
+                                                        indexRelativeToCurrentPage,
+                                                    } = params;
+
+                                                    const parityClassName =
+                                                        indexRelativeToCurrentPage %
+                                                            2 ===
+                                                        0
+                                                            ? "even"
+                                                            : "odd";
+
+                                                    const className =
+                                                        originalGetRowClassName?.(
+                                                            params,
+                                                        );
+
+                                                    return className ===
+                                                        undefined
+                                                        ? parityClassName
+                                                        : `${parityClassName} ${className}`;
                                                 };
-                                            }) => {
-                                                const { ownerState } = params;
 
-                                                if (ownerState === undefined) {
-                                                    return borderNone;
-                                                }
-
-                                                if (
-                                                    ownerState.getRowClassName ===
-                                                        undefined ||
-                                                    !set.has(
-                                                        ownerState.getRowClassName,
-                                                    )
-                                                ) {
-                                                    const originalGetRowClassName =
-                                                        ownerState.getRowClassName;
-
-                                                    ownerState.getRowClassName =
-                                                        params => {
-                                                            const {
-                                                                indexRelativeToCurrentPage,
-                                                            } = params;
-
-                                                            const parityClassName =
-                                                                indexRelativeToCurrentPage %
-                                                                    2 ===
-                                                                0
-                                                                    ? "even"
-                                                                    : "odd";
-
-                                                            const className =
-                                                                originalGetRowClassName?.(
-                                                                    params,
-                                                                );
-
-                                                            return className ===
-                                                                undefined
-                                                                ? parityClassName
-                                                                : `${parityClassName} ${className}`;
-                                                        };
-
-                                                    set.add(
-                                                        ownerState.getRowClassName,
-                                                    );
-                                                }
-
-                                                return borderNone;
-                                            };
-                                        })(),
-                                        row: () => {
-                                            const hoveredAndSelected = {
-                                                "&.Mui-hovered": {
-                                                    backgroundColor: alpha(
-                                                        useCases.typography
-                                                            .textFocus,
-                                                        0.6,
-                                                    ),
-                                                },
-                                                "&.Mui-selected": {
-                                                    backgroundColor: alpha(
-                                                        useCases.typography
-                                                            .textFocus,
-                                                        0.2,
-                                                    ),
-                                                },
-                                            };
-
-                                            return {
-                                                "&.even": {
-                                                    backgroundColor:
-                                                        useCases.surfaces
-                                                            .surface2,
-                                                    ...hoveredAndSelected,
-                                                },
-                                                "&.odd": {
-                                                    backgroundColor:
-                                                        useCases.surfaces
-                                                            .background,
-                                                    ...hoveredAndSelected,
-                                                },
-                                            };
+                                            set.add(ownerState.getRowClassName);
+                                        }
+                                        return borderNone;
+                                    };
+                                })(),
+                                row: () => {
+                                    const hoveredAndSelected = {
+                                        "&.Mui-hovered": {
+                                            backgroundColor: alpha(
+                                                useCases.typography.textFocus,
+                                                0.6,
+                                            ),
                                         },
-                                        withBorderColor: {
-                                            borderColor: "transparent",
+                                        "&.Mui-selected": {
+                                            backgroundColor: alpha(
+                                                useCases.typography.textFocus,
+                                                0.2,
+                                            ),
                                         },
-                                    },
+                                    };
+
+                                    return {
+                                        "&.even": {
+                                            backgroundColor:
+                                                useCases.surfaces.surface2,
+                                            ...hoveredAndSelected,
+                                        },
+                                        "&.odd": {
+                                            backgroundColor:
+                                                useCases.surfaces.background,
+                                            ...hoveredAndSelected,
+                                        },
+                                    };
                                 },
-                            };
 
-                            return nonTypedMuiComponents as any as {};
-                        })(),
+                                cell: {
+                                    border: "none",
+                                },
+                                withBorderColor: {
+                                    borderColor: "transparent",
+                                },
+                            },
+                        },
                     },
                 });
 
