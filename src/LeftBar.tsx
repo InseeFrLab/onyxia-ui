@@ -138,7 +138,7 @@ export const LeftBar = memo(
                                 if (getIsDivider(item)) {
                                     const hasItem = (function callee(
                                         i: number,
-                                    ) {
+                                    ): boolean {
                                         const nextItem = items[i + 1];
 
                                         if (nextItem === undefined) {
