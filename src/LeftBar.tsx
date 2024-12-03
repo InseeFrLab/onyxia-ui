@@ -136,15 +136,31 @@ export const LeftBar = memo(
                                     "groupId" in item_i;
 
                                 if (getIsDivider(item)) {
-                                    {
+                                    const hasItem = (function callee(
+                                        i: number,
+                                    ) {
                                         const nextItem = items[i + 1];
 
-                                        if (
-                                            nextItem === undefined ||
-                                            getIsDivider(nextItem)
-                                        ) {
-                                            return undefined;
+                                        if (nextItem === undefined) {
+                                            return false;
                                         }
+
+                                        if (getIsDivider(nextItem)) {
+                                            return false;
+                                        }
+
+                                        if (
+                                            nextItem.availability ===
+                                            "not visible"
+                                        ) {
+                                            return callee(i + 1);
+                                        }
+
+                                        return true;
+                                    })(i);
+
+                                    if (!hasItem) {
+                                        return undefined;
                                     }
 
                                     return (
