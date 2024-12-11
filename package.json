@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "6.2.3",
+    "version": "6.2.4",
     "description": "The Onyxia UI toolkit",
     "repository": {
         "type": "git",
@@ -57,7 +57,7 @@
         "react-markdown": "^9.0.1",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.8.5",
-        "tss-react": "^4.9.13"
+        "tss-react": "^4.9.14"
     },
     "devDependencies": {
         "@emotion/cache": "^11.11.0",
