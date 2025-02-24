@@ -1,6 +1,6 @@
 {
     "name": "onyxia-ui",
-    "version": "6.2.4",
+    "version": "6.2.5",
     "description": "The Onyxia UI toolkit",
     "repository": {
         "type": "git",
@@ -50,15 +50,15 @@
     },
     "dependencies": {
         "@mui/icons-material": "^6.1.7",
-        "evt": "^2.5.8",
+        "evt": "^2.5.9",
         "memoizee": "^0.4.17",
         "minimal-polyfills": "^2.2.3",
-        "powerhooks": "^1.0.19",
+        "powerhooks": "^1.0.20",
         "react-markdown": "^9.0.1",
         "rehype-raw": "^7.0.0",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.8.5",
-        "tss-react": "^4.9.13"
+        "tss-react": "^4.9.15"
     },
     "devDependencies": {
         "@emotion/cache": "^11.11.0",
