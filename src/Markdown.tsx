@@ -4,6 +4,7 @@ import MuiLink from "@mui/material/Link";
 import { symToStr } from "tsafe/symToStr";
 import { id } from "tsafe/id";
 import { tss } from "./lib/tss";
+import rehypeRaw from "rehype-raw";
 
 export type MarkdownProps = {
     className?: string;
@@ -39,6 +40,7 @@ export const Markdown = memo((props: MarkdownProps) => {
         isInline ? "span" : "div",
         { lang: lang, className: cx(classes.root, className) },
         <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
             components={{
                 a: ({ href, children }) => {
                     const linkProps =
