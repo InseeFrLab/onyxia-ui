@@ -55,6 +55,7 @@
         "minimal-polyfills": "^2.2.3",
         "powerhooks": "^1.0.19",
         "react-markdown": "^9.0.1",
+        "rehype-raw": "^7.0.0",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.8.5",
         "tss-react": "^4.9.13"

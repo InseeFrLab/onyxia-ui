@@ -20,3 +20,12 @@ export const InlineView = getStory({
     inline: true,
     children: `Hello [with a link](https://www.example.com) world`,
 });
+
+export const AccordionView = getStory({
+    children: `
+<details>
+  <summary>Click to expand</summary>
+  This is the hidden content inside the details tag.
+</details>
+`,
+});
