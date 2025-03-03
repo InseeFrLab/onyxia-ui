@@ -7540,6 +7540,15 @@ evt@^2.5.8:
     run-exclusive "^2.2.19"
     tsafe "^1.8.5"
 
+evt@^2.5.9:
+  version "2.5.9"
+  resolved "https://registry.yarnpkg.com/evt/-/evt-2.5.9.tgz#cd270e50ce1e7c586bf86242c054dd958d06a5c4"
+  integrity sha512-GpjX476FSlttEGWHT8BdVMoI8wGXQGbEOtKcP4E+kggg+yJzXBZN2n4x7TS/zPBJ1DZqWI+rguZZApjjzQ0HpA==
+  dependencies:
+    minimal-polyfills "^2.2.3"
+    run-exclusive "^2.2.19"
+    tsafe "^1.8.5"
+
 exec-sh@^0.3.2:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.6.tgz#ff264f9e325519a60cb5e273692943483cca63bc"
@@ -12963,12 +12972,12 @@ powerhooks@^1.0.1:
     memoizee "^0.4.15"
     tsafe "^1.6.5"
 
-powerhooks@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-1.0.19.tgz#e93ce44f55d31ca26a4511883a49cfe5341d47af"
-  integrity sha512-kmZX0LLvJyaIphwf2FjKABAQwQFrRqsEA41N4CB8EzfDobyXle545t4teajVo/NPboy0HEaioyv55FWN7d58/Q==
+powerhooks@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-1.0.21.tgz#a0b31193570558be17501fea85a87dc6c7d46ca2"
+  integrity sha512-U+e0+mGtnJPHIPatZ2rWynt3Cc20mtBm26xnBRx0GLzRDc6SqQ2/lO9oleDRfYEdYUX5iOeWizjHq2lCNA/aRQ==
   dependencies:
-    evt "^2.5.8"
+    evt "^2.5.9"
     memoizee "^0.4.17"
     tsafe "^1.8.5"
 
