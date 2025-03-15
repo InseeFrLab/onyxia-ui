@@ -1,12 +1,28 @@
 import { useContext } from "react";
 import { createContext } from "react";
 import { createUseGlobalState } from "powerhooks/useGlobalState";
-import {
-    updateSearchBarUrl,
-    retrieveParamFromUrl,
-} from "powerhooks/tools/urlSearchParams";
+import { getSearchParam } from "powerhooks/tools/urlSearchParams";
+import { updateSearchBarUrl } from "powerhooks/tools/updateSearchBar";
 import type { StatefulEvt } from "evt";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
+
+const GLOBAL_CONTEXT_KEY = "__onyxia-ui.darkMode.globalContext";
+
+declare global {
+    interface Window {
+        [GLOBAL_CONTEXT_KEY]: {
+            initialLocationHref: string;
+        };
+    }
+}
+
+window[GLOBAL_CONTEXT_KEY] ??= {
+    initialLocationHref: window.location.href,
+};
+
+const globalContext = window[GLOBAL_CONTEXT_KEY];
+
+const { initialLocationHref } = globalContext;
 
 type Context = {
     isDarkModeEnabled: boolean;
@@ -44,19 +60,30 @@ export function createUseIsDarkModeEnabledGlobalState(params: {
         });
 
     (() => {
-        const result = retrieveParamFromUrl({
-            url: window.location.href,
-            name: "theme",
+        const URL_PARAM_NAME = "theme";
+
+        const { wasPresent, value } = getSearchParam({
+            url: initialLocationHref,
+            name: URL_PARAM_NAME,
         });
 
-        if (!result.wasPresent) {
+        if (!wasPresent) {
             return;
         }
 
-        updateSearchBarUrl(result.newUrl);
+        {
+            const { wasPresent, url_withoutTheParam } = getSearchParam({
+                url: window.location.href,
+                name: URL_PARAM_NAME,
+            });
+
+            if (wasPresent) {
+                updateSearchBarUrl(url_withoutTheParam);
+            }
+        }
 
         const isDarkModeEnabled = (() => {
-            switch (result.value) {
+            switch (value) {
                 case "dark":
                     return true;
                 case "light":

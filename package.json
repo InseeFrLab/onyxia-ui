@@ -53,7 +53,7 @@
         "evt": "^2.5.8",
         "memoizee": "^0.4.17",
         "minimal-polyfills": "^2.2.3",
-        "powerhooks": "^1.0.21",
+        "powerhooks": "^2.0.1",
         "react-markdown": "^9.0.1",
         "rehype-raw": "^7.0.0",
         "run-exclusive": "^2.2.19",
