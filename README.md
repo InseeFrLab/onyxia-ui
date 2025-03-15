@@ -61,6 +61,6 @@ Disclaimer: `onyxia-ui` is specifically designed to build SPA (Vite projects) an
 
 `yarn add onyxia-ui @mui/material @emotion/react @emotion/styled tss-react`
 
-The easyer way to get started is to checkout this demo repository: [onyxia-ui + gilanding starter](https://github.com/garronej/gitlanding-demo).
+The easer way to get started is to checkout this demo repository: [onyxia-ui + gilanding starter](https://github.com/garronej/gitlanding-demo).
 
 You can see more advanced examples here: [test app of this repo](https://github.com/InseeFrLab/onyxia-ui/tree/main/test-app).
