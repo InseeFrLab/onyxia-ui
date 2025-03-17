@@ -56,7 +56,7 @@ export type ParamsOfCreateThemeFactory<
     ColorUseCases extends ColorUseCasesBase,
     CustomTypographyVariantName extends string,
 > = {
-    palette?: Palette;
+    palette?: Palette | ((params: { isDarkModeEnabled: boolean }) => Palette);
     isReactStrictModeEnabled?: boolean;
     getTypographyDesc?: GetTypographyDesc<CustomTypographyVariantName>;
     createColorUseCases?: CreateColorUseCase<Palette, ColorUseCases>;
@@ -76,7 +76,8 @@ export function createThemeFactory<
     >,
 ) {
     const {
-        palette = defaultPalette as NonNullable<(typeof params)["palette"]>,
+        //palette_params = defaultPalette as NonNullable<(typeof params)["palette"]>,
+        palette: palette_params,
         createColorUseCases = createDefaultColorUseCases as unknown as NonNullable<
             (typeof params)["createColorUseCases"]
         >,
@@ -87,6 +88,20 @@ export function createThemeFactory<
         spacingConfig = defaultSpacingConfig,
         getIconSizeInPx = defaultGetIconSizeInPx,
     } = params;
+
+    const getPalette = (params: { isDarkModeEnabled: boolean }): Palette => {
+        if (palette_params === undefined) {
+            return defaultPalette as Palette;
+        }
+
+        const { isDarkModeEnabled } = params;
+
+        if (typeof palette_params === "function") {
+            return palette_params({ isDarkModeEnabled });
+        }
+
+        return palette_params;
+    };
 
     function createTheme(params: {
         isDarkModeEnabled: boolean;
@@ -99,17 +114,20 @@ export function createThemeFactory<
             windowInnerWidth,
             rootFontSizePx,
         });
-        const useCases = createColorUseCases({
-            palette,
-            isDarkModeEnabled,
-        });
+
+        const getPalette_memoized = memoize((isDarkModeEnabled: boolean) =>
+            getPalette({ isDarkModeEnabled }),
+        );
 
         const getUseCases_memoized = memoize((isDarkModeEnabled: boolean) =>
             createColorUseCases({
-                palette,
+                palette: getPalette_memoized(isDarkModeEnabled),
                 isDarkModeEnabled,
             }),
         );
+
+        const palette = getPalette_memoized(isDarkModeEnabled);
+        const useCases = getUseCases_memoized(isDarkModeEnabled);
 
         const spacing = (factorOrExplicitNumberOfPx: number | `${number}px`) =>
             spacingConfig({
