@@ -101,29 +101,37 @@ export function createUseIsDarkModeEnabledGlobalState(params: {
     })();
 
     evtIsDarkModeEnabled.attach(isDarkModeEnabled => {
-        const id = "root-color-scheme";
+        {
+            const id = "root-color-scheme";
 
-        remove_existing_element: {
-            const element = document.getElementById(id);
+            remove_existing_element: {
+                const element = document.getElementById(id);
 
-            if (element === null) {
-                break remove_existing_element;
+                if (element === null) {
+                    break remove_existing_element;
+                }
+
+                element.remove();
             }
 
-            element.remove();
-        }
+            const element = document.createElement("style");
 
-        const element = document.createElement("style");
+            element.id = id;
 
-        element.id = id;
-
-        element.innerHTML = `
+            element.innerHTML = `
 				:root {
 					color-scheme: ${isDarkModeEnabled ? "dark" : "light"}
 				}
 		`;
 
-        document.getElementsByTagName("head")[0].appendChild(element);
+            document.getElementsByTagName("head")[0].appendChild(element);
+        }
+
+        // To enable custom css stylesheets to target a specific theme
+        document.documentElement.setAttribute(
+            "theme",
+            isDarkModeEnabled ? "dark" : "light",
+        );
     });
 
     return evtIsDarkModeEnabled;
