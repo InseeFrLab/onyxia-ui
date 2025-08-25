@@ -31,8 +31,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 export type Props = {
     className?: string;
     image: ReactNode;
-    title: NonNullable<ReactNode>;
-    subtitle?: NonNullable<ReactNode>;
+    title: ReactNode;
+    subtitle?: ReactNode;
     onGoBack(): void;
     classes?: Partial<ReturnType<typeof useStyles>["classes"]>;
 };
