@@ -30,6 +30,7 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
  * Example: icon="https://example.com/myCustomIcon.svg"
  * It's important that the string ends with ".svg".
  * It can also be a data url like: "data:image/svg+xml..." in this case it doesn't need to end with ".svg".
+ * It has to be with a viewBox of 0 0 24 24 though, it's pretty constraining...
  *
  * ======== Size:
  *
