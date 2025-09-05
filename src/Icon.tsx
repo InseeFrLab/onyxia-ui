@@ -29,6 +29,19 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
  * Example: icon="https://example.com/myCustomIcon.svg"
  * It's important that the string ends with ".svg".
  * It can also be a data url like: "data:image/svg+xml..." in this case it doesn't need to end with ".svg".
+ * Important: The SVG must have a viewBox and the default width and height are going to be ignored.
+ * If you have an svg like:
+ * <svg width="127" height="127">
+ * You must add a viewBox like so:
+ * <svg width="127" height="127" viewBox="0 0 127 127">
+ *
+ * ======== Colors:
+ *
+ * All fill colors are ignored and overwrite by the current color.
+ * This is so that the icon can be use as special font character of sort.
+ * The icon do not support different colors. It's bichrome.
+ * If you want to change the whole color you can so so simply by setting the color
+ * CSS property on the parent.
  *
  * ======== Size:
  *
@@ -45,13 +58,6 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
  *         return { "width": `${factor}em`, "height": `${factor}em` }
  *     })()
  * }
- *
- * Color:
- *
- * By default icons inherit the color.
- * If you want to change the color you can
- * simply set the style "color".
- *
  */
 export type IconProps = {
     icon: IconProps.Icon;
@@ -145,6 +151,9 @@ const useStyles = tss
                 ? undefined
                 : {
                       fill: "currentcolor",
+                      "& > path": {
+                          fill: "currentcolor",
+                      },
                   }),
         },
     }));
