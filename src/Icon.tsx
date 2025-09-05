@@ -39,9 +39,10 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
  *
  * All fill colors are ignored and overwrite by the current color.
  * This is so that the icon can be use as special font character of sort.
- * The icon do not support different colors. It's bichrome.
  * If you want to change the whole color you can so so simply by setting the color
  * CSS property on the parent.
+ * The icon will apply fill="currentColor" at the root so every path that do not have an
+ * explicit fill attribute will receive the current color, usually the color of the font.
  *
  * ======== Size:
  *
@@ -151,9 +152,6 @@ const useStyles = tss
                 ? undefined
                 : {
                       fill: "currentcolor",
-                      "& > path": {
-                          fill: "currentcolor",
-                      },
                   }),
         },
     }));
