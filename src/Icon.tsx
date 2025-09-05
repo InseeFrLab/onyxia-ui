@@ -1,10 +1,9 @@
-import { memo, forwardRef, type ElementType } from "react";
+import { memo, forwardRef } from "react";
 import type { MouseEventHandler } from "react";
 import { tss } from "./lib/tss";
-import SvgIcon from "@mui/material/SvgIcon";
 import type { Equals } from "tsafe";
 import type { IconSizeName } from "./lib/icon";
-import { createLazySvg } from "./tools/LazySvg";
+import { LazySvg } from "./tools/LazySvg";
 import { symToStr } from "tsafe/symToStr";
 import memoize from "memoizee";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -30,7 +29,6 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
  * Example: icon="https://example.com/myCustomIcon.svg"
  * It's important that the string ends with ".svg".
  * It can also be a data url like: "data:image/svg+xml..." in this case it doesn't need to end with ".svg".
- * It has to be with a viewBox of 0 0 24 24 though, it's pretty constraining...
  *
  * ======== Size:
  *
@@ -85,43 +83,41 @@ export const Icon = memo(
         //For the forwarding, rest should be empty (typewise),
         assert<Equals<typeof rest, {}>>();
 
-        const { classes, cx } = useStyles({ size });
+        const { classes, cx } = useStyles({
+            size,
+            isMuiComponent: typeof icon !== "string",
+        });
 
         if (typeof icon !== "string") {
             const MuiIconComponent = icon;
 
             return (
                 <MuiIconComponent
+                    {...rest}
                     ref={ref}
                     className={cx(classes.root, className)}
                     onClick={onClick}
-                    {...rest}
                 />
             );
         }
 
-        const SvgComponent: ElementType = (() => {
-            if (
-                icon.startsWith("http") ||
-                icon.startsWith("/") ||
-                icon.endsWith(".svg") ||
-                icon.startsWith("data:image/svg")
-            ) {
-                return createLazySvg(icon);
-            }
-
+        if (
+            !icon.startsWith("http") &&
+            !icon.startsWith("/") &&
+            !icon.endsWith(".svg") &&
+            !icon.startsWith("data:image/svg")
+        ) {
             console.warn(`'${icon}' is not an url`);
-
-            return CropSquareIcon;
-        })();
+            return <Icon {...props} icon={CropSquareIcon} />;
+        }
 
         return (
-            <SvgIcon
-                ref={ref}
-                onClick={onClick}
-                className={cx(classes.root, className)}
-                component={SvgComponent}
+            <LazySvg
                 {...rest}
+                ref={ref}
+                className={cx(classes.root, className)}
+                onClick={onClick}
+                svgUrl={icon}
             />
         );
     }),
@@ -133,8 +129,9 @@ const useStyles = tss
     .withName({ Icon })
     .withParams<{
         size: IconSizeName;
+        isMuiComponent: boolean;
     }>()
-    .create(({ theme, size }) => ({
+    .create(({ theme, size, isMuiComponent }) => ({
         root: {
             color: "inherit",
             // https://stackoverflow.com/a/24626986/3731798
@@ -144,6 +141,11 @@ const useStyles = tss
             fontSize: theme.iconSizesInPxByName[size],
             width: "1em",
             height: "1em",
+            ...(isMuiComponent
+                ? undefined
+                : {
+                      fill: "currentcolor",
+                  }),
         },
     }));
 
