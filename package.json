@@ -41,7 +41,7 @@
         "@emotion/react": "^11.0.0",
         "@mui/material": "^6.1.7",
         "@types/react": "^17.0.0 || ^18.0.0",
-        "react": "^17.0.0 || ^18.0.0"
+        "react": "^17.0.0 || ^18.0.0 || ^19.0.0"
     },
     "peerDependenciesMeta": {
         "@types/react": {
@@ -50,7 +50,7 @@
     },
     "dependencies": {
         "@mui/icons-material": "^6.1.7",
-        "evt": "^2.5.8",
+        "evt": "^2.5.9",
         "memoizee": "^0.4.17",
         "@types/memoizee": "^0.4.11",
         "minimal-polyfills": "^2.2.3",
@@ -59,7 +59,7 @@
         "rehype-raw": "^7.0.0",
         "run-exclusive": "^2.2.19",
         "tsafe": "^1.8.5",
-        "tss-react": "^4.9.13"
+        "tss-react": "^4.9.19"
     },
     "devDependencies": {
         "@emotion/cache": "^11.11.0",
