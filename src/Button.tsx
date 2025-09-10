@@ -277,7 +277,7 @@ const useStyles = tss
 
                     "&:hover": {
                         backgroundColor: hoverBackgroundColor,
-                        "& .MuiSvgIcon-root": {
+                        "& svg": {
                             color: hoverTextColor,
                         },
                         "&.MuiButton-text": {
