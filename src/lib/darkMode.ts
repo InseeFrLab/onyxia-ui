@@ -60,6 +60,7 @@ export function createUseIsDarkModeEnabledGlobalState(params: {
         });
 
     (() => {
+        // WARNING: Logic duplicated in early init
         const URL_PARAM_NAME = "theme";
 
         const { wasPresent, value } = getSearchParam({
@@ -102,6 +103,7 @@ export function createUseIsDarkModeEnabledGlobalState(params: {
 
     evtIsDarkModeEnabled.attach(isDarkModeEnabled => {
         {
+            // WARNING: Logic duplicated in earlyInit
             const id = "root-color-scheme";
 
             remove_existing_element: {
@@ -128,6 +130,7 @@ export function createUseIsDarkModeEnabledGlobalState(params: {
         }
 
         // To enable custom css stylesheets to target a specific theme
+        // WARNING: Logic duplicated in earlyInit
         document.documentElement.setAttribute(
             "theme",
             isDarkModeEnabled ? "dark" : "light",

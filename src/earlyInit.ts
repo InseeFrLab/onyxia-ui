@@ -28,11 +28,29 @@ export function onyxiaUiEarlyInit(params: {
                 return `${isDarkModeEnabled_force}`;
             }
 
-            const KEY = "powerhooks_useGlobalState_isDarkModeEnabled";
             let value: string | null = null;
 
             try {
-                value = new URLSearchParams(location.search).get(KEY);
+                value = new URLSearchParams(location.search).get("theme");
+            } catch {}
+
+            if (value === "light") {
+                return "true";
+            }
+
+            if (value === "dark") {
+                return "false";
+            }
+
+            value = null;
+
+            const POWERHOOKS_KEY =
+                "powerhooks_useGlobalState_isDarkModeEnabled";
+
+            try {
+                value = new URLSearchParams(location.search).get(
+                    POWERHOOKS_KEY,
+                );
             } catch {}
 
             if (value !== null) {
@@ -40,7 +58,7 @@ export function onyxiaUiEarlyInit(params: {
             }
 
             try {
-                value = localStorage.getItem(KEY);
+                value = localStorage.getItem(POWERHOOKS_KEY);
             } catch {}
 
             if (value !== null) {
@@ -62,28 +80,64 @@ export function onyxiaUiEarlyInit(params: {
         })(),
     );
 
-    const backgroundColor = (() => {
-        const paletteOverride = getPaletteOverride?.({ isDarkModeEnabled });
+    {
+        const backgroundColor = (() => {
+            const paletteOverride = getPaletteOverride?.({ isDarkModeEnabled });
 
-        const key = isDarkModeEnabled ? "dark" : "light";
+            const key = isDarkModeEnabled ? "dark" : "light";
 
-        return paletteOverride?.[key]?.main ?? defaultPalette_urgent[key].main;
-    })();
+            return (
+                paletteOverride?.[key]?.main ?? defaultPalette_urgent[key].main
+            );
+        })();
 
-    document.documentElement.style.backgroundColor = backgroundColor;
+        document.documentElement.style.backgroundColor = backgroundColor;
 
-    while (true) {
-        const element = document.querySelector("meta[name=theme-color]");
+        while (true) {
+            const element = document.querySelector("meta[name=theme-color]");
 
-        if (element === null) {
-            break;
+            if (element === null) {
+                break;
+            }
+
+            element.remove();
         }
 
-        element.remove();
+        document.head.insertAdjacentHTML(
+            "beforeend",
+            '<meta name="theme-color" content="' + backgroundColor + '">',
+        );
     }
 
-    document.head.insertAdjacentHTML(
-        "beforeend",
-        '<meta name="theme-color" content="' + backgroundColor + '">',
+    {
+        const id = "root-color-scheme";
+
+        remove_existing_element: {
+            const element = document.getElementById(id);
+
+            if (element === null) {
+                break remove_existing_element;
+            }
+
+            element.remove();
+        }
+
+        const element = document.createElement("style");
+
+        element.id = id;
+
+        element.innerHTML = `
+				:root {
+					color-scheme: ${isDarkModeEnabled ? "dark" : "light"}
+				}
+		`;
+
+        document.getElementsByTagName("head")[0].appendChild(element);
+    }
+
+    // To enable custom css stylesheets to target a specific theme
+    document.documentElement.setAttribute(
+        "theme",
+        isDarkModeEnabled ? "dark" : "light",
     );
 }
