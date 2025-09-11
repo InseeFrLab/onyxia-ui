@@ -5,6 +5,10 @@ import {
 
 export type { PaletteOverrideLike };
 
+export type GetPaletteOverride = (params: {
+    isDarkModeEnabled: boolean;
+}) => PaletteOverrideLike;
+
 /*
 This is a way to get the correct background color as soon as possible,
 even before the JavaScript bundle is evaluated.
@@ -14,9 +18,7 @@ if it does no big deal.
 */
 export function onyxiaUiEarlyInit(params: {
     isDarkModeEnabled_force: boolean | undefined;
-    getPaletteOverride:
-        | ((params: { isDarkModeEnabled: boolean }) => PaletteOverrideLike)
-        | undefined;
+    getPaletteOverride: GetPaletteOverride | undefined;
 }) {
     const { isDarkModeEnabled_force, getPaletteOverride } = params;
 
