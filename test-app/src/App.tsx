@@ -17,7 +17,7 @@ import { useConst } from "powerhooks/useConst";
 import { Evt } from "evt";
 import { ThemedImage } from "onyxia-ui/ThemedImage";
 
-export function MyComponent() {
+export default function App() {
     const { isDarkModeEnabled, setIsDarkModeEnabled } = useDarkMode();
 
     {
@@ -125,7 +125,7 @@ export function MyComponent() {
 }
 
 //See: https://github.com/garronej/tss-react
-const useStyles = tss.withName({ MyComponent }).create(({ theme }) => ({
+const useStyles = tss.withName({ App }).create(({ theme }) => ({
     root: {
         backgroundColor: theme.colors.useCases.surfaces.background,
         /*

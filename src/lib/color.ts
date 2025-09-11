@@ -1,6 +1,7 @@
 import { alpha } from "@mui/material/styles";
 import type { PaletteOptions as MuiPaletteOptions } from "@mui/material/styles/createPalette";
 import type { Param0 } from "tsafe";
+import { defaultPalette_urgent } from "./color.urgent";
 
 export type PaletteBase = typeof defaultPalette;
 export type ColorUseCasesBase = ReturnType<typeof createDefaultColorUseCases>;
@@ -17,7 +18,7 @@ export const defaultPalette = {
         light2: "#FFAD99",
     },
     dark: {
-        main: "#2C323F",
+        main: defaultPalette_urgent.dark.main,
         light: "#373E4F",
         greyVariant1: "#242C39",
         greyVariant2: "#5A6270",
@@ -25,7 +26,7 @@ export const defaultPalette = {
         greyVariant4: "#B8BABF",
     },
     light: {
-        main: "#F1F0EB",
+        main: defaultPalette_urgent.light.main,
         light: "#FDFDFC",
         greyVariant1: "#E6E6E6",
         greyVariant2: "#C9C9C9",

@@ -1,9 +1,8 @@
-import { createRoot } from "react-dom/client";
-import { OnyxiaUi } from "./theme";
-import { MyComponent } from "./MyComponent";
+import { onyxiaUiEarlyInit } from "onyxia-ui/earlyInit";
 
-createRoot(document.getElementById("root")!).render(
-    <OnyxiaUi>
-        <MyComponent />
-    </OnyxiaUi>,
-);
+onyxiaUiEarlyInit({
+    getPaletteOverride: undefined,
+    isDarkModeEnabled_force: undefined,
+});
+
+import("./index.lazy");
