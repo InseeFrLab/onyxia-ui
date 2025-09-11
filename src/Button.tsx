@@ -123,14 +123,41 @@ export const Button = memo(
                     const {
                         onClick,
                         href,
-                        doOpenNewTabIfHref = href !== undefined,
+                        doOpenNewTabIfHref,
+                        target,
                         ...restRest
-                    } = rest;
+                    } = rest as typeof rest & { target?: string };
 
                     return {
                         onClick,
                         href,
-                        target: doOpenNewTabIfHref ? "_blank" : undefined,
+                        target: (() => {
+                            if (
+                                doOpenNewTabIfHref !== undefined &&
+                                href !== undefined
+                            ) {
+                                return doOpenNewTabIfHref
+                                    ? "_blank"
+                                    : undefined;
+                            }
+
+                            if (target !== undefined) {
+                                return target;
+                            }
+
+                            if (href === undefined) {
+                                return undefined;
+                            }
+
+                            try {
+                                return new URL(href).origin ===
+                                    window.location.origin
+                                    ? undefined
+                                    : "_blank";
+                            } catch {}
+
+                            return undefined;
+                        })(),
                         ...restRest,
                     };
                 })()}
