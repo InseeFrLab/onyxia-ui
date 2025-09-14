@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 export function createUseAsync<T extends Object>(getAsync: () => Promise<T>) {
     let pr: Promise<T> | undefined = undefined;
     let pr_value: T | undefined = undefined;
