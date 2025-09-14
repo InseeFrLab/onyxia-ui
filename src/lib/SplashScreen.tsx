@@ -376,10 +376,10 @@ export function createSplashScreen(params: SplashScreenParams) {
                         "&.splashscreen-animation": {
                             opacity: 0,
                             animation: getAnimation("3s"),
-                            animationDelay: "0.3s",
+                            animationDelay: "0.5s",
                         },
                         ...Object.fromEntries(
-                            [".3s", ".7s", "1.1s"].map(
+                            [".5s", ".9s", "1.3s"].map(
                                 (animationDelay, index) => [
                                     `& .splashscreen-animation-group${
                                         index + 1
