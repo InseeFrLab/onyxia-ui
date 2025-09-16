@@ -33,7 +33,12 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
  * If you have an svg like:
  * <svg width="127" height="127">
  * You must add a viewBox like so:
- * <svg width="127" height="127" viewBox="0 0 127 127">
+ * <svg width="127" height="127" viewBox="0 0 127 127"> // Note that the width and height are ignored only the viewBox matters
+ * You should note as well that the mui icons are not using the full box, so if you are mixing custom
+ * icons from MUI and your icon use the whole box you might want to adjust the view box so every icon have homogeneous
+ * size.
+ * In practice you could increase the size of the box and manually recenter. Example here with 20 you should apply -20/2
+ * viewBox="0 0 127 127" -> viewBox="0-20/2 0-20/2 127+20 127+20" -> viewBox="-10 -10 147 147"
  *
  * ======== Colors:
  *
