@@ -147,25 +147,25 @@ const { useSplashScreen, useSplashScreenStatus } = (() => {
         }, []);
 
         const { showSplashScreen, hideSplashScreen } = (function useClosure() {
-            const countRef = useRef<number>(0);
+            const isShownRef = useRef(false);
 
             const showSplashScreen = useConstCallback<
                 typeof globalShowSplashScreen
             >(({ enableTransparency }) => {
-                countRef.current++;
-
+                if (isShownRef.current) {
+                    return;
+                }
+                isShownRef.current = true;
                 globalShowSplashScreen({ enableTransparency });
             });
 
             const hideSplashScreen = useConstCallback<
                 typeof globalHideSplashScreen
             >(async () => {
-                if (countRef.current === 0) {
+                if (!isShownRef.current) {
                     return;
                 }
-
-                countRef.current--;
-
+                isShownRef.current = false;
                 await globalHideSplashScreen();
             });
 
