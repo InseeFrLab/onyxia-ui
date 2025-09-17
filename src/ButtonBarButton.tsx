@@ -61,20 +61,14 @@ const useStyles = tss.withName({ ButtonBarButton }).create(({ theme }) => ({
         "& > *": {
             transition: "none",
         },
-        "&:hover.MuiButton-text": {
+        "&:hover": {
             color: theme.colors.useCases.typography.textPrimary,
             borderBottomColor: theme.colors.useCases.buttons.actionActive,
             boxSizing: "border-box",
             backgroundColor: "unset",
-            "& .MuiSvgIcon-root": {
-                color: theme.colors.useCases.typography.textPrimary,
-            },
         },
-        "&:active.MuiButton-text": {
+        "&:active": {
             color: theme.colors.useCases.typography.textFocus,
-            "& .MuiSvgIcon-root": {
-                color: theme.colors.useCases.typography.textFocus,
-            },
         },
     },
 }));

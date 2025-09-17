@@ -1,6 +1,5 @@
 import { forwardRef, memo } from "react";
 import { tss } from "./lib/tss";
-import { useGuaranteedMemo } from "powerhooks/useGuaranteedMemo";
 import MuiButton from "@mui/material/Button";
 import { capitalize } from "tsafe/capitalize";
 import { assert } from "tsafe";
@@ -74,32 +73,19 @@ export const Button = memo(
             disabled,
         });
 
-        const IconWd = useGuaranteedMemo(
-            () => (props: { icon: IconProps.Icon }) =>
-                (
-                    <Icon
-                        icon={props.icon}
-                        className={classes.icon}
-                        size="default"
-                    />
-                ),
-            [disabled, classes.icon],
-        );
-
         return (
             <MuiButton
                 ref={ref}
                 className={cx(classes.root, className)}
-                //There is an error in @mui/material types, this should be correct.
                 disabled={disabled}
                 startIcon={
                     startIcon === undefined ? undefined : (
-                        <IconWd icon={startIcon} />
+                        <Icon icon={startIcon} size="default" />
                     )
                 }
                 endIcon={
                     endIcon === undefined ? undefined : (
-                        <IconWd icon={endIcon} />
+                        <Icon icon={endIcon} size="default" />
                     )
                 }
                 autoFocus={autoFocus}
@@ -298,23 +284,12 @@ const useStyles = tss
                             return 4;
                         })(),
                     ),
-                    "&.MuiButton-text": {
-                        color: textColor,
-                    },
-
+                    color: textColor,
                     "&:hover": {
                         backgroundColor: hoverBackgroundColor,
-                        "& svg": {
-                            color: hoverTextColor,
-                        },
-                        "&.MuiButton-text": {
-                            color: hoverTextColor,
-                        },
+                        color: hoverTextColor,
                     },
                 } as const;
             })(),
-            icon: {
-                color: textColor,
-            },
         };
     });

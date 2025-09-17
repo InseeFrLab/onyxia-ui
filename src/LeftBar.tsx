@@ -319,7 +319,7 @@ const { CustomButton } = (() => {
             isCurrent: boolean | undefined;
             isDisabled: boolean;
         }>()
-        .withNestedSelectors<"iconHoverBox" | "typoWrapper">()
+        .withNestedSelectors<"iconHoverBox" | "typoWrapper" | "icon" | "typo">()
         .withName(`${symToStr({ LeftBar })}${symToStr({ CustomButton })}`)
         .create(
             ({
@@ -345,7 +345,7 @@ const { CustomButton } = (() => {
                             ? theme.colors.useCases.surfaces.background
                             : undefined,
                     },
-                    [[".MuiSvgIcon-root", "h6"]
+                    [[`.${classes.icon}`, `.${classes.typo}`]
                         .map(name => `&${isCurrent ? "" : ":active"} ${name}`)
                         .join(", ")]: {
                         color: theme.colors.useCases.typography.textFocus,
