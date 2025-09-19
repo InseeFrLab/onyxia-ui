@@ -6,7 +6,6 @@ import * as mui from "@mui/material/styles";
 import type { PaletteBase, ColorUseCasesBase } from "./color";
 import { createSplashScreen, type SplashScreenParams } from "./SplashScreen";
 import { assert } from "tsafe/assert";
-import type { StatefulReadonlyEvt } from "evt";
 import { typeGuard } from "tsafe/typeGuard";
 import { memoize } from "../tools/memoize";
 import {
@@ -24,7 +23,16 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDefault";
 import { getEvtRootFontSizePx } from "../tools/evtRootFontSizePx";
 import { getEvtWindowInnerSize } from "../tools/evtWindowInnerSize";
-import { Evt } from "evt";
+import { Evt, type StatefulReadonlyEvt } from "evt";
+import { createForwardingProxy } from "../tools/createForwardingProxy";
+
+const fpOnyxiaUi = createForwardingProxy<
+    (props: { darkMode?: boolean; children: ReactNode }) => JSX.Element
+>({ isFunction: true });
+
+const fpEvtTheme = createForwardingProxy<StatefulReadonlyEvt<any>>({
+    isFunction: false,
+});
 
 /**
  * BASE_URL:
@@ -320,9 +328,15 @@ export function createOnyxiaUi<
                   },
               ]);
 
+    fpOnyxiaUi.updateTarget(OnyxiaUi);
+    if (evtTheme !== undefined) {
+        fpEvtTheme.updateTarget(evtTheme);
+    }
+
     return {
-        OnyxiaUi,
+        OnyxiaUi: fpOnyxiaUi.proxy,
         ofTypeTheme: null as any,
-        evtTheme: evtTheme as any,
+        evtTheme:
+            evtTheme === undefined ? undefined : (fpEvtTheme.proxy as any),
     };
 }
