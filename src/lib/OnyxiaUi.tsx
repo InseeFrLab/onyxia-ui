@@ -24,15 +24,8 @@ import { getIsDarkModeEnabledOsDefault } from "../tools/getIsDarkModeEnabledOsDe
 import { getEvtRootFontSizePx } from "../tools/evtRootFontSizePx";
 import { getEvtWindowInnerSize } from "../tools/evtWindowInnerSize";
 import { Evt, type StatefulReadonlyEvt } from "evt";
-import { createForwardingProxy } from "../tools/createForwardingProxy";
 
-const fpOnyxiaUi = createForwardingProxy<
-    (props: { darkMode?: boolean; children: ReactNode }) => JSX.Element
->({ isFunction: true });
-
-const fpEvtTheme = createForwardingProxy<StatefulReadonlyEvt<any>>({
-    isFunction: false,
-});
+let hasCreateOnyxiaUiBeenCalled = false;
 
 /**
  * BASE_URL:
@@ -83,6 +76,15 @@ export function createOnyxiaUi<
               }
           >;
       }) {
+    if (hasCreateOnyxiaUiBeenCalled) {
+        console.log(
+            `onyxia-ui: createOnyxiaUi() has been called again, probably HMR, reloading the app to avoid bugs.`,
+        );
+        window.location.reload();
+    }
+
+    hasCreateOnyxiaUiBeenCalled = true;
+
     const {
         isScoped = false,
         splashScreenParams,
@@ -328,15 +330,9 @@ export function createOnyxiaUi<
                   },
               ]);
 
-    fpOnyxiaUi.updateTarget(OnyxiaUi);
-    if (evtTheme !== undefined) {
-        fpEvtTheme.updateTarget(evtTheme);
-    }
-
     return {
-        OnyxiaUi: fpOnyxiaUi.proxy,
+        OnyxiaUi,
         ofTypeTheme: null as any,
-        evtTheme:
-            evtTheme === undefined ? undefined : (fpEvtTheme.proxy as any),
+        evtTheme: evtTheme as any,
     };
 }
