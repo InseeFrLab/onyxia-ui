@@ -4,6 +4,7 @@ import memoize from "memoizee";
 import { symToStr } from "tsafe/symToStr";
 import { capitalize } from "tsafe/capitalize";
 import { getSafeUrl } from "./getSafeUrl";
+import "./LazySvg.css";
 
 export type LazySvgProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
     svgUrl: string;
@@ -18,6 +19,7 @@ export const LazySvg = memo(
                   svgUrl: string;
                   svgRootAttrs: Record<string, string>;
                   svgInnerHtml: string;
+                  displayAnimation: boolean;
               }
             | undefined
         >(undefined);
@@ -26,6 +28,9 @@ export const LazySvg = memo(
             let isActive = true;
 
             (async () => {
+                const wasAlreadyFetched =
+                    cache.get(svgUrl)?.hasResolved === true;
+
                 const svgElement = await fetchSvgAsHTMLElement(svgUrl);
 
                 if (!isActive) {
@@ -59,6 +64,7 @@ export const LazySvg = memo(
                         svgUrl,
                         svgInnerHtml,
                         svgRootAttrs,
+                        displayAnimation: !wasAlreadyFetched,
                     };
                 });
             })();
@@ -69,7 +75,13 @@ export const LazySvg = memo(
         }, []);
 
         if (state === undefined) {
-            return null;
+            return (
+                <svg
+                    ref={ref}
+                    {...svgComponentProps}
+                    className={svgComponentProps.className}
+                />
+            );
         }
 
         const {
@@ -94,7 +106,12 @@ export const LazySvg = memo(
                 ref={ref}
                 {...svgRootProps}
                 {...svgComponentProps}
-                className={[class_svgRootAttrs, svgComponentProps.className]
+                className={[
+                    state.displayAnimation &&
+                        "onyxia-ui_tools_lazy-svg_fade-in_effect",
+                    class_svgRootAttrs,
+                    svgComponentProps.className,
+                ]
                     .filter(className => !!className)
                     .join(" ")}
                 dangerouslySetInnerHTML={{ __html: svgInnerHtml }}
@@ -116,8 +133,22 @@ export const createLazySvg = memoize((svgUrl: string) => {
     return LazySvgWithUrl;
 });
 
-export const fetchSvgAsHTMLElement = memoize(
-    async (svgUrl: string) => {
+type CacheEntry = {
+    pr: Promise<SVGSVGElement | undefined>;
+    hasResolved: boolean;
+};
+const cache = new Map<string, CacheEntry>();
+
+export async function fetchSvgAsHTMLElement(svgUrl: string) {
+    {
+        const cacheEntry = cache.get(svgUrl);
+
+        if (cacheEntry !== undefined) {
+            return cacheEntry.pr;
+        }
+    }
+
+    const pr = (async () => {
         const rawSvgString = await (async () => {
             const safeUrl = getSafeUrl(svgUrl);
 
@@ -168,6 +199,12 @@ export const fetchSvgAsHTMLElement = memoize(
         })();
 
         return svgElement;
-    },
-    { promise: true },
-);
+    })();
+
+    const cacheEntry: CacheEntry = { pr, hasResolved: false };
+    pr.then(() => (cacheEntry.hasResolved = true));
+
+    cache.set(svgUrl, cacheEntry);
+
+    return pr;
+}
