@@ -95,4 +95,18 @@
   font-style: italic;
 }
 
-/*# sourceMappingURL=main.bb493217.css.map*/
+.onyxia-ui_tools_lazy-svg_fade-in_effect {
+  opacity: 0;
+  animation: fadeIn 0.1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*# sourceMappingURL=main.dd01a5a3.css.map*/
