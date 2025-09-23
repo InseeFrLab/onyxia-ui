@@ -1,12 +1,12 @@
 {
     "name": "spa",
-    "version": "0.1.70",
+    "version": "0.1.71",
     "private": true,
     "dependencies": {
         "@mui/material": "^6.1.7",
         "@emotion/react": "^11.4.1",
         "@emotion/styled": "^11.3.0",
-        "tss-react": "^4.9.13",
+        "tss-react": "^4.9.19",
         "powerhooks": "^0.27.2",
         "onyxia-ui": "file:../dist",
         "@types/node": "^12.0.0",
