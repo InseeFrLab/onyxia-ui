@@ -1,9 +1,13 @@
-import {
-    defaultPalette_urgent,
-    type PaletteOverrideLike,
-} from "./lib/color.urgent";
+import { defaultPalette } from "./lib/color.urgent";
 
-export type { PaletteOverrideLike };
+export type PaletteOverrideLike = {
+    light?: {
+        main?: string;
+    };
+    dark?: {
+        main?: string;
+    };
+};
 
 export type GetPaletteOverride = (params: {
     isDarkModeEnabled: boolean;
@@ -86,9 +90,7 @@ export function onyxiaUiEarlyInit(params: {
 
             const key = isDarkModeEnabled ? "dark" : "light";
 
-            return (
-                paletteOverride?.[key]?.main ?? defaultPalette_urgent[key].main
-            );
+            return paletteOverride?.[key]?.main ?? defaultPalette[key].main;
         })();
 
         document.documentElement.style.backgroundColor = backgroundColor;
