@@ -1,8 +1,16 @@
+import { alpha } from "@mui/material/styles";
+
 export const defaultPalette = {
     focus: {
         main: "#FF562C",
         light: "#FF562C",
         light2: "#FFAD99",
+        get mainAlpha20() {
+            return alpha(this.main, 0.2);
+        },
+        get mainAlpha10() {
+            return alpha(this.main, 0.1);
+        },
     },
     dark: {
         main: "#2C323F",

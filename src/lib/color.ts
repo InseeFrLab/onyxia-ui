@@ -19,6 +19,12 @@ export const francePalette: typeof defaultPalette = {
         main: "#000091",
         light: "#9A9AFF",
         light2: "#E5E5F4",
+        get mainAlpha20() {
+            return alpha(this.main, 0.2);
+        },
+        get mainAlpha10() {
+            return alpha(this.main, 0.1);
+        },
     },
     dark: {
         main: "#2A2A2A",
@@ -44,6 +50,12 @@ export const casdPalette: typeof defaultPalette = {
         main: "#000091",
         light: "#9A9AFF",
         light2: "#E5E5F4",
+        get mainAlpha20() {
+            return alpha(this.main, 0.2);
+        },
+        get mainAlpha10() {
+            return alpha(this.main, 0.1);
+        },
     },
     dark: {
         main: "#2A2A2A",
@@ -69,6 +81,12 @@ export const ultravioletPalette: typeof defaultPalette = {
         main: "#067A76",
         light: "#0AD6CF",
         light2: "#AEE4E3",
+        get mainAlpha20() {
+            return alpha(this.main, 0.2);
+        },
+        get mainAlpha10() {
+            return alpha(this.main, 0.1);
+        },
     },
     dark: {
         main: "#2D1C3A",
@@ -94,6 +112,12 @@ export const verdantPalette: typeof defaultPalette = {
         main: "#1F8D49",
         light: "#4efb8d",
         light2: "#dffee6",
+        get mainAlpha20() {
+            return alpha(this.main, 0.2);
+        },
+        get mainAlpha10() {
+            return alpha(this.main, 0.1);
+        },
     },
     light: {
         main: "#F4F6FF",
