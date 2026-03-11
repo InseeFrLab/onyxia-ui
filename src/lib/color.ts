@@ -166,6 +166,8 @@ export function createDefaultColorUseCases(
             surface1: palette[isDarkModeEnabled ? "dark" : "light"].light,
             surface2:
                 palette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
+            surface3:
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
         },
         alertSeverity: {
             error: {
