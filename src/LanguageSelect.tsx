@@ -158,8 +158,11 @@ const useStyles = tss
             })(),
         },
         menu: {
+            "&& .Mui-selected:hover": {
+                backgroundColor: theme.colors.useCases.buttons.actionActive,
+            },
             "& .Mui-selected": {
-                backgroundColor: theme.colors.useCases.surfaces.surface1,
+                backgroundColor: theme.colors.useCases.surfaces.surfaceFocus2,
             },
             "& .MuiPaper-root": {
                 backgroundColor: theme.colors.useCases.surfaces.background,
