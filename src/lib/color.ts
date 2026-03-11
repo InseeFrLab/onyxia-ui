@@ -27,6 +27,7 @@ export const francePalette: typeof defaultPalette = {
         },
     },
     dark: {
+        ...defaultPalette.dark,
         main: "#2A2A2A",
         light: "#383838",
         greyVariant1: "#161616",
@@ -35,6 +36,7 @@ export const francePalette: typeof defaultPalette = {
         greyVariant4: "#E5E5E5",
     },
     light: {
+        ...defaultPalette.light,
         main: "#F1F0EB",
         light: "#FDFDFC",
         greyVariant1: "#E6E6E6",
@@ -58,6 +60,7 @@ export const casdPalette: typeof defaultPalette = {
         },
     },
     dark: {
+        ...defaultPalette.dark,
         main: "#2A2A2A",
         light: "#383838",
         greyVariant1: "#161616",
@@ -66,6 +69,7 @@ export const casdPalette: typeof defaultPalette = {
         greyVariant4: "#E5E5E5",
     },
     light: {
+        ...defaultPalette.light,
         main: "#F7F5F4",
         light: "#FDFDFC",
         greyVariant1: "#E6E6E6",
@@ -89,6 +93,7 @@ export const ultravioletPalette: typeof defaultPalette = {
         },
     },
     dark: {
+        ...defaultPalette.dark,
         main: "#2D1C3A",
         light: "#4A3957",
         greyVariant1: "#22122E",
@@ -97,6 +102,7 @@ export const ultravioletPalette: typeof defaultPalette = {
         greyVariant4: "#C0B8C6",
     },
     light: {
+        ...defaultPalette.light,
         main: "#F7F5F4",
         light: "#FDFDFC",
         greyVariant1: "#E6E6E6",
@@ -120,6 +126,7 @@ export const verdantPalette: typeof defaultPalette = {
         },
     },
     light: {
+        ...defaultPalette.light,
         main: "#F4F6FF",
         light: "#F6F6F6",
         greyVariant1: "#E6E6E6",
@@ -138,11 +145,11 @@ export function createDefaultColorUseCases(
         typography: {
             textPrimary: palette[isDarkModeEnabled ? "light" : "dark"].main,
             textSecondary:
-                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant4,
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant5,
             textTertiary:
-                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant4,
             textDisabled:
-                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
+                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant3,
             textFocus: palette.focus[isDarkModeEnabled ? "light" : "main"],
         },
         buttons: {
@@ -156,8 +163,6 @@ export function createDefaultColorUseCases(
                 ? palette.dark.light
                 : palette.light.greyVariant1,
             actionActive: palette.focus[isDarkModeEnabled ? "light" : "main"],
-            actionDisabled:
-                palette[isDarkModeEnabled ? "dark" : "light"].greyVariant3,
             actionDisabledBackground:
                 palette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
         },
@@ -168,6 +173,8 @@ export function createDefaultColorUseCases(
                 palette[isDarkModeEnabled ? "dark" : "light"].greyVariant1,
             surface3:
                 palette[isDarkModeEnabled ? "dark" : "light"].greyVariant2,
+            surfaceFocus1: palette.focus.mainAlpha10,
+            surfaceFocus2: palette.focus.mainAlpha20,
         },
         alertSeverity: {
             error: {
@@ -249,7 +256,7 @@ export function createMuiPaletteOptions(params: {
             active: useCases.buttons.actionActive,
             hover: palette.focus.light,
             selected: useCases.buttons.actionSelected,
-            disabled: useCases.buttons.actionDisabled,
+            disabled: useCases.typography.textDisabled,
             disabledBackground: useCases.buttons.actionDisabledBackground,
             focus: useCases.typography.textFocus,
         },
