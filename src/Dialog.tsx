@@ -176,8 +176,8 @@ const useStyles = tss
         },
         closeButton: {
             position: "absolute",
-            top: theme.spacing(2),
-            right: theme.spacing(2),
+            top: theme.spacing(4) - theme.spacing(2),
+            right: theme.spacing(4) - theme.spacing(2),
         },
         buttons: {
             display: "flex",
