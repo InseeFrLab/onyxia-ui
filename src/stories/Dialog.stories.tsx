@@ -37,3 +37,9 @@ const props: DialogProps = {
 };
 
 export const VueFull = getStory(props);
+
+export const WithCloseButton = getStory({
+    ...props,
+    buttons: undefined,
+    showCloseButton: true,
+});

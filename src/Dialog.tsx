@@ -8,6 +8,8 @@ import { useConstCallback } from "powerhooks/useConstCallback";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { assert } from "tsafe/assert";
 import type { DialogClasses as MuiDialogClasses } from "@mui/material/Dialog";
+import { IconButton } from "./IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 /** To make the dialog fit content: "maxWidth": "unset" */
 export type DialogProps = {
@@ -18,7 +20,7 @@ export type DialogProps = {
     subtitle?: ReactNode;
     /** NOTE: If string, <Text typo="body 2" /> */
     body?: ReactNode;
-    buttons: ReactNode;
+    buttons?: ReactNode;
     isOpen: boolean;
     onClose: () => void;
     onDoShowNextTimeValueChange?: (doShowNextTime: boolean) => void;
@@ -28,6 +30,8 @@ export type DialogProps = {
     muiDialogClasses?: Partial<MuiDialogClasses>;
     maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false;
     fullWidth?: boolean;
+    /** Default: false */
+    showCloseButton?: boolean;
 };
 
 const labelledby = "alert-dialog-title";
@@ -47,11 +51,13 @@ export const Dialog = memo((props: DialogProps) => {
         muiDialogClasses,
         maxWidth,
         fullWidth,
+        showCloseButton = false,
     } = props;
 
     const { cx, classes } = useStyles({
         classesOverrides: props.classes,
         isOpen,
+        showCloseButton,
     });
 
     const [isChecked, setIsChecked] = useState(false);
@@ -66,6 +72,9 @@ export const Dialog = memo((props: DialogProps) => {
         onDoShowNextTimeValueChange(!isCheckedNewValue);
     });
 
+    const doRenderFooter =
+        onDoShowNextTimeValueChange !== undefined || buttons !== undefined;
+
     return (
         <MuiDialog
             classes={{
@@ -79,6 +88,14 @@ export const Dialog = memo((props: DialogProps) => {
             maxWidth={maxWidth}
             fullWidth={fullWidth}
         >
+            {showCloseButton && (
+                <IconButton
+                    className={classes.closeButton}
+                    icon={CloseIcon}
+                    onClick={onClose}
+                    aria-label="Close"
+                />
+            )}
             {title !== undefined &&
                 (typeof title !== "string" ? (
                     <div className={classes.title}>{title}</div>
@@ -116,24 +133,26 @@ export const Dialog = memo((props: DialogProps) => {
                     </Text>
                 ))}
 
-            <div className={classes.buttons}>
-                {onDoShowNextTimeValueChange !== undefined && (
-                    <div className={classes.showNextTimeCheckboxesWrapper}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={isChecked}
-                                    onChange={onChange}
-                                    name="checkedB"
-                                    color="primary"
-                                />
-                            }
-                            label={doNotShowNextTimeText}
-                        />
-                    </div>
-                )}
-                {buttons}
-            </div>
+            {doRenderFooter && (
+                <div className={classes.buttons}>
+                    {onDoShowNextTimeValueChange !== undefined && (
+                        <div className={classes.showNextTimeCheckboxesWrapper}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={isChecked}
+                                        onChange={onChange}
+                                        name="checkedB"
+                                        color="primary"
+                                    />
+                                }
+                                label={doNotShowNextTimeText}
+                            />
+                        </div>
+                    )}
+                    {buttons}
+                </div>
+            )}
         </MuiDialog>
     );
 });
@@ -142,15 +161,23 @@ const useStyles = tss
     .withName({ Dialog })
     .withParams<{
         isOpen: boolean;
+        showCloseButton: boolean;
     }>()
-    .create(({ theme, isOpen }) => ({
+    .create(({ theme, isOpen, showCloseButton }) => ({
         root: {
             backgroundColor: theme.colors.useCases.surfaces.surface1,
             backgroundImage: "unset",
             borderRadius: 5,
             padding: theme.spacing(4),
+            paddingRight: showCloseButton ? theme.spacing(8) : undefined,
             ...theme.spacing.rightLeft("margin", 4),
             visibility: isOpen ? undefined : "hidden",
+            position: "relative",
+        },
+        closeButton: {
+            position: "absolute",
+            top: theme.spacing(2),
+            right: theme.spacing(2),
         },
         buttons: {
             display: "flex",
