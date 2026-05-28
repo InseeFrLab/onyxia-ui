@@ -57,7 +57,6 @@ export const Dialog = memo((props: DialogProps) => {
     const { cx, classes } = useStyles({
         classesOverrides: props.classes,
         isOpen,
-        showCloseButton,
     });
 
     const [isChecked, setIsChecked] = useState(false);
@@ -161,15 +160,13 @@ const useStyles = tss
     .withName({ Dialog })
     .withParams<{
         isOpen: boolean;
-        showCloseButton: boolean;
     }>()
-    .create(({ theme, isOpen, showCloseButton }) => ({
+    .create(({ theme, isOpen }) => ({
         root: {
             backgroundColor: theme.colors.useCases.surfaces.surface1,
             backgroundImage: "unset",
             borderRadius: 5,
             padding: theme.spacing(4),
-            paddingRight: showCloseButton ? theme.spacing(8) : undefined,
             ...theme.spacing.rightLeft("margin", 4),
             visibility: isOpen ? undefined : "hidden",
             position: "relative",
