@@ -2,9 +2,9 @@ import { alpha } from "@mui/material/styles";
 
 export const defaultPalette = {
     focus: {
-        main: "#FF562C",
+        main: "#FE3711",
         light: "#FF562C",
-        light2: "#FFAD99",
+        light2: "#FF9671",
         get mainAlpha20() {
             return alpha(this.main, 0.2);
         },
@@ -13,22 +13,22 @@ export const defaultPalette = {
         },
     },
     dark: {
-        main: "#2C323F",
-        light: "#373E4F",
-        greyVariant1: "#282D38",
-        greyVariant2: "#465267",
-        greyVariant3: "#7C8AA2",
-        greyVariant4: "#C5CADE",
-        greyVariant5: "#D0D4DA",
+        main: "#22262F",
+        light: "#2E333F",
+        greyVariant1: "#1C1F27",
+        greyVariant2: "#3A4352",
+        greyVariant3: "#3A4352",
+        greyVariant4: "#B0BCCD",
+        greyVariant5: "#CBD2DD",
     },
     light: {
-        main: "#F3F2F0",
-        light: "#FDFDFC",
-        greyVariant1: "#E9E9E9",
-        greyVariant2: "#C5CADE",
-        greyVariant3: "#9CA5B2",
-        greyVariant4: "#6C778B",
-        greyVariant5: "#4A5364",
+        main: "#ECEEF2",
+        light: "#F6F7F9",
+        greyVariant1: "#E2E5EB",
+        greyVariant2: "#E2E5EB",
+        greyVariant3: "#B0BCCD",
+        greyVariant4: "#516078",
+        greyVariant5: "#516078",
     },
     redError: {
         main: "#CC0B0B",
