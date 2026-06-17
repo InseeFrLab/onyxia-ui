@@ -530,6 +530,7 @@ export const TextField = memo((props: TextFieldProps) => {
         return (
             <Autocomplete
                 freeSolo={freeSolo}
+                disabled={disabled}
                 className={cx(classes.muiAutocomplete, className)}
                 inputValue={value}
                 onInputChange={onInputChange}
@@ -552,6 +553,7 @@ export const TextField = memo((props: TextFieldProps) => {
                         inputProps={{
                             ...inputProps,
                             ...params.inputProps,
+                            disabled,
                             className: cx(
                                 params.inputProps?.className,
                                 inputProps.className,
