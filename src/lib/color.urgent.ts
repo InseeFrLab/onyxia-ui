@@ -2,9 +2,9 @@ import { alpha } from "@mui/material/styles";
 
 export const defaultPalette = {
     focus: {
-        main: "#FE3711",
-        light: "#FF562C",
-        light2: "#FF9671",
+        main: "#E92700",
+        light: "#FF6C47",
+        light2: "#FFC1A8",
         get mainAlpha20() {
             return alpha(this.main, 0.2);
         },
